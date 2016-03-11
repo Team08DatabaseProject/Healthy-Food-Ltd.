@@ -2,22 +2,20 @@
  * Created by roger on 10.03.2016.
  */
 
-import javafx.beans.property.SimpleStringProperty;
-
 public class TableTest {
-	private final SimpleStringProperty orderNo;
-	private final SimpleStringProperty dishes;
+	private final String orderNo;
+	private final String dishes;
 
 	public TableTest(String orderNo, String dishes) {
-		this.orderNo = new SimpleStringProperty(orderNo);
-		this.dishes = new SimpleStringProperty(dishes);
+		this.orderNo = orderNo;
+		this.dishes = dishes;
 	}
 
 	public String getOrderNo() {
-		return orderNo.get();
+		return orderNo;
 	}
 
 	public String getDishes() {
-		return dishes.get();
+		return dishes;
 	}
 }
