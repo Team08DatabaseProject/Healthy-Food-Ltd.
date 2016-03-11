@@ -1,0 +1,9 @@
+<TableView fx:id="tables" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+	<columns>
+		<TableColumn prefWidth="75.0" text="Order no." />
+		<TableColumn prefWidth="75.0" text="Dishes" />
+	</columns>
+ <columnResizePolicy>
+	<TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+ </columnResizePolicy>
+</TableView>
