@@ -12,9 +12,9 @@ import java.util.ResourceBundle;
 public class Controller implements Initializable {
 
 	@FXML
-	public TableView tables; // retreives TableView with fx:id="tables"
+	public TableView tables; // Retrieves TableView with fx:id="tables"
 
-	public void initialize(URL fxmlFileLocation, ResourceBundle resources) { // Required method for Initializable, runs program launch
+	public void initialize(URL fxmlFileLocation, ResourceBundle resources) { // Required method for Initializable, runs at program launch
 		final ObservableList<TableTest> data = FXCollections.observableArrayList(
 			new TableTest("1", "5"),
 			new TableTest("2", "2"),
