@@ -20,6 +20,7 @@ public class Controller implements Initializable {
 	//public TableView tables; // Retrieves TableView with fx:id="tables"
 	public Button ingredients;
 	public BorderPane rootPane;
+
 	final ObservableList<TableTest> data = FXCollections.observableArrayList(
 			new TableTest("1", "5"),
 			new TableTest("2", "2"),
@@ -33,7 +34,8 @@ public class Controller implements Initializable {
 		public void handle(ActionEvent e) {
 			try {
 				FXMLLoader loader = new FXMLLoader();
-				loader.setLocation(getClass().getResource("./src/OrderTable.fxml"));
+				loader.setLocation(getClass().getResource("OrderTable.fxml"));
+				System.out.println(loader.getLocation());
 				TableView orderTable = loader.load();
 				rootPane.setCenter(orderTable);
 				ObservableList<TableColumn> columns = orderTable.getColumns();
