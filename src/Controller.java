@@ -32,14 +32,16 @@ public class Controller implements Initializable {
 		@Override
 		public void handle(ActionEvent e) {
 			try {
-				TableView orderTable = FXMLLoader.load(getClass().getResource("OrderTable.fxml"));
+				FXMLLoader loader = new FXMLLoader();
+				loader.setLocation(getClass().getResource("./src/OrderTable.fxml"));
+				TableView orderTable = loader.load();
 				rootPane.setCenter(orderTable);
 				ObservableList<TableColumn> columns = orderTable.getColumns();
 				columns.get(0).setCellValueFactory(new PropertyValueFactory<TableTest,String>("orderNo"));
 				columns.get(1).setCellValueFactory(new PropertyValueFactory<TableTest,String>("dishes"));
 				orderTable.setItems(data);
 			} catch(Exception exc) {
-
+				System.out.println(exc);
 			}
 		}
 	};
