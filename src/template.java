@@ -10,7 +10,7 @@ import _0.consts;
 public class template {
 
     // This 'should' be either saved in a common class for just static final queries or we just saved it as final in the methods they are being used. In this case i am saving outside to be simpler to find.
-    static final String sf_getAllEmployeesQuery = "SELECT * ";
+    static final String sf_getAllEmployeesQuery = "SELECT * FROM `employee`";
 
     //Either use the name "db", or "connection", i personally use db and rarely connection, but any other name could end up being misleading. This should also be in a class thats easily rememebred and accessed by every class so that we all use the same connection and keep it alive.
     public static Connection db;
