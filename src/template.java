@@ -20,7 +20,7 @@ public class template {
     static List<Employee> s_employeeListSavedOnClient;
 
     // Named _main to not conflict with a main if there is already in our program. Though our main main should have these functions: and _init_() should be on the top of everything in our main.
-    public static void _main(String[] args) throws Exception {
+    public static void main(String[] args) throws Exception {
         _init_();
         updateEmployeeList();
     }

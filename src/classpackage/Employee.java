@@ -39,5 +39,21 @@ class Employee {
 
     public void setSalary(double newSalary) {
         salary = newSalary;
+        updateSalary();
+    }
+
+    private void updateSalary()
+    {
+        //query to update
+    }
+
+    // Usage:
+    // Employee a = LoadEmployee(5);
+    public static Employee LoadEmployee(int p_personId)
+    {
+        Statement statement = statics.db.createStatement();
+        ResultSet res = statement.executeQuery("SELECT * FROM `employee` WHERE person_id = '" + p_personId + "' LIMIT 1");
+        while (res.next())
+            return new Employee(res.getInt("person_id"), res.getString("username"), res.getInt("pos_id"), res.getDouble("salary"), res.getString("passhash"));
     }
 }
