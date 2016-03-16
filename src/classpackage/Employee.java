@@ -1,3 +1,5 @@
+package classpackage;
+
 /**
  * Created by axelkvistad on 3/16/16.
  */
