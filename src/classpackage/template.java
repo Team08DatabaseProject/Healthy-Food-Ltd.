@@ -5,9 +5,10 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.List;
+
 import _0.consts;
 
-public class template {
+class template {
 
     // This 'should' be either saved in a common class for just static final queries or we just saved it as final in the methods they are being used. In this case i am saving outside to be simpler to find.
     static final String sf_getAllEmployeesQuery = "SELECT * FROM `employee`";
@@ -26,14 +27,12 @@ public class template {
     }
 
     // This only has to be called once and at the startup of our application.. probaly the first function in our main(). Also, we should set our username and password. I actually don't mind if we use my username and password.
-    private static void _init_() throws Exception
-    {
+    private static void _init_() throws Exception {
         String dbDriver = "com.mysql.jdbc.Driver";
         Class.forName(dbDriver);
         String databasenavn = "jdbc:mysql://mysql.stud.iie.ntnu.no:3306/" + consts.username + "?user=" + consts.username + "&password=" + consts.passord;
         db = DriverManager.getConnection(databasenavn);
     }
-
 
 
     // Call this function whenever another client updates or when we init to get the list. NOTE: we should actually change the class Employee to have "passhash" instead of "startPassword", as we should not have the password saved in memory. (we shouldnt have the hash either.. but this is a school thing, so we can keep it. The hash is generated when we enter the password and the salt.
