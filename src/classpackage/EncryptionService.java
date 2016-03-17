@@ -11,7 +11,7 @@ import java.util.Arrays;
 /**
  * Created by paul thomas on 16.03.2016.
  */
-public class EncryptionService {
+class EncryptionService {
 
 
     /*
@@ -43,7 +43,7 @@ public class EncryptionService {
         // http://csrc.nist.gov/publications/nistpubs/800-132/nist-sp800-132.pdf
         // iOS 4.x reportedly uses 10,000:
         // http://blog.crackpassword.com/2010/09/smartphone-forensics-cracking-blackberry-backup-passwords/
-        int iterations = 1000000;
+        int iterations = 100000;
         KeySpec spec = new PBEKeySpec(password.toCharArray(), salt, iterations, derivedKeyLength);
         SecretKeyFactory f = SecretKeyFactory.getInstance(algorithm);
         return f.generateSecret(spec).getEncoded();
@@ -62,7 +62,7 @@ public class EncryptionService {
         try {
             PasswordEncryptionService myPasswordEncryptionService = new PasswordEncryptionService();
             byte[] myArray = {24, 55, 78, 56, 34, 23, 6, 4, 6,};
-            byte[] password = myPasswordEncryptionService.getEncryptedPassword("MyNewPassword94", myArray);
+            byte[] password = myPasswordEncryptionService.getEncryptedPassword("DataPassword", myArray);
             String password1 = "";
             for (int i = 0; i < password.length; i++) {
                 password1 += password[i];

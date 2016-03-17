@@ -62,7 +62,7 @@ CREATE TABLE employee(
 CREATE TABLE employee_position(
   pos_id INTEGER,
   description VARCHAR(255),
-  n_privileges INTEGER,
+  n_privilege INTEGER,-- privilege determines what window starts up after login.
   default_salary DOUBLE NOT NULL,
   PRIMARY KEY(pos_id)
 );
@@ -95,9 +95,9 @@ CREATE TABLE ingredient(
   PRIMARY KEY(ingredient_id));
 
 CREATE TABLE ingredient_in_dish(
-  ingredient_id INTEGER, -- connected to ingredient
+  ingredient_id INTEGER, -- connected to Ingredient
   dish_id INTEGER, -- connected to dish
-  quantity DOUBLE, -- amount of ingredient needed for the dish, in the unit specify
+  quantity DOUBLE, -- amount of Ingredient needed for the dish, in the unit specify
   PRIMARY KEY(ingredient_id, dish_id));
 
 CREATE TABLE menu(
