@@ -1,0 +1,5 @@
+Button {
+    -fx-min-width: 100px;
+    -fx-min-height: 80px;
+    -fx-alignment: CENTER;
+}
