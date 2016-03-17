@@ -8,7 +8,7 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 
-<BorderPane fx:id="rootPane" fx:controller="Controller" stylesheets="@Testvindu.css" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane fx:id="rootPane" fx:controller="classpackage.Controller" stylesheets="@Testvindu.css" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
 	<top>
 		<MenuBar BorderPane.alignment="TOP_LEFT">
 			<menus>
@@ -41,4 +41,6 @@
 	</left>
 	<center>
 	</center>
+	<bottom>
+	</bottom>
 </BorderPane>

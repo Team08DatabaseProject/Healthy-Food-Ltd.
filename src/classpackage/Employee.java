@@ -21,15 +21,6 @@ class Employee {
         //passHash = "encryption-ting her";
     }
 
-    // employee constructor without password
-
-    public Employee(int personId, String username, int posId, double salary) {
-        this.personId = personId;
-        this.posId = posId;
-        this.username = username;
-        this.salary = salary;
-    }
-
     public int getPersonId() {
         return personId;
     }
