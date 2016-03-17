@@ -55,7 +55,7 @@ public class EncryptionService {
         random.nextBytes(salt);
         return salt;
     }
-
+/*
     public static void main(String[] args) throws Exception {
         try {
             PasswordEncryptionService myPasswordEncryptionService = new PasswordEncryptionService();
@@ -77,5 +77,5 @@ public class EncryptionService {
         } catch (Exception e) {
             System.out.println("oh no!");
         }
-    }
+    } */
 }
