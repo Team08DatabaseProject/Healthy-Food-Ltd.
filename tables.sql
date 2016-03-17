@@ -62,7 +62,7 @@ CREATE TABLE employee(
 CREATE TABLE employee_position(
   pos_id INTEGER,
   description VARCHAR(255),
-  n_privilege INTEGER,-- privilege determines what window starts up after login.
+  n_privilege INTEGER AUTO_INCREMENT NOT NULL ,-- privilege determines what window starts up after login.
   default_salary DOUBLE NOT NULL,
   PRIMARY KEY(pos_id)
 );
@@ -211,3 +211,37 @@ ADD FOREIGN KEY(ingredient_id)
 REFERENCES ingredient(ingredient_id),
 ADD FOREIGN KEY(dish_id)
 REFERENCES dish(dish_id);
+
+
+
+
+
+
+
+
+
+
+-- DUMMY DATA
+
+INSERT INTO zipcode VALUES ('Trondheim', 7017);
+INSERT INTO zipcode VALUES ('Trondheim', 7018);
+INSERT INTO zipcode VALUES ('Trondheim', 7019);
+
+INSERT INTO address VALUES (DEFAULT, 'Osloveien 56B', 7017);
+INSERT INTO address VALUES (DEFAULT, 'Olav Tryggvasons gate 3 ', 7017);
+
+INSERT INTO person VALUES (DEFAULT, 'Paul Thomas', 'Korsvold', '99110488', 'paultk@student.hist.no', 1 );
+
+INSERT INTO employee_position VALUES (DEFAULT, 'DRIVER', DEFAULT, 1000);
+
+INSERT INTO employee VALUES (1, 'PTKM', 1, 1000, '-11-80-37-128-9630-127-12366787-42-10811914-5-9123-20-38');
+
+
+
+
+
+
+
+
+
+
