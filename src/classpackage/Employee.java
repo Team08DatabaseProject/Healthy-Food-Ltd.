@@ -15,7 +15,7 @@ public class Employee {
         this.username = username;
         this.posId = posId;
         this.salary = salary;
-
+        this.passHash = passHash;
         /* Kall til EncryptionService her for å generere passHash (og kanskje salt) */
         // Thomas: If a new employee is being created (i dont meant he object.. i mean a real new one to be added to the DB), the method to encrypt the password should called before and only the hash should be passed to the object.
         //passHash = "encryption-ting her";

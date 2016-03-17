@@ -1,4 +1,4 @@
-package classpackage;
+/*package classpackage;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -46,3 +46,4 @@ public class template extends consts {
             s_employeeListSavedOnClient.add(new Employee(res.getInt("person_id"), res.getString("username"), res.getInt("pos_id"), res.getDouble("salary"), res.getString("passhash")));
     }
 }
+*/

@@ -5,7 +5,7 @@ import java.sql.*;
 /**
  * Created by paul thomas on 17.03.2016.
  */
-class SqlQueries {
+public class SqlQueries {
 
     /*
     Class where all methods that sql is required, shall be written.
@@ -13,11 +13,12 @@ class SqlQueries {
      */
 
 
-    private String brukernavn = "thomjos"; //DataLeser2.lesTekst("Brukernavn: ");  // DataLeser2, se nedenfor
-    private String passord = "cinPn2AK";
-    private String databasenavn = "jdbc:mysql://mysql.stud.iie.ntnu.no:3306/" + brukernavn + "?user=" + brukernavn + "&password=" + passord;
-    private String databasedriver = "com.mysql.jdbc.Driver";
-    private Connection connection = null;
+    String brukernavn = "thomjos"; //DataLeser2.lesTekst("Brukernavn: ");  // DataLeser2, se nedenfor
+    String passord = "cinPn2AK";
+    String databasenavn = "jdbc:mysql://mysql.stud.iie.ntnu.no:3306/" + brukernavn + "?user=" + brukernavn + "&password=" + passord;
+    String databasedriver = "com.mysql.jdbc.Driver";
+    Connection connection = null;
+    PreparedStatement selectQuery;
     ResultSet res = null;
 
 
@@ -26,6 +27,17 @@ class SqlQueries {
 
 
     */
+    public SqlQueries() {
+        try {
+            Class.forName(databasedriver);  // laster inn driverklassen
+            connection = DriverManager.getConnection(databasenavn);
+        } catch (ClassNotFoundException e) {
+            System.out.println("Databasedriver ikke funnet.");
+        } catch (SQLException e) {
+            System.out.println("Forbindelse feilet.");
+        }
+    }
+
     public void databaseConnection() {
         try {
             Class.forName(databasedriver);  // laster inn driverklassen
@@ -56,9 +68,9 @@ class SqlQueries {
 
         do {
             try {
-                connection.setAutoCommit(false);
-                String selectSql = "SELECT person_id, username, pos_id, salary, passhash FROM employee WHERE username = ? AND passwordHash = ?";
-                PreparedStatement selectQuery = connection.prepareStatement(selectSql);
+//                connection.setAutoCommit(false);
+                String selectSql = "SELECT person_id, username, pos_id, salary, passhash FROM employee WHERE username = ? AND passHash = ?";
+                selectQuery = connection.prepareStatement(selectSql);
                 selectQuery.setString(1, username);
                 selectQuery.setString(2, passwordHash);
                 res = selectQuery.executeQuery();
@@ -67,7 +79,7 @@ class SqlQueries {
                 personId = res.getInt("person_id");
                 posId = res.getInt("pos_id");
                 salary = res.getDouble("salary");
-                connection.commit();
+         //       connection.commit();
                 ok = true;
 
             } catch (SQLException e) {
@@ -82,7 +94,7 @@ class SqlQueries {
                 SqlCleanup.settAutoCommit(connection);
             }
         } while(!ok);
-        if (personId > -1 && posId > -1 && salary > -1) {
+        if (personId != -1) {
             return new Employee(personId, username, posId, salary, passwordHash);
         }
         return null;
