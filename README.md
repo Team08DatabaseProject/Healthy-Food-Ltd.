@@ -10,3 +10,7 @@ Using:
 -Java 1.8
 
 -Modeling programs
+
+-Java FX (fxml)
+
+-CSS
