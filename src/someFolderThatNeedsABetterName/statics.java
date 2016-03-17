@@ -1,7 +1,9 @@
-package _0;
+package someFolderThatNeedsABetterName;
 
 import classpackage.*;
 import java.sql.*;
+import java.util.List;
+
 public class statics
 {
     public static Connection db;

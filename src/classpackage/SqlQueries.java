@@ -13,11 +13,12 @@ class SqlQueries {
      */
 
 
-    private String brukernavn = "axelbkv"; //DataLeser2.lesTekst("Brukernavn: ");  // DataLeser2, se nedenfor
-    private String passord = "btrWX2Fy";
+    private String brukernavn = "thomjos"; //DataLeser2.lesTekst("Brukernavn: ");  // DataLeser2, se nedenfor
+    private String passord = "cinPn2AK";
     private String databasenavn = "jdbc:mysql://mysql.stud.iie.ntnu.no:3306/" + brukernavn + "?user=" + brukernavn + "&password=" + passord;
     private String databasedriver = "com.mysql.jdbc.Driver";
     private Connection connection = null;
+    ResultSet res = null;
 
 
     /*
@@ -44,10 +45,51 @@ class SqlQueries {
             System.out.println("Forbindelse kunne ikke lukkes.");
         }
     }
+
     public Employee getUser(String username, String passwordHash) {
+        int personId = -1;
+        int posId = -1;
+        double salary = -1;
+        int attempts = 0;
 
+        boolean ok = false;
 
+        do {
+            try {
+                connection.setAutoCommit(false);
+                String selectSql = "SELECT person_id, username, pos_id, salary, passhash FROM employee WHERE username = ? AND passwordHash = ?";
+                PreparedStatement selectQuery = connection.prepareStatement(selectSql);
+                selectQuery.setString(1, username);
+                selectQuery.setString(2, passwordHash);
+                res = selectQuery.executeQuery();
+                res.next();
 
+                personId = res.getInt("person_id");
+                posId = res.getInt("pos_id");
+                salary = res.getDouble("salary");
+                connection.commit();
+                ok = true;
+
+            } catch (SQLException e) {
+                if (attempts < 4) {
+                    attempts++;
+                } else {
+                    return null;
+                }
+                SqlCleanup.rullTilbake(connection);
+            } finally {
+                SqlCleanup.lukkResSet(res);
+                SqlCleanup.settAutoCommit(connection);
+            }
+        } while(!ok);
+        if (personId > -1 && posId > -1 && salary > -1) {
+            return new Employee(personId, username, posId, salary, passwordHash);
+        }
+        return null;
+    }
+
+    public Employee getUser() {
+        return null;
 
     }
 

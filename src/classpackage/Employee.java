@@ -3,12 +3,12 @@ package classpackage;
 /**
  * Created by axelkvistad on 3/16/16.
  */
-class Employee {
+public class Employee {
     private int personId;
     private String username;
     private int posId;
     private double salary;
-    private final String passHash;
+    private String passHash;
 
     public Employee(int personId, String username, int posId, double salary, String passHash) {
         this.personId = personId;
@@ -58,6 +58,7 @@ class Employee {
 
     // Usage:
     // Employee a = LoadEmployee(5);
+    /*
     public static Employee LoadEmployee(int p_personId)
     {
         Statement statement = statics.db.createStatement();
@@ -66,4 +67,5 @@ class Employee {
             return new Employee(res.getInt("person_id"), res.getString("username"), res.getInt("pos_id"), res.getDouble("salary"), res.getString("passhash"));
         return null;
     }
+    */
 }

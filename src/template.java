@@ -5,9 +5,10 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.List;
-import _0.consts;
 
-public class template {
+import someFolderThatNeedsABetterName.consts;
+
+public class template extends consts {
 
     // This 'should' be either saved in a common class for just static final queries or we just saved it as final in the methods they are being used. In this case i am saving outside to be simpler to find.
     static final String sf_getAllEmployeesQuery = "SELECT * FROM `employee`";

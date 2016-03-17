@@ -1,4 +1,4 @@
-package _0;
+package someFolderThatNeedsABetterName;
 
 public class consts {
     public static final String username = "thomjos";
