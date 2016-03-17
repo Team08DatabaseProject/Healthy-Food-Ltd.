@@ -6,7 +6,7 @@ package classpackage;
 class Supplier {
     private int supplierId;
     private int phoneNumber;
-    private Adress thisAdress;
+    private Address thisAddress;
 
 
 }

@@ -5,6 +5,8 @@ package classpackage;
  */
 class Person {
     private int personID;
-
-    private Adress myAdress;
+    private String firstName;
+    private String lastName;
+    private int phoneNumber;
+    private Address myAddress;
 }

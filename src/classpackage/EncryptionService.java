@@ -11,7 +11,7 @@ import java.util.Arrays;
 /**
  * Created by paul thomas on 16.03.2016.
  */
-public class EncryptionService {
+class EncryptionService {
 
 
     /*
