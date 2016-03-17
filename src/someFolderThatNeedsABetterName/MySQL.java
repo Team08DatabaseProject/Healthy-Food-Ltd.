@@ -1,3 +1,4 @@
+/*
 package _0;
 
 import classpackage.*;
@@ -28,3 +29,4 @@ public class MySQL
         }
     }
 }
+*/
