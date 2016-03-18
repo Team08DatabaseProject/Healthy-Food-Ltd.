@@ -24,12 +24,13 @@ SET time_zone = "+00:00";
 --
 
 DROP TABLE IF EXISTS `address`;
-CREATE TABLE `address` (
+CREATE TABLE IF NOT EXISTS `address` (
   `address_id` int(11) NOT NULL AUTO_INCREMENT,
   `address` varchar(255) DEFAULT NULL,
   `zipcode` int(11) DEFAULT NULL,
-  PRIMARY KEY (`address_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
+  PRIMARY KEY (`address_id`),
+  KEY `zipcode` (`zipcode`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin  AUTO_INCREMENT=3 ;
 
 --
 -- Dataark for tabell `address`
@@ -370,6 +371,12 @@ INSERT INTO `zipcode` (`place`, `zipcode`) VALUES
 --
 -- Begrensninger for dumpede tabeller
 --
+
+--
+-- Begrensninger for tabell `address`
+--
+ALTER TABLE `address`
+ADD CONSTRAINT `address_ibfk_1` FOREIGN KEY (`zipcode`) REFERENCES `zipcode` (`zipcode`);
 
 --
 -- Begrensninger for tabell `customer`
