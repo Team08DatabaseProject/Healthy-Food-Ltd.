@@ -9,8 +9,10 @@ public class QueryTest {
     public static void main(String[] args) {
         SqlQueries sq = new SqlQueries();
         // sq.databaseConnection();
-        Employee employee = sq.getUser("Axel", "abc");
-        System.out.println("Position id: " + employee.getPosId() + "\nUsername: " + employee.getUsername() +
-        "\nSalary: " + employee.getSalary() + "\nPassword hash: " + employee.getPassHash());
+        Employee employee = sq.getUser("testdriver", "testhash");
+        System.out.println("Position id: " + employee.getPosId());
+        /*+ "\nUsername: " + employee.getUsername() +
+        "\nSalary: " + employee.getSalary() + "\nPassword hash: " + employee.getPassHash());*/
+
     }
 }

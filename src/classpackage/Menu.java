@@ -5,8 +5,9 @@ package classpackage;
  */
 
 class Menu {
-    private int menuId;
-    
+    private int posId;
 
-    public Menu()
+    public Menu(int posId) {
+
+    }
 }

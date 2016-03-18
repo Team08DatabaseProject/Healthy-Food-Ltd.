@@ -1,4 +1,7 @@
-import classpackage.EncryptionService;
+//import classpackage.EncryptionService;
+import classpackage.SqlQueries;
+
+import java.util.Map;
 
 /**
  * Created by roger on 10.03.2016.
@@ -33,10 +36,6 @@ public class Main extends Login {
      */
 
     public static void main(String[] args) {
-        EncryptionService onlyEncryptionService = new EncryptionService();
-        sh
-
-
         launch(args);
     }
 }

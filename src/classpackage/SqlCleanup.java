@@ -1,3 +1,4 @@
+package classpackage;
 /**
  *
  * Opprydder.java  - "Programmering i Java", 4.utgave - 2009-07-01

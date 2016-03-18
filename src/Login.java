@@ -2,9 +2,10 @@
  * Created by axelkvistad on 3/17/16.
  * Stole the template from a website
  */
+import classpackage.Employee;
+import classpackage.SqlQueries;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
@@ -38,6 +39,13 @@ public class Login extends Application {
     String user = "JavaFX2";
     String pw = "password";
     String checkUser, checkPw;
+    SqlQueries query = new SqlQueries();
+    private static final int CEO = 1;
+    private static final int CHEF = 2;
+    private static final int DRIVER = 3;
+    private static final int SALES = 4;
+    private static final int NUTRITION = 5;
+
 
     public static void main(String[] args) {
         launch(args);
@@ -45,6 +53,7 @@ public class Login extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+
         primaryStage.setTitle("Healthy Catering System Login");
 
         BorderPane bp = new BorderPane();
@@ -109,18 +118,34 @@ public class Login extends Application {
                 try {
                     checkUser = txtUserName.getText().toString();
                     checkPw = pf.getText().toString();
-                    if (checkUser.equals(driverUser) && checkPw.equals(driverPassword)) {
-                        Parent root = FXMLLoader.load(getClass().getResource("Driver/DriverWindow.fxml"));
-                        primaryStage.setTitle("Healthy Catering - Driver");
-                        primaryStage.setScene(new Scene(root, 800, 600));
-                        primaryStage.show();
-                    } else if (checkUser.equals(testUser) && checkPw.equals(testPassword)) {
-                        Parent root = FXMLLoader.load(getClass().getResource("Testvindu.fxml"));
-                        primaryStage.setTitle("Healthy Catering - Test");
-                        primaryStage.setScene(new Scene(root, 800, 600));
-                        primaryStage.show();
-                    }
-                    else {
+                    Employee emp = query.getUser(checkUser, checkPw);
+                    if (emp != null) {
+                        switch(emp.getPosId()) {
+                            case CEO : {
+                                break;
+                            }
+                            case CHEF : {
+                                break;
+                            }
+                            case DRIVER : {
+                                Parent root = FXMLLoader.load(getClass().getResource("Driver/DriverWindow.fxml"));
+                                primaryStage.setTitle("Healthy Catering - Driver");
+                                primaryStage.setScene(new Scene(root, 800, 600));
+                                primaryStage.show();
+                                break;
+                            }
+                            case SALES : {
+                                break;
+                            }
+                            case NUTRITION : {
+                                break;
+                            }
+                            default : {
+                                System.out.println("Error during login. Exiting system.");
+                                System.exit(0);
+                            }
+                        }
+                    } else {
                         lblMessage.setText("Incorrect user or pw.");
                         lblMessage.setTextFill(Color.RED);
                     }
