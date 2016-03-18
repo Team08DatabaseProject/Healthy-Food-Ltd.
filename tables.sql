@@ -236,11 +236,12 @@ INSERT INTO employee_position VALUES (DEFAULT, 'DRIVER', DEFAULT, 1000);
 
 INSERT INTO employee VALUES (1, 'PTKM', 1, 1000, '-11-80-37-128-9630-127-12366787-42-10811914-5-9123-20-38');
 
-
-
-
-
-
+INSERT INTO employee_position (pos_id, description, default_salary) VALUES
+  (1, 'CEO', 800000),
+  (2, 'Chef', 700000),
+  (3, 'Driver', 400000),
+  (4, 'Sales', 350000),
+  (5, 'Nutrition', 650000);
 
 
 
