@@ -1,6 +1,5 @@
 package someFolderThatNeedsABetterName;
 
-import classpackage.*;
 import java.sql.*;
 import java.util.List;
 
