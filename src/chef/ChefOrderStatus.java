@@ -1,10 +1,10 @@
-package driver;
+package chef;
 
 /**
  * Created by axelkvistad on 3/16/16.
  * For use in "Change order status" table
  */
-public class DriverOrderStatus {
+public class ChefOrderStatus {
 
     private int orderNo;
     private String address;

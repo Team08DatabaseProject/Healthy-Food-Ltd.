@@ -10,7 +10,8 @@
 
 <!--> Table in submenu "Change order status" </!-->
 
-<TableView fx:id="tables" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" xmlns:fx="http://javafx.com/fxml">
+<TableView fx:id="tables" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER"
+           xmlns:fx="http://javafx.com/fxml">
     <columns>
         <TableColumn prefWidth="40.0" text="Order no." />
         <TableColumn prefWidth="40.0" text="Address" />

@@ -32,7 +32,7 @@ import javafx.stage.Stage;
  */
 public class Login extends Application {
 
-    String driverUser = "Driver";
+    String driverUser = "driver";
     String driverPassword = "Driver123";
     String testUser = "Test";
     String testPassword = "Test123";
@@ -128,8 +128,8 @@ public class Login extends Application {
                                 break;
                             }
                             case DRIVER : {
-                                Parent root = FXMLLoader.load(getClass().getResource("Driver/DriverWindow.fxml"));
-                                primaryStage.setTitle("Healthy Catering - Driver");
+                                Parent root = FXMLLoader.load(getClass().getResource("driver/DriverWindow.fxml"));
+                                primaryStage.setTitle("Healthy Catering - driver");
                                 primaryStage.setScene(new Scene(root, 800, 600));
                                 primaryStage.show();
                                 break;

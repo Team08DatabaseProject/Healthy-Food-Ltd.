@@ -278,8 +278,8 @@ INSERT INTO customer_order VALUES (1, 1);
 
 INSERT INTO employee_position (pos_id, description, default_salary) VALUES
   (1, 'CEO', 800000),
-  (2, 'Chef', 700000),
-  (3, 'Driver', 400000),
+  (2, 'chef', 700000),
+  (3, 'driver', 400000),
   (4, 'Sales', 350000),
   (5, 'Nutrition', 650000);
 

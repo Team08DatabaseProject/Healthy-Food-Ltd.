@@ -8,6 +8,4 @@ import classpackage.*;
 class Dish {
     private classpackage.Ingredient[] ingridents;
 
-
-
 }
