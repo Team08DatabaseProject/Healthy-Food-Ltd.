@@ -24,7 +24,7 @@ SET time_zone = "+00:00";
 --
 
 DROP TABLE IF EXISTS `address`;
-CREATE TABLE IF NOT EXISTS `address` (
+CREATE TABLE `address` (
   `address_id` int(11) NOT NULL AUTO_INCREMENT,
   `address` varchar(255) DEFAULT NULL,
   `zipcode` int(11) DEFAULT NULL,
