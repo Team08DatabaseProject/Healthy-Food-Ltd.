@@ -1,13 +1,35 @@
 package classpackage;
 
-/**
- * Created by paul thomas on 16.03.2016.
+/** Created by Axel
+ * 11.03.2016
  */
-class Ingredient {
-    private String name;
-    private int ingredientId;
-    private int quantityOwned;
-    private int quantityReserved;
-    private String unit;
+
+public class Ingredient {
+    private final String ingName;
+    private final String unit;
+    private double storage;
     private double price;
+
+    public Ingredient(String ingName, String unit, double storage, double price) {
+        this.ingName = ingName;
+        this.unit = unit;
+        this.storage = storage;
+        this.price = price;
+    }
+
+    public String getIngName() {
+        return ingName;
+    }
+
+    public String getUnit() {
+        return unit;
+    }
+
+    public double getStorage() {
+        return storage;
+    }
+
+    public double getPrice() {
+        return price;
+    }
 }

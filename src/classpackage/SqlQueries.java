@@ -1,5 +1,7 @@
 package classpackage;
 
+import classpackage.Employee;
+
 import java.sql.*;
 
 /**

@@ -1,4 +1,3 @@
-/*
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -14,6 +13,7 @@ import javafx.scene.layout.BorderPane;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+
 public class Controller implements Initializable {
 
 	@FXML
@@ -59,4 +59,3 @@ public class Controller implements Initializable {
 
 
 }
-*/

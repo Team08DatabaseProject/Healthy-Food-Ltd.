@@ -1,8 +1,12 @@
+import classpackage.EncryptionService;
+
 /**
  * Created by roger on 10.03.2016.
  */
 
 public class Main extends Login {
+
+
 
     // Currently using a login template I stole and made some changes to. Guide below.
 /*
@@ -29,6 +33,10 @@ public class Main extends Login {
      */
 
     public static void main(String[] args) {
+        EncryptionService onlyEncryptionService = new EncryptionService();
+        sh
+
+
         launch(args);
     }
 }
