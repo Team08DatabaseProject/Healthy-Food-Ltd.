@@ -5,7 +5,7 @@ package classpackage;
  * Test class for SqlQueries.java
  */
 
-public class QueryTest2 {
+public class QueryTest {
     public static void main(String[] args) {
         SqlQueries sq = new SqlQueries();
         // sq.databaseConnection();

@@ -66,6 +66,7 @@ public class Login extends Application {
         Label lblPassword = new Label("Password");
         final PasswordField pf = new PasswordField();
         Button btnLogin = new Button("Login");
+        Button btnLogin2 = new Button("Login2");
         final Label lblMessage = new Label();
 
         //Adding Nodes to GridPane layout
@@ -130,6 +131,8 @@ public class Login extends Application {
                 }
             }
         });
+
+
 
         //Add HBox and GridPane layout to BorderPane Layout
         bp.setTop(hb);
