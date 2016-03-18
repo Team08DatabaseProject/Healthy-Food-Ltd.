@@ -30,7 +30,7 @@ CREATE TABLE `address` (
   `zipcode` int(11) DEFAULT NULL,
   PRIMARY KEY (`address_id`),
   KEY `zipcode` (`zipcode`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin  AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1  AUTO_INCREMENT=3 ;
 
 --
 -- Dataark for tabell `address`
