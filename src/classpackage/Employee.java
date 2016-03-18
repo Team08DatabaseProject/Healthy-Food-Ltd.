@@ -13,17 +13,21 @@ public class Employee {
     private int posId;
     private double salary;
     private String passHash;
+
+    private String email;
+
+    private String firstName;
+
+    private String lastName;
+    private int phone;
+    private int adressId;
     private static final int CEO = 1;
+
+
     private static final int CHEF = 2;
     private static final int DRIVER = 3;
     private static final int SALES = 4;
     private static final int NUTRITION = 5;
-
-
-
-
-
-
     public Employee(int personId, String username, int posId, double salary, String passHash) {
         this.personId = personId;
         this.username = username;
@@ -36,6 +40,11 @@ public class Employee {
         //passHash = "encryption-ting her";
     }
 
+
+
+
+
+
     // employee constructor without password
 
     public Employee(int personId, String username, int posId, double salary) {
@@ -43,6 +52,46 @@ public class Employee {
         this.posId = posId;
         this.username = username;
         this.salary = salary;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public int getPhone() {
+        return phone;
+    }
+
+    public void setPhone(int phone) {
+        this.phone = phone;
+    }
+
+    public int getAdressId() {
+        return adressId;
+    }
+
+    public void setAdressId(int adressId) {
+        this.adressId = adressId;
     }
 
     public int getPersonId() {

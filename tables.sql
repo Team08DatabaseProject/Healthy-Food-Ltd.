@@ -237,12 +237,12 @@ INSERT INTO address VALUES (DEFAULT, 'Osloveien 56B', 7017);
 INSERT INTO address VALUES (DEFAULT, 'Olav Tryggvasons gate 3 ', 7017);
 
 
-INSERT INTO employee_position VALUES (DEFAULT, 'DRIVER', 1000);
-INSERT INTO employee_position VALUES (DEFAULT, 'ADMINISTRATOR', 100000);
-INSERT INTO employee_position VALUES (DEFAULT, 'CHEF', 1000);
-INSERT INTO employee_position VALUES (DEFAULT, 'CEO', 1000);
-INSERT INTO employee_position VALUES (DEFAULT, 'NUTRITION EXPERT', 1000);
-INSERT INTO employee_position VALUES (DEFAULT, 'SALESPERSON', 1000);
+INSERT INTO employee_position (pos_id, description, default_salary) VALUES
+  (1, 'CEO', 800000),
+  (2, 'Chef', 700000),
+  (3, 'Driver', 400000),
+  (4, 'Sales', 350000),
+  (5, 'Nutrition', 650000);
 
 
 INSERT INTO employee VALUES (DEFAULT , 'Paul Thomas', 'Korsvold', 99110488, 'paultk@student.hist.no', 1, 'PTKM', 1, 1000, '-11-80-37-128-9630-127-12366787-42-10811914-5-9123-20-38');
@@ -276,12 +276,6 @@ INSERT INTO customer VALUES (DEFAULT, 'firstBusinessCustomer', 'firstContactPers
 INSERT INTO customer VALUES (DEFAULT, 'firstOrdinaryCustomer', 'firstcustomer', 'aftercustomer', 93322992, 'firstOrdiaryCustomerEmail', 1, 0);
 INSERT INTO customer_order VALUES (1, 1);
 
-INSERT INTO employee_position (pos_id, description, default_salary) VALUES
-  (1, 'CEO', 800000),
-  (2, 'Chef', 700000),
-  (3, 'Driver', 400000),
-  (4, 'Sales', 350000),
-  (5, 'Nutrition', 650000);
 
 
 
