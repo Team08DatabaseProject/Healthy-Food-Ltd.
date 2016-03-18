@@ -3,17 +3,14 @@
 -- http://www.phpmyadmin.net
 --
 -- Vert: 127.0.0.1
--- Generert den: 18. Mar, 2016 16:55 PM
+-- Generert den: 18. Mar, 2016 18:52 PM
 -- Tjenerversjon: 5.5.47-0ubuntu0.14.04.1
 -- PHP-Versjon: 5.5.9-1ubuntu4.14
 
+SET FOREIGN_KEY_CHECKS=0;
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
 
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8 */;
 
 --
@@ -26,12 +23,13 @@ SET time_zone = "+00:00";
 -- Tabellstruktur for tabell `address`
 --
 
-CREATE TABLE IF NOT EXISTS `address` (
+DROP TABLE IF EXISTS `address`;
+CREATE TABLE `address` (
   `address_id` int(11) NOT NULL AUTO_INCREMENT,
   `address` varchar(255) DEFAULT NULL,
   `zipcode` int(11) DEFAULT NULL,
   PRIMARY KEY (`address_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
 
 --
 -- Dataark for tabell `address`
@@ -47,7 +45,8 @@ INSERT INTO `address` (`address_id`, `address`, `zipcode`) VALUES
 -- Tabellstruktur for tabell `customer`
 --
 
-CREATE TABLE IF NOT EXISTS `customer` (
+DROP TABLE IF EXISTS `customer`;
+CREATE TABLE `customer` (
   `c_id` int(11) NOT NULL AUTO_INCREMENT,
   `business_name` varchar(64) DEFAULT NULL,
   `first_name` varchar(64) DEFAULT NULL,
@@ -74,7 +73,8 @@ INSERT INTO `customer` (`c_id`, `business_name`, `first_name`, `last_name`, `pho
 -- Tabellstruktur for tabell `data_cache`
 --
 
-CREATE TABLE IF NOT EXISTS `data_cache` (
+DROP TABLE IF EXISTS `data_cache`;
+CREATE TABLE `data_cache` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `dataname` varchar(50) DEFAULT NULL,
   `VALUE` int(10) unsigned NOT NULL,
@@ -87,7 +87,8 @@ CREATE TABLE IF NOT EXISTS `data_cache` (
 -- Tabellstruktur for tabell `dish`
 --
 
-CREATE TABLE IF NOT EXISTS `dish` (
+DROP TABLE IF EXISTS `dish`;
+CREATE TABLE `dish` (
   `price` double DEFAULT NULL,
   `dish_id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) DEFAULT NULL,
@@ -108,7 +109,8 @@ INSERT INTO `dish` (`price`, `dish_id`, `name`) VALUES
 -- Tabellstruktur for tabell `employee`
 --
 
-CREATE TABLE IF NOT EXISTS `employee` (
+DROP TABLE IF EXISTS `employee`;
+CREATE TABLE `employee` (
   `employee_id` int(11) NOT NULL AUTO_INCREMENT,
   `first_name` varchar(64) DEFAULT NULL,
   `last_name` varchar(64) DEFAULT NULL,
@@ -122,7 +124,7 @@ CREATE TABLE IF NOT EXISTS `employee` (
   PRIMARY KEY (`employee_id`),
   UNIQUE KEY `username` (`username`),
   KEY `address_id` (`address_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=45 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=6 ;
 
 --
 -- Dataark for tabell `employee`
@@ -133,7 +135,7 @@ INSERT INTO `employee` (`employee_id`, `first_name`, `last_name`, `phone`, `emai
   (2, 'Bob', 'Testdriver', 90133787, 'bobtestdriver@gmail.com', 2, 'testdriver', 3, 200000, 'testhash'),
   (3, 'Important', 'Bossman', 12345678, 'importantbossman@gmail.com', 1, 'testceo', 1, 10000000, 'testceohash'),
   (4, 'Axel', 'Kvistad', 90133787, 'axel.b.kvistad@gmail.com', 2, 'axelbkv', 3, 200000, 'axelerbra'),
-  (43, 'Spaghetti', 'Meatballs', 87654321, 'spaghetti.meatballs@gmail.com', 2, 'testchef', 2, 300000, 'testchefhash');
+  (5, 'Spaghetti', 'Meatballs', 87654321, 'spaghetti.meatballs@gmail.com', 2, 'testchef', 2, 300000, 'testchefhash');
 
 -- --------------------------------------------------------
 
@@ -141,7 +143,8 @@ INSERT INTO `employee` (`employee_id`, `first_name`, `last_name`, `phone`, `emai
 -- Tabellstruktur for tabell `employee_position`
 --
 
-CREATE TABLE IF NOT EXISTS `employee_position` (
+DROP TABLE IF EXISTS `employee_position`;
+CREATE TABLE `employee_position` (
   `pos_id` int(11) NOT NULL AUTO_INCREMENT,
   `description` varchar(255) DEFAULT NULL,
   `default_salary` double NOT NULL,
@@ -165,7 +168,8 @@ INSERT INTO `employee_position` (`pos_id`, `description`, `default_salary`) VALU
 -- Tabellstruktur for tabell `ingredient`
 --
 
-CREATE TABLE IF NOT EXISTS `ingredient` (
+DROP TABLE IF EXISTS `ingredient`;
+CREATE TABLE `ingredient` (
   `ingredient_id` int(11) NOT NULL AUTO_INCREMENT,
   `quantity_owned` double DEFAULT NULL,
   `quantity_reserved` double DEFAULT NULL,
@@ -192,7 +196,8 @@ INSERT INTO `ingredient` (`ingredient_id`, `quantity_owned`, `quantity_reserved`
 -- Tabellstruktur for tabell `ingredient_in_dish`
 --
 
-CREATE TABLE IF NOT EXISTS `ingredient_in_dish` (
+DROP TABLE IF EXISTS `ingredient_in_dish`;
+CREATE TABLE `ingredient_in_dish` (
   `ingredient_id` int(11) NOT NULL DEFAULT '0',
   `dish_id` int(11) NOT NULL DEFAULT '0',
   `quantity` double DEFAULT NULL,
@@ -214,7 +219,8 @@ INSERT INTO `ingredient_in_dish` (`ingredient_id`, `dish_id`, `quantity`) VALUES
 -- Tabellstruktur for tabell `menu`
 --
 
-CREATE TABLE IF NOT EXISTS `menu` (
+DROP TABLE IF EXISTS `menu`;
+CREATE TABLE `menu` (
   `menu_id` int(11) NOT NULL AUTO_INCREMENT,
   `description` varchar(100) DEFAULT NULL,
   `type_meal` varchar(70) DEFAULT NULL,
@@ -234,7 +240,8 @@ INSERT INTO `menu` (`menu_id`, `description`, `type_meal`) VALUES
 -- Tabellstruktur for tabell `menu_relation_dish`
 --
 
-CREATE TABLE IF NOT EXISTS `menu_relation_dish` (
+DROP TABLE IF EXISTS `menu_relation_dish`;
+CREATE TABLE `menu_relation_dish` (
   `dish_id` int(11) NOT NULL DEFAULT '0',
   `menu_id` int(11) NOT NULL DEFAULT '0',
   `quantity` int(11) DEFAULT '1',
@@ -255,7 +262,8 @@ INSERT INTO `menu_relation_dish` (`dish_id`, `menu_id`, `quantity`) VALUES
 -- Tabellstruktur for tabell `n_data`
 --
 
-CREATE TABLE IF NOT EXISTS `n_data` (
+DROP TABLE IF EXISTS `n_data`;
+CREATE TABLE `n_data` (
   `dataname` varchar(50) DEFAULT NULL,
   `VALUE` varchar(50) DEFAULT NULL,
   `TIMESTAMP` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
@@ -267,7 +275,8 @@ CREATE TABLE IF NOT EXISTS `n_data` (
 -- Tabellstruktur for tabell `n_order`
 --
 
-CREATE TABLE IF NOT EXISTS `n_order` (
+DROP TABLE IF EXISTS `n_order`;
+CREATE TABLE `n_order` (
   `order_id` int(11) NOT NULL AUTO_INCREMENT,
   `customer_id` int(11) NOT NULL,
   `subscription_id` int(11) DEFAULT NULL,
@@ -279,7 +288,7 @@ CREATE TABLE IF NOT EXISTS `n_order` (
   PRIMARY KEY (`order_id`),
   KEY `subscription_id` (`subscription_id`),
   KEY `customer_id` (`customer_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
 
 --
 -- Dataark for tabell `n_order`
@@ -294,7 +303,8 @@ INSERT INTO `n_order` (`order_id`, `customer_id`, `subscription_id`, `customer_r
 -- Tabellstruktur for tabell `subscription`
 --
 
-CREATE TABLE IF NOT EXISTS `subscription` (
+DROP TABLE IF EXISTS `subscription`;
+CREATE TABLE `subscription` (
   `subscription_id` int(11) NOT NULL AUTO_INCREMENT,
   `start_date` date DEFAULT NULL,
   `end_date` date DEFAULT NULL,
@@ -317,7 +327,8 @@ INSERT INTO `subscription` (`subscription_id`, `start_date`, `end_date`) VALUES
 -- Tabellstruktur for tabell `supplier`
 --
 
-CREATE TABLE IF NOT EXISTS `supplier` (
+DROP TABLE IF EXISTS `supplier`;
+CREATE TABLE `supplier` (
   `supplier_id` int(11) NOT NULL AUTO_INCREMENT,
   `business_name` varchar(50) NOT NULL,
   `phone` varchar(50) DEFAULT NULL,
@@ -340,7 +351,8 @@ INSERT INTO `supplier` (`supplier_id`, `business_name`, `phone`, `address_id`) V
 -- Tabellstruktur for tabell `zipcode`
 --
 
-CREATE TABLE IF NOT EXISTS `zipcode` (
+DROP TABLE IF EXISTS `zipcode`;
+CREATE TABLE `zipcode` (
   `place` varchar(255) DEFAULT NULL,
   `zipcode` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`zipcode`)
@@ -403,7 +415,4 @@ ADD CONSTRAINT `n_order_ibfk_3` FOREIGN KEY (`customer_id`) REFERENCES `customer
 --
 ALTER TABLE `supplier`
 ADD CONSTRAINT `supplier_ibfk_1` FOREIGN KEY (`address_id`) REFERENCES `address` (`address_id`);
-
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+SET FOREIGN_KEY_CHECKS=1;
