@@ -14,13 +14,15 @@ public class DBConnector {
     protected static Connection con = null;
 
     public DBConnector() {
-        try {
-            Class.forName(databaseDriver);
-            con = DriverManager.getConnection(databaseName);
-        } catch (ClassNotFoundException exc) {
-            System.out.println(exc);
-        } catch (SQLException exc) {
-            System.out.println(exc);
+        if(con == null) {
+            try {
+                Class.forName(databaseDriver);
+                con = DriverManager.getConnection(databaseName);
+            } catch (ClassNotFoundException exc) {
+                System.out.println(exc);
+            } catch (SQLException exc) {
+                System.out.println(exc);
+            }
         }
     }
 
