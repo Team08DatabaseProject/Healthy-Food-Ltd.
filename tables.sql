@@ -1,247 +1,425 @@
-DROP TABLE IF EXISTS subscription; -- reoccuring orders
-DROP TABLE IF EXISTS menu_relation_order;
-DROP TABLE IF EXISTS menu_relation_dish;
-DROP TABLE IF EXISTS menu;
-DROP TABLE IF EXISTS n_order;
-DROP TABLE IF EXISTS customer_order;-- look
-DROP TABLE IF EXISTS ingredient_in_dish;
-DROP TABLE IF EXISTS dish;
-DROP TABLE IF EXISTS customer;
-DROP TABLE IF EXISTS employee_position;
-DROP TABLE IF EXISTS employee;
-DROP TABLE IF EXISTS person;
-DROP TABLE IF EXISTS supplier_relation;
-DROP TABLE IF EXISTS ingredient;
-DROP TABLE IF EXISTS supplier;
-DROP TABLE IF EXISTS address;
-DROP TABLE IF EXISTS n_data;
-DROP TABLE IF EXISTS data_cache;
+-- phpMyAdmin SQL Dump
+-- version 4.0.10deb1
+-- http://www.phpmyadmin.net
+--
+-- Vert: 127.0.0.1
+-- Generert den: 18. Mar, 2016 18:52 PM
+-- Tjenerversjon: 5.5.47-0ubuntu0.14.04.1
+-- PHP-Versjon: 5.5.9-1ubuntu4.14
 
-CREATE TABLE subscription(
-  subscription_id INTEGER NOT NULL AUTO_INCREMENT,
-  start_date DATE,
-  end_date DATE,
-  -- num_days_between INTEGER,
-  -- defined_days VARCHAR(255),
-  PRIMARY KEY(subscription_id));
-  
-CREATE TABLE n_order(
-  order_id INTEGER NOT NULL AUTO_INCREMENT,
-  subscription_id INTEGER DEFAULT NULL,
-  customer_requests VARCHAR(100),
-  delivery_date DATETIME,
-  delivered_date DATETIME DEFAULT NULL,
-  price DOUBLE DEFAULT NULL,
-  address VARCHAR(255), -- this is the only address field that is not connected to anything. This is written in runtime in java
-  PRIMARY KEY(order_id));
+SET FOREIGN_KEY_CHECKS=0;
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET time_zone = "+00:00";
 
+/*!40101 SET NAMES utf8 */;
 
-CREATE TABLE person(
-  person_id INTEGER,
-  firstname VARCHAR(255),
-  lastname VARCHAR(255),
-  phone INTEGER,
-  email VARCHAR(40),
-  address_id INTEGER,
-  PRIMARY KEY(person_id));
+--
+-- Database: `thomjos`
+--
 
-CREATE TABLE customer(
-  c_id INTEGER,
-  person_id INTEGER UNIQUE,  -- connection to person 
-  isbusiness TINYINT(1) UNSIGNED, -- boolean
-  PRIMARY KEY(c_id));
-  
-CREATE TABLE employee(
-  person_id INTEGER, -- connection to person 
-  username VARCHAR(20),
-  pos_id INTEGER NOT NULL, -- connection to employee_position
-  salary DOUBLE,
-  passhash VARCHAR(64),
-  PRIMARY KEY(person_id));
+-- --------------------------------------------------------
 
-CREATE TABLE employee_position(
-  pos_id INTEGER,
-  description VARCHAR(255),
-  n_privilege INTEGER AUTO_INCREMENT NOT NULL ,-- privilege determines what window starts up after login.
-  default_salary DOUBLE NOT NULL,
-  PRIMARY KEY(pos_id)
-);
+--
+-- Tabellstruktur for tabell `address`
+--
 
-CREATE TABLE address(
-  address_id INTEGER NOT NULL AUTO_INCREMENT,
-  address VARCHAR(255),
-  zipcode INTEGER,
-  PRIMARY KEY(address_id));
+DROP TABLE IF EXISTS `address`;
+CREATE TABLE `address` (
+  `address_id` int(11) NOT NULL AUTO_INCREMENT,
+  `address` varchar(255) DEFAULT NULL,
+  `zipcode` int(11) DEFAULT NULL,
+  PRIMARY KEY (`address_id`),
+  KEY `zipcode` (`zipcode`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1  AUTO_INCREMENT=3 ;
 
-CREATE TABLE zipcode(
-  place VARCHAR(255),
-  zipcode INTEGER,
-  PRIMARY KEY(zipcode));
+--
+-- Dataark for tabell `address`
+--
 
-CREATE TABLE customer_order(
-  order_id INTEGER,
-  c_id INTEGER NOT NULL,
-  PRIMARY KEY(order_id));
+INSERT INTO `address` (`address_id`, `address`, `zipcode`) VALUES
+  (1, 'Osloveien 56B', 7017),
+  (2, 'Olav Tryggvasons gate 3 ', 7017);
 
-CREATE TABLE ingredient(
-  ingredient_id INTEGER,
-  quantity_owned DOUBLE,
-  quantity_reserved DOUBLE,
-  unit VARCHAR(20),
-  price DOUBLE,
-  supplier_id INTEGER,
-  -- nutrition VARCHAR(100),
-  description VARCHAR(255),
-  PRIMARY KEY(ingredient_id));
+-- --------------------------------------------------------
 
-CREATE TABLE ingredient_in_dish(
-  ingredient_id INTEGER, -- connected to Ingredient
-  dish_id INTEGER, -- connected to dish
-  quantity DOUBLE, -- amount of Ingredient needed for the dish, in the unit specify
-  PRIMARY KEY(ingredient_id, dish_id));
+--
+-- Tabellstruktur for tabell `customer`
+--
 
-CREATE TABLE menu(
-  menu_id INTEGER,
-  description VARCHAR(100),
-  type_meal VARCHAR(70) DEFAULT NULL,
-  -- portion INTEGER,
-  PRIMARY KEY(menu_id));
+DROP TABLE IF EXISTS `customer`;
+CREATE TABLE `customer` (
+  `c_id` int(11) NOT NULL AUTO_INCREMENT,
+  `business_name` varchar(64) DEFAULT NULL,
+  `first_name` varchar(64) DEFAULT NULL,
+  `last_name` varchar(64) DEFAULT NULL,
+  `phone` int(11) DEFAULT NULL,
+  `email` varchar(50) DEFAULT NULL,
+  `address_id` int(11) DEFAULT NULL,
+  `isbusiness` tinyint(1) unsigned DEFAULT NULL,
+  PRIMARY KEY (`c_id`),
+  KEY `address_id` (`address_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
 
-CREATE TABLE supplier(
-  supplier_id INTEGER,
-  phone VARCHAR(50),
-  address_id INTEGER,
-  PRIMARY KEY(supplier_id));
+--
+-- Dataark for tabell `customer`
+--
 
-CREATE TABLE dish(
-  price DOUBLE,
-  dish_id INTEGER,
-  NAME VARCHAR(255),
-  PRIMARY KEY(dish_id));
+INSERT INTO `customer` (`c_id`, `business_name`, `first_name`, `last_name`, `phone`, `email`, `address_id`, `isbusiness`) VALUES
+  (1, 'firstBusinessCustomer', 'firstContactPerson', 'afterNameContactPerson', 922992, 'firstBusinessCustomerEmail', 1, 1),
+  (2, 'firstOrdinaryCustomer', 'firstcustomer', 'aftercustomer', 93322992, 'firstOrdiaryCustomerEmail', 1, 0);
 
-CREATE TABLE menu_relation_dish(
-  dish_id INTEGER,
-  menu_id INTEGER,
-  quantity INTEGER DEFAULT '1',
-  PRIMARY KEY(dish_id, menu_id));
+-- --------------------------------------------------------
 
+--
+-- Tabellstruktur for tabell `data_cache`
+--
 
-CREATE TABLE n_data(
-  dataname VARCHAR(50),
-  VALUE VARCHAR(50),
-  TIMESTAMP TIMESTAMP
-  -- gross_profit ,
-  -- profit ,
-  -- expenses ,
-  -- update_jclients ,
-);
+DROP TABLE IF EXISTS `data_cache`;
+CREATE TABLE `data_cache` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `dataname` varchar(50) DEFAULT NULL,
+  `VALUE` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
-CREATE TABLE data_cache(
-  id INTEGER(11) NOT NULL AUTO_INCREMENT,
-  dataname VARCHAR(50),
-  VALUE INTEGER UNSIGNED NOT NULL,
-  PRIMARY KEY(id)
-) ENGINE=MYISAM DEFAULT CHARSET=latin1;
+-- --------------------------------------------------------
 
--- ****************************************************************************
--- ****************************************************************************
--- ****************************************************************************
--- ****************************************************************************
+--
+-- Tabellstruktur for tabell `dish`
+--
 
--- Not sure if this was supposed to be called "menu_relation_order" or really "order_relation_dish"
+DROP TABLE IF EXISTS `dish`;
+CREATE TABLE `dish` (
+  `price` double DEFAULT NULL,
+  `dish_id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`dish_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
 
--- CREATE TABLE order_relation_dish(
---  dish_id INTEGER,
---  order_id INTEGER,
---  quantity INTEGER DEFAULT '1',
---  PRIMARY KEY(dish_id, order_id));
+--
+-- Dataark for tabell `dish`
+--
 
+INSERT INTO `dish` (`price`, `dish_id`, `name`) VALUES
+  (32, 1, 'Spaghetti'),
+  (14, 2, 'Meatballs');
 
--- Commented because of the comments above /\
+-- --------------------------------------------------------
 
--- ALTER TABLE menu_relation_order
--- ADD FOREIGN KEY(menu_id)
--- REFERENCES menu(menu_id),
--- ADD FOREIGN KEY(order_id)
--- REFERENCES n_order(order_id);
+--
+-- Tabellstruktur for tabell `employee`
+--
 
--- ****************************************************************************
--- ****************************************************************************
--- ****************************************************************************
--- ****************************************************************************
- 
-ALTER TABLE person
-ADD FOREIGN KEY(address_id)
-REFERENCES address(address_id);
+DROP TABLE IF EXISTS `employee`;
+CREATE TABLE `employee` (
+  `employee_id` int(11) NOT NULL AUTO_INCREMENT,
+  `first_name` varchar(64) DEFAULT NULL,
+  `last_name` varchar(64) DEFAULT NULL,
+  `phone` int(11) DEFAULT NULL,
+  `email` varchar(50) DEFAULT NULL,
+  `address_id` int(11) DEFAULT NULL,
+  `username` varchar(20) DEFAULT NULL,
+  `pos_id` int(11) NOT NULL,
+  `salary` double DEFAULT NULL,
+  `passhash` varchar(64) DEFAULT NULL,
+  PRIMARY KEY (`employee_id`),
+  UNIQUE KEY `username` (`username`),
+  KEY `address_id` (`address_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=6 ;
 
-ALTER TABLE address
-ADD FOREIGN KEY(zipcode)
-REFERENCES zipcode(zipcode);
+--
+-- Dataark for tabell `employee`
+--
 
-ALTER TABLE n_order
-ADD FOREIGN KEY(subscription_id)
-REFERENCES subscription(subscription_id),
-ADD FOREIGN KEY(order_id)
-REFERENCES customer_order(order_id);
+INSERT INTO `employee` (`employee_id`, `first_name`, `last_name`, `phone`, `email`, `address_id`, `username`, `pos_id`, `salary`, `passhash`) VALUES
+  (1, 'Paul Thomas', 'Korsvold', 99110488, 'paultk@student.hist.no', 1, 'PTKM', 1, 1000, '-11-80-37-128-9630-127-12366787-42-10811914-5-9123-20-38'),
+  (2, 'Bob', 'Testdriver', 90133787, 'bobtestdriver@gmail.com', 2, 'testdriver', 3, 200000, 'testhash'),
+  (3, 'Important', 'Bossman', 12345678, 'importantbossman@gmail.com', 1, 'testceo', 1, 10000000, 'testceohash'),
+  (4, 'Axel', 'Kvistad', 90133787, 'axel.b.kvistad@gmail.com', 2, 'axelbkv', 3, 200000, 'axelerbra'),
+  (5, 'Spaghetti', 'Meatballs', 87654321, 'spaghetti.meatballs@gmail.com', 2, 'testchef', 2, 300000, 'testchefhash');
 
-ALTER TABLE supplier
-ADD FOREIGN KEY(address_id)
-REFERENCES address(address_id);
+-- --------------------------------------------------------
 
-ALTER TABLE ingredient
-ADD FOREIGN KEY(supplier_id)
-REFERENCES supplier(supplier_id);
+--
+-- Tabellstruktur for tabell `employee_position`
+--
 
-ALTER TABLE menu_relation_dish
-ADD FOREIGN KEY(dish_id)
-REFERENCES dish(dish_id),
-ADD FOREIGN KEY(menu_id)
-REFERENCES menu(menu_id);
+DROP TABLE IF EXISTS `employee_position`;
+CREATE TABLE `employee_position` (
+  `pos_id` int(11) NOT NULL AUTO_INCREMENT,
+  `description` varchar(255) DEFAULT NULL,
+  `default_salary` double NOT NULL,
+  PRIMARY KEY (`pos_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=6 ;
 
-ALTER TABLE employee
-ADD FOREIGN KEY(person_id)
-REFERENCES person(person_id);
+--
+-- Dataark for tabell `employee_position`
+--
 
-ALTER TABLE customer_order
-ADD FOREIGN KEY(c_id)
-REFERENCES customer(c_id);
+INSERT INTO `employee_position` (`pos_id`, `description`, `default_salary`) VALUES
+  (1, 'CEO', 800000),
+  (2, 'Chef', 700000),
+  (3, 'Driver', 400000),
+  (4, 'Sales', 350000),
+  (5, 'Nutrition', 650000);
 
-ALTER TABLE ingredient_in_dish
-ADD FOREIGN KEY(ingredient_id)
-REFERENCES ingredient(ingredient_id),
-ADD FOREIGN KEY(dish_id)
-REFERENCES dish(dish_id);
+-- --------------------------------------------------------
 
+--
+-- Tabellstruktur for tabell `ingredient`
+--
 
+DROP TABLE IF EXISTS `ingredient`;
+CREATE TABLE `ingredient` (
+  `ingredient_id` int(11) NOT NULL AUTO_INCREMENT,
+  `quantity_owned` double DEFAULT NULL,
+  `quantity_reserved` double DEFAULT NULL,
+  `unit` varchar(20) DEFAULT NULL,
+  `price` double DEFAULT NULL,
+  `supplier_id` int(11) DEFAULT NULL,
+  `description` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`ingredient_id`),
+  KEY `supplier_id` (`supplier_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
 
+--
+-- Dataark for tabell `ingredient`
+--
 
+INSERT INTO `ingredient` (`ingredient_id`, `quantity_owned`, `quantity_reserved`, `unit`, `price`, `supplier_id`, `description`) VALUES
+  (1, 200, 0, 'Kg', 35, 1, 'sugar'),
+  (2, 300, 0, 'Kg', 353, 1, 'chocolate'),
+  (3, 400, 0, 'Kg', 31, 1, 'flour');
 
+-- --------------------------------------------------------
 
+--
+-- Tabellstruktur for tabell `ingredient_in_dish`
+--
 
+DROP TABLE IF EXISTS `ingredient_in_dish`;
+CREATE TABLE `ingredient_in_dish` (
+  `ingredient_id` int(11) NOT NULL DEFAULT '0',
+  `dish_id` int(11) NOT NULL DEFAULT '0',
+  `quantity` double DEFAULT NULL,
+  PRIMARY KEY (`ingredient_id`,`dish_id`),
+  KEY `dish_id` (`dish_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Dataark for tabell `ingredient_in_dish`
+--
 
+INSERT INTO `ingredient_in_dish` (`ingredient_id`, `dish_id`, `quantity`) VALUES
+  (1, 1, 1),
+  (2, 2, 1);
 
--- DUMMY DATA
+-- --------------------------------------------------------
 
-INSERT INTO zipcode VALUES ('Trondheim', 7017);
-INSERT INTO zipcode VALUES ('Trondheim', 7018);
-INSERT INTO zipcode VALUES ('Trondheim', 7019);
+--
+-- Tabellstruktur for tabell `menu`
+--
 
-INSERT INTO address VALUES (DEFAULT, 'Osloveien 56B', 7017);
-INSERT INTO address VALUES (DEFAULT, 'Olav Tryggvasons gate 3 ', 7017);
+DROP TABLE IF EXISTS `menu`;
+CREATE TABLE `menu` (
+  `menu_id` int(11) NOT NULL AUTO_INCREMENT,
+  `description` varchar(100) DEFAULT NULL,
+  `type_meal` varchar(70) DEFAULT NULL,
+  PRIMARY KEY (`menu_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
 
-INSERT INTO person VALUES (DEFAULT, 'Paul Thomas', 'Korsvold', '99110488', 'paultk@student.hist.no', 1 );
+--
+-- Dataark for tabell `menu`
+--
 
-INSERT INTO employee_position VALUES (DEFAULT, 'DRIVER', DEFAULT, 1000);
+INSERT INTO `menu` (`menu_id`, `description`, `type_meal`) VALUES
+  (1, 'firstMenu', 'not vegan!');
 
-INSERT INTO employee VALUES (1, 'PTKM', 1, 1000, '-11-80-37-128-9630-127-12366787-42-10811914-5-9123-20-38');
+-- --------------------------------------------------------
 
+--
+-- Tabellstruktur for tabell `menu_relation_dish`
+--
 
+DROP TABLE IF EXISTS `menu_relation_dish`;
+CREATE TABLE `menu_relation_dish` (
+  `dish_id` int(11) NOT NULL DEFAULT '0',
+  `menu_id` int(11) NOT NULL DEFAULT '0',
+  `quantity` int(11) DEFAULT '1',
+  PRIMARY KEY (`dish_id`,`menu_id`),
+  KEY `menu_id` (`menu_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Dataark for tabell `menu_relation_dish`
+--
 
+INSERT INTO `menu_relation_dish` (`dish_id`, `menu_id`, `quantity`) VALUES
+  (1, 1, 1);
 
+-- --------------------------------------------------------
 
+--
+-- Tabellstruktur for tabell `n_data`
+--
 
+DROP TABLE IF EXISTS `n_data`;
+CREATE TABLE `n_data` (
+  `dataname` varchar(50) DEFAULT NULL,
+  `VALUE` varchar(50) DEFAULT NULL,
+  `TIMESTAMP` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+-- --------------------------------------------------------
 
+--
+-- Tabellstruktur for tabell `n_order`
+--
 
+DROP TABLE IF EXISTS `n_order`;
+CREATE TABLE `n_order` (
+  `order_id` int(11) NOT NULL AUTO_INCREMENT,
+  `customer_id` int(11) NOT NULL,
+  `subscription_id` int(11) DEFAULT NULL,
+  `customer_requests` varchar(100) DEFAULT NULL,
+  `delivery_date` datetime DEFAULT NULL,
+  `delivered_date` datetime DEFAULT NULL,
+  `price` double DEFAULT NULL,
+  `address` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`order_id`),
+  KEY `subscription_id` (`subscription_id`),
+  KEY `customer_id` (`customer_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+
+--
+-- Dataark for tabell `n_order`
+--
+
+INSERT INTO `n_order` (`order_id`, `customer_id`, `subscription_id`, `customer_requests`, `delivery_date`, `delivered_date`, `price`, `address`) VALUES
+  (1, 1, 1, 'hold the pickle, hold the lettuce, special orders do upset us', '2016-04-23 00:00:00', NULL, 2000, 'johann sollis gate 3');
+
+-- --------------------------------------------------------
+
+--
+-- Tabellstruktur for tabell `subscription`
+--
+
+DROP TABLE IF EXISTS `subscription`;
+CREATE TABLE `subscription` (
+  `subscription_id` int(11) NOT NULL AUTO_INCREMENT,
+  `start_date` date DEFAULT NULL,
+  `end_date` date DEFAULT NULL,
+  PRIMARY KEY (`subscription_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
+
+--
+-- Dataark for tabell `subscription`
+--
+
+INSERT INTO `subscription` (`subscription_id`, `start_date`, `end_date`) VALUES
+  (1, '2014-12-14', '2016-05-02'),
+  (2, '2012-12-14', '2018-05-02'),
+  (3, '2014-12-14', '2016-05-02'),
+  (4, '2012-12-14', '2018-05-02');
+
+-- --------------------------------------------------------
+
+--
+-- Tabellstruktur for tabell `supplier`
+--
+
+DROP TABLE IF EXISTS `supplier`;
+CREATE TABLE `supplier` (
+  `supplier_id` int(11) NOT NULL AUTO_INCREMENT,
+  `business_name` varchar(50) NOT NULL,
+  `phone` varchar(50) DEFAULT NULL,
+  `address_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`supplier_id`),
+  KEY `address_id` (`address_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
+
+--
+-- Dataark for tabell `supplier`
+--
+
+INSERT INTO `supplier` (`supplier_id`, `business_name`, `phone`, `address_id`) VALUES
+  (1, 'Freia', '2201943', 1),
+  (2, 'Kraft', '2201943', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Tabellstruktur for tabell `zipcode`
+--
+
+DROP TABLE IF EXISTS `zipcode`;
+CREATE TABLE `zipcode` (
+  `place` varchar(255) DEFAULT NULL,
+  `zipcode` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`zipcode`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dataark for tabell `zipcode`
+--
+
+INSERT INTO `zipcode` (`place`, `zipcode`) VALUES
+  ('Trondheim', 7017),
+  ('Trondheim', 7018),
+  ('Trondheim', 7019);
+
+--
+-- Begrensninger for dumpede tabeller
+--
+
+--
+-- Begrensninger for tabell `address`
+--
+ALTER TABLE `address`
+ADD CONSTRAINT `address_ibfk_1` FOREIGN KEY (`zipcode`) REFERENCES `zipcode` (`zipcode`);
+
+--
+-- Begrensninger for tabell `customer`
+--
+ALTER TABLE `customer`
+ADD CONSTRAINT `customer_ibfk_1` FOREIGN KEY (`address_id`) REFERENCES `address` (`address_id`);
+
+--
+-- Begrensninger for tabell `employee`
+--
+ALTER TABLE `employee`
+ADD CONSTRAINT `employee_ibfk_1` FOREIGN KEY (`address_id`) REFERENCES `address` (`address_id`);
+
+--
+-- Begrensninger for tabell `ingredient`
+--
+ALTER TABLE `ingredient`
+ADD CONSTRAINT `ingredient_ibfk_1` FOREIGN KEY (`supplier_id`) REFERENCES `supplier` (`supplier_id`);
+
+--
+-- Begrensninger for tabell `ingredient_in_dish`
+--
+ALTER TABLE `ingredient_in_dish`
+ADD CONSTRAINT `ingredient_in_dish_ibfk_1` FOREIGN KEY (`ingredient_id`) REFERENCES `ingredient` (`ingredient_id`),
+ADD CONSTRAINT `ingredient_in_dish_ibfk_2` FOREIGN KEY (`dish_id`) REFERENCES `dish` (`dish_id`);
+
+--
+-- Begrensninger for tabell `menu_relation_dish`
+--
+ALTER TABLE `menu_relation_dish`
+ADD CONSTRAINT `menu_relation_dish_ibfk_1` FOREIGN KEY (`dish_id`) REFERENCES `dish` (`dish_id`),
+ADD CONSTRAINT `menu_relation_dish_ibfk_2` FOREIGN KEY (`menu_id`) REFERENCES `menu` (`menu_id`);
+
+--
+-- Begrensninger for tabell `n_order`
+--
+ALTER TABLE `n_order`
+ADD CONSTRAINT `n_order_ibfk_1` FOREIGN KEY (`subscription_id`) REFERENCES `subscription` (`subscription_id`),
+ADD CONSTRAINT `n_order_ibfk_3` FOREIGN KEY (`customer_id`) REFERENCES `customer` (`c_id`);
+
+--
+-- Begrensninger for tabell `supplier`
+--
+ALTER TABLE `supplier`
+ADD CONSTRAINT `supplier_ibfk_1` FOREIGN KEY (`address_id`) REFERENCES `address` (`address_id`);
+SET FOREIGN_KEY_CHECKS=1;
