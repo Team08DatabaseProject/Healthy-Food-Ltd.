@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--> Axel </!-->
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+
+<!--> Textfields for registering new employee </!-->
+
+
+<GridPane fx:id="textGrid" hgap="10" vgap="10" prefHeight="500.0" prefWidth="300.0" BorderPane.alignment="CENTER" xmlns:fx="http://javafx.com/fxml" fx:controller="CEO.ControllerCEORegister">
+    <padding><Insets top="40" right="25" bottom="25" left="25"/></padding>
+
+    <Label text="Employee id:"
+           GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+    <TextField fx:id="idField"
+               GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+    <Label text="First name:"
+           GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+    <TextField fx:id="fNameField"
+               GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+    <Label text="Last name:"
+           GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+    <TextField fx:id="lNameField"
+               GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+
+    <Label text="Phone:"
+           GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+    <TextField fx:id="phoneField"
+               GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+
+    <Label text="Email:"
+           GridPane.columnIndex="0" GridPane.rowIndex="4"/>
+    <TextField fx:id="emailField"
+               GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+
+    <Label text="Address:"
+           GridPane.columnIndex="0" GridPane.rowIndex="5"/>
+    <TextField fx:id="addressField"
+               GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+
+    <Label text="Username:"
+           GridPane.columnIndex="0" GridPane.rowIndex="6"/>
+    <TextField fx:id="usernameField"
+               GridPane.columnIndex="1" GridPane.rowIndex="6"/>
+
+    <Label text="Position id:"
+           GridPane.columnIndex="0" GridPane.rowIndex="7"/>
+    <TextField fx:id="posIdField"
+               GridPane.columnIndex="1" GridPane.rowIndex="7"/>
+
+    <Label text="Salary:"
+           GridPane.columnIndex="0" GridPane.rowIndex="8"/>
+    <TextField fx:id="salaryField"
+               GridPane.columnIndex="1" GridPane.rowIndex="8"/>
+
+    <Label text="Password:"
+           GridPane.columnIndex="0" GridPane.rowIndex="9"/>
+    <PasswordField fx:id="passwordField"
+               GridPane.columnIndex="1" GridPane.rowIndex="9"/>
+
+    <HBox spacing="10" alignment="BOTTOM_RIGHT"
+          GridPane.columnIndex="1" GridPane.rowIndex="10">
+        <Button styleClass="SmallButton" fx:id="finalRegisterButton" text="Register employee"/>
+    </HBox>
+
+</GridPane>

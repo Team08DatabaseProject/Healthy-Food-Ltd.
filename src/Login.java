@@ -32,12 +32,6 @@ import javafx.stage.Stage;
  */
 public class Login extends Application {
 
-    String driverUser = "Driver";
-    String driverPassword = "Driver123";
-    String testUser = "Test";
-    String testPassword = "Test123";
-    String user = "JavaFX2";
-    String pw = "password";
     String checkUser, checkPw;
     SqlQueries query = new SqlQueries();
     private static final int CEO = 1;
@@ -122,7 +116,10 @@ public class Login extends Application {
                     if (emp != null) {
                         switch(emp.getPosId()) {
                             case CEO : {
-                                break;
+                                Parent root = FXMLLoader.load(getClass().getResource("CEO/CEOWindow.fxml"));
+                                primaryStage.setTitle("Healthy Catering - CEO");
+                                primaryStage.setScene(new Scene(root, 800, 600));
+                                primaryStage.show();
                             }
                             case CHEF : {
                                 break;

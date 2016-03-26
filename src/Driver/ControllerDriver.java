@@ -16,10 +16,12 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import Driver.ControllerDriverCS;
 
 public class ControllerDriver implements Initializable {
 
@@ -30,7 +32,7 @@ public class ControllerDriver implements Initializable {
     public Button deliveredButton;
     public Button notDeliveredButton;
     public BorderPane rootPaneDriver;
-    public TableView changeOrderStatusTable;
+    public GridPane changeStatusTable;
 
     // Test data for orders which are ready for delivery
     final ObservableList<DriverOrderDelivery> readyOrderData = FXCollections.observableArrayList(
@@ -82,19 +84,8 @@ public class ControllerDriver implements Initializable {
             try {
                 FXMLLoader loader = new FXMLLoader();
                 loader.setLocation(getClass().getResource("ChangeOrderStatusTable.fxml"));
-                changeOrderStatusTable = loader.load();
-                rootPaneDriver.setCenter(changeOrderStatusTable);
-                ObservableList<TableColumn> columns = changeOrderStatusTable.getColumns();
-                columns.get(0).setCellValueFactory(new PropertyValueFactory<DriverOrderStatus,Integer>("orderNo"));
-                columns.get(1).setCellValueFactory(new PropertyValueFactory<DriverOrderStatus,String>("address"));
-                columns.get(2).setCellValueFactory(new PropertyValueFactory<DriverOrderStatus,String>("deadline"));
-                columns.get(3).setCellValueFactory(new PropertyValueFactory<DriverOrderStatus,String>("status"));
-                changeOrderStatusTable.setItems(changeStatusData);
-
-                FXMLLoader bottomLoader = new FXMLLoader();
-                bottomLoader.setLocation(getClass().getResource("ChangeOrderStatusBottom.fxml"));
-                HBox changeOrderStatusBottom = bottomLoader.load();
-                rootPaneDriver.setBottom(changeOrderStatusBottom);
+                changeStatusTable = loader.load();
+                rootPaneDriver.setCenter(changeStatusTable);
 
             } catch(Exception exc) {
                 System.out.println("changeStatusEvent: " + exc);
@@ -104,18 +95,20 @@ public class ControllerDriver implements Initializable {
 
     // WORK IN PROGRESS: changes the status of selected orders from "Not delivered" to "Delivered".
     // Once this is figured out I'll make another one for doing the reverse.
+    /*
     EventHandler<ActionEvent> markAsDelivered = new EventHandler<ActionEvent>() {
         @Override
         public void handle(ActionEvent e) {
             try {
-                changeOrderStatusTable.getSelectionModel().setCellSelectionEnabled(true);
-                DriverOrderStatus orderStatus = (DriverOrderStatus) changeOrderStatusTable.getSelectionModel().getSelectedItem();
+                changeStatusTable.getSelectionModel().setCellSelectionEnabled(true);
+                DriverOrderStatus orderStatus = (DriverOrderStatus) changeStatusTable.getSelectionModel().getSelectedItem();
                 orderStatus.setStatus("Delivered");
             } catch (Exception exc) {
                 System.out.println(exc);
             }
         }
     };
+    */
 
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) { // Required method for Initializable, runs at program launch
 
