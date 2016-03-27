@@ -4,6 +4,8 @@ package driver;
  * Created by axelkvistad on 3/16/16.
  * For use in "Change order status" table
  */
+// import javafx.beans.property.*;
+
 public class DriverOrderStatus {
 
     private int orderNo;

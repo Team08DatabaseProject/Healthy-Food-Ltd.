@@ -8,11 +8,9 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 
-<!--> Main window for driver <!-->
+<!--> Main window for CEO <!-->
 
-<BorderPane fx:id="rootPaneDriver" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-            prefHeight="600.0" prefWidth="800.0" stylesheets="@/driver/DriverStyle.css" xmlns="http://javafx.com/javafx/8"
-            xmlns:fx="http://javafx.com/fxml/1" fx:controller="driver.ControllerDriver">
+<BorderPane fx:id="rootPaneDriver" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" stylesheets="@/CEO/CEOStyle.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="CEO.ControllerCEO">
     <top>
         <MenuBar BorderPane.alignment="TOP_LEFT">
             <menus>
@@ -34,15 +32,8 @@
             </menus>
         </MenuBar>
     </top>
-    <left>
-        <VBox prefHeight="200.0" prefWidth="100.0" style="-fx-spacing: 4px; -fx-padding: 4px;" BorderPane.alignment="CENTER">
-            <children>
-                <Button fx:id="readyOrderButton" mnemonicParsing="false" text="Ready &#10;for delivery" textAlignment="CENTER" />
-                <Button fx:id="changeStatusButton" mnemonicParsing="false" text="Change &#10;status" textAlignment="CENTER" />
-            </children>
-        </VBox>
-    </left>
     <center>
+        <Button styleClass="BigButton" fx:id="registerEmployeeButton" mnemonicParsing="false" text="Register new &#10; employee" textAlignment="CENTER" />
     </center>
     <bottom>
         <HBox fx:id="bottomHBox" prefHeight="80.0" prefWidth="100.0" BorderPane.alignment="CENTER"></HBox>

@@ -18,10 +18,51 @@ public class SqlQueries extends DBConnector {
      */
     
     PreparedStatement selectQuery;
+    PreparedStatement insertQuery;
     ResultSet res = null;
 
     public SqlQueries() {
 
+    }
+
+
+    public void addEmployee(Employee newEmp, String fName, String lName, int phone,
+                            String email, int addressId) {
+        int attempts = 0;
+        boolean ok = false;
+
+        do {
+            try {
+                con.setAutoCommit(false);
+                String insertSql = "INSERT INTO employee VALUES(?,?,?,?,?,?,?,?,?,?)";
+                insertQuery = con.prepareStatement(insertSql);
+                insertQuery.setInt(1, newEmp.getPersonId());
+                insertQuery.setString(2, fName);
+                insertQuery.setString(3, lName);
+                insertQuery.setInt(4, phone);
+                insertQuery.setString(5, email);
+                insertQuery.setInt(6, addressId);
+                insertQuery.setString(7, newEmp.getUsername());
+                insertQuery.setInt(8, newEmp.getPosId());
+                insertQuery.setDouble(9, newEmp.getSalary());
+                insertQuery.setString(10, newEmp.getPassHash());
+                insertQuery.execute();
+
+                con.commit();
+                ok = true;
+            } catch (SQLException e) {
+                System.out.println(e);
+                if (attempts < 4) {
+                    attempts++;
+                } else {
+                    System.out.println("Something went wrong: user registration failed.");
+                    SqlCleanup.lukkForbindelse(con);
+                }
+            } finally {
+                SqlCleanup.lukkSetning(insertQuery);
+                SqlCleanup.settAutoCommit(con);
+            }
+        } while(!ok);
     }
 
     public Employee getUser(String username, String passwordHash) {
@@ -54,7 +95,6 @@ public class SqlQueries extends DBConnector {
                 } else {
                     return null;
                 }
-                SqlCleanup.rullTilbake(con);
             } finally {
                 SqlCleanup.lukkResSet(res);
                 SqlCleanup.settAutoCommit(con);
