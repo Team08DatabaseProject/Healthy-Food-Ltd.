@@ -1,7 +1,7 @@
 package Driver;
 /**
  * Created by Axel 16.03.2016
- * Controller for the driver
+ * Controller for the Driver
  */
 
 import classpackage.SqlQueries;
@@ -27,8 +27,7 @@ import classpackage.Order;
 
 public class ControllerDriver implements Initializable {
 
-    @FXML
-    //public TableView tables; // Retrieves TableView with fx:id="tables"
+    @FXML public TableView tables; // Retrieves TableView with fx:id="tables"
     public Button readyOrderButton;
     public Button changeStatusButton;
     public Button deliveredButton;
@@ -42,15 +41,15 @@ public class ControllerDriver implements Initializable {
             new DriverOrderDelivery(2, "Testveien 2", "14:00"),
             new DriverOrderDelivery(3, "Testveien 3", "15:00"),
             new DriverOrderDelivery(4, "Testveien 4", "16:00")
-            );
+    );
 
-    // Same test data, only for the part of the menu where the driver can change the status of the order
+    // Same test data, only for the part of the menu where the Driver can change the status of the order
     final ObservableList<DriverOrderStatus> changeStatusData = FXCollections.observableArrayList(
             new DriverOrderStatus(1, "Testveien 1", "13:00", "Not delivered"),
             new DriverOrderStatus(2, "Testveien 2", "14:00", "Not delivered"),
             new DriverOrderStatus(3, "Testveien 3", "15:00", "Not delivered"),
             new DriverOrderStatus(4, "Testveien 4", "16:00", "Not delivered")
-            );
+    );
 
 
     // Shows a list of orders ready for delivery and a button for generating the route (non-functional as of now)
@@ -117,7 +116,7 @@ public class ControllerDriver implements Initializable {
         //data.add(new TableTest("Fifty-three", "7")); // adds new line to table by adding another TableTest object to the data array
 
         //deliveredButton.setOnAction(markAsDelivered); <-- this line makes the program crash, should be initialized AFTER user clicks "Change order status"-button.
-                                                       // also tried to put it inside changeStatusEvent() but this unsurprisingly leads to NullPointerException
+        // also tried to put it inside changeStatusEvent() but this unsurprisingly leads to NullPointerException
         readyOrderButton.setOnAction(readyOrderEvent);
         changeStatusButton.setOnAction(changeStatusEvent);
 

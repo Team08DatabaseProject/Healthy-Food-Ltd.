@@ -8,17 +8,13 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
-import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
+
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -32,9 +28,7 @@ public class ControllerDriverCS implements Initializable {
     DriverOrderStatus d3 = new DriverOrderStatus(3, "Testveien 3", "15:00", "Not delivered");
     DriverOrderStatus d4 = new DriverOrderStatus(4, "Testveien 4", "16:00", "Not delivered");
 
-    final ObservableList<DriverOrderStatus> changeStatusData = FXCollections.observableArrayList(
-            d1, d2, d3, d4
-    );
+    final ObservableList<DriverOrderStatus> changeStatusData = FXCollections.observableArrayList(d1, d2, d3, d4);
 
 
     EventHandler<ActionEvent> markAsDelivered = new EventHandler<ActionEvent>() {
