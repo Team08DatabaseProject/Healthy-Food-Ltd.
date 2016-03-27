@@ -1,8 +1,11 @@
 package classpackage;
 
 import classpackage.Employee;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 import java.sql.*;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,6 +26,36 @@ public class SqlQueries extends DBConnector {
 
     public SqlQueries() {
 
+    }
+
+    public ObservableList<Order> getOrders() {
+        ObservableList<Order> orders = FXCollections.observableArrayList();
+        boolean done = false;
+
+        do {
+            try {
+                String selectSql = "SELECT * FROM n_order";
+                selectQuery = con.prepareStatement(selectSql);
+                res = selectQuery.executeQuery();
+
+                while (res.next()) {
+                    int orderId = res.getInt("order_id");
+                    int customerId = res.getInt("customer_id");
+                    int subscriptionId = res.getInt("subscription_id");
+                    String  customerReq = res.getString("customer_requests");
+                    java.util.Date deliveryDate = res.getDate("delivery_date");
+                    double price = res.getDouble("price");
+                    String address = res.getString("address");
+
+                    Order order = new Order(orderId, customerReq, deliveryDate, price, address);
+                    orders.add(order);
+                }
+                done = true;
+            } catch (SQLException e) {
+                System.out.println(e);
+            }
+        } while(!done);
+        return orders;
     }
 
 

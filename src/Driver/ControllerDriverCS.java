@@ -42,7 +42,6 @@ public class ControllerDriverCS implements Initializable {
         public void handle(ActionEvent e) {
             try {
                 ((DriverOrderStatus) tables.getSelectionModel().getSelectedItem()).setStatus("Delivered");
-
             } catch (Exception exc) {
                 System.out.println(exc);
             }

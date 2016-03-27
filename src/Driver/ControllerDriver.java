@@ -4,6 +4,7 @@ package Driver;
  * Controller for the driver
  */
 
+import classpackage.SqlQueries;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -21,7 +22,8 @@ import javafx.scene.layout.HBox;
 
 import java.net.URL;
 import java.util.ResourceBundle;
-import Driver.ControllerDriverCS;
+
+import classpackage.Order;
 
 public class ControllerDriver implements Initializable {
 

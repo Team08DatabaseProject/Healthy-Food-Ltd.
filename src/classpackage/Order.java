@@ -2,21 +2,30 @@ package classpackage;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  * Created by paul thomas on 17.03.2016.
  */
-class Order {
+public class Order {
     private double price;
     private int orderId;
     private String customerRequest;
-    private LocalDateTime deliverDate;
+    private Date deliverDate;
 
-    public Order(int orderId, String customerRequest, LocalDateTime deliverDate, LocalDateTime datDelivered, double price, String adress) {
+    public Order(int orderId, String customerRequest, Date deliverDate, LocalDateTime datDelivered, double price, String adress) {
         this.orderId = orderId;
         this.customerRequest = customerRequest;
         this.deliverDate = deliverDate;
         this.datDelivered = datDelivered;
+        this.price = price;
+        this.adress = adress;
+    }
+
+    public Order(int orderId, String customerRequest, Date deliverDate, double price, String adress) {
+        this.orderId = orderId;
+        this.customerRequest = customerRequest;
+        this.deliverDate = deliverDate;
         this.price = price;
         this.adress = adress;
     }
@@ -37,11 +46,11 @@ class Order {
         this.customerRequest = customerRequest;
     }
 
-    public LocalDateTime getDeliverDate() {
+    public Date getDeliverDate() {
         return deliverDate;
     }
 
-    public void setDeliverDate(LocalDateTime deliverDate) {
+    public void setDeliverDate(Date deliverDate) {
         this.deliverDate = deliverDate;
     }
 
