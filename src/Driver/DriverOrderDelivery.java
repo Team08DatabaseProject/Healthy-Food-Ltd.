@@ -1,4 +1,4 @@
-package driver;
+package Driver;
 
 /** Created by Axel
  * 11.03.2016

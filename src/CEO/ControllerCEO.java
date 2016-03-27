@@ -1,7 +1,7 @@
 package CEO;
 /**
  * Created by Axel 16.03.2016
- * Controller for the driver
+ * Controller for the Driver
  */
 
 import javafx.collections.FXCollections;
