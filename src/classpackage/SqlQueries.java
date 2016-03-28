@@ -2,6 +2,7 @@ package classpackage;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.MultipleSelectionModel;
 
 import java.sql.*;
 import java.util.*;
@@ -9,7 +10,6 @@ import java.util.*;
 /**
  * Created by paul thomas on 17.03.2016.
  */
-
 
 
 public class SqlQueries extends DBConnector {
@@ -166,6 +166,7 @@ public class SqlQueries extends DBConnector {
             insertQuery = con.prepareStatement(sqlSetning);
             insertQuery.setInt(1, zipCode);
             insertQuery.setString(2, address);
+            insertQuery.execute();
             con.commit();
             success = true;
         } catch (SQLException e) {
@@ -194,6 +195,7 @@ public class SqlQueries extends DBConnector {
             insertQuery.setInt(5, phoneNumber);
             insertQuery.setString(6, email);
             insertQuery.setInt(7, isBusiness); // 0 is not business, 1 is!
+            insertQuery.execute();
             con.commit();
             success = true;
         } catch (SQLException e) {
@@ -216,6 +218,7 @@ public class SqlQueries extends DBConnector {
             insertQuery = con.prepareStatement(sqlSetning);
             insertQuery.setDouble(1, price);
             insertQuery.setString(2, name);
+            insertQuery.execute();
             con.commit();
             success = true;
         } catch (SQLException e) {
@@ -245,6 +248,7 @@ public class SqlQueries extends DBConnector {
             insertQuery.setInt(7, positionId);
             insertQuery.setInt(8, salary);
             insertQuery.setString(9, passHash);
+            insertQuery.execute();
             con.commit();
             success = true;
         } catch (SQLIntegrityConstraintViolationException e) {
@@ -275,7 +279,7 @@ public class SqlQueries extends DBConnector {
          */
         try {
             con.setAutoCommit(false);
-            String query = "UPDATE employee set passhash = ? where employee_id = ?";
+            String query = "UPDATE employee SET passhash = ? WHERE employee_id = ?";
             updateQuery = con.prepareStatement(query);
             updateQuery.setString(1, newPasshash);
             updateQuery.setInt(2, theEmployee.getEmployeeId());
@@ -290,46 +294,94 @@ public class SqlQueries extends DBConnector {
 
     public ObservableList<Order> getOrders(int posId) {
         ObservableList<Order> orders = FXCollections.observableArrayList();
-        boolean done = false;
 
 
-        do {
-            try {
-                String selectSql = "SELECT * FROM n_order WHERE status = ?";
-                selectQuery = con.prepareStatement(selectSql);
-                if (posId == 1){
-                   selectQuery.setString(1, CREATED);
-                } else if(posId == 2) {
-                    selectQuery.setString(1, );
-                }if (posId == 3){
-                    selectQuery.setString(1, CREATED);
-                }if (posId == 4){
-                    selectQuery.setString(1, CREATED);
-                }if (posId == 5){
-                    selectQuery.setString(1, CREATED);
-                }if (posId == 6){
-                    selectQuery.setString(1, CREATED);
-                }
-                res = selectQuery.executeQuery();
-
-                while (res.next()) {
-                    int orderId = res.getInt("order_id");
-                    int customerId = res.getInt("customer_id");
-                    int subscriptionId = res.getInt("subscription_id");
-                    String customerRequests = res.getString("customer_requests");
-                    java.util.Date deadline = res.getTimestamp("delivery_date");
-                    double price = res.getDouble("price");
-                    String address = res.getString("address");
-                    Order order = new Order(orderId, customerId, subscriptionId, customerRequests, deadline, price, address);
-                    orders.add(order);
-                }
-                done = true;
-            } catch (SQLException e) {
-                System.out.println(e);
+        try {
+            String selectSql = "";
+            //CEO and sales
+            if (posId == 1) {
+                selectSql = "SELECT * FROM n_order";
+                //CHEF
+            } else if (posId == 2) {
+                selectSql = "SELECT * FROM n_order WHERE status = ? OR ? OR ?";
+                selectQuery.setString(1, CREATED);
+                selectQuery.setString(2, INPREPARATION);
+                selectQuery.setString(3, READYFORDELIVERY);
+                //DRIVER
+            } else if (posId == 3) {
+                selectSql = "SELECT * FROM n_order WHERE status = ?;" +
+                        "SELECT * FROM n_order WHERE STATUS = ? AND delivery_date = DATE(now())";
+                selectQuery.setString(1, READYFORDELIVERY);
+                selectQuery.setString(2, DELIVERED);
             }
-        } while(!done);
+            selectQuery = con.prepareStatement(selectSql);
+            res = selectQuery.executeQuery();
+            while (res.next()) {
+                int orderId = res.getInt("order_id");
+                int customerId = res.getInt("customer_id");
+                int subscriptionId = res.getInt("subscription_id");
+                String customerRequests = res.getString("customer_requests");
+                java.util.Date deadline = res.getTimestamp("delivery_date");
+                double price = res.getDouble("price");
+                String address = res.getString("address");
+                Order order = new Order(orderId, customerId, subscriptionId, customerRequests, deadline, price, address);
+                orders.add(order);
+            }
+            done = true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("error in method getOrders, most likely to do when calling DRIVER, because results clash created by Paul");
+        }
         return orders;
     }
+    /*MultipleSelectionModel selector = new MultipleSelectionModel() {
+    }*/
+    // TODO: 28.03.2016 needs to enable a selector in the windows of the individual employee positions that lets you select elements and send them to methods
+
+
+
+    /*Method for registering ingredients in DISH
+    * takes in a Hashmap where key = ingredientId, value = quantity
+    * */
+    public boolean registerIngredintsInDish(Dish theDish, HashMap<Integer, Double> ingredientsAndQuantity) {
+        boolean success = false;
+        try {
+            int ingrId;
+            con.setAutoCommit(false);
+            String sqlSetning = "INSERT INTO ingredient_in_dish(ingredient_id, dish_id, quantity) VALUES(?,?, ?)";
+            insertQuery = con.prepareStatement(sqlSetning);
+
+
+            /*
+            System.out.println("\nExample 2...");
+		for (Map.Entry<String, String> entry : map.entrySet()) {
+			System.out.println("Key : " + entry.getKey() + " Value : " + entry.getValue());
+		map.forEach((k,v)->System.out.println("Key : " + k + " Value : " + v))
+		}
+
+             */
+
+            for (Map.Entry<Integer, Double> entry : ingredientsAndQuantity.entrySet()){
+                insertQuery.setInt(1, entry.getKey().intValue());
+                insertQuery.setInt(2, theDish.getDishId());
+                insertQuery.setDouble(3, entry.getValue().doubleValue());
+                insertQuery.execute();
+            }
+            con.commit();
+            success = true;
+        } catch (SQLIntegrityConstraintViolationException e) {
+            System.out.println("Unique value restraint!!!");
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Method registerIngredientsInDish failed");
+            SqlCleanup.lukkForbindelse(con);
+        } finally {
+            SqlCleanup.lukkSetning(insertQuery);
+            SqlCleanup.settAutoCommit(con);
+        }
+        return success;
+    }
+
 }
 
 
