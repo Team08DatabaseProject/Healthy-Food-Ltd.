@@ -1,14 +1,11 @@
 package classpackage;
 
 
-import java.util.Map;
-
-
 /**
  * Created by axelkvistad on 3/16/16.
  */
 public class Employee {
-    private int personId;
+    private int employeeId;
     private String username;
     private int posId;
     private double salary;
@@ -24,8 +21,8 @@ public class Employee {
 
 
 
-    public Employee(int personId, String username, int posId, double salary, String passHash) {
-        this.personId = personId;
+    public Employee(int employeeId, String username, int posId, double salary, String passHash) {
+        this.employeeId = employeeId;
         this.username = username;
         this.posId = posId;
         this.salary = salary;
@@ -38,15 +35,15 @@ public class Employee {
 
     // employee constructor without password
 
-    public Employee(int personId, String username, int posId, double salary) {
-        this.personId = personId;
+    public Employee(int employeeId, String username, int posId, double salary) {
+        this.employeeId = employeeId;
         this.posId = posId;
         this.username = username;
         this.salary = salary;
     }
 
-    public int getPersonId() {
-        return personId;
+    public int getEmployeeId() {
+        return employeeId;
     }
     public String getUsername() {
         return username;
