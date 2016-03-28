@@ -8,6 +8,8 @@ import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Calendar;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by paul thomas on 17.03.2016.
@@ -42,12 +44,11 @@ public class SqlQueries extends DBConnector {
                     int orderId = res.getInt("order_id");
                     int customerId = res.getInt("customer_id");
                     int subscriptionId = res.getInt("subscription_id");
-                    String  customerReq = res.getString("customer_requests");
-                    java.util.Date deliveryDate = res.getDate("delivery_date");
+                    String customerRequests = res.getString("customer_requests");
+                    java.util.Date deadline = res.getTimestamp("delivery_date");
                     double price = res.getDouble("price");
                     String address = res.getString("address");
-
-                    Order order = new Order(orderId, customerReq, deliveryDate, price, address);
+                    Order order = new Order(orderId, customerId, subscriptionId, customerRequests, deadline, price, address);
                     orders.add(order);
                 }
                 done = true;
@@ -97,6 +98,20 @@ public class SqlQueries extends DBConnector {
             }
         } while(!ok);
     }
+
+    /*
+
+    public void changeOrderStatus(Order order) {
+
+        do {
+            try {
+                con.setAutoCommit(false);
+                String insertSql = "UPDATE employee WHERE order_id"
+            }
+        }
+    }
+
+   */
 
     public Employee getUser(String username, String passwordHash) {
         int personId = -1;

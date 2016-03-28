@@ -1,11 +1,10 @@
-package Driver;
+package driver;
 /**
  * Created by Axel 16.03.2016
- * Controller for the Driver
+ * Controller for the driver
  */
 
 import classpackage.SqlQueries;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -21,11 +20,14 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 
 import java.net.URL;
+import java.util.Date;
 import java.util.ResourceBundle;
 
 import classpackage.Order;
 
 public class ControllerDriver implements Initializable {
+
+    private SqlQueries query = new SqlQueries();
 
     @FXML public TableView tables; // Retrieves TableView with fx:id="tables"
     public Button readyOrderButton;
@@ -35,6 +37,7 @@ public class ControllerDriver implements Initializable {
     public BorderPane rootPaneDriver;
     public GridPane changeStatusTable;
 
+    /*
     // Test data for orders which are ready for delivery
     final ObservableList<DriverOrderDelivery> readyOrderData = FXCollections.observableArrayList(
             new DriverOrderDelivery(1, "Testveien 1", "13:00"),
@@ -43,13 +46,20 @@ public class ControllerDriver implements Initializable {
             new DriverOrderDelivery(4, "Testveien 4", "16:00")
     );
 
-    // Same test data, only for the part of the menu where the Driver can change the status of the order
+     // Same test data, only for the part of the menu where the driver can change the status of the order
     final ObservableList<DriverOrderStatus> changeStatusData = FXCollections.observableArrayList(
             new DriverOrderStatus(1, "Testveien 1", "13:00", "Not delivered"),
             new DriverOrderStatus(2, "Testveien 2", "14:00", "Not delivered"),
             new DriverOrderStatus(3, "Testveien 3", "15:00", "Not delivered"),
             new DriverOrderStatus(4, "Testveien 4", "16:00", "Not delivered")
     );
+*/
+
+    final ObservableList<Order> orderTest = query.getOrders();
+
+
+
+
 
 
     // Shows a list of orders ready for delivery and a button for generating the route (non-functional as of now)
@@ -62,10 +72,10 @@ public class ControllerDriver implements Initializable {
                 TableView readyOrderTable = loader.load();
                 rootPaneDriver.setCenter(readyOrderTable);
                 ObservableList<TableColumn> columns = readyOrderTable.getColumns();
-                columns.get(0).setCellValueFactory(new PropertyValueFactory<DriverOrderDelivery,Integer>("orderNo"));
-                columns.get(1).setCellValueFactory(new PropertyValueFactory<DriverOrderDelivery,String>("address"));
-                columns.get(2).setCellValueFactory(new PropertyValueFactory<DriverOrderDelivery,String>("deadline"));
-                readyOrderTable.setItems(readyOrderData);
+                columns.get(0).setCellValueFactory(new PropertyValueFactory<Order,Integer>("orderId"));
+                columns.get(1).setCellValueFactory(new PropertyValueFactory<Order,String>("address"));
+                columns.get(2).setCellValueFactory(new PropertyValueFactory<Order,Date>("deadline"));
+                readyOrderTable.setItems(orderTest);
 
                 FXMLLoader bottomLoader = new FXMLLoader();
                 bottomLoader.setLocation(getClass().getResource("ReadyOrderBottom.fxml"));

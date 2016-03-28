@@ -1,33 +1,31 @@
 package classpackage;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Date;
 
 /**
  * Created by paul thomas on 17.03.2016.
  */
+
 public class Order {
-    private double price;
     private int orderId;
-    private String customerRequest;
-    private Date deliverDate;
+    private int customerId;
+    private int subscriptionId;
+    private double price;
+    private String customerRequests; //Additional info from customer
+    private Date actualDeliveryDate; //Is set when order is delivered. Default null
+    private String address; //Delivery address
+    private Date deadline; //Consists of date and time
 
-    public Order(int orderId, String customerRequest, Date deliverDate, LocalDateTime datDelivered, double price, String adress) {
+    public Order(int orderId, int customerId, int subscriptionId, String customerRequests, Date deadline,
+                 double price, String address) {
         this.orderId = orderId;
-        this.customerRequest = customerRequest;
-        this.deliverDate = deliverDate;
-        this.datDelivered = datDelivered;
+        this.customerId = customerId;
+        this.subscriptionId = subscriptionId;
+        this.customerRequests = customerRequests;
+        this.deadline = deadline;
         this.price = price;
-        this.adress = adress;
-    }
-
-    public Order(int orderId, String customerRequest, Date deliverDate, double price, String adress) {
-        this.orderId = orderId;
-        this.customerRequest = customerRequest;
-        this.deliverDate = deliverDate;
-        this.price = price;
-        this.adress = adress;
+        this.address = address;
+        actualDeliveryDate = null;
     }
 
     public int getOrderId() {
@@ -38,28 +36,28 @@ public class Order {
         this.orderId = orderId;
     }
 
-    public String getCustomerRequest() {
-        return customerRequest;
+    public String getCustomerRequests() {
+        return customerRequests;
     }
 
-    public void setCustomerRequest(String customerRequest) {
-        this.customerRequest = customerRequest;
+    public void setCustomerRequests(String customerRequests) {
+        this.customerRequests = customerRequests;
     }
 
-    public Date getDeliverDate() {
-        return deliverDate;
+    public Date getDeadline() {
+        return deadline;
     }
 
-    public void setDeliverDate(Date deliverDate) {
-        this.deliverDate = deliverDate;
+    public void setDeadline(Date deadline) {
+        this.deadline = deadline;
     }
 
-    public LocalDateTime getDatDelivered() {
-        return datDelivered;
+    public Date getActualDeliveryDate() {
+        return actualDeliveryDate;
     }
 
-    public void setDatDelivered(LocalDateTime datDelivered) {
-        this.datDelivered = datDelivered;
+    public void setActualDeliveryDate(Date actualDeliveryDate) {
+        this.actualDeliveryDate = actualDeliveryDate;
     }
 
     public double getPrice() {
@@ -70,14 +68,10 @@ public class Order {
         this.price = price;
     }
 
-    public String getAdress() {
-        return adress;
+    public String getAddress() {
+        return address;
     }
-
-    public void setAdress(String adress) {
-        this.adress = adress;
+    public void setAddress(String address) {
+        this.address = address;
     }
-    private LocalDateTime datDelivered;
-
-    private String adress; //delivery adress
 }

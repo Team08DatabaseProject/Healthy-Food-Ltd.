@@ -116,8 +116,8 @@ public class Login extends Application {
                     if (emp != null) {
                         switch(emp.getPosId()) {
                             case CEO : {
-                                Parent root = FXMLLoader.load(getClass().getResource("CEO/CEOWindow.fxml"));
-                                primaryStage.setTitle("Healthy Catering - CEO");
+                                Parent root = FXMLLoader.load(getClass().getResource("ceo/CEOWindow.fxml"));
+                                primaryStage.setTitle("Healthy Catering - ceo");
                                 primaryStage.setScene(new Scene(root, 800, 600));
                                 primaryStage.show();
                             }
@@ -125,8 +125,8 @@ public class Login extends Application {
                                 break;
                             }
                             case DRIVER : {
-                                Parent root = FXMLLoader.load(getClass().getResource("Driver/DriverWindow.fxml"));
-                                primaryStage.setTitle("Healthy Catering - Driver");
+                                Parent root = FXMLLoader.load(getClass().getResource("driver/DriverWindow.fxml"));
+                                primaryStage.setTitle("Healthy Catering - driver");
                                 primaryStage.setScene(new Scene(root, 800, 600));
                                 primaryStage.show();
                                 break;
