@@ -1,5 +1,8 @@
 package classpackage;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
 import java.sql.*;
 import java.util.*;
 
@@ -7,7 +10,15 @@ import java.util.*;
  * Created by paul thomas on 17.03.2016.
  */
 
+
+
 public class SqlQueries extends DBConnector {
+
+    public final static String INPREPARATION = "In preparation";
+    public final static String CREATED = "Create";
+    public final static String READYFORDELIVERY = "Ready for delivery";
+    public final static String UNDERDELIVERY = "Under delivery";
+    public final static String DELIVERED = "In preparation";
 
     /*
     Class where all methods that sql is required, shall be written.
@@ -269,11 +280,85 @@ public class SqlQueries extends DBConnector {
             updateQuery.setString(1, newPasshash);
             updateQuery.setInt(2, theEmployee.getEmployeeId());
             updateQuery.executeUpdate();
-             success = true;
+            success = true;
 
         } catch (SQLException e) {
             System.out.println("update of password failed in method resetPasswordForUser");
         }
         return success;
     }
+
+    public ObservableList<Order> getOrders(int posId) {
+        ObservableList<Order> orders = FXCollections.observableArrayList();
+        boolean done = false;
+
+
+        do {
+            try {
+                String selectSql = "SELECT * FROM n_order WHERE status = ?";
+                selectQuery = con.prepareStatement(selectSql);
+                if (posId == 1){
+                   selectQuery.setString(1, CREATED);
+                } else if(posId == 2) {
+                    selectQuery.setString(1, );
+                }if (posId == 3){
+                    selectQuery.setString(1, CREATED);
+                }if (posId == 4){
+                    selectQuery.setString(1, CREATED);
+                }if (posId == 5){
+                    selectQuery.setString(1, CREATED);
+                }if (posId == 6){
+                    selectQuery.setString(1, CREATED);
+                }
+                res = selectQuery.executeQuery();
+
+                while (res.next()) {
+                    int orderId = res.getInt("order_id");
+                    int customerId = res.getInt("customer_id");
+                    int subscriptionId = res.getInt("subscription_id");
+                    String customerRequests = res.getString("customer_requests");
+                    java.util.Date deadline = res.getTimestamp("delivery_date");
+                    double price = res.getDouble("price");
+                    String address = res.getString("address");
+                    Order order = new Order(orderId, customerId, subscriptionId, customerRequests, deadline, price, address);
+                    orders.add(order);
+                }
+                done = true;
+            } catch (SQLException e) {
+                System.out.println(e);
+            }
+        } while(!done);
+        return orders;
+    }
 }
+
+
+
+/*
+created
+in preparation
+ready for delivery
+under delivery
+delivered
+
+sales {
+*
+}
+chef{
+created
+in preparation
+ready for delivery
+}
+driver{
+ready for delivery
+delivered (timestamp)
+}
+ceo
+{
+*
+}
+admin{
+*
+}
+
+ */
