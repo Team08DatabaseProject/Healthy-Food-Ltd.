@@ -10,6 +10,7 @@ public class Employee {
     private int posId;
     private double salary;
     private String passHash;
+    private static final int ADMIN = 0;
     private static final int CEO = 1;
     private static final int CHEF = 2;
     private static final int DRIVER = 3;
@@ -68,6 +69,8 @@ public class Employee {
         //query to update
     }
 
+    public boolean isAdmin(){
+        return (posId == ADMIN);}
     public boolean isCEO() {
         return (posId == CEO);
     }

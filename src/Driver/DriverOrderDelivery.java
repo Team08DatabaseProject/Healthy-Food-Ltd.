@@ -1,4 +1,4 @@
-package Driver;
+package driver;
 
 /** Created by Axel
  * 11.03.2016
@@ -9,11 +9,16 @@ public class DriverOrderDelivery {
     private int orderNo;
     private String address;
     private String deadline;
+    private int viktigInformasjon;
 
     public DriverOrderDelivery(int orderNo, String address, String deadline) {
         this.orderNo = orderNo;
         this.address = address;
         this.deadline = deadline;
+    }
+
+    public void setViktigInformasjon(int bleh) {
+        viktigInformasjon = bleh;
     }
 
     public int getOrderNo() {

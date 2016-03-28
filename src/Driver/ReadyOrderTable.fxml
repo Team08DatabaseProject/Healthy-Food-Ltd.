@@ -1,15 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--> Axel </!-->
 <?import javafx.scene.control.*?>
-<?import java.lang.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
 
 <!--> Table in submenu "Orders ready for delivery" </!-->
-
 
 <TableView fx:id="tables" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" xmlns:fx="http://javafx.com/fxml">
     <columns>

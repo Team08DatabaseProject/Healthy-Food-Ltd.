@@ -1,10 +1,9 @@
-package Driver;
+package driver;
 
 /**
  * Created by axelkvistad on 3/16/16.
  * For use in "Change order status" table
  */
-// import javafx.beans.property.*;
 
 public class DriverOrderStatus {
 
@@ -12,12 +11,22 @@ public class DriverOrderStatus {
     private String address;
     private String deadline;
     private String status;
+    private String viktigInfo;
 
     public DriverOrderStatus(int orderNo, String address, String deadline, String status) {
         this.orderNo = orderNo;
         this.address = address;
         this.deadline = deadline;
         this.status = status;
+        this.viktigInfo = "asdf";
+    }
+
+    public void setViktigInfo(String info) {
+        viktigInfo = info;
+    }
+
+    public String getViktigInfo() {
+        return viktigInfo;
     }
 
     public int getOrderNo() {
