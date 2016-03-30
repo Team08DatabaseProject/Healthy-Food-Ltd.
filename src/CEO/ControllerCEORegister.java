@@ -1,11 +1,10 @@
-package ceo;
+package CEO;
 /**
  * Created by Axel 16.03.2016
  * Controller for the driver
  */
 
-import classpackage.Employee;
-import classpackage.SqlQueries;
+import classpackage.*;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -29,6 +28,7 @@ public class ControllerCEORegister implements Initializable {
     public TextField phoneField;
     public TextField emailField;
     public TextField addressField;
+    public TextField zipCodeField;
     public TextField usernameField;
     public TextField posIdField;
     public TextField salaryField;
@@ -39,19 +39,19 @@ public class ControllerCEORegister implements Initializable {
         @Override
         public void handle(ActionEvent e) {
             try {
-                int employeeId = Integer.parseInt(idField.getText());
-                String fName = fNameField.getText();
-                String lName = lNameField.getText();
-                int phone = Integer.parseInt(phoneField.getText());
-                String email = emailField.getText();
-                int addressId = Integer.parseInt(addressField.getText());
+                String firstName = fNameField.getText();
+                String lastName = lNameField.getText();
+                int phoneNo = Integer.parseInt(phoneField.getText());
+                String eMail = emailField.getText();
+                String address = addressField.getText();
+                int zipCode = Integer.parseInt(zipCodeField.getText());
                 String username = usernameField.getText();
                 int posId = Integer.parseInt(posIdField.getText());
                 double salary = Double.parseDouble(salaryField.getText());
                 String passhash = passwordField.getText();
-
-                Employee newEmp = new Employee(employeeId, username, posId, salary, passhash);
-                query.addEmployee(newEmp, fName, lName, phone, email, addressId);
+                Address newAddress = new Address(address, zipCode);
+                Employee newEmp = new Employee(username, firstName, lastName, phoneNo, eMail, posId, salary, passhash, newAddress);
+                query.addEmployee(newEmp);
 
             } catch (Exception exc) {
                 System.out.println(exc);

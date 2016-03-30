@@ -1,4 +1,4 @@
-package driver;
+package Driver;
 /**
  * Created by Axel 16.03.2016
  * Controller for the driver
@@ -55,7 +55,7 @@ public class ControllerDriver implements Initializable {
     );
 */
 
-    final ObservableList<Order> orderTest = query.getOrders();
+    final ObservableList<Order> orderTest = query.getOrders(1); // Fucked up, fix
 
 
 

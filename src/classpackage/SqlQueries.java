@@ -35,28 +35,27 @@ public class SqlQueries extends DBConnector {
     }
 
 
-    public void addEmployee(Employee newEmp, String fName, String lName, int phone,
-                            String email, int addressId) {
+    public void addEmployee(Employee newEmp) {
         int attempts = 0;
         boolean ok = false;
 
         do {
             try {
                 con.setAutoCommit(false);
+								registerAddress(newEmp.getAddress());
                 String insertSql = "INSERT INTO employee VALUES(?,?,?,?,?,?,?,?,?,?)";
                 insertQuery = con.prepareStatement(insertSql);
                 insertQuery.setInt(1, newEmp.getEmployeeId());
-                insertQuery.setString(2, fName);
-                insertQuery.setString(3, lName);
-                insertQuery.setInt(4, phone);
-                insertQuery.setString(5, email);
-                insertQuery.setInt(6, addressId);
+                insertQuery.setString(2, newEmp.getFirstName());
+                insertQuery.setString(3, newEmp.getLastName());
+                insertQuery.setInt(4, newEmp.getPhoneNo());
+                insertQuery.setString(5, newEmp.geteMail());
+                insertQuery.setInt(6, newEmp.getAddress().getAddressId());
                 insertQuery.setString(7, newEmp.getUsername());
                 insertQuery.setInt(8, newEmp.getPosId());
                 insertQuery.setDouble(9, newEmp.getSalary());
                 insertQuery.setString(10, newEmp.getPassHash());
-                insertQuery.execute();
-
+                insertQuery.executeUpdate();
                 con.commit();
                 ok = true;
             } catch (SQLException e) {
@@ -327,7 +326,6 @@ public class SqlQueries extends DBConnector {
                 Order order = new Order(orderId, customerId, subscriptionId, customerRequests, deadline, price, address);
                 orders.add(order);
             }
-            done = true;
         } catch (SQLException e) {
             e.printStackTrace();
             System.out.println("error in method getOrders, most likely to do when calling DRIVER, because results clash created by Paul");
@@ -381,6 +379,22 @@ public class SqlQueries extends DBConnector {
         }
         return success;
     }
+
+	public boolean registerAddress(Address newAddress) {
+		try {
+			String sql = "INSERT INTO address(address, zipcode) VALUES(?, ?);";
+			insertQuery = con.prepareStatement(sql);
+			insertQuery.setString(1, newAddress.getAddress());
+			insertQuery.setInt(2, newAddress.getZipCode());
+			insertQuery.executeUpdate();
+			ResultSet res = insertQuery.getGeneratedKeys();
+			res.next();
+			newAddress.setAddressId(res.getInt(1));
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
+	}
 
 }
 

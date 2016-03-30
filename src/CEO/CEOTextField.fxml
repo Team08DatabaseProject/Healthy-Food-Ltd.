@@ -11,7 +11,7 @@
 <!--> Textfields for registering new employee </!-->
 
 
-<GridPane fx:id="textGrid" hgap="10" vgap="10" prefHeight="500.0" prefWidth="300.0" BorderPane.alignment="CENTER" xmlns:fx="http://javafx.com/fxml" fx:controller="ceo.ControllerCEORegister">
+<GridPane fx:id="textGrid" hgap="10" vgap="10" prefHeight="500.0" prefWidth="300.0" BorderPane.alignment="CENTER" xmlns:fx="http://javafx.com/fxml" fx:controller="CEO.ControllerCEORegister">
     <padding><Insets top="40" right="25" bottom="25" left="25"/></padding>
 
     <Label text="Employee id:"
@@ -44,25 +44,30 @@
     <TextField fx:id="addressField"
                GridPane.columnIndex="1" GridPane.rowIndex="5"/>
 
-    <Label text="Username:"
-           GridPane.columnIndex="0" GridPane.rowIndex="6"/>
-    <TextField fx:id="usernameField"
-               GridPane.columnIndex="1" GridPane.rowIndex="6"/>
+    <Label text="Zip code:"
+           GridPane.columnIndex="0" GridPane.columnSpan="6"/>
+    <TextField fx:id="zipCodeField"
+               GridPane.columnIndex="1" GridPane.columnSpan="6"/>
 
-    <Label text="Position id:"
+    <Label text="Username:"
            GridPane.columnIndex="0" GridPane.rowIndex="7"/>
-    <TextField fx:id="posIdField"
+    <TextField fx:id="usernameField"
                GridPane.columnIndex="1" GridPane.rowIndex="7"/>
 
-    <Label text="Salary:"
+    <Label text="Position id:"
            GridPane.columnIndex="0" GridPane.rowIndex="8"/>
-    <TextField fx:id="salaryField"
+    <TextField fx:id="posIdField"
                GridPane.columnIndex="1" GridPane.rowIndex="8"/>
 
-    <Label text="Password:"
+    <Label text="Salary:"
            GridPane.columnIndex="0" GridPane.rowIndex="9"/>
-    <PasswordField fx:id="passwordField"
+    <TextField fx:id="salaryField"
                GridPane.columnIndex="1" GridPane.rowIndex="9"/>
+
+    <Label text="Password:"
+           GridPane.columnIndex="0" GridPane.rowIndex="10"/>
+    <PasswordField fx:id="passwordField"
+               GridPane.columnIndex="1" GridPane.rowIndex="10"/>
 
     <HBox spacing="10" alignment="BOTTOM_RIGHT"
           GridPane.columnIndex="1" GridPane.rowIndex="10">

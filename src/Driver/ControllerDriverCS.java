@@ -1,4 +1,4 @@
-package driver;
+package Driver;
 
 /**
  * Created by axelkvistad on 3/24/16.
@@ -35,7 +35,7 @@ public class ControllerDriverCS implements Initializable {
     DriverOrderStatus d4 = new DriverOrderStatus(4, "Testveien 4", "16:00", "Not delivered");
 
     final ObservableList<DriverOrderStatus> changeStatusData = FXCollections.observableArrayList(d1, d2, d3, d4);
-    final ObservableList<Order> orderList = query.getOrders();
+    final ObservableList<Order> orderList = query.getOrders(1); // Fucked up, fix
 
     EventHandler<ActionEvent> markAsDelivered = new EventHandler<ActionEvent>() {
         @Override
