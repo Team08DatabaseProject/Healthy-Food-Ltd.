@@ -265,7 +265,7 @@ public class SqlQueries extends DBConnector {
         return success;
     }
 
-    // Method for reseting password, only to be used by CEO or admin!!!!!!!!!!!!!!!!
+    // Method for resetting password, only to be used by CEO or admin!!!!!!!!!!!!!!!!
     public boolean resetPasswordForUser(Employee theEmployee, String newPasshash) {
         boolean success = false;
         /*
@@ -303,7 +303,7 @@ public class SqlQueries extends DBConnector {
                 selectSql = "SELECT * FROM n_order";
                 //CHEF
             } else if (posId == 2) {
-                selectSql = "SELECT * FROM n_order WHERE status = ? OR ? OR ?";
+                selectSql = "SELECT * FROM n_order WHERE status = ? OR status = ? OR status = ?";
                 selectQuery.setString(1, CREATED);
                 selectQuery.setString(2, INPREPARATION);
                 selectQuery.setString(3, READYFORDELIVERY);
@@ -327,7 +327,6 @@ public class SqlQueries extends DBConnector {
                 Order order = new Order(orderId, customerId, subscriptionId, customerRequests, deadline, price, address);
                 orders.add(order);
             }
-            done = true;
         } catch (SQLException e) {
             e.printStackTrace();
             System.out.println("error in method getOrders, most likely to do when calling DRIVER, because results clash created by Paul");
@@ -381,6 +380,28 @@ public class SqlQueries extends DBConnector {
         }
         return success;
     }
+
+
+
+    /*
+    Timestamp method
+
+    possible solution for live update{
+    each method that modifies, creates or deletes a table, also stores a notification in a table in database with a timestamp, and the other users frequently checks that notification table
+    possibly another thread with another connection is needed for this!
+
+     */
+
+
+
+
+
+
+
+
+
+
+
 
 }
 
