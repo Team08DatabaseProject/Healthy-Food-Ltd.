@@ -341,7 +341,8 @@ public class SqlQueries extends DBConnector {
                 java.util.Date deadline = res.getTimestamp("delivery_date");
                 double price = res.getDouble("price");
                 String address = res.getString("address");
-                Order order = new Order(orderId, customerId, subscriptionId, customerRequests, deadline, price, address);
+                String status = res.getString("status");
+                Order order = new Order(orderId, customerId, subscriptionId, customerRequests, deadline, price, address, status);
                 orders.add(order);
             }
         } catch (SQLException e) {
