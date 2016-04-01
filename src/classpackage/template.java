@@ -20,11 +20,12 @@ public class template {
     static List<Employee> s_employeeListSavedOnClient;
 
     // Named _main to not conflict with a main if there is already in our program. Though our main main should have these functions: and _init_() should be on the top of everything in our main.
-    public static void main(String[] args) throws Exception {
+    // TODO: 31.03.2016 commented out because of error
+    /*public static void main(String[] args) throws Exception {
         _init_();
         updateEmployeeList();
     }
-
+*/
     // This only has to be called once and at the startup of our application.. probaly the first function in our main(). Also, we should set our username and password. I actually don't mind if we use my username and password.
     private static void _init_() throws Exception
     {
@@ -37,11 +38,12 @@ public class template {
 
 
     // Call this function whenever another client updates or when we init to get the list. NOTE: we should actually change the class Employee to have "passhash" instead of "startPassword", as we should not have the password saved in memory. (we shouldnt have the hash either.. but this is a school thing, so we can keep it. The hash is generated when we enter the password and the salt.
-    private static void updateEmployeeList() throws Exception {
+    // TODO: 31.03.2016 commented out because it was causing an error
+    /*private static void updateEmployeeList() throws Exception {
         s_employeeListSavedOnClient.clear();
         Statement setning = db.createStatement();
         ResultSet res = setning.executeQuery(sf_getAllEmployeesQuery);
         while (res.next())
             s_employeeListSavedOnClient.add(new Employee(res.getInt("person_id"), res.getString("username"), res.getInt("pos_id"), res.getDouble("salary"), res.getString("passhash")));
-    }
+    }*/
 }

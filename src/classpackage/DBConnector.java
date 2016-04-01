@@ -10,7 +10,7 @@ public class DBConnector {
     private String username = "thomjos"; //DataLeser2.lesTekst("Brukernavn: ");  // DataLeser2, se nedenfor
     private String password = "cinPn2AK";
     private String databaseName = "jdbc:mysql://mysql.stud.iie.ntnu.no:3306/" + username + "?user=" + username + "&password=" + password;
-    private String databaseDriver = "com.mysql.jdbc.driver";
+    private String databaseDriver = "com.mysql.jdbc.Driver";
     protected static Connection con = null;
 
     public DBConnector() {
