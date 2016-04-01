@@ -274,7 +274,7 @@ public class SqlQueries extends DBConnector {
         return success;
     }*/
 
-    // Method for reseting password, only to be used by CEO or admin!!!!!!!!!!!!!!!!
+    // Method for reseting password, only to be used by ceo or admin!!!!!!!!!!!!!!!!
     public boolean resetPasswordForUser(Employee theEmployee, String newPasshash) {
         boolean success = false;
         /*
@@ -308,7 +308,7 @@ public class SqlQueries extends DBConnector {
 
         try {
             String selectSql = "";
-            //CEO and sales
+            //ceo and sales
             if (posId == 1) {
                 selectSql = "SELECT * FROM n_order";
                 //CHEF
