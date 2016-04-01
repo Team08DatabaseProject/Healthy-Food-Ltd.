@@ -2,8 +2,6 @@ package classpackage;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.control.MultipleSelectionModel;
-
 import java.sql.*;
 import java.util.*;
 
@@ -328,7 +326,8 @@ public class SqlQueries extends DBConnector {
                 selectQuery.setString(1, CREATED);
                 selectQuery.setString(2, INPREPARATION);
                 selectQuery.setString(3, READYFORDELIVERY);
-                selectQuery.setString(4, DELIVERED);
+                selectQuery.setString(4, UNDERDELIVERY);
+                selectQuery.setString(5, DELIVERED);
                 //SALES
             }
             selectQuery = con.prepareStatement(selectSql);
