@@ -14,6 +14,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 
 import java.net.URL;
 import java.util.Date;
@@ -26,21 +27,18 @@ import java.util.ResourceBundle;
 
 public class ControllerSales implements Initializable {
 
-    private SqlQueries query = new SqlQueries();
-
-
     @FXML
     public BorderPane rootPaneSales; //RootPane
-    public GridPane gridPaneOrders;
     public TableView tables; // Retrieves TableView with fx:id="tables"
-    public Button ordersButton;
-    public Button deleteOrderButton;
-    public Button createOrderButton;
+    public Button ordersButton; //Button for showing orders
+    public Button createOrderButton; //Button for creating an order
+    public Button deleteOrderButton; //Button for deleting an order
 
+    private SqlQueries query = new SqlQueries();
     final ObservableList<Order> orderTest = query.getOrders(4);
 
     // Shows a list of orders and their status.
-    EventHandler<ActionEvent> OrderEvent = new EventHandler<ActionEvent>() {
+    EventHandler<ActionEvent> orderEvent = new EventHandler<ActionEvent>() {
         @Override
         public void handle(ActionEvent e) {
             try {
@@ -59,13 +57,13 @@ public class ControllerSales implements Initializable {
                 columns.get(7).setCellValueFactory(new PropertyValueFactory<Order,String>("status"));
                 tables.setItems(orderTest);
 
-                /*FXMLLoader bottomLoader = new FXMLLoader();
-                bottomLoader.setLocation(getClass().getResource("ReadyOrderBottom.fxml"));
+                FXMLLoader bottomLoader = new FXMLLoader();
+                bottomLoader.setLocation(getClass().getResource("EditOrdersBottom.fxml"));
                 HBox readyOrderBottom = bottomLoader.load();
-                rootPaneDriver.setBottom(readyOrderBottom);*/
+                rootPaneSales.setBottom(readyOrderBottom);
 
             } catch(Exception exc) {
-                System.out.println("OrderEvent: " + exc);
+                System.out.println("orderEvent: " + exc);
             }
         }
     };
@@ -103,7 +101,7 @@ public class ControllerSales implements Initializable {
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
         // Required method for Initializable, runs at program launch
 
-        ordersButton.setOnAction(OrderEvent);
+        ordersButton.setOnAction(orderEvent);
         createOrderButton.setOnAction(createOrderEvent);
         //deleteOrderButton.setOnAction(deleteOrderEvent);
 
