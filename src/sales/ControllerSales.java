@@ -75,18 +75,18 @@ public class ControllerSales implements Initializable {
         public void handle(ActionEvent e) {
             try {
                 FXMLLoader loader = new FXMLLoader();
-                loader.setLocation(getClass().getResource("EditOrdersBottom.fxml"));
-                ordersTable = loader.load();
-                gridPaneOrders.setCenter(ordersTable);
+                loader.setLocation(getClass().getResource("OrdersTable.fxml"));
+                tables = loader.load();
+                rootPaneSales.setCenter(tables);
 
             } catch(Exception exc) {
-                System.out.println("deleteOrderEvent: " + exc);
+                System.out.println("createOrderEvent: " + exc);
             }
         }
     };
 
     // Shows list of orders with the option to change their status from "Not delivered" to "Delivered".
-    EventHandler<ActionEvent> deleteOrderEvent = new EventHandler<ActionEvent>() {
+    /*EventHandler<ActionEvent> deleteOrderEvent = new EventHandler<ActionEvent>() {
         @Override
         public void handle(ActionEvent e) {
             try {
@@ -94,19 +94,18 @@ public class ControllerSales implements Initializable {
                 loader.setLocation(getClass().getResource("EditOrdersBottom.fxml"));
                 ordersTable = loader.load();
                 gridPaneOrders.setCenter(ordersTable);
-
             } catch(Exception exc) {
                 System.out.println("deleteOrderEvent: " + exc);
             }
         }
-    };
+    };*/
 
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
         // Required method for Initializable, runs at program launch
 
         ordersButton.setOnAction(OrderEvent);
         createOrderButton.setOnAction(createOrderEvent);
-        deleteOrderButton.setOnAction(deleteOrderEvent);
+        //deleteOrderButton.setOnAction(deleteOrderEvent);
 
     }
 

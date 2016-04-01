@@ -116,7 +116,8 @@ public class Login extends Application {
                     checkPw = pf.getText().toString();
                     Employee emp = query.getUser(checkUser, checkPw);
                     */
-                    Employee emp = new Employee(1, "test", "test", "test", 1234, "mail@mail", 1, 50.0, "hash", new Address("Testveien 1", 1234));
+                    Employee emp = new Employee(1, "test", "test", "test", 1234,
+                            "mail@mail", 4, 50.0, "hash", new Address("Testveien 1", 1234));
                     if (emp != null) {
                         switch(emp.getPosId()) {
                             case CEO : {
@@ -136,6 +137,10 @@ public class Login extends Application {
                                 break;
                             }
                             case SALES : {
+                                Parent root = FXMLLoader.load(getClass().getResource("sales/SalesWindow.fxml"));
+                                primaryStage.setTitle("Healthy Catering - sales");
+                                primaryStage.setScene(new Scene(root, 800, 600));
+                                primaryStage.show();
                                 break;
                             }
                             case NUTRITION : {
