@@ -323,6 +323,13 @@ public class SqlQueries extends DBConnector {
                         "SELECT * FROM n_order WHERE STATUS = ? AND delivery_date = DATE(now())";
                 selectQuery.setString(1, READYFORDELIVERY);
                 selectQuery.setString(2, DELIVERED);
+            } else if (posId == 4){
+                selectSql = "SELECT * FROM n_order WHERE status = ? OR ? OR ?";
+                selectQuery.setString(1, CREATED);
+                selectQuery.setString(2, INPREPARATION);
+                selectQuery.setString(3, READYFORDELIVERY);
+                selectQuery.setString(4, DELIVERED);
+                //SALES
             }
             selectQuery = con.prepareStatement(selectSql);
             res = selectQuery.executeQuery();

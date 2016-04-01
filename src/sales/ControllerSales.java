@@ -37,7 +37,7 @@ public class ControllerSales implements Initializable {
     public Button deleteOrderButton;
     public Button createOrderButton;
 
-    final ObservableList<Order> orderTest = query.getOrders();
+    final ObservableList<Order> orderTest = query.getOrders(4);
 
     // Shows a list of orders and their status.
     EventHandler<ActionEvent> OrderEvent = new EventHandler<ActionEvent>() {
