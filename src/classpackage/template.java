@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.List;
 import someFolderThatNeedsABetterName.consts;
-
+/*
 public class template {
 
     // This 'should' be either saved in a common class for just static final queries or we just saved it as final in the methods they are being used. In this case i am saving outside to be simpler to find.
@@ -25,7 +25,7 @@ public class template {
         _init_();
         updateEmployeeList();
     }
-*/
+
     // This only has to be called once and at the startup of our application.. probaly the first function in our main(). Also, we should set our username and password. I actually don't mind if we use my username and password.
     private static void _init_() throws Exception
     {
@@ -45,5 +45,6 @@ public class template {
         ResultSet res = setning.executeQuery(sf_getAllEmployeesQuery);
         while (res.next())
             s_employeeListSavedOnClient.add(new Employee(res.getInt("person_id"), res.getString("username"), res.getInt("pos_id"), res.getDouble("salary"), res.getString("passhash")));
-    }*/
+    }
 }
+*/
