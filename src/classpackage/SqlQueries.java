@@ -2,8 +2,6 @@ package classpackage;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.control.MultipleSelectionModel;
-
 import java.sql.*;
 import java.util.*;
 
@@ -157,7 +155,7 @@ public class SqlQueries extends DBConnector {
     }
 
     // Method for registering new customer
-    public boolean registerNewAddress(int zipCode, String address) {
+  /*  public boolean registerNewAddress(int zipCode, String address) {
         boolean success = false;
         try {
             con.setAutoCommit(false);
@@ -177,24 +175,30 @@ public class SqlQueries extends DBConnector {
             SqlCleanup.settAutoCommit(con);
         }
         return success;
-    }
+    }*/
 
     //Method for registering Customer
-    public boolean registerCustomer(int addressId, String businessName, String firstName, String lastName, int phoneNumber, String email, int isBusiness) {
+    public boolean registerCustomer(Customer theCustomer) {
         boolean success = false;
 
         try {
             con.setAutoCommit(false);
             String sqlSetning = "INSERT INTO customer(address_id, business_name, first_name, last_name, phone, email, isbusiness) VALUES(?,?,?,?,?,?,?)";
+            int isBusiness = 0;
+            if (theCustomer.isBusiness()){
+                isBusiness = 1;
+            }
+
             insertQuery = con.prepareStatement(sqlSetning);
-            insertQuery.setInt(1, addressId);
-            insertQuery.setString(2, businessName);
-            insertQuery.setString(3, firstName);
-            insertQuery.setString(4, lastName);
-            insertQuery.setInt(5, phoneNumber);
-            insertQuery.setString(6, email);
+            insertQuery.setInt(1, theCustomer.getAddress().getAddressId());
+            insertQuery.setString(2, theCustomer.getBusinessName());
+            insertQuery.setString(3, theCustomer.getFirstName());
+            insertQuery.setString(4, theCustomer.getLastName());
+            insertQuery.setInt(5, theCustomer.getPhoneNumber());
+            insertQuery.setString(6, theCustomer.getEmail());
             insertQuery.setInt(7, isBusiness); // 0 is not business, 1 is!
             insertQuery.execute();
+            // TODO: 31.03.2016 compare registerAddress with how this method should be done!
             con.commit();
             success = true;
         } catch (SQLException e) {
@@ -209,15 +213,19 @@ public class SqlQueries extends DBConnector {
     }
 
     // Method for  Registering Dish in database
-    public boolean registerDish(double price, String name) {
+    public boolean registerDish(Dish theDish) {
         boolean success = false;
         try {
             con.setAutoCommit(false);
             String sqlSetning = "INSERT INTO dish(price, name) VALUES(?,?)";
             insertQuery = con.prepareStatement(sqlSetning);
-            insertQuery.setDouble(1, price);
-            insertQuery.setString(2, name);
+            insertQuery.setDouble(1, theDish.getPrice());
+            insertQuery.setString(2, theDish.getDishName());
             insertQuery.execute();
+            ResultSet res = insertQuery.getGeneratedKeys();
+            while (res.next()){
+                theDish.setDishId(res.getInt(1));
+            }
             con.commit();
             success = true;
         } catch (SQLException e) {
@@ -231,7 +239,7 @@ public class SqlQueries extends DBConnector {
         return success;
     }
 
-    public boolean registerEmployee(String firstName, String lastName, int phoneNumber, String email, int addressId, String userName, int positionId,
+    /*public boolean registerEmployee(String firstName, String lastName, int phoneNumber, String email, int addressId, String userName, int positionId,
                                     int salary, String passHash) {
         boolean success = false;
         try {
@@ -262,9 +270,9 @@ public class SqlQueries extends DBConnector {
             SqlCleanup.settAutoCommit(con);
         }
         return success;
-    }
+    }*/
 
-    // Method for reseting password, only to be used by CEO or admin!!!!!!!!!!!!!!!!
+    // Method for reseting password, only to be used by ceo or admin!!!!!!!!!!!!!!!!
     public boolean resetPasswordForUser(Employee theEmployee, String newPasshash) {
         boolean success = false;
         /*
@@ -283,6 +291,7 @@ public class SqlQueries extends DBConnector {
             updateQuery.setString(1, newPasshash);
             updateQuery.setInt(2, theEmployee.getEmployeeId());
             updateQuery.executeUpdate();
+            con.commit();
             success = true;
 
         } catch (SQLException e) {
@@ -297,7 +306,7 @@ public class SqlQueries extends DBConnector {
 
         try {
             String selectSql = "";
-            //CEO and sales
+            //ceo and sales
             if (posId == 1) {
                 selectSql = "SELECT * FROM n_order";
                 //CHEF
@@ -312,6 +321,14 @@ public class SqlQueries extends DBConnector {
                         "SELECT * FROM n_order WHERE STATUS = ? AND delivery_date = DATE(now())";
                 selectQuery.setString(1, READYFORDELIVERY);
                 selectQuery.setString(2, DELIVERED);
+            } else if (posId == 4){ // TODO: 01/04/2016 Trym - Ta en titt på dette Paul
+                selectSql = "SELECT * FROM n_order WHERE status = ? OR ? OR ?";
+                selectQuery.setString(1, CREATED);
+                selectQuery.setString(2, INPREPARATION);
+                selectQuery.setString(3, READYFORDELIVERY);
+                selectQuery.setString(4, UNDERDELIVERY);
+                selectQuery.setString(5, DELIVERED);
+                //SALES
             }
             selectQuery = con.prepareStatement(selectSql);
             res = selectQuery.executeQuery();
@@ -323,12 +340,13 @@ public class SqlQueries extends DBConnector {
                 java.util.Date deadline = res.getTimestamp("delivery_date");
                 double price = res.getDouble("price");
                 String address = res.getString("address");
-                Order order = new Order(orderId, customerId, subscriptionId, customerRequests, deadline, price, address);
+                String status = res.getString("status");
+                Order order = new Order(orderId, customerId, subscriptionId, customerRequests, deadline, price, address, status);
                 orders.add(order);
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            System.out.println("error in method getOrders, most likely to do when calling DRIVER, because results clash created by Paul");
+            System.out.println("error in method getOrders, most likely to do when calling DRIVER, because results clash (created by Paul)");
         }
         return orders;
     }
@@ -380,7 +398,8 @@ public class SqlQueries extends DBConnector {
         return success;
     }
 
-	public boolean registerAddress(Address newAddress) {
+    // TODO: 31.03.2016 is this method finished or should there sqlcleanup be called? As well as a more specific Exception handled?
+    public boolean registerAddress(Address newAddress) {
 		try {
 			String sql = "INSERT INTO address(address, zipcode) VALUES(?, ?);";
 			insertQuery = con.prepareStatement(sql);

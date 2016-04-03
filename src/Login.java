@@ -2,6 +2,7 @@
  * Created by axelkvistad on 3/17/16.
  * Stole the template from a website
  */
+import classpackage.Address;
 import classpackage.Employee;
 import classpackage.SqlQueries;
 import javafx.application.Application;
@@ -110,9 +111,13 @@ public class Login extends Application {
 
             public void handle(ActionEvent event) {
                 try {
+                    /* Commented out user check against database and creates test user
                     checkUser = txtUserName.getText().toString();
                     checkPw = pf.getText().toString();
                     Employee emp = query.getUser(checkUser, checkPw);
+                    */
+                    Employee emp = new Employee(1, "test", "test", "test", 1234,
+                            "mail@mail", 4, 50.0, "hash", new Address("Testveien 1", 1234));
                     if (emp != null) {
                         switch(emp.getPosId()) {
                             case CEO : {
@@ -132,6 +137,10 @@ public class Login extends Application {
                                 break;
                             }
                             case SALES : {
+                                Parent root = FXMLLoader.load(getClass().getResource("sales/SalesWindow.fxml"));
+                                primaryStage.setTitle("Healthy Catering - sales");
+                                primaryStage.setScene(new Scene(root, 800, 600));
+                                primaryStage.show();
                                 break;
                             }
                             case NUTRITION : {

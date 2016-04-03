@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.List;
 import someFolderThatNeedsABetterName.consts;
-
+/*
 public class template {
 
     // This 'should' be either saved in a common class for just static final queries or we just saved it as final in the methods they are being used. In this case i am saving outside to be simpler to find.
@@ -20,7 +20,8 @@ public class template {
     static List<Employee> s_employeeListSavedOnClient;
 
     // Named _main to not conflict with a main if there is already in our program. Though our main main should have these functions: and _init_() should be on the top of everything in our main.
-    public static void main(String[] args) throws Exception {
+    // TODO: 31.03.2016 commented out because of error
+    /*public static void main(String[] args) throws Exception {
         _init_();
         updateEmployeeList();
     }
@@ -37,7 +38,8 @@ public class template {
 
 
     // Call this function whenever another client updates or when we init to get the list. NOTE: we should actually change the class Employee to have "passhash" instead of "startPassword", as we should not have the password saved in memory. (we shouldnt have the hash either.. but this is a school thing, so we can keep it. The hash is generated when we enter the password and the salt.
-    private static void updateEmployeeList() throws Exception {
+    // TODO: 31.03.2016 commented out because it was causing an error
+    /*private static void updateEmployeeList() throws Exception {
         s_employeeListSavedOnClient.clear();
         Statement setning = db.createStatement();
         ResultSet res = setning.executeQuery(sf_getAllEmployeesQuery);
@@ -45,3 +47,4 @@ public class template {
             s_employeeListSavedOnClient.add(new Employee(res.getInt("person_id"), res.getString("username"), res.getInt("pos_id"), res.getDouble("salary"), res.getString("passhash")));
     }
 }
+*/

@@ -15,9 +15,10 @@ public class Order {
     private Date actualDeliveryDate; //Is set when order is delivered. Default null
     private String address; //Delivery address
     private Date deadline; //Consists of date and time
+    private String status;
 
     public Order(int orderId, int customerId, int subscriptionId, String customerRequests, Date deadline,
-                 double price, String address) {
+                 double price, String address, String status) {
         this.orderId = orderId;
         this.customerId = customerId;
         this.subscriptionId = subscriptionId;
@@ -25,6 +26,7 @@ public class Order {
         this.deadline = deadline;
         this.price = price;
         this.address = address;
+        this.status = status;
         actualDeliveryDate = null;
     }
 
@@ -71,7 +73,16 @@ public class Order {
     public String getAddress() {
         return address;
     }
+
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }
