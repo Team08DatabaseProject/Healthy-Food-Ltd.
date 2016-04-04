@@ -1,6 +1,9 @@
 package classpackage;
 
-import classpackage.*;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
+import java.util.ArrayList;
 
 /**
  * Created by paul thomas on 16.03.2016.
@@ -9,8 +12,15 @@ class Dish {
     private int dishId;
     private double price;
     private String dishName;
+    private ObservableList<Ingredient> allIngredientsForThisDish = FXCollections.observableArrayList();
 
-    public Dish(double price, String dishName) {
+    public Dish(int dishId, double price, String dishName) {
+        this.dishId = dishId;
+        this.price = price;
+        this.dishName = dishName;
+    }
+public Dish(double price, String dishName) {
+        this.dishId = dishId;
         this.price = price;
         this.dishName = dishName;
     }
@@ -38,4 +48,17 @@ class Dish {
     public void setDishName(String dishName) {
         this.dishName = dishName;
     }
+
+    public String toString() {
+        return dishName;
+    }
+
+    public ObservableList<Ingredient> getAllIngredientsForThisDish() {
+        return allIngredientsForThisDish;
+    }
+
+    public void setAllIngredientsForThisDish(ObservableList<Ingredient> allIngredientsForThisDish) {
+        this.allIngredientsForThisDish = allIngredientsForThisDish;
+    }
+
 }

@@ -2,6 +2,8 @@ package classpackage;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.MultipleSelectionModel;
+
 import java.sql.*;
 import java.util.*;
 
@@ -22,8 +24,8 @@ public class SqlQueries extends DBConnector {
     Class where all methods that sql is required, shall be written.
      For example every method that requires getting data from database.
      */
-
     PreparedStatement selectQuery;
+
     PreparedStatement insertQuery;
     PreparedStatement updateQuery;
     ResultSet res = null;
@@ -33,42 +35,67 @@ public class SqlQueries extends DBConnector {
     }
 
 
-    public void addEmployee(Employee newEmp) {
-        int attempts = 0;
+    // method for registering new Ingredient
+    // Method for registering new customer
+    /*MultipleSelectionModel selector = new MultipleSelectionModel() {
+    }*/
+    // TODO: 31.03.2016 is this method finished or should there sqlcleanup be called? As well as a more specific Exception handled?
+    public boolean addAddress(Address newAddress) {
+        boolean success= false;
+        try {
+            String sql = "INSERT INTO address(address, zipcode) VALUES(?, ?);";
+            insertQuery = con.prepareStatement(sql);
+            insertQuery.setString(1, newAddress.getAddress());
+            insertQuery.setInt(2, newAddress.getZipCode());
+            insertQuery.executeUpdate();
+            ResultSet res = insertQuery.getGeneratedKeys();
+            res.next();
+            newAddress.setAddressId(res.getInt(1));
+            success = true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("method addAddress failed");
+        }
+        return success;
+    }
+
+    public boolean addEmployee(Employee newEmp) {
         boolean ok = false;
 
-        do {
-            try {
-                con.setAutoCommit(false);
-								registerAddress(newEmp.getAddress());
-                String insertSql = "INSERT INTO employee VALUES(?,?,?,?,?,?,?,?,?,?)";
-                insertQuery = con.prepareStatement(insertSql);
-                insertQuery.setInt(1, newEmp.getEmployeeId());
-                insertQuery.setString(2, newEmp.getFirstName());
-                insertQuery.setString(3, newEmp.getLastName());
-                insertQuery.setInt(4, newEmp.getPhoneNo());
-                insertQuery.setString(5, newEmp.geteMail());
-                insertQuery.setInt(6, newEmp.getAddress().getAddressId());
-                insertQuery.setString(7, newEmp.getUsername());
-                insertQuery.setInt(8, newEmp.getPosId());
-                insertQuery.setDouble(9, newEmp.getSalary());
-                insertQuery.setString(10, newEmp.getPassHash());
-                insertQuery.executeUpdate();
-                con.commit();
-                ok = true;
-            } catch (SQLException e) {
-                System.out.println(e);
-                if (attempts < 4) {
-                    attempts++;
-                } else {
-                    System.out.println("Something went wrong: user registration failed.");
-                    SqlCleanup.lukkForbindelse(con);
-                }
-            } finally {
-                SqlCleanup.lukkSetning(insertQuery);
-                SqlCleanup.settAutoCommit(con);
+        try {
+            con.setAutoCommit(false);
+            if (!addAddress(newEmp.getAddress())) {
+                return false;
             }
-        } while (!ok);
+            String insertSql = "INSERT INTO employee VALUES(?,?,?,?,?,?,?,?,?,?)";
+            insertQuery = con.prepareStatement(insertSql);
+            insertQuery.setInt(1, newEmp.getEmployeeId());
+            insertQuery.setString(2, newEmp.getFirstName());
+            insertQuery.setString(3, newEmp.getLastName());
+            insertQuery.setInt(4, newEmp.getPhoneNo());
+            insertQuery.setString(5, newEmp.geteMail());
+            insertQuery.setInt(6, newEmp.getAddress().getAddressId());
+            insertQuery.setString(7, newEmp.getUsername());
+            insertQuery.setInt(8, newEmp.getPosId());
+            insertQuery.setDouble(9, newEmp.getSalary());
+            insertQuery.setString(10, newEmp.getPassHash());
+            insertQuery.executeUpdate();
+
+            ResultSet res = insertQuery.getGeneratedKeys();
+            res.next();
+            newEmp.setEmployeeId(res.getInt(1));
+            ok = true;
+        } catch (SQLIntegrityConstraintViolationException e) {
+            e.printStackTrace();
+            System.out.println("Restraint violation in addEmployee");
+        } catch (SQLException e) {
+            System.out.println("Something went wrong: user registration failed in method addEmployee");
+            SqlCleanup.rullTilbake(con);
+        } finally {
+            SqlCleanup.lukkSetning(insertQuery);
+            SqlCleanup.settAutoCommit(con);
+        }
+        return ok;
     }
 
     public Employee getUser(String username, String passwordHash) {
@@ -96,7 +123,7 @@ public class SqlQueries extends DBConnector {
                 ok = true;
 
             } catch (SQLException e) {
-                System.out.println(e);
+                e.printStackTrace();
             } finally {
                 SqlCleanup.lukkResSet(res);
                 SqlCleanup.settAutoCommit(con);
@@ -125,8 +152,7 @@ public class SqlQueries extends DBConnector {
         return null;
     }
 
-    // method for registering new Ingredient
-    public boolean registerNewIngredient(int supplierId, double quantityOwned, double quantityReserved, String unit, double price, String description) {
+    /*public boolean addIngredient(int supplierId, double quantityOwned, double quantityReserved, String unit, double price, String description) {
         boolean success = false;
 
         try {
@@ -152,40 +178,49 @@ public class SqlQueries extends DBConnector {
             SqlCleanup.settAutoCommit(con);
         }
         return success;
-    }
+    }*/
 
-    // Method for registering new customer
-  /*  public boolean registerNewAddress(int zipCode, String address) {
+    public boolean addIngredient(Ingredient theIngredient) {
         boolean success = false;
+
         try {
-            con.setAutoCommit(false);
-            String sqlSetning = "INSERT INTO address(zipcode, address) VALUES(?,?)";
-            insertQuery = con.prepareStatement(sqlSetning);
-            insertQuery.setInt(1, zipCode);
-            insertQuery.setString(2, address);
+            String insertSql = "INSERT INTO ingredient(supplier_id, quantity_owned, unit, price, description) VALUES(?,?,?,?,?,?)";
+            insertQuery = con.prepareStatement(insertSql);
+            insertQuery.setInt(1, theIngredient.getSupplierId());
+            insertQuery.setDouble(2, theIngredient.getQuantityOwned());
+            insertQuery.setString(3, theIngredient.getUnit());
+            insertQuery.setDouble(4, theIngredient.getPrice());
+            insertQuery.setString(5, theIngredient.getIngName());
             insertQuery.execute();
-            con.commit();
+
+            ResultSet res = insertQuery.getGeneratedKeys();
+            res.next();
+            theIngredient.setIngredientId(res.getInt(1));
+
             success = true;
         } catch (SQLException e) {
             e.printStackTrace();
-            System.out.println("Method registerNewAddress failed");
-            SqlCleanup.lukkForbindelse(con);
+            System.out.println("Something went wrong: user registration failed.");
         } finally {
             SqlCleanup.lukkSetning(insertQuery);
             SqlCleanup.settAutoCommit(con);
+            SqlCleanup.lukkForbindelse(con);
         }
         return success;
-    }*/
+    }
 
     //Method for registering Customer
-    public boolean registerCustomer(Customer theCustomer) {
+    public boolean addCustomer(Customer theCustomer) {
         boolean success = false;
 
         try {
             con.setAutoCommit(false);
+            if (addAddress(theCustomer.getAddress())) {
+                return false;
+            }
             String sqlSetning = "INSERT INTO customer(address_id, business_name, first_name, last_name, phone, email, isbusiness) VALUES(?,?,?,?,?,?,?)";
             int isBusiness = 0;
-            if (theCustomer.isBusiness()){
+            if (theCustomer.isBusiness()) {
                 isBusiness = 1;
             }
 
@@ -198,16 +233,18 @@ public class SqlQueries extends DBConnector {
             insertQuery.setString(6, theCustomer.getEmail());
             insertQuery.setInt(7, isBusiness); // 0 is not business, 1 is!
             insertQuery.execute();
+
+            ResultSet res = insertQuery.getGeneratedKeys();
+            res.next();
+            theCustomer.setCustomerId(res.getInt(1));
             // TODO: 31.03.2016 compare registerAddress with how this method should be done!
-            con.commit();
             success = true;
         } catch (SQLException e) {
             e.printStackTrace();
-            System.out.println("Method registerCustomer failed");
+            System.out.println("Method addCustomer failed");
             SqlCleanup.lukkForbindelse(con);
         } finally {
             SqlCleanup.lukkSetning(insertQuery);
-            SqlCleanup.settAutoCommit(con);
         }
         return success;
     }
@@ -216,17 +253,14 @@ public class SqlQueries extends DBConnector {
     public boolean registerDish(Dish theDish) {
         boolean success = false;
         try {
-            con.setAutoCommit(false);
             String sqlSetning = "INSERT INTO dish(price, name) VALUES(?,?)";
             insertQuery = con.prepareStatement(sqlSetning);
             insertQuery.setDouble(1, theDish.getPrice());
             insertQuery.setString(2, theDish.getDishName());
             insertQuery.execute();
             ResultSet res = insertQuery.getGeneratedKeys();
-            while (res.next()){
-                theDish.setDishId(res.getInt(1));
-            }
-            con.commit();
+            res.next();
+            theDish.setDishId(res.getInt(1));
             success = true;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -234,7 +268,6 @@ public class SqlQueries extends DBConnector {
             SqlCleanup.lukkForbindelse(con);
         } finally {
             SqlCleanup.lukkSetning(insertQuery);
-            SqlCleanup.settAutoCommit(con);
         }
         return success;
     }
@@ -321,13 +354,12 @@ public class SqlQueries extends DBConnector {
                         "SELECT * FROM n_order WHERE STATUS = ? AND delivery_date = DATE(now())";
                 selectQuery.setString(1, READYFORDELIVERY);
                 selectQuery.setString(2, DELIVERED);
-            } else if (posId == 4){ // TODO: 01/04/2016 Trym - Ta en titt på dette Paul
+            } else if (posId == 4) {
                 selectSql = "SELECT * FROM n_order WHERE status = ? OR ? OR ?";
                 selectQuery.setString(1, CREATED);
                 selectQuery.setString(2, INPREPARATION);
                 selectQuery.setString(3, READYFORDELIVERY);
-                selectQuery.setString(4, UNDERDELIVERY);
-                selectQuery.setString(5, DELIVERED);
+                selectQuery.setString(4, DELIVERED);
                 //SALES
             }
             selectQuery = con.prepareStatement(selectSql);
@@ -340,8 +372,7 @@ public class SqlQueries extends DBConnector {
                 java.util.Date deadline = res.getTimestamp("delivery_date");
                 double price = res.getDouble("price");
                 String address = res.getString("address");
-                String status = res.getString("status");
-                Order order = new Order(orderId, customerId, subscriptionId, customerRequests, deadline, price, address, status);
+                Order order = new Order(orderId, customerId, subscriptionId, customerRequests, deadline, price, address);
                 orders.add(order);
             }
         } catch (SQLException e) {
@@ -350,11 +381,9 @@ public class SqlQueries extends DBConnector {
         }
         return orders;
     }
-    /*MultipleSelectionModel selector = new MultipleSelectionModel() {
-    }*/
+
+
     // TODO: 28.03.2016 needs to enable a selector in the windows of the individual employee positions that lets you select elements and send them to methods
-
-
 
     /*Method for registering ingredients in DISH
     * takes in a Hashmap where key = ingredientId, value = quantity
@@ -362,7 +391,6 @@ public class SqlQueries extends DBConnector {
     public boolean registerIngredintsInDish(Dish theDish, HashMap<Integer, Double> ingredientsAndQuantity) {
         boolean success = false;
         try {
-            int ingrId;
             con.setAutoCommit(false);
             String sqlSetning = "INSERT INTO ingredient_in_dish(ingredient_id, dish_id, quantity) VALUES(?,?, ?)";
             insertQuery = con.prepareStatement(sqlSetning);
@@ -377,7 +405,7 @@ public class SqlQueries extends DBConnector {
 
              */
 
-            for (Map.Entry<Integer, Double> entry : ingredientsAndQuantity.entrySet()){
+            for (Map.Entry<Integer, Double> entry : ingredientsAndQuantity.entrySet()) {
                 insertQuery.setInt(1, entry.getKey().intValue());
                 insertQuery.setInt(2, theDish.getDishId());
                 insertQuery.setDouble(3, entry.getValue().doubleValue());
@@ -398,22 +426,49 @@ public class SqlQueries extends DBConnector {
         return success;
     }
 
-    // TODO: 31.03.2016 is this method finished or should there sqlcleanup be called? As well as a more specific Exception handled?
-    public boolean registerAddress(Address newAddress) {
-		try {
-			String sql = "INSERT INTO address(address, zipcode) VALUES(?, ?);";
-			insertQuery = con.prepareStatement(sql);
-			insertQuery.setString(1, newAddress.getAddress());
-			insertQuery.setInt(2, newAddress.getZipCode());
-			insertQuery.executeUpdate();
-			ResultSet res = insertQuery.getGeneratedKeys();
-			res.next();
-			newAddress.setAddressId(res.getInt(1));
-			return true;
-		} catch (Exception e) {
-			return false;
-		}
-	}
+    public ZipCode getZipcodeByZipInt(int zipcode) {
+
+        ZipCode theZipcode = new ZipCode(-1, null);
+        try {
+            String selectSql = "SELECT * FROM zipcode WHERE zipcode = ?";
+            selectQuery = con.prepareStatement(selectSql);
+            selectQuery.setInt(1, zipcode);
+            res = selectQuery.executeQuery();
+            while (res.next()) {
+                theZipcode.setZipCode(res.getInt(1));
+                theZipcode.setPlace(res.getString(2));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("error in method getZipcode");
+        }
+        return theZipcode;
+
+    }
+
+    public ObservableList<Ingredient> getAllIngredients() {
+        ObservableList<Ingredient> ingredients = FXCollections.observableArrayList();
+        try {
+            String selectSql = "SELECT * FROM ingredient_in_dish";
+            selectQuery = con.prepareStatement(selectSql);
+            res = selectQuery.executeQuery();
+            while (res.next()) {
+                int ingredientId = res.getInt(1);
+                int supplierId = res.getInt(2);
+                Double quantityOwned = res.getDouble(3);
+                String unit = res.getString(4);
+                Double price = res.getDouble(5);
+                String name = res.getString(6);
+                Ingredient ingredient = new Ingredient(ingredientId, name, unit, quantityOwned, price, supplierId);
+                ingredients.add(ingredient);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("method getAllIngredients failed");
+        }
+        return ingredients;
+    }
+
 
 }
 
@@ -446,4 +501,55 @@ admin{
 *
 }
 
+ */
+
+/*
+public ResultSet getContent(String queryStr) {
+    Connection conn = null;
+    Statement stmt = null;
+    ResultSet resultSet = null;
+    CachedRowSetImpl crs = null;
+    try {
+        Connection conn = dataSource.getConnection();
+        stmt = conn.createStatement();
+        resultSet = stmt.executeQuery(queryStr);
+
+        crs = new CachedRowSetImpl();
+        crs.populate(resultSet);
+    } catch (SQLException e) {
+        throw new IllegalStateException("Unable to execute query: " + queryStr, e);
+    }finally {
+        try {
+            if (resultSet != null) {
+                resultSet.close();
+            }
+            if (stmt != null) {
+                stmt.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        } catch (SQLException e) {
+            LOGGER.error("Ignored", e);
+        }
+    }
+
+    return crs;
+}
+Here is the snippet for creating data source using c3p0:
+
+ ComboPooledDataSource cpds = new ComboPooledDataSource();
+            try {
+                cpds.setDriverClass("<driver class>"); //loads the jdbc driver
+            } catch (PropertyVetoException e) {
+                e.printStackTrace();
+                return;
+            }
+            cpds.setJdbcUrl("jdbc:<url>");
+            cpds.setMinPoolSize(5);
+            cpds.setAcquireIncrement(5);
+            cpds.setMaxPoolSize(20);
+
+
+ javax.sql.DataSource dataSource = cpds;
  */
