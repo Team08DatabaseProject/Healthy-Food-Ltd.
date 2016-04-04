@@ -1,5 +1,7 @@
 package classpackage;
 
+import javafx.collections.ObservableList;
+
 /**
  * Created by paul thomas on 16.03.2016.
  */
@@ -13,10 +15,23 @@ public class Customer {
     private int phoneNumber;
     private Address address;
     private String businessName = "";
+    private Subscription subscription;
 
-    public Customer(boolean isBusiness, String email, String firstName, String lastName, int phoneNumber,
-                    Address address, String businessName) {
+    // Fra database
+    public Customer(int customerId,boolean isBusiness, String email, String firstName, String lastName, int phoneNumber,
+                     String businessName) {
         this.customerId = customerId;
+        this.isBusiness = isBusiness;
+        this.email = email;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phoneNumber = phoneNumber;
+        this.businessName = businessName;
+    }
+
+    // To database
+    public Customer(boolean isBusiness, String email, String firstName, String lastName, int phoneNumber,
+                    Address address, String businessName, Subscription subscription) {
         this.isBusiness = isBusiness;
         this.email = email;
         this.firstName = firstName;
@@ -24,6 +39,7 @@ public class Customer {
         this.phoneNumber = phoneNumber;
         this.address = address;
         this.businessName = businessName;
+        this.subscription = subscription;
     }
 
     public boolean isBusiness() {

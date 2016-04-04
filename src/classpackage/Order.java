@@ -1,5 +1,8 @@
 package classpackage;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
 import java.util.Date;
 
 /**
@@ -8,20 +11,20 @@ import java.util.Date;
 
 public class Order {
     private int orderId;
-    private int customerId;
-    private int subscriptionId;
+    private Customer customer;
+    private Subscription subscription;
     private double price;
     private String customerRequests; //Additional info from customer
     private Date actualDeliveryDate; //Is set when order is delivered. Default null
     private Date deadline; //Consists of date and time
     private String status;
     private Address address;
+    private ObservableList<Dish> dishesInThisOrder = FXCollections.observableArrayList();
 
-    public Order(int orderId, int customerId, int subscriptionId, String customerRequests, Date deadline,
-                 double price, String address, String status) {
+    // From the database
+    public Order(int orderId, String customerRequests, Date deadline,
+                 double price, String status) {
         this.orderId = orderId;
-        this.customerId = customerId;
-        this.subscriptionId = subscriptionId;
         this.customerRequests = customerRequests;
         this.deadline = deadline;
         this.price = price;
@@ -29,15 +32,17 @@ public class Order {
         actualDeliveryDate = null;
     }
 
-    public Order(int customerId, int subscriptionId, String customerRequests, Date deadline,
-                 double price, String address, String status) {
-        this.customerId = customerId;
-        this.subscriptionId = subscriptionId;
+    // To the database
+    public Order(Subscription subscription, String customerRequests, Date deadline,
+                 double price, String status, Customer customer, ObservableList<Dish> dishesInThisOrder) {
+        this.subscription = subscription;
         this.customerRequests = customerRequests;
         this.deadline = deadline;
         this.price = price;
         this.status = status;
         actualDeliveryDate = null;
+        this.customer = customer;
+        this.dishesInThisOrder = dishesInThisOrder;
     }
 
     public int getOrderId() {
@@ -95,4 +100,5 @@ public class Order {
     public void setAddress(Address address) {
         this.address = address;
     }
+
 }

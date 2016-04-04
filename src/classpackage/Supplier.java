@@ -8,11 +8,13 @@ public class Supplier {
     private int phoneNumber;
     private Address thisAddress;
 
+//    from database
     public Supplier(int supplierId, int phoneNumber, Address thisAddress) {
         this.supplierId = supplierId;
         this.phoneNumber = phoneNumber;
         this.thisAddress = thisAddress;
     }
+//    To database
     public Supplier(int phoneNumber, Address thisAddress) {
         this.phoneNumber = phoneNumber;
         this.thisAddress = thisAddress;

@@ -15,13 +15,12 @@ class Menu {
     private String mealType;
     private ObservableList<Dish> dishesForThisMenu = FXCollections.observableArrayList();
 
-    public Menu(int menuId, String name, String mealType, ArrayList<Integer> intsForDishId) {
+    public Menu(int menuId, String name, String mealType) {
         this.menuId = menuId;
         this.name = name;
         this.mealType = mealType;
     }
 public Menu(String name, String mealType) {
-        this.menuId = menuId;
         this.name = name;
         this.mealType = mealType;
     }

@@ -11,6 +11,8 @@ public class Ingredient {
     private double quantityOwned;
     private double price;
     private int supplierId;
+
+    // To database
     public Ingredient(String ingName, String unit, double quantityOwned, double price, int supplierId) {
         this.ingName = ingName;
         this.unit = unit;
@@ -18,6 +20,7 @@ public class Ingredient {
         this.price = price;
         this.supplierId = supplierId;
     }
+    // From database
     public Ingredient(int ingredientId,String ingName, String unit, double quantityOwned, double price, int supplierId) {
         this.ingredientId = ingredientId;
         this.ingName = ingName;

@@ -2,7 +2,6 @@ package classpackage;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.control.MultipleSelectionModel;
 
 import java.sql.*;
 import java.util.*;
@@ -335,8 +334,6 @@ public class SqlQueries extends DBConnector {
 
     public ObservableList<Order> getOrders(int posId) {
         ObservableList<Order> orders = FXCollections.observableArrayList();
-
-
         try {
             String selectSql = "";
             //ceo and sales
@@ -372,7 +369,7 @@ public class SqlQueries extends DBConnector {
                 Date deadline = res.getTimestamp("delivery_date");
                 double price = res.getDouble("price");
                 String address = res.getString("address");
-                Order order = new Order(orderId, customerId, subscriptionId, customerRequests, deadline, price, address);
+                Order order = new Order(orderId, customerRequests, deadline, price, address);
                 orders.add(order);
             }
         } catch (SQLException e) {
@@ -381,6 +378,8 @@ public class SqlQueries extends DBConnector {
         }
         return orders;
     }
+
+
 
 
     // TODO: 28.03.2016 needs to enable a selector in the windows of the individual employee positions that lets you select elements and send them to methods
