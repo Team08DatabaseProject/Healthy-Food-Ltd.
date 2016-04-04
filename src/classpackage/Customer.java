@@ -18,8 +18,8 @@ public class Customer {
     private Subscription subscription;
 
     // Fra database
-    public Customer(int customerId,boolean isBusiness, String email, String firstName, String lastName, int phoneNumber,
-                     String businessName) {
+    public Customer(int customerId, boolean isBusiness, String email, String firstName, String lastName,
+                    int phoneNumber, String businessName) {
         this.customerId = customerId;
         this.isBusiness = isBusiness;
         this.email = email;
