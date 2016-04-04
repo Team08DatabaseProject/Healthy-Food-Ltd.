@@ -58,12 +58,13 @@ public class ControllerSalesEdit implements Initializable{
                 int orderId = Integer.parseInt(orderIdField.getText());
                 int customerId = Integer.parseInt(customerIdField.getText());
                 int subcriptionId = Integer.parseInt(subcriptionIdField.getText());
+                // TODO: 04/04/2016 Add startsubscription and endsubscription
                 Address newAddress = new Address(address, zipCode);
-                Subscription subscription = new Subscription();
-                Customer customer = new Customer(isBusiness, email, firstName,
+                Subscription subscription = new Subscription(subcriptionId, /*rest of parameters*/);
+                Customer customer = new Customer(customerId, isBusiness, email, firstName,
                         lastName, phoneNumber, newAddress, businessName);
-                Order order = new Order(orderId, customerId, subcriptionId,
-                        customerRequests, deadline, price, address, status);
+                Order order = new Order(subscription, customerRequests, deadline,
+                        price, status, customer, dishesInThisOrder, status /*Fix arguments*/);
 
                 /*FXMLLoader bottomLoader = new FXMLLoader();
                 bottomLoader.setLocation(getClass().getResource("EditOrdersBottom.fxml"));
