@@ -20,7 +20,7 @@ import java.util.ResourceBundle;
 public class ControllerCEO implements Initializable {
 
     @FXML
-    //public TableView tables; // Retrieves TableView with fx:id="tables"
+    //public TableView tables2; // Retrieves TableView with fx:id="tables2"
     public Button registerEmployeeButton;
     public BorderPane rootPaneDriver;
     public Button registerButton;

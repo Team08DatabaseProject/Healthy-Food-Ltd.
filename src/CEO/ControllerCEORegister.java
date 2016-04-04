@@ -19,7 +19,7 @@ import java.util.ResourceBundle;
 public class ControllerCEORegister implements Initializable {
 
     @FXML
-    //public TableView tables; // Retrieves TableView with fx:id="tables"
+    //public TableView tables2; // Retrieves TableView with fx:id="tables2"
     public Button finalRegisterButton;
     public GridPane textGrid;
     public TextField idField;

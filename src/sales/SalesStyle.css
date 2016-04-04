@@ -1,5 +1,11 @@
-Button {
-    -fx-min-width: 100px;
-    -fx-min-height: 80px;
+.BigButton {
+    -fx-min-width: 150px;
+    -fx-min-height: 150px;
+    -fx-alignment: CENTER;
+}
+
+.SmallButton {
+    -fx-min-width: 150px;
+    -fx-min-height: 75px;
     -fx-alignment: CENTER;
 }

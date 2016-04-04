@@ -8,7 +8,8 @@
 
 <BorderPane fx:id="rootPaneSales" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
             prefHeight="600.0" prefWidth="800.0" stylesheets="@/sales/SalesStyle.css" xmlns="http://javafx.com/javafx/8"
-            xmlns:fx="http://javafx.com/fxml/1" fx:controller="sales.ControllerSales">
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="sales.ControllerSales">
     <top>
         <MenuBar BorderPane.alignment="TOP_LEFT">
             <menus>

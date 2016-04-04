@@ -29,7 +29,7 @@ public class ControllerDriver implements Initializable {
 
     private SqlQueries query = new SqlQueries();
 
-    @FXML public TableView tables; // Retrieves TableView with fx:id="tables"
+    @FXML public TableView tables; // Retrieves TableView with fx:id="tables2"
     public Button readyOrderButton;
     public Button changeStatusButton;
     public Button deliveredButton;

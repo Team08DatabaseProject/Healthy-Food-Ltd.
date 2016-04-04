@@ -158,7 +158,7 @@ public class Login extends Application {
                     txtUserName.setText("");
                     pf.setText("");
                 } catch (Exception e) {
-                    System.out.println(e);
+                    System.out.println("asdf" + e);
                 }
             }
         });

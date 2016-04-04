@@ -10,8 +10,7 @@
             <TableColumn prefWidth="40.0" text="Order ID."/>
             <TableColumn prefWidth="40.0" text="Customer ID"/>
             <TableColumn prefWidth="40.0" text="Subscription ID"/>
-            <TableColumn prefWidth="40.0" text="Customer requests">
-            </TableColumn>
+            <TableColumn prefWidth="40.0" text="Customer requests"/>
             <TableColumn prefWidth="40.0" text="Deadline"/>
             <TableColumn prefWidth="40.0" text="Price"/>
             <TableColumn prefWidth="40.0" text="Address"/>

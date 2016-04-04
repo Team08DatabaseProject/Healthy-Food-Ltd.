@@ -1,20 +1,19 @@
 package sales;
 
-import classpackage.Order;
+import classpackage.*;
 import classpackage.SqlQueries;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.text.Text;
 
 import java.net.URL;
 import java.util.Date;
@@ -27,18 +26,35 @@ import java.util.ResourceBundle;
 
 public class ControllerSales implements Initializable {
 
+    public Button createOrderButton; //Button for creating an order
+
+    public TextField fNameField;
+    public TextField lNameField;
+    public ComboBox businessBox;
+    public TextField businessNameField;
+    public TextField emailField;
+    public TextField phoneField;
+    public TextField addressField;
+    public TextField customerRequestsField;
+    public DatePicker deadlinePicker;
+    public TextField priceField;
+    public TextField statusField;
+
+    private ObservableList<Order> allOrdersForSales = FXCollections.observableArrayList();
+    private ObservableList<Subscription> allSubscribtions = FXCollections.observableArrayList();
+
     @FXML
     public BorderPane rootPaneSales; //RootPane
-    public TableView tables; // Retrieves TableView with fx:id="tables"
+    public TableView tables; // Retrieves TableView with fx:id="tables2"
     public Button ordersButton; //Button for showing orders
-    public Button createOrderButton; //Button for creating an order
-    public Button deleteOrderButton; //Button for deleting an order
+    //public Button deleteOrderButton; //Button for deleting an order
 
     private SqlQueries query = new SqlQueries();
     final ObservableList<Order> orderTest = query.getOrders(4);
 
     // Shows a list of orders and their status.
     EventHandler<ActionEvent> orderEvent = new EventHandler<ActionEvent>() {
+
         @Override
         public void handle(ActionEvent e) {
             try {
@@ -57,31 +73,53 @@ public class ControllerSales implements Initializable {
                 columns.get(7).setCellValueFactory(new PropertyValueFactory<Order,String>("status"));
                 tables.setItems(orderTest);
 
-                FXMLLoader bottomLoader = new FXMLLoader();
-                bottomLoader.setLocation(getClass().getResource("EditOrdersBottom.fxml"));
-                HBox readyOrderBottom = bottomLoader.load();
-                rootPaneSales.setBottom(readyOrderBottom);
-
             } catch(Exception exc) {
                 System.out.println("orderEvent: " + exc);
             }
         }
     };
 
+    //fungerer når jeg kommenterer ut denne!
     EventHandler<ActionEvent> createOrderEvent = new EventHandler<ActionEvent>() {
         @Override
         public void handle(ActionEvent e) {
             try {
-                FXMLLoader loader = new FXMLLoader();
-                loader.setLocation(getClass().getResource("OrdersTable.fxml"));
-                tables = loader.load();
-                rootPaneSales.setCenter(tables);
+                String firstName = fNameField.getText();
+                String lastName = lNameField.getText();
+                boolean isBusiness = businessBox.isArmed();
+                String businessName = businessNameField.getText();
+                String email = emailField.getText();
+                String phoneNumber = phoneField.getText();
+                String address = addressField.getText();
+                String customerRequests = customerRequestsField.getText();
+                Date
+
+                /*FXMLLoader bottomLoader = new FXMLLoader();
+                bottomLoader.setLocation(getClass().getResource("EditOrdersBottom.fxml"));
+                HBox readyOrderBottom = bottomLoader.load();
+                rootPaneSales.setBottom(readyOrderBottom);*/
 
             } catch(Exception exc) {
                 System.out.println("createOrderEvent: " + exc);
             }
         }
     };
+
+    public ObservableList<Order> getAllOrdersForSales() {
+        return allOrdersForSales;
+    }
+
+    public void setAllOrdersForSales(ObservableList<Order> allOrdersForSales) {
+        this.allOrdersForSales = allOrdersForSales;
+    }
+
+    public ObservableList<Subscription> getAllSubscribtions() {
+        return allSubscribtions;
+    }
+
+    public void setAllSubscribtions(ObservableList<Subscription> allSubscribtions) {
+        this.allSubscribtions = allSubscribtions;
+    }
 
     // Shows list of orders with the option to change their status from "Not delivered" to "Delivered".
     /*EventHandler<ActionEvent> deleteOrderEvent = new EventHandler<ActionEvent>() {
@@ -106,21 +144,4 @@ public class ControllerSales implements Initializable {
         //deleteOrderButton.setOnAction(deleteOrderEvent);
 
     }
-
-    /*
-    EventHandler<ActionEvent> markAsDelivered = new EventHandler<ActionEvent>() {
-        @Override
-        public void handle(ActionEvent e) {
-            try {
-                changeStatusTable.getSelectionModel().setCellSelectionEnabled(true);
-                DriverOrderStatus orderStatus = (DriverOrderStatus) changeStatusTable.getSelectionModel().getSelectedItem();
-                orderStatus.setStatus("Delivered");
-            } catch (Exception exc) {
-                System.out.println(exc);
-            }
-        }
-    };
-    */
-
-
 }

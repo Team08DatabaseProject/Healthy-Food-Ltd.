@@ -17,7 +17,7 @@ import java.util.ResourceBundle;
 public class Controller implements Initializable {
 
 	@FXML
-	//public TableView tables; // Retrieves TableView with fx:id="tables"
+	//public TableView tables2; // Retrieves TableView with fx:id="tables2"
 	public Button ingredients;
 	public BorderPane rootPane;
 
