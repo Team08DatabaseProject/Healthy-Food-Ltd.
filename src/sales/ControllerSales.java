@@ -24,35 +24,51 @@ import java.util.ResourceBundle;
 
 public class ControllerSales implements Initializable {
 
-    public Button createOrderButton; //Button for creating an order
-
-    public TextField orderIdField;
-    public TextField customerIdField;
-    public TextField subcriptionIdField;
-    public TextField fNameField;
-    public TextField lNameField;
-    public ComboBox businessBox;
-    public TextField businessNameField;
-    public TextField emailField;
-    public TextField phoneField;
-    public TextField addressField;
-    public TextField zipCodeField;
-    public TextField customerRequestsField;
-    public DatePicker deadlinePicker;
-    public TextField priceField;
-    public TextField statusField;
-
+    /*
+    ObservableList to get fetched  from database
+     */
     private ObservableList<Order> allOrdersForSales = FXCollections.observableArrayList();
-    private ObservableList<Subscription> allSubscribtions = FXCollections.observableArrayList();
+    private ObservableList<Subscription> allSubscriptions = FXCollections.observableArrayList();
+    private ObservableList<Dish> allDishes = FXCollections.observableArrayList();
+    private ObservableList<Customer> allCustomers = FXCollections.observableArrayList();
+    private ObservableList<Address> allAdresses = FXCollections.observableArrayList();
+    private ObservableList<Menu> allMenus = FXCollections.observableArrayList();
+
 
     @FXML
     public BorderPane rootPaneSales; //RootPane
-    public TableView tables; // Retrieves TableView with fx:id="tables2"
+    public TableView ordersTable; // Retrieves TableView with fx:id="ordersTable"
+    public TableView subsTable; // Retrieves Tableview with fx:id="subsTable"
     public Button ordersButton; //Button for showing orders
+    public Button subsButton;
     //public Button deleteOrderButton; //Button for deleting an order
 
     private SqlQueries query = new SqlQueries();
     final ObservableList<Order> orderTest = query.getOrders(4);
+
+    EventHandler<ActionEvent> subsEvent = new EventHandler<ActionEvent>() {
+        @Override
+        public void handle(ActionEvent event) {
+            try {
+                FXMLLoader loader = new FXMLLoader();
+                loader.setLocation(getClass().getResource("SubsTable.fxml"));
+                ordersTable = loader.load();
+                rootPaneSales.setCenter(subsTable);
+                ObservableList<TableColumn> columns = subsTable.getColumns();
+                columns.get(0).setCellValueFactory(new PropertyValueFactory<Subscription, Integer>("subscriptionId"));
+                columns.get(1).setCellValueFactory(new PropertyValueFactory<Customer, Integer>("customerId"));
+                columns.get(2).setCellValueFactory(new PropertyValueFactory<Customer, String>("businessName"));
+                columns.get(2).setCellValueFactory(new PropertyValueFactory<Customer, String>("firstName"));
+                columns.get(3).setCellValueFactory(new PropertyValueFactory<Customer, String>("lastName"));
+                columns.get(4).setCellValueFactory(new PropertyValueFactory<Customer, String>("address"));
+                columns.get(5).setCellValueFactory(new PropertyValueFactory<Customer, String>("email"));
+                columns.get(6).setCellValueFactory(new PropertyValueFactory<Customer, Integer>("phoneNumber"));
+                subsTable.setItems(orderTest);
+            }catch (Exception e){
+                System.out.println("subsEvent: " + e);
+            }
+        }
+    };
 
     // Shows a list of orders and their status.
     EventHandler<ActionEvent> orderEvent = new EventHandler<ActionEvent>() {
@@ -62,18 +78,23 @@ public class ControllerSales implements Initializable {
             try {
                 FXMLLoader loader = new FXMLLoader();
                 loader.setLocation(getClass().getResource("OrdersTable.fxml"));
-                tables = loader.load();
-                rootPaneSales.setCenter(tables);
-                ObservableList<TableColumn> columns = tables.getColumns();
+                ordersTable = loader.load();
+                rootPaneSales.setCenter(ordersTable);
+                ObservableList<TableColumn> columns = ordersTable.getColumns();
                 columns.get(0).setCellValueFactory(new PropertyValueFactory<Order,Integer>("orderId"));
-                columns.get(1).setCellValueFactory(new PropertyValueFactory<Order,Integer>("customerId"));
-                columns.get(2).setCellValueFactory(new PropertyValueFactory<Order,Integer>("subscriptionId"));
-                columns.get(3).setCellValueFactory(new PropertyValueFactory<Order,String>("customerRequests"));
-                columns.get(4).setCellValueFactory(new PropertyValueFactory<Order,Date>("deadline"));
-                columns.get(5).setCellValueFactory(new PropertyValueFactory<Order,Double>("price"));
-                columns.get(6).setCellValueFactory(new PropertyValueFactory<Order,String>("address"));
-                columns.get(7).setCellValueFactory(new PropertyValueFactory<Order,String>("status"));
-                tables.setItems(orderTest);
+                columns.get(1).setCellValueFactory(new PropertyValueFactory<Customer,Integer>("customerId"));
+                columns.get(2).setCellValueFactory(new PropertyValueFactory<Subscription,Integer>("subscriptionId"));
+                columns.get(3).setCellValueFactory(new PropertyValueFactory<Customer, String>("firstName"));
+                columns.get(4).setCellValueFactory(new PropertyValueFactory<Customer, String>("lastName"));
+                columns.get(5).setCellValueFactory(new PropertyValueFactory<Customer, String>("businessName"));
+                columns.get(6).setCellValueFactory(new PropertyValueFactory<Customer, String>("email"));
+                columns.get(7).setCellValueFactory(new PropertyValueFactory<Customer, String>("phoneNumber"));
+                columns.get(8).setCellValueFactory(new PropertyValueFactory<Order,String>("customerRequests"));
+                columns.get(9).setCellValueFactory(new PropertyValueFactory<Order,Date>("deadline"));
+                columns.get(10).setCellValueFactory(new PropertyValueFactory<Order,Double>("price"));
+                columns.get(11).setCellValueFactory(new PropertyValueFactory<Address,String>("address"));
+                columns.get(12).setCellValueFactory(new PropertyValueFactory<Order,String>("status"));
+                ordersTable.setItems(orderTest);
 
             } catch(Exception exc) {
                 System.out.println("orderEvent: " + exc);
@@ -82,41 +103,7 @@ public class ControllerSales implements Initializable {
     };
 
     //fungerer når jeg kommenterer ut denne!
-    EventHandler<ActionEvent> createOrderEvent = new EventHandler<ActionEvent>() {
-        @Override
-        public void handle(ActionEvent e) {
-            try {
-                String firstName = fNameField.getText();
-                String lastName = lNameField.getText();
-                boolean isBusiness = businessBox.isArmed();
-                String businessName = businessNameField.getText();
-                String email = emailField.getText();
-                int phoneNumber = Integer.parseInt(phoneField.getText());
-                String address = addressField.getText();
-                int zipCode = Integer.parseInt(zipCodeField.getText());
-                String customerRequests = customerRequestsField.getText();
-                LocalDate deadline = deadlinePicker.getValue();
-                double price = Double.parseDouble(priceField.getText());
-                String status = statusField.getText();
-                int orderId = Integer.parseInt(orderIdField.getText());
-                int customerId = Integer.parseInt(customerIdField.getText());
-                int subcriptionId = Integer.parseInt(subcriptionIdField.getText());
-                Address newAddress = new Address(address, zipCode);
-                Customer customer = new Customer(isBusiness, email, firstName,
-                                lastName, phoneNumber, newAddress, businessName);
-                Order order = new Order(orderId, customerId, subcriptionId,
-                                customerRequests, deadline, price, address, status);
 
-                /*FXMLLoader bottomLoader = new FXMLLoader();
-                bottomLoader.setLocation(getClass().getResource("EditOrdersBottom.fxml"));
-                HBox readyOrderBottom = bottomLoader.load();
-                rootPaneSales.setBottom(readyOrderBottom);*/
-
-            } catch(Exception exc) {
-                System.out.println("createOrderEvent: " + exc);
-            }
-        }
-    };
 
     public ObservableList<Order> getAllOrdersForSales() {
         return allOrdersForSales;
@@ -126,12 +113,44 @@ public class ControllerSales implements Initializable {
         this.allOrdersForSales = allOrdersForSales;
     }
 
-    public ObservableList<Subscription> getAllSubscribtions() {
-        return allSubscribtions;
+    public ObservableList<Subscription> getAllSubscriptions() {
+        return allSubscriptions;
     }
 
-    public void setAllSubscribtions(ObservableList<Subscription> allSubscribtions) {
-        this.allSubscribtions = allSubscribtions;
+    public void setAllSubscriptions(ObservableList<Subscription> allSubscriptions) {
+        this.allSubscriptions = allSubscriptions;
+    }
+
+    public ObservableList<Dish> getAllDishes() {
+        return allDishes;
+    }
+
+    public void setAllDishes(ObservableList<Dish> allDishes) {
+        this.allDishes = allDishes;
+    }
+
+    public ObservableList<Customer> getAllCustomers() {
+        return allCustomers;
+    }
+
+    public void setAllCustomers(ObservableList<Customer> allCustomers) {
+        this.allCustomers = allCustomers;
+    }
+
+    public ObservableList<Address> getAllAdresses() {
+        return allAdresses;
+    }
+
+    public void setAllAdresses(ObservableList<Address> allAdresses) {
+        this.allAdresses = allAdresses;
+    }
+
+    public ObservableList<Menu> getAllMenus() {
+        return allMenus;
+    }
+
+    public void setAllMenus(ObservableList<Menu> allMenus) {
+        this.allMenus = allMenus;
     }
 
     // Shows list of orders with the option to change their status from "Not delivered" to "Delivered".
@@ -153,7 +172,7 @@ public class ControllerSales implements Initializable {
         // Required method for Initializable, runs at program launch
 
         ordersButton.setOnAction(orderEvent);
-        createOrderButton.setOnAction(createOrderEvent);
+        subsButton.setOnAction(subsEvent);
         //deleteOrderButton.setOnAction(deleteOrderEvent);
 
     }

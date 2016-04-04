@@ -369,7 +369,7 @@ public class SqlQueries extends DBConnector {
                 int customerId = res.getInt("customer_id");
                 int subscriptionId = res.getInt("subscription_id");
                 String customerRequests = res.getString("customer_requests");
-                java.util.Date deadline = res.getTimestamp("delivery_date");
+                Date deadline = res.getTimestamp("delivery_date");
                 double price = res.getDouble("price");
                 String address = res.getString("address");
                 Order order = new Order(orderId, customerId, subscriptionId, customerRequests, deadline, price, address);
