@@ -20,4 +20,27 @@ public class Supplier {
         this.thisAddress = thisAddress;
     }
 
+    public int getSupplierId() {
+        return supplierId;
+    }
+
+    public void setSupplierId(int supplierId) {
+        this.supplierId = supplierId;
+    }
+
+    public int getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(int phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public Address getThisAddress() {
+        return thisAddress;
+    }
+
+    public void setThisAddress(Address thisAddress) {
+        this.thisAddress = thisAddress;
+    }
 }
