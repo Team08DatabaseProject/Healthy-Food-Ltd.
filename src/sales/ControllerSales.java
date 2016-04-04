@@ -1,7 +1,6 @@
 package sales;
 
 import classpackage.*;
-import classpackage.SqlQueries;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -12,10 +11,9 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.text.Text;
 
 import java.net.URL;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.ResourceBundle;
 
@@ -28,6 +26,9 @@ public class ControllerSales implements Initializable {
 
     public Button createOrderButton; //Button for creating an order
 
+    public TextField orderIdField;
+    public TextField customerIdField;
+    public TextField subcriptionIdField;
     public TextField fNameField;
     public TextField lNameField;
     public ComboBox businessBox;
@@ -35,6 +36,7 @@ public class ControllerSales implements Initializable {
     public TextField emailField;
     public TextField phoneField;
     public TextField addressField;
+    public TextField zipCodeField;
     public TextField customerRequestsField;
     public DatePicker deadlinePicker;
     public TextField priceField;
@@ -89,10 +91,21 @@ public class ControllerSales implements Initializable {
                 boolean isBusiness = businessBox.isArmed();
                 String businessName = businessNameField.getText();
                 String email = emailField.getText();
-                String phoneNumber = phoneField.getText();
+                int phoneNumber = Integer.parseInt(phoneField.getText());
                 String address = addressField.getText();
+                int zipCode = Integer.parseInt(zipCodeField.getText());
                 String customerRequests = customerRequestsField.getText();
-                Date
+                LocalDate deadline = deadlinePicker.getValue();
+                double price = Double.parseDouble(priceField.getText());
+                String status = statusField.getText();
+                int orderId = Integer.parseInt(orderIdField.getText());
+                int customerId = Integer.parseInt(customerIdField.getText());
+                int subcriptionId = Integer.parseInt(subcriptionIdField.getText());
+                Address newAddress = new Address(address, zipCode);
+                Customer customer = new Customer(isBusiness, email, firstName,
+                                lastName, phoneNumber, newAddress, businessName);
+                Order order = new Order(orderId, customerId, subcriptionId,
+                                customerRequests, deadline, price, address, status);
 
                 /*FXMLLoader bottomLoader = new FXMLLoader();
                 bottomLoader.setLocation(getClass().getResource("EditOrdersBottom.fxml"));

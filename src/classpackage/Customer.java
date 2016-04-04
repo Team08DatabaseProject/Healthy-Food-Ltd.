@@ -13,7 +13,8 @@ public class Customer {
     private Address address;
     private String businessName = "";
 
-    public Customer(boolean isBusiness, String email, String firstName, String lastName, int phoneNumber, Address address, String businessName) {
+    public Customer(boolean isBusiness, String email, String firstName, String lastName, int phoneNumber,
+                    Address address, String businessName) {
         this.customerId = customerId;
         this.isBusiness = isBusiness;
         this.email = email;

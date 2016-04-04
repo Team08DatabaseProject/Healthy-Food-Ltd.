@@ -46,6 +46,11 @@
     <TextField fx:id="addressField"
                GridPane.columnIndex="1" GridPane.rowIndex="6"/>
 
+    <Label text="ZIP code:"
+           GridPane.columnIndex="0" GridPane.rowIndex="6"/>
+    <TextField fx:id="zipCodeField"
+               GridPane.columnIndex="1" GridPane.rowIndex="6"/>
+
     <Label text="Customer requests:"
            GridPane.columnIndex="0" GridPane.columnSpan="7"/>
     <TextField fx:id="customerRequestsField"
@@ -66,8 +71,23 @@
     <TextField fx:id="statusField"
                GridPane.columnIndex="1" GridPane.rowIndex="10"/>
 
+    <Label text="Order ID:"
+           GridPane.columnIndex="0" GridPane.rowIndex="11"/>
+    <TextField fx:id="orderIdField"
+               GridPane.columnIndex="1" GridPane.rowIndex="11"/>
+
+    <Label text="Customer ID:"
+           GridPane.columnIndex="0" GridPane.rowIndex="12"/>
+    <TextField fx:id="customerIdField"
+               GridPane.columnIndex="1" GridPane.rowIndex="12"/>
+
+    <Label text="Subscription ID:"
+           GridPane.columnIndex="0" GridPane.rowIndex="13"/>
+    <TextField fx:id="subcriptionIdField"
+               GridPane.columnIndex="1" GridPane.rowIndex="13"/>
+
     <HBox spacing="10" alignment="BOTTOM_RIGHT"
-          GridPane.columnIndex="1" GridPane.rowIndex="10">
+          GridPane.columnIndex="1" GridPane.rowIndex="13">
         <Button styleClass="SmallButton" fx:id="createOrderButton" text="Create new order"/>
     </HBox>
 

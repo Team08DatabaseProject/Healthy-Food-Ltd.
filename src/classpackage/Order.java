@@ -1,5 +1,6 @@
 package classpackage;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 /**
@@ -14,10 +15,10 @@ public class Order {
     private String customerRequests; //Additional info from customer
     private Date actualDeliveryDate; //Is set when order is delivered. Default null
     private String address; //Delivery address
-    private Date deadline; //Consists of date and time
+    private LocalDate deadline; //Consists of date and time
     private String status;
 
-    public Order(int orderId, int customerId, int subscriptionId, String customerRequests, Date deadline,
+    public Order(int orderId, int customerId, int subscriptionId, String customerRequests, LocalDate deadline,
                  double price, String address, String status) {
         this.orderId = orderId;
         this.customerId = customerId;
