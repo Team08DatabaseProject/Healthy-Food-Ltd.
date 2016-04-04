@@ -5,7 +5,7 @@ import classpackage.*;
 /**
  * Created by paul thomas on 16.03.2016.
  */
-class Dish {
+public class Dish {
     private int dishId;
     private double price;
     private String dishName;

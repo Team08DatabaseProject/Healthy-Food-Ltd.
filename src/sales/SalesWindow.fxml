@@ -35,11 +35,12 @@
         <VBox prefHeight="200.0" prefWidth="100.0" style="-fx-spacing: 4px; -fx-padding: 4px;" BorderPane.alignment="CENTER">
             <children>
                 <Button fx:id="ordersButton" mnemonicParsing="false" text="View &#10;orders" textAlignment="CENTER" />
+                <Button fx:id="subsButton" mnemonicParsing="false" text="Subscriptions" textAlignment="CENTER" />
             </children>
         </VBox>
     </left>
     <center>
-        <TableView fx:id="tables" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER"
+        <TableView fx:id="ordersTable" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER"
                    xmlns:fx="http://javafx.com/fxml" VBox.vgrow="ALWAYS">
             <columns>
             </columns>
