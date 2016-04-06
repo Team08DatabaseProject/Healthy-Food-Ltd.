@@ -1,4 +1,4 @@
-package sales;
+package users.sales;
 
 import classpackage.*;
 import javafx.collections.FXCollections;
@@ -13,7 +13,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 
 import java.net.URL;
-import java.time.LocalDate;
 import java.util.Date;
 import java.util.ResourceBundle;
 

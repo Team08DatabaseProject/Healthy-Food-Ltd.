@@ -1,4 +1,4 @@
-package driver;
+package users.driver;
 
 /**
  * Created by axelkvistad on 3/24/16.

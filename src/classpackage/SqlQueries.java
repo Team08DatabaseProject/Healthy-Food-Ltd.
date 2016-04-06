@@ -305,7 +305,7 @@ public class SqlQueries extends DBConnector {
         return success;
     }*/
 
-    // Method for reseting password, only to be used by ceo or admin!!!!!!!!!!!!!!!!
+    // Method for reseting password, only to be used by users.ceo or admin!!!!!!!!!!!!!!!!
     public boolean resetPasswordForUser(Employee theEmployee, String newPasshash) {
         boolean success = false;
         /*
@@ -337,7 +337,7 @@ public class SqlQueries extends DBConnector {
         ObservableList<Order> orders = FXCollections.observableArrayList();
         try {
             String selectSql = "";
-            //ceo and sales
+            //users.ceo and users.sales
             if (posId == 1) {
                 selectSql = "SELECT * FROM n_order";
                 //CHEF
@@ -481,19 +481,19 @@ ready for delivery
 under delivery
 delivered
 
-sales {
+users.sales {
 *
 }
-chef{
+users.chef{
 created
 in preparation
 ready for delivery
 }
-driver{
+users.driver{
 ready for delivery
 delivered (timestamp)
 }
-ceo
+users.ceo
 {
 *
 }
@@ -540,7 +540,7 @@ Here is the snippet for creating data source using c3p0:
 
  ComboPooledDataSource cpds = new ComboPooledDataSource();
             try {
-                cpds.setDriverClass("<driver class>"); //loads the jdbc driver
+                cpds.setDriverClass("<users.driver class>"); //loads the jdbc users.driver
             } catch (PropertyVetoException e) {
                 e.printStackTrace();
                 return;
