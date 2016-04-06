@@ -99,11 +99,27 @@ public class Employee {
         return eMail;
     }
 
-    public Address getAddress() {
+    public String getAddress() {
+        return address.getAddress();
+    }
+
+    public Address getAddressObject() {
         return address;
     }
 
-    public EmployeePosition getPosition() {
+    public int getZipCode() {
+        return address.getZipCode().getZipCode();
+    }
+
+    public String getPlace() {
+        return address.getZipCode().getPlace();
+    }
+
+    public String getPosition() {
+        return position.getDescription();
+    }
+
+    public EmployeePosition getPositionObject() {
         return position;
     }
     public void setSalary(double newSalary) {

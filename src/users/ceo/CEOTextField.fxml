@@ -12,7 +12,7 @@
 
 
 <GridPane fx:id="textGrid" hgap="10" vgap="10" prefHeight="500.0" prefWidth="300.0" BorderPane.alignment="CENTER"
-          xmlns:fx="http://javafx.com/fxml" fx:controller="CEO.ControllerCEORegister">
+          xmlns:fx="http://javafx.com/fxml" fx:controller="users.ceo.ControllerCEORegister">
     <padding><Insets top="40" right="25" bottom="25" left="25"/></padding>
 
     <Label text="Employee id:"
