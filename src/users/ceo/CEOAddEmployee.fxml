@@ -60,13 +60,8 @@
     <TextField fx:id="salaryField"
                GridPane.columnIndex="1" GridPane.rowIndex="9"/>
 
-    <Label text="Password:"
-           GridPane.columnIndex="0" GridPane.rowIndex="10"/>
-    <PasswordField fx:id="passwordField"
-               GridPane.columnIndex="1" GridPane.rowIndex="10"/>
-
     <HBox spacing="10" alignment="CENTER"
-          GridPane.columnIndex="0" GridPane.rowIndex="11" GridPane.columnSpan="2">
+          GridPane.columnIndex="0" GridPane.rowIndex="10" GridPane.columnSpan="2">
         <Button styleClass="SmallButton" fx:id="addEmployeeButton" text="Add employee"/>
     </HBox>
 
