@@ -19,7 +19,8 @@ public class Dish {
         this.price = price;
         this.dishName = dishName;
     }
-public Dish(double price, String dishName) {
+
+    public Dish(double price, String dishName) {
         this.dishId = dishId;
         this.price = price;
         this.dishName = dishName;

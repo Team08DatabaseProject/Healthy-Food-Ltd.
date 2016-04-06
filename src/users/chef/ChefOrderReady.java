@@ -1,4 +1,4 @@
-package chef;
+package users.chef;
 
 /**
  * Created by Trym Todalshaug on 26/03/2016.

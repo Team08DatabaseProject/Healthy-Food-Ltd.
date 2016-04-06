@@ -8,11 +8,11 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 
-<!--> Main window for ceo <!-->
+<!--> Main window for users.ceo <!-->
 
 <BorderPane fx:id="rootPaneDriver" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
-            minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" stylesheets="@/ceo/CEOStyle.css"
-            xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ceo.ControllerCEO">
+            minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" stylesheets="@/users/ceo/CEOStyle.css"
+            xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="users.ceo.ControllerCEO">
     <top>
         <MenuBar BorderPane.alignment="TOP_LEFT">
             <menus>

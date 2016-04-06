@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--> Trym </!-->
 
-<!--> Main window for sales <!-->
+<!--> Main window for users.sales <!-->
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
 <BorderPane fx:id="rootPaneSales" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-            prefHeight="600.0" prefWidth="800.0" stylesheets="@/sales/SalesStyle.css" xmlns="http://javafx.com/javafx/8"
-            xmlns:fx="http://javafx.com/fxml/1" fx:controller="sales.ControllerSales">
+            prefHeight="600.0" prefWidth="800.0" stylesheets="@/users/sales/SalesStyle.css" xmlns="http://javafx.com/javafx/8"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="users.sales.ControllerSales">
     <top>
         <MenuBar BorderPane.alignment="TOP_LEFT">
             <menus>
