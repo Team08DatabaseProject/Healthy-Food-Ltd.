@@ -6,15 +6,15 @@ package classpackage;
 public class Address {
     private int addressId;
     private String address;
-    private int zipCode;
+    private ZipCode zipCode;
 
-    public Address(int addressId, String address, int zipCode) {
+    public Address(int addressId, String address, ZipCode zipCode) {
         this.addressId = addressId;
         this.address = address;
         this.zipCode = zipCode;
     }
 
-    public Address(String address, int zipCode) {
+    public Address(String address, ZipCode zipCode) {
         this.address = address;
         this.zipCode = zipCode;
     }
@@ -35,11 +35,11 @@ public class Address {
         this.address = adress;
     }
 
-    public int getZipCode() {
+    public ZipCode getZipCode() {
         return zipCode;
     }
 
-    public void setZipCode(int zipCode) {
+    public void setZipCode(ZipCode zipCode) {
         this.zipCode = zipCode;
     }
 }
