@@ -16,11 +16,11 @@ import javafx.scene.layout.GridPane;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class ControllerCEORegister implements Initializable {
+public class ControllerCEOAddEmployee extends ControllerCEOEmployees implements Initializable {
 
     @FXML
     //public TableView tables2; // Retrieves TableView with fx:id="tables2"
-    public Button finalRegisterButton;
+    public Button addEmployeeButton;
     public GridPane textGrid;
     public TextField idField;
     public TextField fNameField;
@@ -35,7 +35,7 @@ public class ControllerCEORegister implements Initializable {
     public PasswordField passwordField;
     private SqlQueries query = new SqlQueries();
 
-    EventHandler<ActionEvent> finalRegistrationEvent = new EventHandler<ActionEvent>() {
+    EventHandler<ActionEvent> addEmployee = new EventHandler<ActionEvent>() {
         @Override
         public void handle(ActionEvent e) {
             try {
@@ -62,6 +62,6 @@ public class ControllerCEORegister implements Initializable {
 
 
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) { // Required method for Initializable, runs at program launch
-        finalRegisterButton.setOnAction(finalRegistrationEvent);
+        addEmployeeButton.setOnAction(addEmployee);
     }
 }

@@ -28,7 +28,6 @@ public class SqlQueries extends DBConnector {
 
     PreparedStatement insertQuery;
     PreparedStatement updateQuery;
-    ResultSet res = null;
 
     public SqlQueries() {
 
@@ -63,7 +62,7 @@ public class SqlQueries extends DBConnector {
         try {
             String selectSql = "SELECT address, zipcode FROM address WHERE address_id = " + addressId;
             selectQuery = con.prepareStatement(selectSql);
-            res = selectQuery.executeQuery();
+            ResultSet res = selectQuery.executeQuery();
             if(!res.next()) return null;
             String address = res.getString(1);
             int zipCode = res.getInt(2);
@@ -82,7 +81,7 @@ public class SqlQueries extends DBConnector {
             String selectSql = "SELECT e.employee_id, e.first_name, e.last_name, e.phone, e.email, e.username, e.salary, e.passhash, e.pos_id, e.address_id" +
                                 " FROM employee e ORDER BY e.employee_id";
             selectQuery = con.prepareStatement(selectSql);
-            res = selectQuery.executeQuery();
+            ResultSet res = selectQuery.executeQuery();
             while (res.next()) {
                 int employeeId = res.getInt(1);
                 String firstName = res.getString(2);
@@ -101,7 +100,7 @@ public class SqlQueries extends DBConnector {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            System.out.println("method getAllIngredients failed");
+            System.out.println("method getEmployees failed");
         }
         return employees;
     }
@@ -187,7 +186,7 @@ public class SqlQueries extends DBConnector {
         try {
             String selectSql = "SELECT pos_id, description, default_salary FROM employee_position";
             Statement s = con.createStatement();
-            res = s.executeQuery(selectSql);
+            ResultSet res = s.executeQuery(selectSql);
             while (res.next()) {
                 EmployeePosition employeePosition = new EmployeePosition(res.getInt(1), res.getString(2), res.getDouble(3));
                 employeePositions.add(employeePosition);
@@ -203,7 +202,7 @@ public class SqlQueries extends DBConnector {
         try {
             String selectSql = "SELECT description, default_salary FROM employee_position WHERE pos_id = " + posId;
             selectQuery = con.prepareStatement(selectSql);
-            res = selectQuery.executeQuery();
+            ResultSet res = selectQuery.executeQuery();
             if(!res.next()) return null;
 
             String description = res.getString(1);
@@ -425,7 +424,7 @@ public class SqlQueries extends DBConnector {
                 //SALES
             }
             selectQuery = con.prepareStatement(selectSql);
-            res = selectQuery.executeQuery();
+            ResultSet res = selectQuery.executeQuery();
             while (res.next()) {
                 int orderId = res.getInt("order_id");
                 int customerId = res.getInt("customer_id");
@@ -497,7 +496,7 @@ public class SqlQueries extends DBConnector {
             String selectSql = "SELECT * FROM zipcode WHERE zipcode = ?";
             selectQuery = con.prepareStatement(selectSql);
             selectQuery.setInt(1, zipcode);
-            res = selectQuery.executeQuery();
+            ResultSet res = selectQuery.executeQuery();
             while (res.next()) {
                 theZipcode.setPlace(res.getString(1));
                 theZipcode.setZipCode(res.getInt(2));
@@ -515,7 +514,7 @@ public class SqlQueries extends DBConnector {
         try {
             String selectSql = "SELECT * FROM ingredient_in_dish";
             selectQuery = con.prepareStatement(selectSql);
-            res = selectQuery.executeQuery();
+            ResultSet res = selectQuery.executeQuery();
             while (res.next()) {
                 int ingredientId = res.getInt(1);
                 int supplierId = res.getInt(2);
