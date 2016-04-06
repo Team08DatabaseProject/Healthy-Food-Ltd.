@@ -3,7 +3,7 @@ package classpackage;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 /**
  * Created by paul thomas on 17.03.2016.
@@ -15,14 +15,14 @@ public class Order {
     private Subscription subscription;
     private double price;
     private String customerRequests; //Additional info from customer
-    private Date actualDeliveryDate; //Is set when order is delivered. Default null
-    private Date deadline; //Consists of date and time
+    private LocalDate actualDeliveryDate; //Is set when order is delivered. Default null
+    private LocalDate deadline; //Consists of date and time
     private String status;
     private Address address;
     private ObservableList<Dish> dishesInThisOrder = FXCollections.observableArrayList();
 
     // From the database
-    public Order(int orderId, String customerRequests, Date deadline,
+    public Order(int orderId, String customerRequests, LocalDate deadline,
                  double price, String status) {
         this.orderId = orderId;
         this.customerRequests = customerRequests;
@@ -33,7 +33,7 @@ public class Order {
     }
 
     // To the database
-    public Order(Subscription subscription, String customerRequests, Date deadline,
+    public Order(Subscription subscription, String customerRequests, LocalDate deadline,
                  double price, String status, Customer customer, ObservableList<Dish> dishesInThisOrder) {
         this.subscription = subscription;
         this.customerRequests = customerRequests;
@@ -61,19 +61,19 @@ public class Order {
         this.customerRequests = customerRequests;
     }
 
-    public Date getDeadline() {
+    public LocalDate getDeadline() {
         return deadline;
     }
 
-    public void setDeadline(Date deadline) {
+    public void setDeadline(LocalDate deadline) {
         this.deadline = deadline;
     }
 
-    public Date getActualDeliveryDate() {
+    public LocalDate getActualDeliveryDate() {
         return actualDeliveryDate;
     }
 
-    public void setActualDeliveryDate(Date actualDeliveryDate) {
+    public void setActualDeliveryDate(LocalDate actualDeliveryDate) {
         this.actualDeliveryDate = actualDeliveryDate;
     }
 
