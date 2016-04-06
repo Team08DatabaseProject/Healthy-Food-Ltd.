@@ -80,7 +80,7 @@ public class SqlQueries extends DBConnector {
         ObservableList<Employee> employees = FXCollections.observableArrayList();
         try {
             String selectSql = "SELECT e.employee_id, e.first_name, e.last_name, e.phone, e.email, e.username, e.salary, e.passhash, e.pos_id, e.address_id" +
-                                " FROM employee ORDER BY e.empoyee_id";
+                                " FROM employee e ORDER BY e.employee_id";
             selectQuery = con.prepareStatement(selectSql);
             res = selectQuery.executeQuery();
             while (res.next()) {
@@ -499,8 +499,8 @@ public class SqlQueries extends DBConnector {
             selectQuery.setInt(1, zipcode);
             res = selectQuery.executeQuery();
             while (res.next()) {
-                theZipcode.setZipCode(res.getInt(1));
-                theZipcode.setPlace(res.getString(2));
+                theZipcode.setPlace(res.getString(1));
+                theZipcode.setZipCode(res.getInt(2));
             }
         } catch (SQLException e) {
             e.printStackTrace();
