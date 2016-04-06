@@ -4,23 +4,20 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.util.ArrayList;
+import java.util.ArrayList;
 
 /**
  * Created by paul thomas on 16.03.2016.
  */
 
-class Menu {
+public class Menu {
     private int menuId;
     private String name;
     private String mealType;
-    private ObservableList<Dish> dishesForThisMenu = FXCollections.observableArrayList();
+    private ArrayList<Integer> intsForDishId;
 
     public Menu(int menuId, String name, String mealType) {
         this.menuId = menuId;
-        this.name = name;
-        this.mealType = mealType;
-    }
-public Menu(String name, String mealType) {
         this.name = name;
         this.mealType = mealType;
     }
@@ -53,11 +50,11 @@ public Menu(String name, String mealType) {
         return name;
     }
 
-    public ObservableList<Dish> getDishesForThisMenu() {
-        return dishesForThisMenu;
+    public ArrayList<Integer> getIntsForDishId() {
+        return intsForDishId;
     }
 
-    public void setDishesForThisMenu(ObservableList<Dish> dishesForThisMenu) {
-        this.dishesForThisMenu = dishesForThisMenu;
+    public void setIntsForDishId(ArrayList<Integer> intsForDishId) {
+        this.intsForDishId = intsForDishId;
     }
 }

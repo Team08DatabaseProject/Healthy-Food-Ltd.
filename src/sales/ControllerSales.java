@@ -21,12 +21,18 @@ import java.util.ResourceBundle;
  * Created by trymrt 28.03.2016
  * Controller for the Sales personnel
  */
+import java.util.Date.*;
 
 public class ControllerSales implements Initializable {
 
     /*
     ObservableList to get fetched  from database
      */
+
+
+
+    private Date newDate = new Date(1985, 11, 15, 14, 00);
+
     private ObservableList<Order> allOrdersForSales = FXCollections.observableArrayList();
     private ObservableList<Subscription> allSubscriptions = FXCollections.observableArrayList();
     private ObservableList<Dish> allDishes = FXCollections.observableArrayList();
@@ -71,6 +77,8 @@ public class ControllerSales implements Initializable {
     };
 
     // Shows a list of orders and their status.
+
+    /*
     EventHandler<ActionEvent> orderEvent = new EventHandler<ActionEvent>() {
 
         @Override
@@ -101,6 +109,7 @@ public class ControllerSales implements Initializable {
             }
         }
     };
+    */
 
     //fungerer når jeg kommenterer ut denne!
 
@@ -171,7 +180,7 @@ public class ControllerSales implements Initializable {
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
         // Required method for Initializable, runs at program launch
 
-        ordersButton.setOnAction(orderEvent);
+        //ordersButton.setOnAction(orderEvent);
         subsButton.setOnAction(subsEvent);
         //deleteOrderButton.setOnAction(deleteOrderEvent);
 

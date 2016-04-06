@@ -125,6 +125,7 @@ public class Login extends Application {
                                 primaryStage.setTitle("Healthy Catering - ceo");
                                 primaryStage.setScene(new Scene(root, 800, 600));
                                 primaryStage.show();
+                                break;
                             }
                             case CHEF : {
                                 break;

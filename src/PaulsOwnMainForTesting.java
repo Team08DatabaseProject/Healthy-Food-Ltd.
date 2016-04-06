@@ -12,8 +12,8 @@ class PaulsOwnMainForTesting {
 
         Address newAddress = new Address("johannesgate 4", 2034);
         myQuery.addAddress(newAddress);
-        Customer firstCustomer = new Customer(false, "customerEmail", "john", "langaas", 92929292, newAddress, "");
-        myQuery.addCustomer(firstCustomer);
+      //  Customer firstCustomer = new Customer(false, "customerEmail", "john", "langaas", 92929292, newAddress, "");
+        //myQuery.addCustomer(firstCustomer);
 
 
 

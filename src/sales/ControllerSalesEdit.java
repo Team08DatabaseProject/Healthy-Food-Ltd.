@@ -19,6 +19,7 @@ import java.util.ResourceBundle;
 /**
  * Created by Trym Todalshaug on 04/04/2016.
  */
+/*
 public class ControllerSalesEdit implements Initializable{
 
     public Button createOrderButton; //Button for creating an order
@@ -38,8 +39,10 @@ public class ControllerSalesEdit implements Initializable{
     public DatePicker deadlinePicker;
     public TextField priceField;
     public TextField statusField;
-
+/*
     EventHandler<ActionEvent> createOrderEvent = new EventHandler<ActionEvent>() {
+
+
         @Override
         public void handle(ActionEvent e) {
             try {
@@ -60,24 +63,26 @@ public class ControllerSalesEdit implements Initializable{
                 int subcriptionId = Integer.parseInt(subcriptionIdField.getText());
                 // TODO: 04/04/2016 Add startsubscription and endsubscription
                 Address newAddress = new Address(address, zipCode);
-                Subscription subscription = new Subscription(subcriptionId, /*rest of parameters*/);
+                Subscription subscription = new Subscription(subcriptionId, /*rest of parameters*//*);
                 Customer customer = new Customer(customerId, isBusiness, email, firstName,
                         lastName, phoneNumber, newAddress, businessName);
                 Order order = new Order(subscription, customerRequests, deadline,
-                        price, status, customer, dishesInThisOrder, status /*Fix arguments*/);
+                        price, status, customer, dishesInThisOrder, status /*Fix arguments);*/
 
                 /*FXMLLoader bottomLoader = new FXMLLoader();
                 bottomLoader.setLocation(getClass().getResource("EditOrdersBottom.fxml"));
                 HBox readyOrderBottom = bottomLoader.load();
-                rootPaneSales.setBottom(readyOrderBottom);*/
+                rootPaneSales.setBottom(readyOrderBottom);*//*
 
             } catch(Exception exc) {
                 System.out.println("createOrderEvent: " + exc);
             }
         }
     };
-
+    */
+/*
     public void initialize(URL fxmlFileLocation, ResourceBundle resources){
-        createOrderButton.setOnAction(createOrderEvent);
+      //  createOrderButton.setOnAction(createOrderEvent);
     }
 }
+*/
