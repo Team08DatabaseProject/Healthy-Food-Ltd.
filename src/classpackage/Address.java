@@ -23,16 +23,16 @@ public class Address {
         return addressId;
     }
 
-    public void setAddressId(int adressId) {
-        this.addressId = adressId;
+    public void setAddressId(int addressId) {
+        this.addressId = addressId;
     }
 
     public String getAddress() {
         return address;
     }
 
-    public void setAdrdess(String adress) {
-        this.address = adress;
+    public void setAdrdess(String address) {
+        this.address = address;
     }
 
     public ZipCode getZipCode() {
