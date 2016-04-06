@@ -8,6 +8,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -94,7 +95,8 @@ public class ControllerCEOEmployees extends ControllerCEO  implements Initializa
 					if(item == null || empty) {
 						setText(null);
 					} else {
-						setText(item.toString() + " kr.");
+						setText(String.format("%.2f", item));
+						setAlignment(Pos.BASELINE_RIGHT);
 					}
 				}
 			};
