@@ -46,7 +46,7 @@ public class SqlQueries extends DBConnector {
             String sql = "INSERT INTO address(address, zipcode) VALUES(?, ?);";
             insertQuery = con.prepareStatement(sql);
             insertQuery.setString(1, newAddress.getAddress());
-            insertQuery.setInt(2, newAddress.getZipCode());
+            insertQuery.setInt(2, newAddress.getZipCode().getZipCode());
             insertQuery.executeUpdate();
             ResultSet res = insertQuery.getGeneratedKeys();
             res.next();
@@ -57,6 +57,53 @@ public class SqlQueries extends DBConnector {
             System.out.println("method addAddress failed");
         }
         return success;
+    }
+
+    public Address getAddress(int addressId) {
+        try {
+            String selectSql = "SELECT address, zipcode FROM address WHERE address_id = " + addressId;
+            selectQuery = con.prepareStatement(selectSql);
+            res = selectQuery.executeQuery();
+            if(!res.next()) return null;
+            String address = res.getString(1);
+            int zipCode = res.getInt(2);
+            ZipCode zipCodeObject = getZipcodeByZipInt(zipCode);
+            return new Address(addressId, address, zipCodeObject);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("method getAddress failed");
+        }
+        return null;
+    }
+
+    public ObservableList<Employee> getEmployees() {
+        ObservableList<Employee> employees = FXCollections.observableArrayList();
+        try {
+            String selectSql = "SELECT e.employee_id, e.first_name, e.last_name, e.phone, e.email, e.username, e.salary, e.passhash, e.pos_id, e.address_id" +
+                                " FROM employees ORDER BY e.empoyee_id";
+            selectQuery = con.prepareStatement(selectSql);
+            res = selectQuery.executeQuery();
+            while (res.next()) {
+                int employeeId = res.getInt(1);
+                String firstName = res.getString(2);
+                String lastName = res.getString(3);
+                int phoneNo = res.getInt(4);
+                String eMail = res.getString(5);
+                String username = res.getString(6);
+                double salary = res.getDouble(7);
+                String passHash = res.getString(8);
+                int posId = res.getInt(9);
+                int addressId = res.getInt(10);
+                Address address = getAddress(addressId);
+                EmployeePosition position = getEmployeePosition(posId);
+                Employee employee = new Employee(employeeId, username, firstName, lastName, phoneNo, eMail, salary, passHash, address, position);
+                employees.add(employee);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("method getAllIngredients failed");
+        }
+        return employees;
     }
 
     public boolean addEmployee(Employee newEmp) {
@@ -76,7 +123,7 @@ public class SqlQueries extends DBConnector {
             insertQuery.setString(5, newEmp.geteMail());
             insertQuery.setInt(6, newEmp.getAddress().getAddressId());
             insertQuery.setString(7, newEmp.getUsername());
-            insertQuery.setInt(8, newEmp.getPosId());
+            insertQuery.setInt(8, newEmp.getPosition().getId());
             insertQuery.setDouble(9, newEmp.getSalary());
             insertQuery.setString(10, newEmp.getPassHash());
             insertQuery.executeUpdate();
@@ -97,7 +144,7 @@ public class SqlQueries extends DBConnector {
         }
         return ok;
     }
-
+/*
     public Employee getUser(String username, String passwordHash) {
         int personId = -1;
         int posId = -1;
@@ -134,20 +181,37 @@ public class SqlQueries extends DBConnector {
         }
         return null;
     }
-
-    public Map<Integer, String> getEmployeePositions() {
-        Map<Integer, String> employeePositions = new HashMap<>();
-
+*/
+    public ObservableList<EmployeePosition> getEmployeePositions() {
+        ObservableList<EmployeePosition> employeePositions = FXCollections.observableArrayList();
         try {
-            String selectSql = "SELECT pos_id, description FROM employee_position";
+            String selectSql = "SELECT pos_id, description, default_salary FROM employee_position";
             Statement s = con.createStatement();
             res = s.executeQuery(selectSql);
             while (res.next()) {
-                employeePositions.put(res.getInt(1), res.getString(2));
+                EmployeePosition employeePosition = new EmployeePosition(res.getInt(1), res.getString(2), res.getDouble(3));
+                employeePositions.add(employeePosition);
             }
             return employeePositions;
         } catch (SQLException e) {
             System.out.println(e);
+        }
+        return null;
+    }
+
+    public EmployeePosition getEmployeePosition(int posId) {
+        try {
+            String selectSql = "SELECT description, default_salary FROM employee_position WHERE pos_id = " + posId;
+            selectQuery = con.prepareStatement(selectSql);
+            res = selectQuery.executeQuery();
+            if(!res.next()) return null;
+
+            String description = res.getString(1);
+            double salary = res.getDouble(2);
+            return new EmployeePosition(posId, description, salary);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("method getAddress failed");
         }
         return null;
     }

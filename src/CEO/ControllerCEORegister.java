@@ -1,4 +1,4 @@
-package ceo;
+package CEO;
 /**
  * Created by Axel 16.03.2016
  * Controller for the driver
@@ -49,10 +49,11 @@ public class ControllerCEORegister implements Initializable {
                 int posId = Integer.parseInt(posIdField.getText());
                 double salary = Double.parseDouble(salaryField.getText());
                 String passhash = passwordField.getText();
-                Address newAddress = new Address(address, zipCode);
-                Employee newEmp = new Employee(username, firstName, lastName, phoneNo, eMail, posId, salary, passhash, newAddress);
+                ZipCode zipCodeObject = new ZipCode(zipCode, "testtest");
+                Address addressObject = new Address(address, zipCodeObject);
+                EmployeePosition employeePosition = new EmployeePosition(posId, "test", 1234);
+                Employee newEmp = new Employee(username, firstName, lastName, phoneNo, eMail, salary, passhash, addressObject, employeePosition);
                 query.addEmployee(newEmp);
-
             } catch (Exception exc) {
                 System.out.println(exc);
             }
