@@ -1,4 +1,4 @@
-package CEO;
+package users.ceo;
 
 import classpackage.Employee;
 import javafx.collections.FXCollections;

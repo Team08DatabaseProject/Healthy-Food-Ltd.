@@ -1,6 +1,7 @@
 package users.sales;
 
 import classpackage.*;
+import classpackage.Menu;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;

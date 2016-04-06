@@ -2,9 +2,7 @@ package div; /**
  * Created by axelkvistad on 3/17/16.
  * Stole the template from a website
  */
-import classpackage.Address;
-import classpackage.Employee;
-import classpackage.SqlQueries;
+import classpackage.*;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -116,10 +114,10 @@ public class Login extends Application {
                     checkPw = pf.getText().toString();
                     Employee emp = query.getUser(checkUser, checkPw);
                     */
-                    Employee emp = new Employee(1, "test", "test", "test", 1234,
-                            "mail@mail", 4, 50.0, "hash", new Address("Testveien 1", 1234));
+                    Employee emp = new Employee(1, "test", "test", "test", 1234, "test", 1234.56,
+                             "hash", new Address("Testveien 1", new ZipCode(1234, "testZip")), new EmployeePosition(1, "test", 23.34));
                     if (emp != null) {
-                        switch(emp.getPosId()) {
+                        switch(emp.getPosition().getId()) {
                             case CEO : {
                                 Parent root = FXMLLoader.load(getClass().getResource("users/ceo/CEOWindow.fxml"));
                                 primaryStage.setTitle("Healthy Catering - users.ceo");

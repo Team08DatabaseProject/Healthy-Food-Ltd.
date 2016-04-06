@@ -1,4 +1,4 @@
-package CEO;
+package users.ceo;
 /**
  * Created by Axel 16.03.2016
  * Controller for the CEO
