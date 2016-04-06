@@ -1,5 +1,6 @@
 package users.ceo;
 
+import classpackage.Address;
 import classpackage.Employee;
 import classpackage.EmployeePosition;
 import classpackage.Order;
@@ -32,9 +33,34 @@ public class ControllerCEOEmployees extends ControllerCEO  implements Initializa
 		columns.get(1).setCellValueFactory(new PropertyValueFactory<Employee, String>("lastName"));
 		columns.get(2).setCellValueFactory(new PropertyValueFactory<Employee, String>("eMail"));
 		columns.get(3).setCellValueFactory(new PropertyValueFactory<Employee, Integer>("phoneNo"));
-		columns.get(4).setCellValueFactory(new PropertyValueFactory<Employee, EmployeePosition>("position"));
-		columns.get(5).setCellValueFactory(new PropertyValueFactory<Employee, Double>("salary"));
+		columns.get(4).setCellValueFactory(new PropertyValueFactory<Employee, Address>("address"));
+		columns.get(4).setCellFactory(column -> {
+			return new TableCell<Employee, Address>() {
+				@Override
+				protected void updateItem(Address item, boolean empty) {
+					if(item == null || empty) {
+						setText(null);
+					} else {
+						setText(item.getAddress() + "\n" + item.getZipCode().getZipCode() + " " + item.getZipCode().getPlace());
+					}
+				}
+			};
+		});
+		columns.get(5).setCellValueFactory(new PropertyValueFactory<Employee, EmployeePosition>("position"));
 		columns.get(5).setCellFactory(column -> {
+			return new TableCell<Employee, EmployeePosition>() {
+				@Override
+				protected void updateItem(EmployeePosition item, boolean empty) {
+					if(item == null || empty) {
+						setText(null);
+					} else {
+						setText(item.getDescription());
+					}
+				}
+			};
+		});
+		columns.get(6).setCellValueFactory(new PropertyValueFactory<Employee, Double>("salary"));
+		columns.get(6).setCellFactory(column -> {
 			return new TableCell<Employee, Double>() {
 				@Override
 				protected void updateItem(Double item, boolean empty) {

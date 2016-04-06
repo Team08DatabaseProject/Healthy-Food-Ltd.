@@ -14,6 +14,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import classpackage.*;
+import javafx.scene.layout.HBox;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -32,7 +33,7 @@ public class ControllerCEO implements Initializable {
             try {
                 FXMLLoader loader = new FXMLLoader();
                 loader.setLocation(getClass().getResource("CEOEmployees.fxml"));
-                TableView employeesTable = loader.load();
+                GridPane employeesTable = loader.load();
                 rootPaneDriver.setCenter(employeesTable);
             } catch (Exception exc) {
                 System.out.println(exc);
