@@ -111,7 +111,7 @@ public class SqlQueries extends DBConnector {
 
         try {
             con.setAutoCommit(false);
-            if (!addAddress(newEmp.getAddressObject())) {
+            if (!addAddress(newEmp.getAddress())) {
                 return false;
             }
             String insertSql = "INSERT INTO employee VALUES(?,?,?,?,?,?,?,?,?,?)";
@@ -121,9 +121,9 @@ public class SqlQueries extends DBConnector {
             insertQuery.setString(3, newEmp.getLastName());
             insertQuery.setInt(4, newEmp.getPhoneNo());
             insertQuery.setString(5, newEmp.geteMail());
-            insertQuery.setInt(6, newEmp.getAddressObject().getAddressId());
+            insertQuery.setInt(6, newEmp.getAddress().getAddressId());
             insertQuery.setString(7, newEmp.getUsername());
-            insertQuery.setInt(8, newEmp.getPositionObject().getId());
+            insertQuery.setInt(8, newEmp.getPosition().getId());
             insertQuery.setDouble(9, newEmp.getSalary());
             insertQuery.setString(10, newEmp.getPassHash());
             insertQuery.executeUpdate();

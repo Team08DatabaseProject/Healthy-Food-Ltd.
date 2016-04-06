@@ -95,11 +95,7 @@ public class Employee {
         return phoneNo;
     }
 
-    public String getAddress() {
-        return address.getAddress();
-    }
-
-    public Address getAddressObject() {
+    public Address getAddress() {
         return address;
     }
 
@@ -107,19 +103,11 @@ public class Employee {
         return eMail;
     }
 
-    public int getZipCode() {
-        return address.getZipCode().getZipCode();
+    public ZipCode getZipCode() {
+        return address.getZipCode();
     }
 
-    public String getPlace() {
-        return address.getZipCode().getPlace();
-    }
-
-    public String getPosition() {
-        return position.getDescription();
-    }
-
-    public EmployeePosition getPositionObject() {
+    public EmployeePosition getPosition() {
         return position;
     }
     public void setSalary(double newSalary) {
