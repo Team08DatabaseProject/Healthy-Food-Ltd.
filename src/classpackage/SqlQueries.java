@@ -80,7 +80,7 @@ public class SqlQueries extends DBConnector {
         ObservableList<Employee> employees = FXCollections.observableArrayList();
         try {
             String selectSql = "SELECT e.employee_id, e.first_name, e.last_name, e.phone, e.email, e.username, e.salary, e.passhash, e.pos_id, e.address_id" +
-                                " FROM employees ORDER BY e.empoyee_id";
+                                " FROM employee ORDER BY e.empoyee_id";
             selectQuery = con.prepareStatement(selectSql);
             res = selectQuery.executeQuery();
             while (res.next()) {

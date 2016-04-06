@@ -95,16 +95,16 @@ public class Employee {
         return phoneNo;
     }
 
-    public String geteMail() {
-        return eMail;
-    }
-
     public String getAddress() {
         return address.getAddress();
     }
 
     public Address getAddressObject() {
         return address;
+    }
+
+    public String geteMail() {
+        return eMail;
     }
 
     public int getZipCode() {
@@ -124,12 +124,6 @@ public class Employee {
     }
     public void setSalary(double newSalary) {
         salary = newSalary;
-        updateSalary();
-    }
-
-    private void updateSalary()
-    {
-        //query to update
     }
 
     public boolean isAdmin(){

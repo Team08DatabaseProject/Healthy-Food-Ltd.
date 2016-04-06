@@ -32,7 +32,6 @@ public class ControllerCEOEmployees extends ControllerCEO  implements Initializa
 		columns.get(3).setCellValueFactory(new PropertyValueFactory<Order,Date>("phoneNo"));
 		columns.get(4).setCellValueFactory(new PropertyValueFactory<Order,Date>("position"));
 		columns.get(5).setCellValueFactory(new PropertyValueFactory<Order,Date>("salary"));
-
 		emmployeesTable.setItems(employees);
 	}
 }
