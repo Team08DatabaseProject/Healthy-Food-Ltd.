@@ -1,6 +1,8 @@
 package users.sales;
 
 import classpackage.*;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.Initializable;
@@ -20,6 +22,7 @@ import java.util.ResourceBundle;
 public class ControllerSalesEdit implements Initializable{
 
     public Button createOrderButton; //Button for creating an order
+    public Button deleteOrderButton;
 
     public TextField orderIdField;
     public TextField customerIdField;
@@ -39,7 +42,7 @@ public class ControllerSalesEdit implements Initializable{
     public TextField priceField;
     public TextField statusField;
 
-    /*EventHandler<ActionEvent> createOrderEvent = new EventHandler<ActionEvent>() {
+    EventHandler<ActionEvent> createOrderEvent = new EventHandler<ActionEvent>() {
         @Override
         public void handle(ActionEvent e) {
             try {
@@ -52,7 +55,7 @@ public class ControllerSalesEdit implements Initializable{
                 String address = addressField.getText();
                 int zipCode = Integer.parseInt(zipCodeField.getText());
                 String customerRequests = customerRequestsField.getText();
-                Date deadline = deadline;
+                LocalDate deadline = deadlinePicker.getValue();
                 double price = Double.parseDouble(priceField.getText());
                 String status = statusField.getText();
                 int orderId = Integer.parseInt(orderIdField.getText());
@@ -66,21 +69,34 @@ public class ControllerSalesEdit implements Initializable{
                 Customer customer = new Customer(isBusiness, email, firstName, lastName, phoneNumber,
                         newAddress, businessName, subscription);
                 Dish dishes = new Dish(price, dishName);
+                ObservableList<Dish> dishesInThisOrder = FXCollections.observableArrayList();
                 Order order = new Order(subscription, customerRequests, deadline,
-                        price, status, customer, dishes);
+                        price, status, customer, dishesInThisOrder);
 
                 /*FXMLLoader bottomLoader = new FXMLLoader();
                 bottomLoader.setLocation(getClass().getResource("EditOrdersBottom.fxml"));
                 HBox readyOrderBottom = bottomLoader.load();
                 rootPaneSales.setBottom(readyOrderBottom);*/
 
-            /*} catch(Exception exc) {
+            } catch(Exception exc) {
                 System.out.println("createOrderEvent: " + exc);
             }
         }
-    };*/
+    };
+
+    EventHandler<ActionEvent> deleteOrderEvent = new EventHandler<ActionEvent>(){
+        @Override
+        public void handle(ActionEvent e){
+            try{
+
+            }catch (Exception exc){
+                System.out.println("deleteOrderEvent: " + e);
+            }
+        }
+    };
 
     public void initialize(URL fxmlFileLocation, ResourceBundle resources){
-        //createOrderButton.setOnAction(createOrderEvent);
+        createOrderButton.setOnAction(createOrderEvent);
+        deleteOrderButton.setOnAction(deleteOrderEvent);
     }
 }

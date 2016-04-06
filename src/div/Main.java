@@ -1,7 +1,5 @@
-//import classpackage.EncryptionService;
-import classpackage.SqlQueries;
+package div;//import classpackage.EncryptionService;
 
-import java.util.Map;
 
 /**
  * Created by roger on 10.03.2016.
