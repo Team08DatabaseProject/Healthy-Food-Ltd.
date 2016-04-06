@@ -1,9 +1,8 @@
-package sales;
+package users.sales;
 
-import classpackage.Address;
-import classpackage.Customer;
-import classpackage.Order;
-import classpackage.Subscription;
+import classpackage.*;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.Initializable;
@@ -14,6 +13,7 @@ import javafx.scene.control.TextField;
 
 import java.net.URL;
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.ResourceBundle;
 
 /**
@@ -22,10 +22,13 @@ import java.util.ResourceBundle;
 public class ControllerSalesEdit implements Initializable{
 
     public Button createOrderButton; //Button for creating an order
+    public Button deleteOrderButton;
 
     public TextField orderIdField;
     public TextField customerIdField;
     public TextField subcriptionIdField;
+    public TextField startSubscription;
+    public TextField endSubscription;
     public TextField fNameField;
     public TextField lNameField;
     public ComboBox businessBox;
@@ -58,13 +61,17 @@ public class ControllerSalesEdit implements Initializable{
                 int orderId = Integer.parseInt(orderIdField.getText());
                 int customerId = Integer.parseInt(customerIdField.getText());
                 int subcriptionId = Integer.parseInt(subcriptionIdField.getText());
-                // TODO: 04/04/2016 Add startsubscription and endsubscription
+                LocalDate startSubscription = deadlinePicker.getValue();
+                LocalDate endSubscription = deadlinePicker.getValue();
+                String dishName = "";
                 Address newAddress = new Address(address, zipCode);
-                Subscription subscription = new Subscription(subcriptionId, /*rest of parameters*/);
-                Customer customer = new Customer(customerId, isBusiness, email, firstName,
-                        lastName, phoneNumber, newAddress, businessName);
+                Subscription subscription = new Subscription(startSubscription, endSubscription);
+                Customer customer = new Customer(isBusiness, email, firstName, lastName, phoneNumber,
+                        newAddress, businessName, subscription);
+                Dish dishes = new Dish(price, dishName);
+                ObservableList<Dish> dishesInThisOrder = FXCollections.observableArrayList();
                 Order order = new Order(subscription, customerRequests, deadline,
-                        price, status, customer, dishesInThisOrder, status /*Fix arguments*/);
+                        price, status, customer, dishesInThisOrder);
 
                 /*FXMLLoader bottomLoader = new FXMLLoader();
                 bottomLoader.setLocation(getClass().getResource("EditOrdersBottom.fxml"));
@@ -77,7 +84,19 @@ public class ControllerSalesEdit implements Initializable{
         }
     };
 
+    EventHandler<ActionEvent> deleteOrderEvent = new EventHandler<ActionEvent>(){
+        @Override
+        public void handle(ActionEvent e){
+            try{
+
+            }catch (Exception exc){
+                System.out.println("deleteOrderEvent: " + e);
+            }
+        }
+    };
+
     public void initialize(URL fxmlFileLocation, ResourceBundle resources){
         createOrderButton.setOnAction(createOrderEvent);
+        deleteOrderButton.setOnAction(deleteOrderEvent);
     }
 }

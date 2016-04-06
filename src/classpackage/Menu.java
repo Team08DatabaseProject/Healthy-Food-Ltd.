@@ -4,23 +4,22 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.util.ArrayList;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by paul thomas on 16.03.2016.
  */
 
-class Menu {
+public class Menu {
     private int menuId;
     private String name;
     private String mealType;
-    private ObservableList<Dish> dishesForThisMenu = FXCollections.observableArrayList();
+    private Map<Dish, Integer> dishes = new HashMap<>();
 
     public Menu(int menuId, String name, String mealType) {
         this.menuId = menuId;
-        this.name = name;
-        this.mealType = mealType;
-    }
-public Menu(String name, String mealType) {
         this.name = name;
         this.mealType = mealType;
     }
@@ -53,11 +52,12 @@ public Menu(String name, String mealType) {
         return name;
     }
 
-    public ObservableList<Dish> getDishesForThisMenu() {
-        return dishesForThisMenu;
+    public Map<Dish, Integer> getDishes() {
+        return dishes;
     }
 
-    public void setDishesForThisMenu(ObservableList<Dish> dishesForThisMenu) {
-        this.dishesForThisMenu = dishesForThisMenu;
+    public void setDishes(Map<Dish, Integer> dishes) {
+        this.dishes = dishes;
     }
+
 }

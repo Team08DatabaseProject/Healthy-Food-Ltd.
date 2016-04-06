@@ -15,6 +15,7 @@ public class Subscription {
     private LocalDate endSubscription;
     private ObservableList ordersOnThisSubscription = FXCollections.observableArrayList();
 
+
     public Subscription(int subscriptionId, LocalDate startSubscription, LocalDate endSubscription, ObservableList ordersOnThisSubscription) {
         this.subscriptionId = subscriptionId;
         this.startSubscription = startSubscription;

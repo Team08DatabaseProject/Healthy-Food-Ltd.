@@ -1,4 +1,4 @@
-/**
+package div; /**
  * Created by axelkvistad on 3/17/16.
  * Stole the template from a website
  */
@@ -121,24 +121,25 @@ public class Login extends Application {
                     if (emp != null) {
                         switch(emp.getPosId()) {
                             case CEO : {
-                                Parent root = FXMLLoader.load(getClass().getResource("ceo/CEOWindow.fxml"));
-                                primaryStage.setTitle("Healthy Catering - ceo");
+                                Parent root = FXMLLoader.load(getClass().getResource("users/ceo/CEOWindow.fxml"));
+                                primaryStage.setTitle("Healthy Catering - users.ceo");
                                 primaryStage.setScene(new Scene(root, 800, 600));
                                 primaryStage.show();
+                                break;
                             }
                             case CHEF : {
                                 break;
                             }
                             case DRIVER : {
-                                Parent root = FXMLLoader.load(getClass().getResource("driver/DriverWindow.fxml"));
-                                primaryStage.setTitle("Healthy Catering - driver");
+                                Parent root = FXMLLoader.load(getClass().getResource("users/driver/DriverWindow.fxml"));
+                                primaryStage.setTitle("Healthy Catering - users.driver");
                                 primaryStage.setScene(new Scene(root, 800, 600));
                                 primaryStage.show();
                                 break;
                             }
                             case SALES : {
-                                Parent root = FXMLLoader.load(getClass().getResource("sales/SalesWindow.fxml"));
-                                primaryStage.setTitle("Healthy Catering - sales");
+                                Parent root = FXMLLoader.load(getClass().getResource("users/sales/SalesWindow.fxml"));
+                                primaryStage.setTitle("Healthy Catering - users.sales");
                                 primaryStage.setScene(new Scene(root, 800, 600));
                                 primaryStage.show();
                                 break;
@@ -171,7 +172,7 @@ public class Login extends Application {
 
         //Adding BorderPane to the scene and loading CSS
         Scene scene = new Scene(bp);
-        scene.getStylesheets().add(getClass().getClassLoader().getResource("login.css").toExternalForm());
+        scene.getStylesheets().add(getClass().getClassLoader().getResource("div/login.css").toExternalForm());
         primaryStage.setScene(scene);
         /*
         primaryStage.titleProperty().bind(

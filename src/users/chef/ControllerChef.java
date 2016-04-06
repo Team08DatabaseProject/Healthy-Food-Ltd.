@@ -1,4 +1,4 @@
-package chef;
+package users.chef;
 
 /**
  * Created by Trym Todalshaug on 26/03/2016.
@@ -17,10 +17,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-
-import java.io.Serializable;
-import java.net.URL;
-import java.util.ResourceBundle;
 
 abstract public class ControllerChef implements Initializable{
 

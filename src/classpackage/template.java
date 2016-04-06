@@ -29,7 +29,7 @@ public class template {
     // This only has to be called once and at the startup of our application.. probaly the first function in our main(). Also, we should set our username and password. I actually don't mind if we use my username and password.
     private static void _init_() throws Exception
    {
-        String dbDriver = "com.mysql.jdbc.driver";
+        String dbDriver = "com.mysql.jdbc.users.driver";
         Class.forName(dbDriver);
         String databasenavn = "jdbc:mysql://mysql.stud.iie.ntnu.no:3306/" + consts.username + "?user=" + consts.username + "&password=" + consts.passord;
         db = DriverManager.getConnection(databasenavn);

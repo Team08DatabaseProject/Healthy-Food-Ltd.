@@ -1,3 +1,5 @@
+package div;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -34,7 +36,7 @@ public class Controller implements Initializable {
 		public void handle(ActionEvent e) {
 			try {
 				FXMLLoader loader = new FXMLLoader();
-				loader.setLocation(getClass().getResource("OrderTable.fxml"));
+				loader.setLocation(getClass().getResource("div/OrderTable.fxml"));
 				System.out.println(loader.getLocation());
 				TableView orderTable = loader.load();
 				rootPane.setCenter(orderTable);
