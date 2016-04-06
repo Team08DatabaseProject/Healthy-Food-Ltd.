@@ -4,14 +4,18 @@
 <?import javafx.scene.layout.*?>
 
 <!--> Table in submenu "Orders for Sales" </!-->
-    <TableView fx:id="tables" prefHeight="200" prefWidth="200.0"
+    <TableView fx:id="ordersTable" prefHeight="200" prefWidth="200.0"
                BorderPane.alignment="CENTER" xmlns:fx="http://javafx.com/fxml">
         <columns>
             <TableColumn prefWidth="40.0" text="Order ID."/>
             <TableColumn prefWidth="40.0" text="Customer ID"/>
             <TableColumn prefWidth="40.0" text="Subscription ID"/>
-            <TableColumn prefWidth="40.0" text="Customer requests">
-            </TableColumn>
+            <TableColumn prefWidth="40.0" text="First name" />
+            <TableColumn prefWidth="40.0" text="Last name" />
+            <TableColumn prefWidth="40.0" text="Business name" />
+            <TableColumn prefWidth="40.0" text="Email" />
+            <TableColumn prefWidth="40.0" text="Phone number" />
+            <TableColumn prefWidth="40.0" text="Customer requests"/>
             <TableColumn prefWidth="40.0" text="Deadline"/>
             <TableColumn prefWidth="40.0" text="Price"/>
             <TableColumn prefWidth="40.0" text="Address"/>

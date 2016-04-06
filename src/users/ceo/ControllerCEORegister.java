@@ -1,4 +1,4 @@
-package ceo;
+package users.ceo;
 /**
  * Created by Axel 16.03.2016
  * Controller for the driver
@@ -19,7 +19,7 @@ import java.util.ResourceBundle;
 public class ControllerCEORegister implements Initializable {
 
     @FXML
-    //public TableView tables; // Retrieves TableView with fx:id="tables"
+    //public TableView tables2; // Retrieves TableView with fx:id="tables2"
     public Button finalRegisterButton;
     public GridPane textGrid;
     public TextField idField;
@@ -49,10 +49,11 @@ public class ControllerCEORegister implements Initializable {
                 int posId = Integer.parseInt(posIdField.getText());
                 double salary = Double.parseDouble(salaryField.getText());
                 String passhash = passwordField.getText();
-                Address newAddress = new Address(address, zipCode);
-                Employee newEmp = new Employee(username, firstName, lastName, phoneNo, eMail, posId, salary, passhash, newAddress);
+                ZipCode zipCodeObject = new ZipCode(zipCode, "testtest");
+                Address addressObject = new Address(address, zipCodeObject);
+                EmployeePosition employeePosition = new EmployeePosition(posId, "test", 1234);
+                Employee newEmp = new Employee(username, firstName, lastName, phoneNo, eMail, salary, passhash, addressObject, employeePosition);
                 query.addEmployee(newEmp);
-
             } catch (Exception exc) {
                 System.out.println(exc);
             }

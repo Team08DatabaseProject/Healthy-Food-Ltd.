@@ -1,10 +1,8 @@
-/**
+package div; /**
  * Created by axelkvistad on 3/17/16.
  * Stole the template from a website
  */
-import classpackage.Address;
-import classpackage.Employee;
-import classpackage.SqlQueries;
+import classpackage.*;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -116,29 +114,30 @@ public class Login extends Application {
                     checkPw = pf.getText().toString();
                     Employee emp = query.getUser(checkUser, checkPw);
                     */
-                    Employee emp = new Employee(1, "test", "test", "test", 1234,
-                            "mail@mail", 4, 50.0, "hash", new Address("Testveien 1", 1234));
+                    Employee emp = new Employee(1, "test", "test", "test", 1234, "test", 1234.56,
+                             "hash", new Address("Testveien 1", new ZipCode(1234, "testZip")), new EmployeePosition(1, "test", 23.34));
                     if (emp != null) {
-                        switch(emp.getPosId()) {
+                        switch(emp.getPosition().getId()) {
                             case CEO : {
-                                Parent root = FXMLLoader.load(getClass().getResource("ceo/CEOWindow.fxml"));
-                                primaryStage.setTitle("Healthy Catering - ceo");
+                                Parent root = FXMLLoader.load(getClass().getResource("../users/ceo/CEOWindow.fxml"));
+                                primaryStage.setTitle("Healthy Catering - users.ceo");
                                 primaryStage.setScene(new Scene(root, 800, 600));
                                 primaryStage.show();
+                                break;
                             }
                             case CHEF : {
                                 break;
                             }
                             case DRIVER : {
-                                Parent root = FXMLLoader.load(getClass().getResource("driver/DriverWindow.fxml"));
-                                primaryStage.setTitle("Healthy Catering - driver");
+                                Parent root = FXMLLoader.load(getClass().getResource("users/driver/DriverWindow.fxml"));
+                                primaryStage.setTitle("Healthy Catering - users.driver");
                                 primaryStage.setScene(new Scene(root, 800, 600));
                                 primaryStage.show();
                                 break;
                             }
                             case SALES : {
-                                Parent root = FXMLLoader.load(getClass().getResource("sales/SalesWindow.fxml"));
-                                primaryStage.setTitle("Healthy Catering - sales");
+                                Parent root = FXMLLoader.load(getClass().getResource("users/sales/SalesWindow.fxml"));
+                                primaryStage.setTitle("Healthy Catering - users.sales");
                                 primaryStage.setScene(new Scene(root, 800, 600));
                                 primaryStage.show();
                                 break;
@@ -158,7 +157,7 @@ public class Login extends Application {
                     txtUserName.setText("");
                     pf.setText("");
                 } catch (Exception e) {
-                    System.out.println(e);
+                    System.out.println("asdf" + e);
                 }
             }
         });
@@ -171,7 +170,7 @@ public class Login extends Application {
 
         //Adding BorderPane to the scene and loading CSS
         Scene scene = new Scene(bp);
-        scene.getStylesheets().add(getClass().getClassLoader().getResource("login.css").toExternalForm());
+        scene.getStylesheets().add(getClass().getClassLoader().getResource("div/login.css").toExternalForm());
         primaryStage.setScene(scene);
         /*
         primaryStage.titleProperty().bind(

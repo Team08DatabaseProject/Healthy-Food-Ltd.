@@ -5,18 +5,30 @@ package classpackage;
  */
 
 public class Ingredient {
+    private int ingredientId;
     private final String ingName;
     private final String unit;
-    private double storage;
+    private double quantityOwned;
     private double price;
+    private int supplierId;
 
-    public Ingredient(String ingName, String unit, double storage, double price) {
+    // To database
+    public Ingredient(String ingName, String unit, double quantityOwned, double price, int supplierId) {
         this.ingName = ingName;
         this.unit = unit;
-        this.storage = storage;
+        this.quantityOwned = quantityOwned;
         this.price = price;
+        this.supplierId = supplierId;
     }
-
+    // From database
+    public Ingredient(int ingredientId,String ingName, String unit, double quantityOwned, double price, int supplierId) {
+        this.ingredientId = ingredientId;
+        this.ingName = ingName;
+        this.unit = unit;
+        this.quantityOwned = quantityOwned;
+        this.price = price;
+        this.supplierId = supplierId;
+    }
     public String getIngName() {
         return ingName;
     }
@@ -25,11 +37,27 @@ public class Ingredient {
         return unit;
     }
 
-    public double getStorage() {
-        return storage;
+    public double getQuantityOwned() {
+        return quantityOwned;
     }
 
     public double getPrice() {
         return price;
+    }
+
+    public int getSupplierId() {
+        return supplierId;
+    }
+
+    public void setSupplierId(int supplierId) {
+        this.supplierId = supplierId;
+    }
+
+    public int getIngredientId() {
+        return ingredientId;
+    }
+
+    public void setIngredientId(int ingredientId) {
+        this.ingredientId = ingredientId;
     }
 }

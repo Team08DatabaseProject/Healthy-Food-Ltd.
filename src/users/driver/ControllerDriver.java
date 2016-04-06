@@ -1,7 +1,7 @@
-package driver;
+package users.driver;
 /**
  * Created by Axel 16.03.2016
- * Controller for the driver
+ * Controller for the users.driver
  */
 
 import classpackage.SqlQueries;
@@ -29,7 +29,7 @@ public class ControllerDriver implements Initializable {
 
     private SqlQueries query = new SqlQueries();
 
-    @FXML public TableView tables; // Retrieves TableView with fx:id="tables"
+    @FXML public TableView tables; // Retrieves TableView with fx:id="tables2"
     public Button readyOrderButton;
     public Button changeStatusButton;
     public Button deliveredButton;
@@ -46,7 +46,7 @@ public class ControllerDriver implements Initializable {
             new DriverOrderDelivery(4, "Testveien 4", "16:00")
     );
 
-     // Same test data, only for the part of the menu where the driver can change the status of the order
+     // Same test data, only for the part of the menu where the users.driver can change the status of the order
     final ObservableList<DriverOrderStatus> changeStatusData = FXCollections.observableArrayList(
             new DriverOrderStatus(1, "Testveien 1", "13:00", "Not delivered"),
             new DriverOrderStatus(2, "Testveien 2", "14:00", "Not delivered"),

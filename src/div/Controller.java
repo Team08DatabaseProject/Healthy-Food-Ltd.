@@ -1,3 +1,5 @@
+package div;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -17,7 +19,7 @@ import java.util.ResourceBundle;
 public class Controller implements Initializable {
 
 	@FXML
-	//public TableView tables; // Retrieves TableView with fx:id="tables"
+	//public TableView tables2; // Retrieves TableView with fx:id="tables2"
 	public Button ingredients;
 	public BorderPane rootPane;
 
@@ -34,7 +36,7 @@ public class Controller implements Initializable {
 		public void handle(ActionEvent e) {
 			try {
 				FXMLLoader loader = new FXMLLoader();
-				loader.setLocation(getClass().getResource("OrderTable.fxml"));
+				loader.setLocation(getClass().getResource("div/OrderTable.fxml"));
 				System.out.println(loader.getLocation());
 				TableView orderTable = loader.load();
 				rootPane.setCenter(orderTable);

@@ -1,6 +1,9 @@
 package classpackage;
 
-import java.util.Date;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
+import java.time.LocalDate;
 
 /**
  * Created by paul thomas on 17.03.2016.
@@ -8,26 +11,38 @@ import java.util.Date;
 
 public class Order {
     private int orderId;
-    private int customerId;
-    private int subscriptionId;
+    private Customer customer;
+    private Subscription subscription;
     private double price;
     private String customerRequests; //Additional info from customer
-    private Date actualDeliveryDate; //Is set when order is delivered. Default null
-    private String address; //Delivery address
-    private Date deadline; //Consists of date and time
+    private LocalDate actualDeliveryDate; //Is set when order is delivered. Default null
+    private LocalDate deadline; //Consists of date and time
     private String status;
+    private Address address;
+    private ObservableList<Dish> dishesInThisOrder = FXCollections.observableArrayList();
 
-    public Order(int orderId, int customerId, int subscriptionId, String customerRequests, Date deadline,
-                 double price, String address, String status) {
+    // From the database
+    public Order(int orderId, String customerRequests, LocalDate deadline,
+                 double price, String status) {
         this.orderId = orderId;
-        this.customerId = customerId;
-        this.subscriptionId = subscriptionId;
         this.customerRequests = customerRequests;
         this.deadline = deadline;
         this.price = price;
-        this.address = address;
         this.status = status;
         actualDeliveryDate = null;
+    }
+
+    // To the database
+    public Order(Subscription subscription, String customerRequests, LocalDate deadline,
+                 double price, String status, Customer customer, ObservableList<Dish> dishesInThisOrder) {
+        this.subscription = subscription;
+        this.customerRequests = customerRequests;
+        this.deadline = deadline;
+        this.price = price;
+        this.status = status;
+        actualDeliveryDate = null;
+        this.customer = customer;
+        this.dishesInThisOrder = dishesInThisOrder;
     }
 
     public int getOrderId() {
@@ -46,19 +61,19 @@ public class Order {
         this.customerRequests = customerRequests;
     }
 
-    public Date getDeadline() {
+    public LocalDate getDeadline() {
         return deadline;
     }
 
-    public void setDeadline(Date deadline) {
+    public void setDeadline(LocalDate deadline) {
         this.deadline = deadline;
     }
 
-    public Date getActualDeliveryDate() {
+    public LocalDate getActualDeliveryDate() {
         return actualDeliveryDate;
     }
 
-    public void setActualDeliveryDate(Date actualDeliveryDate) {
+    public void setActualDeliveryDate(LocalDate actualDeliveryDate) {
         this.actualDeliveryDate = actualDeliveryDate;
     }
 
@@ -70,14 +85,6 @@ public class Order {
         this.price = price;
     }
 
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
     public String getStatus() {
         return status;
     }
@@ -85,4 +92,13 @@ public class Order {
     public void setStatus(String status) {
         this.status = status;
     }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
+    }
+
 }

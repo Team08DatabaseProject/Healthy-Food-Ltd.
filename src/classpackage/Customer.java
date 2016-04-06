@@ -1,20 +1,37 @@
 package classpackage;
 
+import javafx.collections.ObservableList;
+
 /**
  * Created by paul thomas on 16.03.2016.
  */
-class Customer {
+public class Customer {
     private int customerId;
-    private boolean isBusiness; // desides if its a business client or not, set as a tinyInt (0 = false, 1 = true) has to be converted in fetching from database
+    private boolean isBusiness;
+    // desides if its a business client or not, set as a tinyInt (0 = false, 1 = true) has to be converted in fetching from database
     private String email;
     private String firstName;
     private String lastName;
     private int phoneNumber;
     private Address address;
     private String businessName = "";
+    private Subscription subscription;
 
-    public Customer(boolean isBusiness, String email, String firstName, String lastName, int phoneNumber, Address address, String businessName) {
+    // Fra database
+    public Customer(int customerId, boolean isBusiness, String email, String firstName, String lastName,
+                    int phoneNumber, String businessName) {
         this.customerId = customerId;
+        this.isBusiness = isBusiness;
+        this.email = email;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phoneNumber = phoneNumber;
+        this.businessName = businessName;
+    }
+
+    // To database
+    public Customer(boolean isBusiness, String email, String firstName, String lastName, int phoneNumber,
+                    Address address, String businessName, Subscription subscription) {
         this.isBusiness = isBusiness;
         this.email = email;
         this.firstName = firstName;
@@ -22,6 +39,7 @@ class Customer {
         this.phoneNumber = phoneNumber;
         this.address = address;
         this.businessName = businessName;
+        this.subscription = subscription;
     }
 
     public boolean isBusiness() {

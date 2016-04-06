@@ -1,7 +1,5 @@
-//import classpackage.EncryptionService;
-import classpackage.SqlQueries;
+package div;//import classpackage.EncryptionService;
 
-import java.util.Map;
 
 /**
  * Created by roger on 10.03.2016.
@@ -16,9 +14,9 @@ public class Main extends Login {
     @Override
 	public void start(Stage primaryStage) throws Exception {
 		// FXMLLoader loader = new FXMLLoader();
-        if ("driver".equals(userChoice)) {
-            Parent root = FXMLLoader.load(getClass().getResource("driver/DriverWindow.fxml"));
-            primaryStage.setTitle("Healthy Catering - driver");
+        if ("users.driver".equals(userChoice)) {
+            Parent root = FXMLLoader.load(getClass().getResource("users.driver/DriverWindow.fxml"));
+            primaryStage.setTitle("Healthy Catering - users.driver");
             primaryStage.setScene(new Scene(root, 800, 600));
             primaryStage.show();
         } else {
@@ -32,7 +30,7 @@ public class Main extends Login {
 
     /*
      * Guide to logging in:
-     * Two possible username/password combinations: "driver" and "Driver123" or "Test" and "Test123"
+     * Two possible username/password combinations: "users.driver" and "Driver123" or "Test" and "Test123"
      */
 
     public static void main(String[] args) {

@@ -13,10 +13,10 @@ public class Employee {
     private String lastName;
     private int phoneNo;
     private String eMail;
-    private int posId;
     private double salary;
     private String passHash;
     private Address address;
+    private EmployeePosition position;
     private static final int ADMIN = 0;
     private static final int CEO = 1;
     private static final int CHEF = 2;
@@ -26,17 +26,17 @@ public class Employee {
 
     // Constructor for getting an employee from the employee table
 
-    public Employee(int employeeId, String username, String firstName, String lastName, int phoneNo, String eMail, int posId, double salary, String passHash, Address address) {
+    public Employee(int employeeId, String username, String firstName, String lastName, int phoneNo, String eMail, double salary, String passHash, Address address, EmployeePosition position) {
         this.employeeId = employeeId;
         this.username = username;
         this.firstName = firstName;
         this.lastName = lastName;
         this.phoneNo = phoneNo;
         this.eMail = eMail;
-        this.posId = posId;
         this.salary = salary;
         this.passHash = passHash;
         this.address = address;
+        this.position = position;
         /* Kall til EncryptionService her for å generere passHash (og kanskje salt) */
         // Thomas: If a new employee is being created (i dont meant he object.. i mean a real new one to be added to the DB), the method to encrypt the password should called before and only the hash should be passed to the object.
         //passHash = "encryption-ting her";
@@ -44,16 +44,16 @@ public class Employee {
 
     // Constructor for creating a new employee object from GUI, missing employeeId
 
-    public Employee(String username, String firstName, String lastName, int phoneNo, String eMail, int posId, double salary, String passHash, Address address) {
+    public Employee(String username, String firstName, String lastName, int phoneNo, String eMail, double salary, String passHash, Address address, EmployeePosition position) {
         this.username = username;
         this.firstName = firstName;
         this.lastName = lastName;
         this.phoneNo = phoneNo;
         this.eMail = eMail;
-        this.posId = posId;
         this.salary = salary;
         this.passHash = passHash;
         this.address = address;
+        this.position = position;
         /* Kall til EncryptionService her for å generere passHash (og kanskje salt) */
         // Thomas: If a new employee is being created (i dont meant he object.. i mean a real new one to be added to the DB), the method to encrypt the password should called before and only the hash should be passed to the object.
         //passHash = "encryption-ting her";
@@ -61,9 +61,8 @@ public class Employee {
 
     // employee constructor without password
 
-    public Employee(int employeeId, String username, int posId, double salary) {
+    public Employee(int employeeId, String username, double salary) {
         this.employeeId = employeeId;
-        this.posId = posId;
         this.username = username;
         this.salary = salary;
     }
@@ -75,9 +74,7 @@ public class Employee {
     public String getUsername() {
         return username;
     }
-    public int getPosId() {
-        return posId;
-    }
+
     public double getSalary() {
         return salary;
     }
@@ -98,40 +95,41 @@ public class Employee {
         return phoneNo;
     }
 
-    public String geteMail() {
-        return eMail;
-    }
-
     public Address getAddress() {
         return address;
     }
 
-    public void setSalary(double newSalary) {
-        salary = newSalary;
-        updateSalary();
+    public String geteMail() {
+        return eMail;
     }
 
-    private void updateSalary()
-    {
-        //query to update
+    public ZipCode getZipCode() {
+        return address.getZipCode();
+    }
+
+    public EmployeePosition getPosition() {
+        return position;
+    }
+    public void setSalary(double newSalary) {
+        salary = newSalary;
     }
 
     public boolean isAdmin(){
-        return (posId == ADMIN);}
+        return (position.getId() == ADMIN);}
     public boolean isCEO() {
-        return (posId == CEO);
+        return (position.getId() == CEO);
     }
     public boolean isChef() {
-        return (posId == CHEF);
+        return (position.getId() == CHEF);
     }
     public boolean isDriver() {
-        return (posId == DRIVER);
+        return (position.getId() == DRIVER);
     }
     public boolean isSales() {
-        return (posId == SALES);
+        return (position.getId() == SALES);
     }
     public boolean isNutrition() {
-        return (posId == NUTRITION);
+        return (position.getId() == NUTRITION);
     }
 
 
