@@ -34,45 +34,41 @@ import java.util.*;
 public class ChefMain extends Application {
 
 // TODO: 4/6/16 change  
+    // TODO: 4/7/16 Don't use mapping for dishMap! Use ObservableList instead
+
     
     @Override
     public void start(Stage primaryStage) throws Exception {
 
-        // List of default test menus
-        ObservableList<Menu> currentMenus = FXCollections.observableArrayList();
+        ObservableList<Menu> currentMenus = FXCollections.observableArrayList(); // List of default test menus
         currentMenus.add(new Menu(1, "veggie", "vegitarian"));
         currentMenus.add(new Menu(2, "vegan", "vegan"));
         currentMenus.add(new Menu(1, "meatlovers", ""));
 
-        // Menu which is currently displayed on screen
-        ObservableList<Menu> displayedMenu = FXCollections.observableArrayList();
+        ObservableList<Menu> displayedMenu = FXCollections.observableArrayList(); // Menu which is currently displayed on screen
 
-        // List of default test dishes
-        ObservableList<Dish> currentDishes = FXCollections.observableArrayList();
+        ObservableList<Dish> currentDishes = FXCollections.observableArrayList(); // List of default test dishes
         currentDishes.add(new Dish(1, 29, "spaghetti"));
         currentDishes.add(new Dish(2, 234, "ravioli"));
         currentDishes.add(new Dish(3, 2, "lasagna"));
 
-        Map<Dish, Integer> dishMap = new HashMap<>();
+        ObservableList<Dish> displayedDishes = FXCollections.observableArrayList(); // Dishes which are currently displayed on screen in the bottom right table
+        
+        Map<Dish, Integer> dishMap = new HashMap<>(); // Map consisting of dishes and the number of each dish. Used for
 
         for (Dish d : currentDishes) {
             dishMap.put(d, 1);
         }
-        
-        // Dishes which are currently displayed on screen
-        ObservableList<Dish> displayedDishes = FXCollections.observableArrayList();
 
-        // List of default test ingredients
-        ObservableList<Ingredient> currentIngredients = FXCollections.observableArrayList(
+        ObservableList<Ingredient> currentIngredients = FXCollections.observableArrayList( // List of default test ingredients
                 new Ingredient(1, "sugar", "kg", 22, 30, 234),
                 new Ingredient(2, "flour", "kg", 20, 30, 234),
                 new Ingredient(3, "baking soda", "kg", 20, 30, 234)
         );
-        
-        ObservableList<Ingredient> newIngredients = FXCollections.observableArrayList();
+        ObservableList<Ingredient> displayedIngredients = FXCollections.observableArrayList();
 
-        //First Combobox
-        ComboBox menuComboBox = new ComboBox(currentMenus);
+
+        ComboBox menuComboBox = new ComboBox(currentMenus); // combobox in top left corner for switching between menus
         menuComboBox.getSelectionModel().clearSelection();
 
         menuComboBox.setPromptText("choose menu");
@@ -234,6 +230,7 @@ public class ChefMain extends Application {
         Button applyButton = new Button("Apply");
 
         // dette tar KUN å printer ut ting som allerede er endret! Knappen gjør ingenting ellers.
+
         applyButton.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent event) {
                 for (Map.Entry<Dish, Integer> entry : dishMap.entrySet()) {
