@@ -3,11 +3,17 @@ package users.sales;
 import classpackage.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
+
+import javafx.event.ActionEvent;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
@@ -43,7 +49,7 @@ public class ControllerSales implements Initializable {
     private SqlQueries query = new SqlQueries();
    // final ObservableList<Order> orderTest = query.getOrders(4);
 
-    /*
+
     EventHandler<ActionEvent> subsEvent = new EventHandler<ActionEvent>() {
         @Override
         public void handle(ActionEvent event) {
@@ -67,11 +73,10 @@ public class ControllerSales implements Initializable {
             }
         }
     };
-    */
 
     // Shows a list of orders and their status.
 
-    /*
+
     EventHandler<ActionEvent> orderEvent = new EventHandler<ActionEvent>() {
 
         @Override
@@ -91,7 +96,7 @@ public class ControllerSales implements Initializable {
                 columns.get(6).setCellValueFactory(new PropertyValueFactory<Customer, String>("email"));
                 columns.get(7).setCellValueFactory(new PropertyValueFactory<Customer, String>("phoneNumber"));
                 columns.get(8).setCellValueFactory(new PropertyValueFactory<Order,String>("customerRequests"));
-                columns.get(9).setCellValueFactory(new PropertyValueFactory<Order,Date>("deadline"));
+                columns.get(9).setCellValueFactory(new PropertyValueFactory<Order,LocalDate>("deadline"));
                 columns.get(10).setCellValueFactory(new PropertyValueFactory<Order,Double>("price"));
                 columns.get(11).setCellValueFactory(new PropertyValueFactory<Address,String>("address"));
                 columns.get(12).setCellValueFactory(new PropertyValueFactory<Order,String>("status"));
@@ -102,7 +107,6 @@ public class ControllerSales implements Initializable {
             }
         }
     };
-    */
 
     //fungerer når jeg kommenterer ut denne!
 
@@ -194,8 +198,8 @@ public class ControllerSales implements Initializable {
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
         // Required method for Initializable, runs at program launch
 
-        //ordersButton.setOnAction(orderEvent);
-        //subsButton.setOnAction(subsEvent);
+        ordersButton.setOnAction(orderEvent);
+        subsButton.setOnAction(subsEvent);
         //deleteOrderButton.setOnAction(deleteOrderEvent);
 
     }

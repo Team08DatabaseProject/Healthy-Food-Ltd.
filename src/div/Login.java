@@ -115,7 +115,8 @@ public class Login extends Application {
                     Employee emp = query.getUser(checkUser, checkPw);
                     */
                     Employee emp = new Employee(1, "test", "test", "test", 1234, "test", 1234.56,
-                             "hash", new Address("Testveien 1", new ZipCode(1234, "testZip")), new EmployeePosition(1, "test", 23.34));
+                             "hash", new Address("Testveien 1", new ZipCode(1234, "testZip")),
+                              new EmployeePosition(4, "test", 23.34));
                     if (emp != null) {
                         System.out.println(emp.getPosition().getId());
                         switch(emp.getPosition().getId()) {
