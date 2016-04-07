@@ -117,6 +117,7 @@ public class Login extends Application {
                     Employee emp = new Employee(1, "test", "test", "test", 1234, "test", 1234.56,
                              "hash", new Address("Testveien 1", new ZipCode(1234, "testZip")), new EmployeePosition(1, "test", 23.34));
                     if (emp != null) {
+                        System.out.println(emp.getPosition().getId());
                         switch(emp.getPosition().getId()) {
                             case CEO : {
                                 Parent root = FXMLLoader.load(getClass().getResource("../users/ceo/CEOWindow.fxml"));
@@ -129,14 +130,14 @@ public class Login extends Application {
                                 break;
                             }
                             case DRIVER : {
-                                Parent root = FXMLLoader.load(getClass().getResource("users/driver/DriverWindow.fxml"));
+                                Parent root = FXMLLoader.load(getClass().getResource("../users/driver/DriverWindow.fxml"));
                                 primaryStage.setTitle("Healthy Catering - users.driver");
                                 primaryStage.setScene(new Scene(root, 800, 600));
                                 primaryStage.show();
                                 break;
                             }
                             case SALES : {
-                                Parent root = FXMLLoader.load(getClass().getResource("users/sales/SalesWindow.fxml"));
+                                Parent root = FXMLLoader.load(getClass().getResource("../users/sales/SalesWindow.fxml"));
                                 primaryStage.setTitle("Healthy Catering - users.sales");
                                 primaryStage.setScene(new Scene(root, 800, 600));
                                 primaryStage.show();
