@@ -53,7 +53,8 @@ public class ControllerSalesEdit implements Initializable{
                 String email = emailField.getText();
                 int phoneNumber = Integer.parseInt(phoneField.getText());
                 String address = addressField.getText();
-                int zipCode = Integer.parseInt(zipCodeField.getText());
+                int zipCodeInt = Integer.parseInt(zipCodeField.getText());
+                ZipCode zipCode = new ZipCode(zipCodeInt, "Trondheim");
                 String customerRequests = customerRequestsField.getText();
                 LocalDate deadline = deadlinePicker.getValue();
                 double price = Double.parseDouble(priceField.getText());
