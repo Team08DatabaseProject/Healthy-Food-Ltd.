@@ -7,6 +7,7 @@ import classpackage.SqlQueries;
 /**
  * Created by paul thomas on 01.04.2016.
  */
+/*
 class PaulsOwnMainForTesting {
     public static void main(String[] args) {
 
@@ -25,3 +26,4 @@ class PaulsOwnMainForTesting {
     }
 }
 
+*/
