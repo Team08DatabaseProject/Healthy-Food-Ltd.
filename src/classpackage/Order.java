@@ -2,7 +2,6 @@ package classpackage;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-
 import java.time.LocalDate;
 
 /**

@@ -62,8 +62,6 @@ public class ControllerSales implements Initializable {
     ObservableList<Dish> dishes = FXCollections.observableArrayList();
     Dish dish = new Dish(20, "Ravioli");
 
-    LocalDate deadline = LocalDate.of(2016, 04, 10);
-    //Order order = new Order(subscription, "Hot Ravioli", deadline, 300, "CREATED", customer, dishes);
 
     final ObservableList<Customer> subsTest = FXCollections.observableArrayList(
             new Customer(false, "arne@gmail.com", "Arne", "Knudsen", 41333183, address, "", subscription),
@@ -78,17 +76,17 @@ public class ControllerSales implements Initializable {
             try {
                 FXMLLoader loader = new FXMLLoader();
                 loader.setLocation(getClass().getResource("SubsTable.fxml"));
-                ordersTable = loader.load();
+                subsTable = loader.load();
                 rootPaneSales.setCenter(subsTable);
                 ObservableList<TableColumn> columns = subsTable.getColumns();
                 columns.get(0).setCellValueFactory(new PropertyValueFactory<Customer, Subscription>("subscription"));
                 columns.get(1).setCellValueFactory(new PropertyValueFactory<Customer, Integer>("customerId"));
                 columns.get(2).setCellValueFactory(new PropertyValueFactory<Customer, String>("businessName"));
-                columns.get(2).setCellValueFactory(new PropertyValueFactory<Customer, String>("firstName"));
-                columns.get(3).setCellValueFactory(new PropertyValueFactory<Customer, String>("lastName"));
-                columns.get(4).setCellValueFactory(new PropertyValueFactory<Customer, String>("address"));
-                columns.get(5).setCellValueFactory(new PropertyValueFactory<Customer, String>("email"));
-                columns.get(6).setCellValueFactory(new PropertyValueFactory<Customer, Integer>("phoneNumber"));
+                columns.get(3).setCellValueFactory(new PropertyValueFactory<Customer, String>("firstName"));
+                columns.get(4).setCellValueFactory(new PropertyValueFactory<Customer, String>("lastName"));
+                columns.get(5).setCellValueFactory(new PropertyValueFactory<Customer, Address>("address"));
+                columns.get(6).setCellValueFactory(new PropertyValueFactory<Customer, String>("email"));
+                columns.get(7).setCellValueFactory(new PropertyValueFactory<Customer, Integer>("phoneNumber"));
                 subsTable.setItems(subsTest);
 
                 columns.get(0).setCellFactory(column -> {
@@ -103,17 +101,41 @@ public class ControllerSales implements Initializable {
                         }
                     };
                 });
+                columns.get(5).setCellFactory(column -> {
+                    return new TableCell<Customer, Address>() {
+                        @Override
+                        protected void updateItem(Address item, boolean empty) {
+                            if(item == null || empty) {
+                                setText(null);
+                            } else {
+                                setText(item.getAddress());
+                            }
+                        }
+                    };
+                });
             }catch (Exception e){
                 System.out.println("subsEvent: " + e);
             }
         }
     };
 
-    // Shows a list of orders and their status.
+    final ObservableList<Customer> customerTest = FXCollections.observableArrayList(
+            new Customer(false, "arne@gmail.com", "Arne", "Knudsen", 41333183, address, "", subscription),
+            new Customer(true, "truls@gmail.com", "Truls", "Knudsen", 41333183, address1, "Business1", subscription),
+            new Customer(false, "arne@gmail.com", "Arne", "Knudsen", 41333183, address1, "", subscription),
+            new Customer(false, "arne@gmail.com", "Arne", "Knudsen", 41333183, address1, "", subscription)
+    );
 
-/*
+    LocalDate deadline = LocalDate.of(2016, 9, 11);
+    Customer customer = new Customer(true, "bæsj@poop.com", "Bæsj", "Knudsen", 26069512, address, "Rør og kloakk AS", subscription);
+    final ObservableList<Order> order = FXCollections.observableArrayList(
+            new Order(subscription, "More pickles", deadline, 367.00, "CREATED", customer, dishes),
+            new Order(subscription, "Less pickles", deadline, 367.00, "CREATED", customer, dishes),
+            new Order(subscription, "More pickles", deadline, 367.00, "CREATED", customer, dishes),
+            new Order(subscription, "More pickles", deadline, 367.00, "CREATED", customer, dishes)
+    );
+
     EventHandler<ActionEvent> orderEvent = new EventHandler<ActionEvent>() {
-
         @Override
         public void handle(ActionEvent e) {
             try {
@@ -123,28 +145,121 @@ public class ControllerSales implements Initializable {
                 rootPaneSales.setCenter(ordersTable);
                 ObservableList<TableColumn> columns = ordersTable.getColumns();
                 columns.get(0).setCellValueFactory(new PropertyValueFactory<Order,Integer>("orderId"));
-                columns.get(1).setCellValueFactory(new PropertyValueFactory<Customer,Integer>("customerId"));
-                columns.get(2).setCellValueFactory(new PropertyValueFactory<Subscription,Integer>("subscriptionId"));
-                columns.get(3).setCellValueFactory(new PropertyValueFactory<Customer, String>("firstName"));
-                columns.get(4).setCellValueFactory(new PropertyValueFactory<Customer, String>("lastName"));
-                columns.get(5).setCellValueFactory(new PropertyValueFactory<Customer, String>("businessName"));
-                columns.get(6).setCellValueFactory(new PropertyValueFactory<Customer, String>("email"));
-                columns.get(7).setCellValueFactory(new PropertyValueFactory<Customer, String>("phoneNumber"));
+                columns.get(1).setCellValueFactory(new PropertyValueFactory<Order,Customer>("customer")); //customerId
+                columns.get(2).setCellValueFactory(new PropertyValueFactory<Order,Subscription>("subscription")); //subscriptionId
+                columns.get(3).setCellValueFactory(new PropertyValueFactory<Order,Customer>("customer")); //fName
+                columns.get(4).setCellValueFactory(new PropertyValueFactory<Order,Customer>("customer")); //lName
+                columns.get(5).setCellValueFactory(new PropertyValueFactory<Order,Customer>("customer")); //businessName
+                columns.get(6).setCellValueFactory(new PropertyValueFactory<Order,Customer>("customer")); //email
+                columns.get(7).setCellValueFactory(new PropertyValueFactory<Order,Customer>("customer")); //phoneNumber
                 columns.get(8).setCellValueFactory(new PropertyValueFactory<Order,String>("customerRequests"));
                 columns.get(9).setCellValueFactory(new PropertyValueFactory<Order,LocalDate>("deadline"));
                 columns.get(10).setCellValueFactory(new PropertyValueFactory<Order,Double>("price"));
-                columns.get(11).setCellValueFactory(new PropertyValueFactory<Address,String>("address"));
+                columns.get(11).setCellValueFactory(new PropertyValueFactory<Order,Address>("address")); //address
                 columns.get(12).setCellValueFactory(new PropertyValueFactory<Order,String>("status"));
-                ordersTable.setItems(orderTest);
+                ordersTable.setItems(order);
 
+                columns.get(1).setCellFactory(column -> {
+                    return new TableCell<Order, Customer>() {
+                        @Override
+                        protected void updateItem(Customer item, boolean empty) {
+                            if(item == null || empty) {
+                                setText(null);
+                            } else {
+                                setText(Integer.toString(item.getCustomerId()));
+                            }
+                        }
+                    };
+                });
+                columns.get(2).setCellFactory(column -> {
+                    return new TableCell<Order, Subscription>() {
+                        @Override
+                        protected void updateItem(Subscription item, boolean empty) {
+                            if(item == null || empty) {
+                                setText(null);
+                            } else {
+                                setText(Integer.toString(item.getSubscriptionId()));
+                            }
+                        }
+                    };
+                });
+                columns.get(3).setCellFactory(column -> {
+                    return new TableCell<Order, Customer>() {
+                        @Override
+                        protected void updateItem(Customer item, boolean empty) {
+                            if(item == null || empty) {
+                                setText(null);
+                            } else {
+                                setText(item.getFirstName());
+                            }
+                        }
+                    };
+                });
+                columns.get(4).setCellFactory(column -> {
+                    return new TableCell<Order, Customer>() {
+                        @Override
+                        protected void updateItem(Customer item, boolean empty) {
+                            if(item == null || empty) {
+                                setText(null);
+                            } else {
+                                setText(item.getLastName());
+                            }
+                        }
+                    };
+                });
+                columns.get(5).setCellFactory(column -> {
+                    return new TableCell<Order, Customer>() {
+                        @Override
+                        protected void updateItem(Customer item, boolean empty) {
+                            if(item == null || empty) {
+                                setText(null);
+                            } else {
+                                setText(item.getBusinessName());
+                            }
+                        }
+                    };
+                });
+                columns.get(6).setCellFactory(column -> {
+                    return new TableCell<Order, Customer>() {
+                        @Override
+                        protected void updateItem(Customer item, boolean empty) {
+                            if(item == null || empty) {
+                                setText(null);
+                            } else {
+                                setText(item.getEmail());
+                            }
+                        }
+                    };
+                });
+                columns.get(7).setCellFactory(column -> {
+                    return new TableCell<Order, Customer>() {
+                        @Override
+                        protected void updateItem(Customer item, boolean empty) {
+                            if(item == null || empty) {
+                                setText(null);
+                            } else {
+                                setText(Integer.toString(item.getPhoneNumber()));
+                            }
+                        }
+                    };
+                });
+                columns.get(11).setCellFactory(column -> {
+                    return new TableCell<Order, Address>() {
+                        @Override
+                        protected void updateItem(Address item, boolean empty) {
+                            if(item == null || empty) {
+                                setText(null);
+                            } else {
+                                setText(item.getAddress());
+                            }
+                        }
+                    };
+                });
             } catch(Exception exc) {
                 System.out.println("orderEvent: " + exc);
             }
         }
     };
-*/
-    //fungerer når jeg kommenterer ut denne!
-
 
     public ObservableList<Order> getAllOrdersForSales() {
         return allOrdersForSales;
@@ -212,7 +327,7 @@ public class ControllerSales implements Initializable {
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
         // Required method for Initializable, runs at program launch
 
-     //   ordersButton.setOnAction(orderEvent);
+        ordersButton.setOnAction(orderEvent);
         subsButton.setOnAction(subsEvent);
         //deleteOrderButton.setOnAction(deleteOrderEvent);
 
