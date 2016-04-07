@@ -1,7 +1,7 @@
 package users.ceo;
 /**
  * Created by Axel 16.03.2016
- * Controller for the users.driver
+ * Controller for the driver
  */
 
 import classpackage.*;
@@ -16,11 +16,11 @@ import javafx.scene.layout.GridPane;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class ControllerCEORegister implements Initializable {
+public class ControllerCEOAddEmployee extends ControllerCEOEmployees implements Initializable {
 
     @FXML
     //public TableView tables2; // Retrieves TableView with fx:id="tables2"
-    public Button finalRegisterButton;
+    public Button addEmployeeButton;
     public GridPane textGrid;
     public TextField idField;
     public TextField fNameField;
@@ -35,7 +35,7 @@ public class ControllerCEORegister implements Initializable {
     public PasswordField passwordField;
     private SqlQueries query = new SqlQueries();
 
-    EventHandler<ActionEvent> finalRegistrationEvent = new EventHandler<ActionEvent>() {
+    EventHandler<ActionEvent> addEmployee = new EventHandler<ActionEvent>() {
         @Override
         public void handle(ActionEvent e) {
             try {
@@ -49,10 +49,11 @@ public class ControllerCEORegister implements Initializable {
                 int posId = Integer.parseInt(posIdField.getText());
                 double salary = Double.parseDouble(salaryField.getText());
                 String passhash = passwordField.getText();
-                Address newAddress = new Address(address, zipCode);
-                Employee newEmp = new Employee(username, firstName, lastName, phoneNo, eMail, posId, salary, passhash, newAddress);
+                ZipCode zipCodeObject = new ZipCode(zipCode, "testtest");
+                Address addressObject = new Address(address, zipCodeObject);
+                EmployeePosition employeePosition = new EmployeePosition(posId, "test", 1234);
+                Employee newEmp = new Employee(username, firstName, lastName, phoneNo, eMail, salary, passhash, addressObject, employeePosition);
                 query.addEmployee(newEmp);
-
             } catch (Exception exc) {
                 System.out.println(exc);
             }
@@ -61,6 +62,6 @@ public class ControllerCEORegister implements Initializable {
 
 
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) { // Required method for Initializable, runs at program launch
-        finalRegisterButton.setOnAction(finalRegistrationEvent);
+        addEmployeeButton.setOnAction(addEmployee);
     }
 }

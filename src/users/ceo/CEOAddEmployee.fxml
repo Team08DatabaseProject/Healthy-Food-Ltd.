@@ -11,14 +11,9 @@
 <!--> Textfields for registering new employee </!-->
 
 
-<GridPane fx:id="textGrid" hgap="10" vgap="10" prefHeight="500.0" prefWidth="300.0" BorderPane.alignment="CENTER"
-          xmlns:fx="http://javafx.com/fxml" fx:controller="users.ceo.ControllerCEORegister">
+<GridPane fx:id="addEmployeeTable" hgap="10" vgap="10" prefHeight="500.0" prefWidth="300.0" BorderPane.alignment="CENTER"
+          xmlns:fx="http://javafx.com/fxml" fx:controller="users.ceo.ControllerCEOAddEmployee">
     <padding><Insets top="40" right="25" bottom="25" left="25"/></padding>
-
-    <Label text="Employee id:"
-           GridPane.columnIndex="0" GridPane.rowIndex="0"/>
-    <TextField fx:id="idField"
-               GridPane.columnIndex="1" GridPane.rowIndex="0"/>
 
     <Label text="First name:"
            GridPane.columnIndex="0" GridPane.rowIndex="1"/>
@@ -46,9 +41,9 @@
                GridPane.columnIndex="1" GridPane.rowIndex="5"/>
 
     <Label text="Zip code:"
-           GridPane.columnIndex="0" GridPane.columnSpan="6"/>
+           GridPane.columnIndex="0" GridPane.rowIndex="6"/>
     <TextField fx:id="zipCodeField"
-               GridPane.columnIndex="1" GridPane.columnSpan="6"/>
+               GridPane.columnIndex="1" GridPane.rowIndex="6"/>
 
     <Label text="Username:"
            GridPane.columnIndex="0" GridPane.rowIndex="7"/>
@@ -65,14 +60,9 @@
     <TextField fx:id="salaryField"
                GridPane.columnIndex="1" GridPane.rowIndex="9"/>
 
-    <Label text="Password:"
-           GridPane.columnIndex="0" GridPane.rowIndex="10"/>
-    <PasswordField fx:id="passwordField"
-               GridPane.columnIndex="1" GridPane.rowIndex="10"/>
-
-    <HBox spacing="10" alignment="BOTTOM_RIGHT"
-          GridPane.columnIndex="1" GridPane.rowIndex="10">
-        <Button styleClass="SmallButton" fx:id="finalRegisterButton" text="Register employee"/>
+    <HBox spacing="10" alignment="CENTER"
+          GridPane.columnIndex="0" GridPane.rowIndex="10" GridPane.columnSpan="2">
+        <Button styleClass="SmallButton" fx:id="addEmployeeButton" text="Add employee"/>
     </HBox>
 
 </GridPane>
