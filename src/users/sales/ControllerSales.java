@@ -27,7 +27,7 @@ public class ControllerSales implements Initializable {
 
     /*
     ObservableList to get fetched  from database
-     */
+    */
     private ObservableList<Order> allOrdersForSales = FXCollections.observableArrayList();
     private ObservableList<Subscription> allSubscriptions = FXCollections.observableArrayList();
     private ObservableList<Dish> allDishes = FXCollections.observableArrayList();
@@ -48,6 +48,26 @@ public class ControllerSales implements Initializable {
 
     private SqlQueries query = new SqlQueries();
    // final ObservableList<Order> orderTest = query.getOrders(4);
+    ZipCode zip = new ZipCode(7031, "Trondheim");
+    ZipCode zip1 = new ZipCode(7042, "Trondheim");
+
+    Address address = new Address(1, "Bugata 5", zip);
+    Address address1 = new Address(2, "Bugata 7", zip1);
+
+    LocalDate subStart = LocalDate.of(2015, 02, 11);
+    LocalDate subEnd = LocalDate.of(2016, 02, 11);
+    Subscription subscription = new Subscription(subStart, subEnd);
+
+    Customer customer = new Customer(false, "arne@gmail.com", "Arne", "Knudsen",
+            41333183, address, "", subscription);
+    Customer customer1 = new Customer(false, "arne@gmail.com", "Arne", "Knudsen",
+            41333183, address1, "", subscription);
+
+    ObservableList<Dish> dishes = FXCollections.observableArrayList();
+    Dish dish = new Dish(20, "Ravioli");
+
+    LocalDate deadline = LocalDate.of(2016, 04, 10);
+    Order order = new Order(subscription, "Hot Ravioli", deadline, 300, "CREATED", customer, dishes);
 
 
     EventHandler<ActionEvent> subsEvent = new EventHandler<ActionEvent>() {
@@ -158,27 +178,6 @@ public class ControllerSales implements Initializable {
     public void setAllMenus(ObservableList<Menu> allMenus) {
         this.allMenus = allMenus;
     }
-
-    ZipCode zip = new ZipCode(7031, "Trondheim");
-    ZipCode zip1 = new ZipCode(7042, "Trondheim");
-
-    Address address = new Address(1, "Bugata 5", zip);
-    Address address1 = new Address(2, "Bugata 7", zip1);
-
-    LocalDate subStart = LocalDate.of(2015, 02, 11);
-    LocalDate subEnd = LocalDate.of(2016, 02, 11);
-    Subscription subscription = new Subscription(subStart, subEnd);
-
-    Customer customer = new Customer(false, "arne@gmail.com", "Arne", "Knudsen",
-            41333183, address, "", subscription);
-    Customer customer1 = new Customer(false, "arne@gmail.com", "Arne", "Knudsen",
-            41333183, address1, "", subscription);
-
-    ObservableList<Dish> dishes = FXCollections.observableArrayList();
-    Dish dish = new Dish(20, "Ravioli");
-
-    LocalDate deadline = LocalDate.of(2016, 04, 10);
-    Order order = new Order(subscription, "Hot Ravioli", deadline, 300, "CREATED", customer, dishes);
 
     // Shows list of orders with the option to change their status from "Not delivered" to "Delivered".
     /*EventHandler<ActionEvent> deleteOrderEvent = new EventHandler<ActionEvent>() {
