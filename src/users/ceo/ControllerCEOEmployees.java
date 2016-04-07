@@ -1,25 +1,20 @@
 package users.ceo;
 
-import classpackage.*;
-import javafx.collections.FXCollections;
+import classpackage.Address;
+import classpackage.Employee;
+import classpackage.EmployeePosition;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
-import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.TableCell;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
 
 import java.net.URL;
-import java.util.Date;
 import java.util.ResourceBundle;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Created by HUMBUG on 06.04.2016.
@@ -28,33 +23,19 @@ public class ControllerCEOEmployees extends ControllerCEO  implements Initializa
 
 	@FXML
 	private TableView employeesTable;
-	@FXML
-	private Button addEmployeeFormButton;
-	@FXML
-	private VBox employeesButtons;
-
 	private ObservableList<Employee> employees;
 
-	private EventHandler<ActionEvent> addEmployeeForm = new EventHandler<ActionEvent>() {
-		@Override
-		public void handle(ActionEvent e) {
-			try {
-				FXMLLoader loader = new FXMLLoader();
-				loader.setLocation(getClass().getResource("CEOAddEmployee.fxml"));
-				GridPane addEmployeeTable = loader.load();
-				Scene formScene = new Scene(addEmployeeTable);
-				Stage formStage = new Stage();
-				formStage.setTitle("Add Employee");
-				formStage.setScene(formScene);
-				formStage.show();
-			} catch (Exception exc) {
-				System.out.println(exc);
-			}
+	public String generatePsasword(int length) {
+		String characters = "ABCDEFGHIJKLMNOPQRTSUVWXYZÆØÅabcdefghijklmnopqrstuvwxyzæøå1234567890.,:;!\"#+-";
+		String password = "";
+		for(int i = 0; i < characters.length(); i++) {
+			int index = ThreadLocalRandom.current().nextInt(characters.length());
+			password += characters.charAt(index);
 		}
-	};
+		return password;
+	}
 
 	public void initialize(URL fxmlFileLocation, ResourceBundle resources) { // Required method for Initializable, runs at program launch
-		addEmployeeFormButton.setOnAction(addEmployeeForm);
 		employees = db.getEmployees();
 		ObservableList<TableColumn> columns = employeesTable.getColumns();
 		columns.get(0).setCellValueFactory(new PropertyValueFactory<Employee, String>("firstName"));
