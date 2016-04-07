@@ -58,10 +58,7 @@ public class ControllerSales implements Initializable {
     LocalDate subEnd = LocalDate.of(2016, 02, 11);
     Subscription subscription = new Subscription(subStart, subEnd);
 
-    Customer customer = new Customer(false, "arne@gmail.com", "Arne", "Knudsen",
-            41333183, address, "", subscription);
-    Customer customer1 = new Customer(false, "arne@gmail.com", "Arne", "Knudsen",
-            41333183, address1, "", subscription);
+
 
     ObservableList<Dish> dishes = FXCollections.observableArrayList();
     Dish dish = new Dish(20, "Ravioli");
@@ -69,6 +66,12 @@ public class ControllerSales implements Initializable {
     LocalDate deadline = LocalDate.of(2016, 04, 10);
     Order order = new Order(subscription, "Hot Ravioli", deadline, 300, "CREATED", customer, dishes);
 
+    final ObservableList<Customer> subsTest = FXCollections.observableArrayList(
+            new Customer(false, "arne@gmail.com", "Arne", "Knudsen", 41333183, address, "", subscription),
+            new Customer(true, "arne@gmail.com", "Arne", "Knudsen", 41333183, address1, "", subscription),
+            new Customer(false, "arne@gmail.com", "Arne", "Knudsen", 41333183, address1, "", subscription),
+            new Customer(false, "arne@gmail.com", "Arne", "Knudsen", 41333183, address1, "", subscription)
+    );
 
     EventHandler<ActionEvent> subsEvent = new EventHandler<ActionEvent>() {
         @Override
@@ -96,7 +99,7 @@ public class ControllerSales implements Initializable {
 
     // Shows a list of orders and their status.
 
-
+/*
     EventHandler<ActionEvent> orderEvent = new EventHandler<ActionEvent>() {
 
         @Override
@@ -127,7 +130,7 @@ public class ControllerSales implements Initializable {
             }
         }
     };
-
+*/
     //fungerer når jeg kommenterer ut denne!
 
 
@@ -197,7 +200,7 @@ public class ControllerSales implements Initializable {
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
         // Required method for Initializable, runs at program launch
 
-        ordersButton.setOnAction(orderEvent);
+     //   ordersButton.setOnAction(orderEvent);
         subsButton.setOnAction(subsEvent);
         //deleteOrderButton.setOnAction(deleteOrderEvent);
 
