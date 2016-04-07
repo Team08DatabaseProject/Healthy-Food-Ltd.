@@ -39,7 +39,7 @@
         </VBox>
     </left>
     <center>
-        <TableView fx:id="ordersTable" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER"
+        <TableView prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER"
                    xmlns:fx="http://javafx.com/fxml" VBox.vgrow="ALWAYS">
             <columns>
             </columns>
