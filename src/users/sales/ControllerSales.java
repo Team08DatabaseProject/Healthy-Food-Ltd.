@@ -8,6 +8,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -58,17 +59,15 @@ public class ControllerSales implements Initializable {
     LocalDate subEnd = LocalDate.of(2016, 02, 11);
     Subscription subscription = new Subscription(subStart, subEnd);
 
-
-
     ObservableList<Dish> dishes = FXCollections.observableArrayList();
     Dish dish = new Dish(20, "Ravioli");
 
     LocalDate deadline = LocalDate.of(2016, 04, 10);
-    Order order = new Order(subscription, "Hot Ravioli", deadline, 300, "CREATED", customer, dishes);
+    //Order order = new Order(subscription, "Hot Ravioli", deadline, 300, "CREATED", customer, dishes);
 
     final ObservableList<Customer> subsTest = FXCollections.observableArrayList(
             new Customer(false, "arne@gmail.com", "Arne", "Knudsen", 41333183, address, "", subscription),
-            new Customer(true, "arne@gmail.com", "Arne", "Knudsen", 41333183, address1, "", subscription),
+            new Customer(true, "truls@gmail.com", "Truls", "Knudsen", 41333183, address1, "Business1", subscription),
             new Customer(false, "arne@gmail.com", "Arne", "Knudsen", 41333183, address1, "", subscription),
             new Customer(false, "arne@gmail.com", "Arne", "Knudsen", 41333183, address1, "", subscription)
     );
@@ -82,7 +81,7 @@ public class ControllerSales implements Initializable {
                 ordersTable = loader.load();
                 rootPaneSales.setCenter(subsTable);
                 ObservableList<TableColumn> columns = subsTable.getColumns();
-                columns.get(0).setCellValueFactory(new PropertyValueFactory<Subscription, Integer>("subscriptionId"));
+                columns.get(0).setCellValueFactory(new PropertyValueFactory<Customer, Subscription>("subscription"));
                 columns.get(1).setCellValueFactory(new PropertyValueFactory<Customer, Integer>("customerId"));
                 columns.get(2).setCellValueFactory(new PropertyValueFactory<Customer, String>("businessName"));
                 columns.get(2).setCellValueFactory(new PropertyValueFactory<Customer, String>("firstName"));
@@ -90,7 +89,20 @@ public class ControllerSales implements Initializable {
                 columns.get(4).setCellValueFactory(new PropertyValueFactory<Customer, String>("address"));
                 columns.get(5).setCellValueFactory(new PropertyValueFactory<Customer, String>("email"));
                 columns.get(6).setCellValueFactory(new PropertyValueFactory<Customer, Integer>("phoneNumber"));
-                subsTable.setItems(orderTest);
+                subsTable.setItems(subsTest);
+
+                columns.get(0).setCellFactory(column -> {
+                    return new TableCell<Customer, Subscription>() {
+                        @Override
+                        protected void updateItem(Subscription item, boolean empty) {
+                            if(item == null || empty) {
+                                setText(null);
+                            } else {
+                                setText(Integer.toString(item.getSubscriptionId()));
+                            }
+                        }
+                    };
+                });
             }catch (Exception e){
                 System.out.println("subsEvent: " + e);
             }
