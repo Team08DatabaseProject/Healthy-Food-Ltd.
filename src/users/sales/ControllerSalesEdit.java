@@ -13,7 +13,6 @@ import javafx.scene.control.TextField;
 
 import java.net.URL;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.ResourceBundle;
 
 /**
@@ -85,7 +84,7 @@ public class ControllerSalesEdit implements Initializable{
         }
     };
 
-    EventHandler<ActionEvent> deleteOrderEvent = new EventHandler<ActionEvent>(){
+    /*EventHandler<ActionEvent> deleteOrderEvent = new EventHandler<ActionEvent>(){
         @Override
         public void handle(ActionEvent e){
             try{
@@ -94,10 +93,10 @@ public class ControllerSalesEdit implements Initializable{
                 System.out.println("deleteOrderEvent: " + e);
             }
         }
-    };
+    };*/
 
     public void initialize(URL fxmlFileLocation, ResourceBundle resources){
         createOrderButton.setOnAction(createOrderEvent);
-        deleteOrderButton.setOnAction(deleteOrderEvent);
+        //deleteOrderButton.setOnAction(deleteOrderEvent);
     }
 }

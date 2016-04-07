@@ -1,39 +1,26 @@
 package users.sales;
 
 import classpackage.*;
-import classpackage.Menu;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.Button;
+import javafx.scene.control.TableView;
 import javafx.scene.layout.BorderPane;
-
 import java.net.URL;
-import java.util.Date;
 import java.util.ResourceBundle;
-import classpackage.Menu;
 
 /**
  * Created by trymrt 28.03.2016
  * Controller for the Sales personnel
  */
-import java.util.Date.*;
 
 public class ControllerSales implements Initializable {
 
     /*
     ObservableList to get fetched  from database
      */
-
-
-
-    private Date newDate = new Date(1985, 11, 15, 14, 00);
-
     private ObservableList<Order> allOrdersForSales = FXCollections.observableArrayList();
     private ObservableList<Subscription> allSubscriptions = FXCollections.observableArrayList();
     private ObservableList<Dish> allDishes = FXCollections.observableArrayList();
