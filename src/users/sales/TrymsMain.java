@@ -17,7 +17,7 @@ import java.time.LocalDate;
     public static void main(String[] args) {
     launch(args);
         ControllerSales sales = new ControllerSales();
-        ControllerSalesEdit salesEdit = new ControllerSalesEdit();
+        ControllerSalesCreate salesEdit = new ControllerSalesCreate();
 
         ZipCode zip = new ZipCode(7031, "Trondheim");
         ZipCode zip1 = new ZipCode(7042, "Trondheim");

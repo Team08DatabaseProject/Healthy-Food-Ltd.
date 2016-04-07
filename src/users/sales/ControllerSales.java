@@ -47,7 +47,6 @@ public class ControllerSales implements Initializable {
 
     public Button ordersButton; //Button for showing orders
     public Button subsButton;
-    //public Button deleteOrderButton; //Button for deleting an order
 
     private SqlQueries query = new SqlQueries();
    // final ObservableList<Order> orderTest = query.getOrders(4);
@@ -203,7 +202,6 @@ public class ControllerSales implements Initializable {
 
         ordersButton.setOnAction(orderEvent);
         subsButton.setOnAction(subsEvent);
-        //deleteOrderButton.setOnAction(deleteOrderEvent);
 
     }
 }

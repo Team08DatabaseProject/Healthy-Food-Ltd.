@@ -19,10 +19,10 @@ import java.util.ResourceBundle;
 /**
  * Created by Trym Todalshaug on 04/04/2016.
  */
-public class ControllerSalesEdit implements Initializable{
+public class ControllerSalesCreate implements Initializable{
 
     public Button createOrderButton; //Button for creating an order
-    public Button deleteOrderButton;
+    //public Button deleteOrderButton;
 
     public TableView ordersTable;
     public BorderPane rootPaneCreate;

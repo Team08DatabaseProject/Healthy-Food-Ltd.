@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.*?>
 
 <!--> Table in submenu "Orders for Sales" </!-->
-<GridPane  prefHeight="200" prefWidth="200.0" xmlns:fx="http://javafx.com/fxml" fx:controller="users.sales.ControllerSalesEdit">
+<GridPane  prefHeight="200" prefWidth="200.0" xmlns:fx="http://javafx.com/fxml" fx:controller="users.sales.ControllerSalesCreate">
     <children>
         <TableView fx:id="ordersTable" GridPane.columnIndex="0" GridPane.hgrow="SOMETIMES" GridPane.rowIndex="0" GridPane.vgrow="ALWAYS">
             <columns>
