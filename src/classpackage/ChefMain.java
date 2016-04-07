@@ -31,7 +31,7 @@ import javafx.util.converter.DefaultStringConverter;
 import java.util.*;
 
 
-public class Main2 extends Application {
+public class ChefMain extends Application {
 
 // TODO: 4/6/16 change  
     
@@ -262,7 +262,6 @@ public class Main2 extends Application {
 
         gridpane.add(vbox2, 1, 1);
         GridPane.setConstraints(vbox, 1, 1, 1, 2, HPos.CENTER, VPos.CENTER);
-
 
         HBox upper = new HBox(menuComboBox, dishListView);
 
