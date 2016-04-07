@@ -4,8 +4,9 @@
 <?import javafx.scene.layout.*?>
 
 <!--> Table in submenu "Orders for Sales" </!-->
-    <TableView fx:id="ordersTable" prefHeight="200" prefWidth="200.0"
-               BorderPane.alignment="CENTER" xmlns:fx="http://javafx.com/fxml">
+<BorderPane prefHeight="200" prefWidth="200.0"
+            BorderPane.alignment="CENTER" xmlns:fx="http://javafx.com/fxml" fx:controller="users.sales.ControllerSalesEdit">
+    <TableView fx:id="ordersTable">
         <columns>
             <TableColumn prefWidth="40.0" text="Order ID."/>
             <TableColumn prefWidth="40.0" text="Customer ID"/>
@@ -25,3 +26,4 @@
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/> <!--> fix vgrow <!-->
         </columnResizePolicy>
     </TableView>
+</BorderPane>

@@ -155,7 +155,7 @@ public class ControllerSales implements Initializable {
                 columns.get(8).setCellValueFactory(new PropertyValueFactory<Order,String>("customerRequests"));
                 columns.get(9).setCellValueFactory(new PropertyValueFactory<Order,LocalDate>("deadline"));
                 columns.get(10).setCellValueFactory(new PropertyValueFactory<Order,Double>("price"));
-                columns.get(11).setCellValueFactory(new PropertyValueFactory<Order,Address>("address")); //address
+                columns.get(11).setCellValueFactory(new PropertyValueFactory<Order,Customer>("address")); //address
                 columns.get(12).setCellValueFactory(new PropertyValueFactory<Order,String>("status"));
                 ordersTable.setItems(order);
 
@@ -244,13 +244,13 @@ public class ControllerSales implements Initializable {
                     };
                 });
                 columns.get(11).setCellFactory(column -> {
-                    return new TableCell<Order, Address>() {
+                    return new TableCell<Order, Customer>() {
                         @Override
-                        protected void updateItem(Address item, boolean empty) {
+                        protected void updateItem(Customer item, boolean empty) {
                             if(item == null || empty) {
                                 setText(null);
                             } else {
-                                setText(item.getAddress());
+                                setText(item.getAddress().getAddress());
                             }
                         }
                     };

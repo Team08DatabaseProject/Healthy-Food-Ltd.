@@ -100,4 +100,27 @@ public class Order {
         this.address = address;
     }
 
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+
+    public ObservableList<Dish> getDishesInThisOrder() {
+        return dishesInThisOrder;
+    }
+
+    public void setDishesInThisOrder(ObservableList<Dish> dishesInThisOrder) {
+        this.dishesInThisOrder = dishesInThisOrder;
+    }
+
+    public Subscription getSubscription() {
+        return subscription;
+    }
+
+    public void setSubscription(Subscription subscription) {
+        this.subscription = subscription;
+    }
 }

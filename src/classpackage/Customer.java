@@ -105,4 +105,12 @@ public class Customer {
     public void setCustomerId(int customerId) {
         this.customerId = customerId;
     }
+
+    public Subscription getSubscription() {
+        return subscription;
+    }
+
+    public void setSubscription(Subscription subscription) {
+        this.subscription = subscription;
+    }
 }
