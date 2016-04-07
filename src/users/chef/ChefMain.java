@@ -1,4 +1,5 @@
-package classpackage;
+package users.chef;
+import classpackage.*;
 import javafx.application.Application;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
@@ -18,6 +19,7 @@ import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.Menu;
 import javafx.scene.control.cell.CheckBoxListCell;
 import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -30,7 +32,6 @@ import javafx.util.converter.DefaultStringConverter;
 
 import java.util.*;
 
-
 public class ChefMain extends Application {
 
 // TODO: 4/6/16 change  
@@ -40,12 +41,13 @@ public class ChefMain extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
 
-        ObservableList<Menu> currentMenus = FXCollections.observableArrayList(); // List of default test menus
-        currentMenus.add(new Menu(1, "veggie", "vegitarian"));
-        currentMenus.add(new Menu(2, "vegan", "vegan"));
-        currentMenus.add(new Menu(1, "meatlovers", ""));
 
-        ObservableList<Menu> displayedMenu = FXCollections.observableArrayList(); // Menu which is currently displayed on screen
+        ObservableList<classpackage.Menu> currentMenus = FXCollections.observableArrayList(); // List of default test menus
+        currentMenus.add(new classpackage.Menu(1, "veggie", "vegitarian"));
+        currentMenus.add(new classpackage.Menu(2, "vegan", "vegan"));
+        currentMenus.add(new classpackage.Menu(1, "meatlovers", ""));
+
+        ObservableList<classpackage.Menu> displayedMenu = FXCollections.observableArrayList(); // Menu which is currently displayed on screen
 
         ObservableList<Dish> currentDishes = FXCollections.observableArrayList(); // List of default test dishes
         currentDishes.add(new Dish(1, 29, "spaghetti"));
@@ -68,14 +70,15 @@ public class ChefMain extends Application {
         ObservableList<Ingredient> displayedIngredients = FXCollections.observableArrayList();
 
 
+
         ComboBox menuComboBox = new ComboBox(currentMenus); // combobox in top left corner for switching between menus
         menuComboBox.getSelectionModel().clearSelection();
+        menuComboBox.setPromptText("Choose menu");
 
-        menuComboBox.setPromptText("choose menu");
-        VBox vBox = new VBox();
-        vBox.setPadding(new Insets(5, 5, 5, 5));
-        vBox.setSpacing(5);
-        vBox.getChildren().addAll(menuComboBox);
+        VBox menuVBox = new VBox();
+        menuVBox.setPadding(new Insets(5, 5, 5, 5));
+        menuVBox.setSpacing(5);
+        menuVBox.getChildren().addAll(menuComboBox);
 
         GridPane gridpane = new GridPane();
         gridpane.setPadding(new Insets(5));
@@ -91,31 +94,25 @@ public class ChefMain extends Application {
         gridpane.setVgap(10);
 
 
-        // Listener for changing list under
 
-
+        /* Listener for changing adding the menu name after text label "Chosen menu:" */
         menuComboBox.valueProperty().addListener(new ChangeListener() {
             @Override
             public void changed(ObservableValue observable, Object oldValue, Object newValue) {
                 displayedMenu.clear();
-                displayedMenu.add((Menu) newValue);
-                chosenMenuLabel.setText("Chosen menu: " + ((Menu) newValue).getName());
+                displayedMenu.add((classpackage.Menu) newValue);
+                chosenMenuLabel.setText("Chosen menu: " + ((classpackage.Menu) newValue).getName());
             }
         });
 
-        // Listener for changing text in menuComboBox when a menu is clicked in the box
-        menuComboBox.setCellFactory(new Callback<ListView<Menu>, ListCell<Menu>>() {
-
+        /* Listener for changing text in menuComboBox cell when a menu is clicked in the box */
+        menuComboBox.setCellFactory(new Callback<ListView<classpackage.Menu>, ListCell<classpackage.Menu>>() {
             @Override
-            public ListCell<Menu> call(ListView<Menu> p) {
-
-                final ListCell<Menu> cell = new ListCell<Menu>() {
-
+            public ListCell<classpackage.Menu> call(ListView<classpackage.Menu> p) {
+                final ListCell<classpackage.Menu> cell = new ListCell<classpackage.Menu>() {
                     @Override
-                    protected void updateItem(Menu t, boolean bln) {
-
+                    protected void updateItem(classpackage.Menu t, boolean bln) {
                         super.updateItem(t, bln);
-
                         if (t != null) {
                             setText(t.toString());
                         } else {
@@ -132,6 +129,7 @@ public class ChefMain extends Application {
         VBox vbox = new VBox(5);
         gridpane.add(vbox, 1, 1);
         GridPane.setConstraints(vbox, 1, 1, 1, 2, HPos.CENTER, VPos.CENTER);
+
 
         SplitPane splitPane2 = new SplitPane();
         splitPane2.setOrientation(Orientation.VERTICAL);
@@ -212,7 +210,6 @@ public class ChefMain extends Application {
             }
         });
 
-
         column2.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Map.Entry<Dish, Integer>, String>, ObservableValue<String>>() {
 
             @Override
@@ -223,7 +220,6 @@ public class ChefMain extends Application {
 
         });
         column2.setEditable(true);
-
 
         ObservableList<Map.Entry<Dish, Integer>> dishObservableList = FXCollections.observableArrayList(dishMap.entrySet());
         final TableView<Map.Entry<Dish, Integer>> dishesInChosenMenu = new TableView<>(dishObservableList);
