@@ -388,7 +388,8 @@ ADD CONSTRAINT `customer_ibfk_1` FOREIGN KEY (`address_id`) REFERENCES `address`
 -- Begrensninger for tabell `employee`
 --
 ALTER TABLE `employee`
-ADD CONSTRAINT `employee_ibfk_1` FOREIGN KEY (`address_id`) REFERENCES `address` (`address_id`);
+ADD CONSTRAINT `employee_ibfk_1` FOREIGN KEY (`address_id`) REFERENCES `address` (`address_id`),
+ADD CONSTRAINT `employee_ibfk_2` FOREIGN KEY (`pos_id`) REFERENCES `employee_position` (`pos_id`);
 
 --
 -- Begrensninger for tabell `ingredient`
