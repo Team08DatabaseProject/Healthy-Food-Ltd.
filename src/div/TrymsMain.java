@@ -1,0 +1,37 @@
+package div;
+
+import classpackage.*;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import users.sales.ControllerSales;
+
+import java.time.LocalDate;
+
+/**
+ * Created by Trym Todalshaug on 06/04/2016.
+ */
+public class TrymsMain {
+    public static void main(String[] args) {
+
+        ControllerSales sales = new ControllerSales();
+
+        ZipCode zip = new ZipCode(7031, "Trondheim");
+        ZipCode zip1 = new ZipCode(7042, "Trondheim");
+
+        Address address = new Address(1, "Bugata 5", zip);
+        Address address1 = new Address(2, "Bugata 7", zip1);
+
+        LocalDate subStart = LocalDate.of(2015, 02, 11);
+        LocalDate subEnd = LocalDate.of(2016, 02, 11);
+        Subscription subscription = new Subscription(subStart, subEnd);
+
+        Customer customer = new Customer(false, "arne@gmail.com", "Arne", "Knudsen",
+                                        41333183, address, "", subscription);
+
+        ObservableList<Dish> dishes = FXCollections.observableArrayList();
+        Dish dish = new Dish(20, "Ravioli");
+
+        LocalDate deadline = LocalDate.of(2016, 04, 10);
+        Order order = new Order(subscription, "Hot Ravioli", deadline, 300, "CREATED", customer, dishes);
+    }
+}

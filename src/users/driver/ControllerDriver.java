@@ -76,7 +76,7 @@ public class ControllerDriver implements Initializable {
                 columns.get(0).setCellValueFactory(new PropertyValueFactory<Order,Integer>("orderId"));
                 columns.get(1).setCellValueFactory(new PropertyValueFactory<Order,String>("address"));
                 columns.get(2).setCellValueFactory(new PropertyValueFactory<Order,Date>("deadline"));
-                readyOrderTable.setItems(orderTest);
+                //readyOrderTable.setItems(orderTest);
 
                 FXMLLoader bottomLoader = new FXMLLoader();
                 bottomLoader.setLocation(getClass().getResource("ReadyOrderBottom.fxml"));
