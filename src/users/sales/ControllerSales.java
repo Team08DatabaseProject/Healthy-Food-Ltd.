@@ -15,6 +15,7 @@ import javafx.scene.layout.BorderPane;
 import java.net.URL;
 import java.util.Date;
 import java.util.ResourceBundle;
+import classpackage.Menu;
 
 /**
  * Created by trymrt 28.03.2016
@@ -49,8 +50,9 @@ public class ControllerSales implements Initializable {
     //public Button deleteOrderButton; //Button for deleting an order
 
     private SqlQueries query = new SqlQueries();
-    final ObservableList<Order> orderTest = query.getOrders(4);
+   // final ObservableList<Order> orderTest = query.getOrders(4);
 
+    /*
     EventHandler<ActionEvent> subsEvent = new EventHandler<ActionEvent>() {
         @Override
         public void handle(ActionEvent event) {
@@ -74,6 +76,7 @@ public class ControllerSales implements Initializable {
             }
         }
     };
+    */
 
     // Shows a list of orders and their status.
 
@@ -180,7 +183,7 @@ public class ControllerSales implements Initializable {
         // Required method for Initializable, runs at program launch
 
         //ordersButton.setOnAction(orderEvent);
-        subsButton.setOnAction(subsEvent);
+        //subsButton.setOnAction(subsEvent);
         //deleteOrderButton.setOnAction(deleteOrderEvent);
 
     }

@@ -332,7 +332,7 @@ public class SqlQueries extends DBConnector {
         }
         return success;
     }
-
+/*
     public ObservableList<Order> getOrders(int posId) {
         ObservableList<Order> orders = FXCollections.observableArrayList();
         try {
@@ -380,8 +380,7 @@ public class SqlQueries extends DBConnector {
         return orders;
     }
 
-
-
+*/
 
     // TODO: 28.03.2016 needs to enable a selector in the windows of the individual employee positions that lets you select elements and send them to methods
 

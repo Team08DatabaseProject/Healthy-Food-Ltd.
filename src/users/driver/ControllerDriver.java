@@ -55,7 +55,7 @@ public class ControllerDriver implements Initializable {
     );
 */
 
-    final ObservableList<Order> orderTest = query.getOrders(1); // Fucked up, fix
+    //final ObservableList<Order> orderTest = query.getOrders(1); // Fucked up, fix
 
 
 
@@ -63,6 +63,7 @@ public class ControllerDriver implements Initializable {
 
 
     // Shows a list of orders ready for delivery and a button for generating the route (non-functional as of now)
+    /*
     EventHandler<ActionEvent> readyOrderEvent  = new EventHandler<ActionEvent>() {
         @Override
         public void handle(ActionEvent e) {
@@ -87,6 +88,7 @@ public class ControllerDriver implements Initializable {
             }
         }
     };
+    */
 
     // Shows list of orders with the option to change their status from "Not delivered" to "Delivered".
     EventHandler<ActionEvent> changeStatusEvent  = new EventHandler<ActionEvent>() {
@@ -127,7 +129,7 @@ public class ControllerDriver implements Initializable {
 
         //deliveredButton.setOnAction(markAsDelivered); <-- this line makes the program crash, should be initialized AFTER user clicks "Change order status"-button.
         // also tried to put it inside changeStatusEvent() but this unsurprisingly leads to NullPointerException
-        readyOrderButton.setOnAction(readyOrderEvent);
+        //readyOrderButton.setOnAction(readyOrderEvent);
         changeStatusButton.setOnAction(changeStatusEvent);
 
     }
