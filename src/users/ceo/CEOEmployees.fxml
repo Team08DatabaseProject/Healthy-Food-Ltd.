@@ -13,6 +13,7 @@
 
 <!--> Table in submenu "Employees" </!-->
 
+<?import javafx.scene.layout.HBox?>
 <GridPane xmlns:fx="http://javafx.com/fxml/1" fx:controller="users.ceo.ControllerCEOEmployees">
     <children>
       <TableView fx:id="employeesTable" GridPane.columnIndex="0" GridPane.hgrow="SOMETIMES" GridPane.rowIndex="0" GridPane.vgrow="ALWAYS">
@@ -32,12 +33,13 @@
             <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
          </GridPane.margin>
       </TableView>
-      <VBox fx:id="employeesButtons" GridPane.columnIndex="0" GridPane.rowIndex="1" xmlns:fx="http://javafx.com/fxml">
+      <HBox fx:id="employeesButtons" GridPane.columnIndex="0" GridPane.rowIndex="1" xmlns:fx="http://javafx.com/fxml">
           <Button fx:id="addEmployeeFormButton" mnemonicParsing="false" styleClass="SmallButton" text="Add employee" textAlignment="CENTER" />
+          <Button fx:id="refreshEmployeesButton" mnemonicParsing="false" styleClass="SmallButton" text="Refresh" textAlignment="CENTER" />
          <GridPane.margin>
             <Insets left="4.0" right="4.0" top="4.0" />
          </GridPane.margin>
-      </VBox>
+      </HBox>
     </children>
    <columnConstraints>
       <ColumnConstraints percentWidth="100" prefWidth="100" />

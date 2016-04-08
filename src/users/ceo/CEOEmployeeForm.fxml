@@ -10,7 +10,7 @@
 
 <!--> Textfields for registering new employee </!-->
 
-
+<?import div.*?>
 <GridPane fx:id="addEmployeeTable" hgap="10" vgap="10" prefHeight="500.0" prefWidth="300.0" BorderPane.alignment="CENTER"
           xmlns:fx="http://javafx.com/fxml" fx:controller="users.ceo.ControllerCEOAddEmployee">
     <padding><Insets top="40" right="25" bottom="25" left="25"/></padding>
@@ -42,12 +42,12 @@
 
     <Label text="Zip code:"
            GridPane.columnIndex="0" GridPane.rowIndex="6"/>
-    <TextField fx:id="zipCodeField"
-               GridPane.columnIndex="1" GridPane.rowIndex="6"/>
+    <ZipCodeField fx:id="zipCodeField"
+              GridPane.columnIndex="1" GridPane.rowIndex="6"/>
 
-    <Label text="Username:"
+    <Label text="Place:"
            GridPane.columnIndex="0" GridPane.rowIndex="7"/>
-    <TextField fx:id="usernameField"
+    <TextField fx:id="placeField"
                GridPane.columnIndex="1" GridPane.rowIndex="7"/>
 
     <Label text="Position id:"

@@ -27,16 +27,22 @@ public class ControllerCEO implements Initializable {
     public BorderPane rootPaneDriver;
     protected SqlQueries db = new SqlQueries();
 
+    private final int EMPLOYEES = 1;
+    private int currentView;
+
     EventHandler<ActionEvent> viewEmployees = new EventHandler<ActionEvent>() {
         @Override
         public void handle(ActionEvent e) {
-            try {
-                FXMLLoader loader = new FXMLLoader();
-                loader.setLocation(getClass().getResource("CEOEmployees.fxml"));
-                GridPane employeesTable = loader.load();
-                rootPaneDriver.setCenter(employeesTable);
-            } catch (Exception exc) {
-                System.out.println(exc);
+            if(currentView != EMPLOYEES) {
+                try {
+                    FXMLLoader loader = new FXMLLoader();
+                    loader.setLocation(getClass().getResource("CEOEmployees.fxml"));
+                    GridPane employeesTable = loader.load();
+                    rootPaneDriver.setCenter(employeesTable);
+                    currentView = EMPLOYEES;
+                } catch(Exception exc) {
+                    System.out.println(exc);
+                }
             }
         }
     };
