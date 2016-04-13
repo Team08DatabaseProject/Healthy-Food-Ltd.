@@ -19,6 +19,7 @@ import javafx.util.StringConverter;
 import javafx.util.converter.DefaultStringConverter;
 import javafx.util.converter.DoubleStringConverter;
 import javafx.util.converter.IntegerStringConverter;
+import javafx.util.converter.LocalDateStringConverter;
 
 import java.net.URL;
 import java.time.LocalDate;
@@ -38,7 +39,7 @@ public class ControllerSalesEdit implements Initializable{
     ZipCode zip1 = new ZipCode(7042, "Trondheim");
 
     Address addressTest = new Address(1, "Bugata 5", zip);
-    Address address1 = new Address(2, "Bugata 7", zip1);
+    Address addressTest2 = new Address(2, "Bugata 7", zip1);
 
     LocalDate subStart = LocalDate.of(2015, 02, 11);
     LocalDate subEnd = LocalDate.of(2016, 02, 11);
@@ -49,9 +50,9 @@ public class ControllerSalesEdit implements Initializable{
 
     final ObservableList<Customer> customerTest = FXCollections.observableArrayList(
             new Customer(false, "arne@gmail.com", "Arne", "Knudsen", 41333183, addressTest, "", subscription),
-            new Customer(true, "truls@gmail.com", "Truls", "Knudsen", 41333183, address1, "Business1", subscription),
-            new Customer(false, "arne@gmail.com", "Arne", "Knudsen", 41333183, address1, "", subscription),
-            new Customer(false, "arne@gmail.com", "Arne", "Knudsen", 41333183, address1, "", subscription)
+            new Customer(true, "truls@gmail.com", "Truls", "Knudsen", 41333183, addressTest2, "Business1", subscription),
+            new Customer(false, "arne@gmail.com", "Arne", "Knudsen", 41333183, addressTest, "", subscription),
+            new Customer(false, "arne@gmail.com", "Arne", "Knudsen", 41333183, addressTest2, "", subscription)
     );
 
     LocalDate deadline = LocalDate.of(2016, 9, 11);
@@ -66,9 +67,9 @@ public class ControllerSalesEdit implements Initializable{
 
     final ObservableList<Customer> subsTest = FXCollections.observableArrayList(
             new Customer(false, "arne@gmail.com", "Arne", "Knudsen", 41333183, addressTest, "", subscription),
-            new Customer(true, "truls@gmail.com", "Truls", "Arnfinnsson", 41333183, address1, "Business1", subscription),
-            new Customer(false, "pål@gmail.com", "Pål", "Juega", 41333183, address1, "", subscription),
-            new Customer(false, "knut@gmail.com", "Knut", "Ludvigsen", 41333183, address1, "", subscription)
+            new Customer(true, "truls@gmail.com", "Truls", "Arnfinnsson", 41333183, addressTest2, "Business1", subscription),
+            new Customer(false, "pål@gmail.com", "Pål", "Juega", 41333183, addressTest, "", subscription),
+            new Customer(false, "knut@gmail.com", "Knut", "Ludvigsen", 41333183, addressTest2, "", subscription)
     );
 
     public GridPane salesTextField;
@@ -142,6 +143,14 @@ public class ControllerSalesEdit implements Initializable{
         columns.get(10).setCellValueFactory(new PropertyValueFactory<Order,Double>("price"));
         columns.get(11).setCellValueFactory(new PropertyValueFactory<Order,Customer>("customer")); //address
         columns.get(12).setCellValueFactory(new PropertyValueFactory<Order,String>("status"));
+
+        // Deadline
+        deadline.setCellFactory(TextFieldTableCell.<Order, LocalDate>forTableColumn(new LocalDateStringConverter()));
+        deadline.setOnEditCommit(
+                (TableColumn.CellEditEvent<Order, LocalDate> t) -> {
+                    ((Order) t.getTableView().getItems().get(t.getTablePosition().getRow())).setDeadline(t.getNewValue());
+                }
+        );
 
         /* Order */
         orderId.setCellFactory(TextFieldTableCell.<Order, Integer>forTableColumn(new IntegerStringConverter()));
