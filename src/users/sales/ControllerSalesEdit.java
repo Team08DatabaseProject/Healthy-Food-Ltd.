@@ -9,6 +9,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.SubScene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.BorderPane;
@@ -141,52 +142,15 @@ public class ControllerSalesEdit implements Initializable{
         columns.get(11).setCellValueFactory(new PropertyValueFactory<Order,Customer>("address")); //address
         columns.get(12).setCellValueFactory(new PropertyValueFactory<Order,String>("status"));
 
+        /* Order */
         orderId.setCellFactory(TextFieldTableCell.<Order, Integer>forTableColumn(new IntegerStringConverter()));
         orderId.setOnEditCommit(
                 (TableColumn.CellEditEvent<Order, Integer> t) -> {
                     ((Order) t.getTableView().getItems().get(t.getTablePosition().getRow())).setOrderId(t.getNewValue());
                 }
         );
-// TODO: 13/04/2016 int
-      /*  customerId.setCellFactory(TextFieldTableCell.<Order, Customer>forTableColumn(
-                new StringConverter<Customer>() {
-                    @Override
-                    public String toString(Customer value) {
-                        return value.getCustomerId();
-                    }
-                    @Override
-                    public Customer fromString(int customerId) {
-                        customer.setCustomerId(customerId);
-                        return customer;
-                    }
-                }));
 
-        customerId.setOnEditCommit(
-                (TableColumn.CellEditEvent<Order, Customer> t) -> {
-                    ((Order) t.getTableView().getItems().get(t.getTablePosition().getRow())).setCustomer(t.getNewValue());
-                }
-        );*/
-// TODO: 13/04/2016 int
-        /*subscriptionId.setCellFactory(TextFieldTableCell.<Order, Subscription>forTableColumn(
-                new StringConverter<Subscription>() {
-                    @Override
-                    public String toString(Subscription value) {
-                        return value.getSubscriptionId();
-                    }
-                    @Override
-                    public Subscription fromString(int subscriptionId) {
-                        subscription.setSubscriptionId(subscriptionId);
-                        return subscription;
-                    }
-                }));
-*/
-        subscriptionId.setOnEditCommit(
-                (TableColumn.CellEditEvent<Order, Subscription> t) -> {
-                    ((Order) t.getTableView().getItems().get(t.getTablePosition().getRow())).setSubscription(t.getNewValue());
-                }
-        );
-
-
+        /* First name */
         fname.setCellFactory(lv -> {
             TextFieldTableCell<Order, Customer> cell = new TextFieldTableCell();
             StringConverter<Customer> converter = new StringConverter<Customer>() {
@@ -216,6 +180,7 @@ public class ControllerSalesEdit implements Initializable{
                 }
         );
 
+        /* Last name */
         lname.setCellFactory(lv -> {
             TextFieldTableCell<Order, Customer> cell = new TextFieldTableCell();
             StringConverter<Customer> converter = new StringConverter<Customer>() {
@@ -245,6 +210,8 @@ public class ControllerSalesEdit implements Initializable{
                 }
         );
 
+
+        // Business name
         businessName.setCellFactory(lv -> {
             TextFieldTableCell<Order, Customer> cell = new TextFieldTableCell();
             StringConverter<Customer> converter = new StringConverter<Customer>() {
@@ -274,6 +241,7 @@ public class ControllerSalesEdit implements Initializable{
                 }
         );
 
+        // Email
         email.setCellFactory(lv -> {
             TextFieldTableCell<Order, Customer> cell = new TextFieldTableCell();
             StringConverter<Customer> converter = new StringConverter<Customer>() {
@@ -303,6 +271,7 @@ public class ControllerSalesEdit implements Initializable{
                 }
         );
 
+        // Phone number
         phoneNumber.setCellFactory(lv -> {
             TextFieldTableCell<Order, Customer> cell = new TextFieldTableCell();
             StringConverter<Customer> converter = new StringConverter<Customer>() {
@@ -334,6 +303,7 @@ public class ControllerSalesEdit implements Initializable{
                 }
         );
 
+        // Address
         address.setCellFactory(lv -> {
             TextFieldTableCell<Order, Customer> cell = new TextFieldTableCell();
             StringConverter<Customer> converter = new StringConverter<Customer>() {
@@ -363,6 +333,8 @@ public class ControllerSalesEdit implements Initializable{
                 }
         );
 
+
+        // Customer requests
         customerRequests.setCellFactory(TextFieldTableCell.<Order>forTableColumn());
         customerRequests.setOnEditCommit(
                 (TableColumn.CellEditEvent<Order, String> t) -> {
@@ -370,6 +342,8 @@ public class ControllerSalesEdit implements Initializable{
                 }
         );
 
+
+        // Customer ID
         customerId.setCellFactory(lv -> {
             TextFieldTableCell<Order, Customer> cell = new TextFieldTableCell();
             StringConverter<Customer> converter = new StringConverter<Customer>() {
@@ -401,6 +375,8 @@ public class ControllerSalesEdit implements Initializable{
                 }
         );
 
+
+        // Subscription ID
         subscriptionId.setCellFactory(lv -> {
             TextFieldTableCell<Order, Subscription> cell = new TextFieldTableCell();
             StringConverter<Subscription> converter = new StringConverter<Subscription>() {
@@ -429,6 +405,19 @@ public class ControllerSalesEdit implements Initializable{
         subscriptionId.setOnEditCommit(
                 (TableColumn.CellEditEvent<Order, Subscription> t) -> {
                     ((Order) t.getTableView().getItems().get(t.getTablePosition().getRow())).setSubscription(t.getNewValue());
+                }
+        );
+
+
+        // Status
+        ObservableList<String> statusComboBoxValues = FXCollections.observableArrayList(
+                "Created", "In preperation", "Ready for delivery", "Under delivery", "Delivered"
+        );
+
+        status.setCellFactory(ComboBoxTableCell.forTableColumn(statusComboBoxValues));
+        status.setOnEditCommit(
+                (TableColumn.CellEditEvent<Order, String> t) -> {
+                    ((Order) t.getTableView().getItems().get(t.getTablePosition().getRow())).setStatus(t.getNewValue());
                 }
         );
 
