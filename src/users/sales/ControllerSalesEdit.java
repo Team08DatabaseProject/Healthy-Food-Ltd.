@@ -9,6 +9,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 
@@ -104,7 +105,23 @@ public class ControllerSalesEdit implements Initializable{
 
     public void initialize(URL fxmlFileLocation, ResourceBundle resources){
 
+        ordersTable.setEditable(true);
         ObservableList<TableColumn> columns = ordersTable.getColumns();
+        TableColumn<Order, Integer> orderId = columns.get(0);
+        TableColumn<Order, Customer> customerId = columns.get(1);
+        TableColumn<Order, Subscription> subscriptionId = columns.get(2);
+        TableColumn<Order, Customer> fname = columns.get(3);
+        TableColumn<Order, Customer> lname = columns.get(4);
+        TableColumn<Order, Customer> businessName = columns.get(5);
+        TableColumn<Order, Customer> email = columns.get(6);
+        TableColumn<Order, Customer> phoneNumber = columns.get(7);
+        TableColumn<Order, String> customerRequests = columns.get(8);
+        TableColumn<Order, LocalDate> deadline = columns.get(9);
+        TableColumn<Order, Double> price = columns.get(10);
+        TableColumn<Order, Customer> address = columns.get(11);
+        TableColumn<Order, String> status = columns.get(12);
+
+
         columns.get(0).setCellValueFactory(new PropertyValueFactory<Order,Integer>("orderId"));
         columns.get(1).setCellValueFactory(new PropertyValueFactory<Order,Customer>("customer")); //customerId
         columns.get(2).setCellValueFactory(new PropertyValueFactory<Order,Subscription>("subscription")); //subscriptionId
@@ -118,6 +135,20 @@ public class ControllerSalesEdit implements Initializable{
         columns.get(10).setCellValueFactory(new PropertyValueFactory<Order,Double>("price"));
         columns.get(11).setCellValueFactory(new PropertyValueFactory<Order,Customer>("address")); //address
         columns.get(12).setCellValueFactory(new PropertyValueFactory<Order,String>("status"));
+
+        orderId.setCellFactory(TextFieldTableCell.<Order>forTableColumn());
+        orderId.setOnEditCommit(
+                (TableColumn.CellEditEvent<Order, Integer> t) -> {
+                    ((Order) t.getTableView().getItems().get(t.getTablePosition().getRow())).setOrderId(t.getNewValue());
+                }
+        );
+
+        customerRequests.setCellFactory(TextFieldTableCell.<Order>forTableColumn());
+        customerRequests.setOnEditCommit(
+                (TableColumn.CellEditEvent<Order, String> t) -> {
+                    ((Order) t.getTableView().getItems().get(t.getTablePosition().getRow())).setCustomerRequests(t.getNewValue());
+                }
+        );
 
         columns.get(1).setCellFactory(column -> {
             return new TableCell<Order, Customer>() {
