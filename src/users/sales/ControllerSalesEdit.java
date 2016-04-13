@@ -17,6 +17,7 @@ import javafx.scene.layout.GridPane;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
 import javafx.util.converter.DefaultStringConverter;
+import javafx.util.converter.DoubleStringConverter;
 import javafx.util.converter.IntegerStringConverter;
 
 import java.net.URL;
@@ -36,7 +37,7 @@ public class ControllerSalesEdit implements Initializable{
     ZipCode zip = new ZipCode(7031, "Trondheim");
     ZipCode zip1 = new ZipCode(7042, "Trondheim");
 
-    Address address = new Address(1, "Bugata 5", zip);
+    Address addressTest = new Address(1, "Bugata 5", zip);
     Address address1 = new Address(2, "Bugata 7", zip1);
 
     LocalDate subStart = LocalDate.of(2015, 02, 11);
@@ -47,14 +48,14 @@ public class ControllerSalesEdit implements Initializable{
     Dish dish = new Dish(20, "Ravioli");
 
     final ObservableList<Customer> customerTest = FXCollections.observableArrayList(
-            new Customer(false, "arne@gmail.com", "Arne", "Knudsen", 41333183, address, "", subscription),
+            new Customer(false, "arne@gmail.com", "Arne", "Knudsen", 41333183, addressTest, "", subscription),
             new Customer(true, "truls@gmail.com", "Truls", "Knudsen", 41333183, address1, "Business1", subscription),
             new Customer(false, "arne@gmail.com", "Arne", "Knudsen", 41333183, address1, "", subscription),
             new Customer(false, "arne@gmail.com", "Arne", "Knudsen", 41333183, address1, "", subscription)
     );
 
     LocalDate deadline = LocalDate.of(2016, 9, 11);
-    Customer customer = new Customer(true, "bæsj@poop.com", "Bæsj", "Knudsen", 26069512, address, "Rør og kloakk AS", subscription);
+    Customer customer = new Customer(true, "bæsj@poop.com", "Bæsj", "Knudsen", 26069512, addressTest, "Rør og kloakk AS", subscription);
     final ObservableList<Order> order = FXCollections.observableArrayList(
             new Order(subscription, "More pickles", deadline, 367.00, "CREATED", customer, dishes),
             new Order(subscription, "Less pickles", deadline, 367.00, "CREATED", customer, dishes),
@@ -64,7 +65,7 @@ public class ControllerSalesEdit implements Initializable{
 
 
     final ObservableList<Customer> subsTest = FXCollections.observableArrayList(
-            new Customer(false, "arne@gmail.com", "Arne", "Knudsen", 41333183, address, "", subscription),
+            new Customer(false, "arne@gmail.com", "Arne", "Knudsen", 41333183, addressTest, "", subscription),
             new Customer(true, "truls@gmail.com", "Truls", "Arnfinnsson", 41333183, address1, "Business1", subscription),
             new Customer(false, "pål@gmail.com", "Pål", "Juega", 41333183, address1, "", subscription),
             new Customer(false, "knut@gmail.com", "Knut", "Ludvigsen", 41333183, address1, "", subscription)
@@ -139,7 +140,7 @@ public class ControllerSalesEdit implements Initializable{
         columns.get(8).setCellValueFactory(new PropertyValueFactory<Order,String>("customerRequests"));
         columns.get(9).setCellValueFactory(new PropertyValueFactory<Order,LocalDate>("deadline"));
         columns.get(10).setCellValueFactory(new PropertyValueFactory<Order,Double>("price"));
-        columns.get(11).setCellValueFactory(new PropertyValueFactory<Order,Customer>("address")); //address
+        columns.get(11).setCellValueFactory(new PropertyValueFactory<Order,Customer>("customer")); //address
         columns.get(12).setCellValueFactory(new PropertyValueFactory<Order,String>("status"));
 
         /* Order */
@@ -342,6 +343,12 @@ public class ControllerSalesEdit implements Initializable{
                 }
         );
 
+        price.setCellFactory(TextFieldTableCell.<Order, Double>forTableColumn(new DoubleStringConverter()));
+        price.setOnEditCommit(
+                (TableColumn.CellEditEvent<Order, Double> t) -> {
+                    ((Order) t.getTableView().getItems().get(t.getTablePosition().getRow())).setPrice(t.getNewValue());
+                }
+        );
 
         // Customer ID
         customerId.setCellFactory(lv -> {
