@@ -116,29 +116,33 @@ public class Login extends Application {
                     */
                     Employee emp = new Employee(1, "test", "test", "test", 1234, "test", 1234.56,
                              "hash", new Address("Testveien 1", new ZipCode(1234, "testZip")),
-                              new EmployeePosition(1, "test", 23.34));
+                              new EmployeePosition(2, "test", 23.34));
                     if (emp != null) {
                         switch(emp.getPosition().getId()) {
                             case CEO : {
                                 Parent root = FXMLLoader.load(getClass().getResource("../users/ceo/CEOWindow.fxml"));
-                                primaryStage.setTitle("Healthy Catering - users.ceo");
+                                primaryStage.setTitle("Healthy Catering System - CEO");
                                 primaryStage.setScene(new Scene(root, 800, 600));
                                 primaryStage.show();
                                 break;
                             }
                             case CHEF : {
+                                Parent root = FXMLLoader.load(getClass().getResource("../users/chef/ChefWindow.fxml"));
+                                primaryStage.setTitle("Healthy Catering System - Chef");
+                                primaryStage.setScene(new Scene(root, 800, 600));
+                                primaryStage.show();
                                 break;
                             }
                             case DRIVER : {
                                 Parent root = FXMLLoader.load(getClass().getResource("../users/driver/DriverWindow.fxml"));
-                                primaryStage.setTitle("Healthy Catering - users.driver");
+                                primaryStage.setTitle("Healthy Catering System - Driver");
                                 primaryStage.setScene(new Scene(root, 800, 600));
                                 primaryStage.show();
                                 break;
                             }
                             case SALES : {
                                 Parent root = FXMLLoader.load(getClass().getResource("../users/sales/SalesWindow.fxml"));
-                                primaryStage.setTitle("Healthy Catering - users.sales");
+                                primaryStage.setTitle("Healthy Catering System - Sales");
                                 primaryStage.setScene(new Scene(root, 800, 600));
                                 primaryStage.show();
                                 break;

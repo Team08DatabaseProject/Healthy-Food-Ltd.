@@ -265,7 +265,7 @@ public class ChefMain extends Application {
 
         StackPane root = new StackPane(splitPane2);
         root.getChildren().addAll();
-        primaryStage.setTitle("Hello World");
+        primaryStage.setTitle("Healthy Catering System - Chef");
         Scene scene = new Scene(root, 350, 250, Color.WHITE);
         splitPane2.prefWidthProperty().bind(scene.widthProperty());
         splitPane2.prefHeightProperty().bind(scene.heightProperty());

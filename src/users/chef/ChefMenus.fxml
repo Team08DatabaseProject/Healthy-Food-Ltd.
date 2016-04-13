@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--> Axel </!-->
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<GridPane prefHeight="200" prefWidth="200.0" xmlns:fx="http://javafx.com/fxml">
+    <children>
+        <Button fx:id="editMenuButton" GridPane.columnIndex="0" GridPane.rowIndex="0" StyleClass="BigButton" text="Edit Menu"/>
+        <ComboBox fx:id="chooseMenuCB" GridPane.columnIndex="0" GridPane.rowIndex="1" promptText="Choose menu"/>
+        <Button fx:id="addMenuButton" GridPane.columnIndex="1" GridPane.rowIndex="0" StyleClass="BigButton" text="Add new menu"/>
+    </children>
+</GridPane>

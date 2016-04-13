@@ -1,0 +1,17 @@
+.SideButton {
+    -fx-min-width: 100px;
+    -fx-min-height: 75px;
+    -fx-alignment: CENTER;
+}
+
+.SmallButton {
+    -fx-min-width: 100px;
+    -fx-min-height: 15px;
+    -fx-alignment: CENTER;
+}
+
+.BigButton {
+    -fx-min-width: 200px;
+    -fx-min-heigh: 150px;
+    -fx-alignment: CENTER;
+}
