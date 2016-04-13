@@ -3,3 +3,9 @@ Button {
     -fx-min-height: 100px;
     -fx-alignment: CENTER;
 }
+
+.newOrderButton{
+    -fx-min-width: 100px;
+    -fx-min-height: 50px;
+    -fx-alignment: CENTER;
+}

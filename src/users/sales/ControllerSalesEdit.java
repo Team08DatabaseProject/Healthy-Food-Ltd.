@@ -19,31 +19,12 @@ import java.util.ResourceBundle;
 /**
  * Created by Trym Todalshaug on 04/04/2016.
  */
-public class ControllerSalesCreate implements Initializable{
+public class ControllerSalesEdit implements Initializable{
 
     public Button createOrderButton; //Button for creating an order
-    //public Button deleteOrderButton;
-
+    public Button deleteOrderButton; //Button for deleting an order
     public TableView ordersTable;
     public BorderPane rootPaneCreate;
-
-    public TextField orderIdField;
-    public TextField customerIdField;
-    public TextField subcriptionIdField;
-    public TextField startSubscription;
-    public TextField endSubscription;
-    public TextField fNameField;
-    public TextField lNameField;
-    public ComboBox businessBox;
-    public TextField businessNameField;
-    public TextField emailField;
-    public TextField phoneField;
-    public TextField addressField;
-    public TextField zipCodeField;
-    public TextField customerRequestsField;
-    public DatePicker deadlinePicker;
-    public TextField priceField;
-    public TextField statusField;
 
     ZipCode zip = new ZipCode(7031, "Trondheim");
     ZipCode zip1 = new ZipCode(7042, "Trondheim");
@@ -77,9 +58,9 @@ public class ControllerSalesCreate implements Initializable{
 
     final ObservableList<Customer> subsTest = FXCollections.observableArrayList(
             new Customer(false, "arne@gmail.com", "Arne", "Knudsen", 41333183, address, "", subscription),
-            new Customer(true, "truls@gmail.com", "Truls", "Knudsen", 41333183, address1, "Business1", subscription),
-            new Customer(false, "arne@gmail.com", "Arne", "Knudsen", 41333183, address1, "", subscription),
-            new Customer(false, "arne@gmail.com", "Arne", "Knudsen", 41333183, address1, "", subscription)
+            new Customer(true, "truls@gmail.com", "Truls", "Arnfinnsson", 41333183, address1, "Business1", subscription),
+            new Customer(false, "pål@gmail.com", "Pål", "Juega", 41333183, address1, "", subscription),
+            new Customer(false, "knut@gmail.com", "Knut", "Ludvigsen", 41333183, address1, "", subscription)
     );
 
     public GridPane salesTextField;
@@ -92,68 +73,34 @@ public class ControllerSalesCreate implements Initializable{
                 loader.setLocation(getClass().getResource("SalesTextField.fxml"));
                 salesTextField = loader.load();
                 rootPaneCreate.setCenter(salesTextField);
+                rootPaneCreate.setBottom(null);
             } catch (Exception e) {
                 System.out.println(e);
             }
         }
     };
 
-/*
-    EventHandler<ActionEvent> createOrderEvent = new EventHandler<ActionEvent>() {
+    EventHandler<ActionEvent> deleteOrderEvent = new EventHandler<ActionEvent>() {
         @Override
-        public void handle(ActionEvent e) {
-            try {
-                String firstName = fNameField.getText();
-                String lastName = lNameField.getText();
-                boolean isBusiness = businessBox.isArmed();
-                String businessName = businessNameField.getText();
-                String email = emailField.getText();
-                int phoneNumber = Integer.parseInt(phoneField.getText());
-                String address = addressField.getText();
-                int zipCodeInt = Integer.parseInt(zipCodeField.getText());
-                ZipCode zipCode = new ZipCode(zipCodeInt, "Trondheim");
-                String customerRequests = customerRequestsField.getText();
-                LocalDate deadline = deadlinePicker.getValue();
-                double price = Double.parseDouble(priceField.getText());
-                String status = statusField.getText();
-                int orderId = Integer.parseInt(orderIdField.getText());
-                int customerId = Integer.parseInt(customerIdField.getText());
-                int subcriptionId = Integer.parseInt(subcriptionIdField.getText());
-                LocalDate startSubscription = deadlinePicker.getValue();
-                LocalDate endSubscription = deadlinePicker.getValue();
-                String dishName = "";
-                Address newAddress = new Address(address, zipCode);
-                Subscription subscription = new Subscription(startSubscription, endSubscription);
-                Customer customer = new Customer(isBusiness, email, firstName, lastName, phoneNumber,
-                        newAddress, businessName, subscription);
-                Dish dishes = new Dish(price, dishName);
-                ObservableList<Dish> dishesInThisOrder = FXCollections.observableArrayList();
-                Order order = new Order(subscription, customerRequests, deadline,
-                        price, status, customer, dishesInThisOrder);
+        public void handle(ActionEvent event) {
+            try{
+                int selectedIndex = ordersTable.getSelectionModel().getSelectedIndex();
+                if(selectedIndex >= 0){
+                    ordersTable.getItems().remove(selectedIndex);
+                }else{
+                    //Nothing selected
+                    Alert alert = new Alert(Alert.AlertType.WARNING);
+                    alert.setTitle("No selection");
+                    alert.setHeaderText("No order selected");
+                    alert.setContentText("Select an order to delete it");
 
-                /*FXMLLoader bottomLoader = new FXMLLoader();
-                bottomLoader.setLocation(getClass().getResource("EditOrdersBottom.fxml"));
-                HBox readyOrderBottom = bottomLoader.load();
-                rootPaneSales.setBottom(readyOrderBottom);*/
-/*
-            } catch(Exception exc) {
-                System.out.println("createOrderEvent: " + exc);
+                    alert.showAndWait();
+                }
+            }catch (Exception e){
+                System.out.println("deleteOrderEvent" + e);
             }
         }
     };
-    */
-
-
-    /*EventHandler<ActionEvent> deleteOrderEvent = new EventHandler<ActionEvent>(){
-        @Override
-        public void handle(ActionEvent e){
-            try{
-
-            }catch (Exception exc){
-                System.out.println("deleteOrderEvent: " + e);
-            }
-        }
-    };*/
 
     public void initialize(URL fxmlFileLocation, ResourceBundle resources){
 
@@ -269,6 +216,7 @@ public class ControllerSalesCreate implements Initializable{
             };
         });
         createOrderButton.setOnAction(createOrderEvent);
+        deleteOrderButton.setOnAction(deleteOrderEvent);
         ordersTable.setItems(order);
     }
 }

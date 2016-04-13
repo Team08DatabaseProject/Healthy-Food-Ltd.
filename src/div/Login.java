@@ -116,7 +116,7 @@ public class Login extends Application {
                     */
                     Employee emp = new Employee(1, "test", "test", "test", 1234, "test", 1234.56,
                              "hash", new Address("Testveien 1", new ZipCode(1234, "testZip")),
-                              new EmployeePosition(2, "test", 23.34));
+                              new EmployeePosition(4, "test", 23.34));
                     if (emp != null) {
                         switch(emp.getPosition().getId()) {
                             case CEO : {
@@ -144,6 +144,7 @@ public class Login extends Application {
                                 Parent root = FXMLLoader.load(getClass().getResource("../users/sales/SalesWindow.fxml"));
                                 primaryStage.setTitle("Healthy Catering System - Sales");
                                 primaryStage.setScene(new Scene(root, 800, 600));
+                                primaryStage.setMaximized(true);
                                 primaryStage.show();
                                 break;
                             }
