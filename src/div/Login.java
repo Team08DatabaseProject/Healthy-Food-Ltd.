@@ -123,6 +123,7 @@ public class Login extends Application {
                                 Parent root = FXMLLoader.load(getClass().getResource("../users/ceo/CEOWindow.fxml"));
                                 primaryStage.setTitle("Healthy Catering System - CEO");
                                 primaryStage.setScene(new Scene(root, 800, 600));
+                                primaryStage.setMaximized(true);
                                 primaryStage.show();
                                 break;
                             }
@@ -130,6 +131,7 @@ public class Login extends Application {
                                 Parent root = FXMLLoader.load(getClass().getResource("../users/chef/ChefWindow.fxml"));
                                 primaryStage.setTitle("Healthy Catering System - Chef");
                                 primaryStage.setScene(new Scene(root, 800, 600));
+                                primaryStage.setMaximized(true);
                                 primaryStage.show();
                                 break;
                             }
@@ -137,6 +139,7 @@ public class Login extends Application {
                                 Parent root = FXMLLoader.load(getClass().getResource("../users/driver/DriverWindow.fxml"));
                                 primaryStage.setTitle("Healthy Catering System - Driver");
                                 primaryStage.setScene(new Scene(root, 800, 600));
+                                primaryStage.setMaximized(true);
                                 primaryStage.show();
                                 break;
                             }
@@ -149,6 +152,7 @@ public class Login extends Application {
                                 break;
                             }
                             case NUTRITION : {
+                                primaryStage.setMaximized(true);
                                 break;
                             }
                             default : {
