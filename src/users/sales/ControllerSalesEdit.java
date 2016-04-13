@@ -7,6 +7,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.SubScene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
@@ -244,18 +245,28 @@ public class ControllerSalesEdit implements Initializable{
                 }
         );
 
-        businessName.setCellFactory(TextFieldTableCell.<Order, Customer>forTableColumn(
-                new StringConverter<Customer>() {
-                    @Override
-                    public String toString(Customer value) {
-                        return value.getBusinessName();
-                    }
-                    @Override
-                    public Customer fromString(String businessName) {
-                        customer.setBusinessName(businessName);
+        businessName.setCellFactory(lv -> {
+            TextFieldTableCell<Order, Customer> cell = new TextFieldTableCell();
+            StringConverter<Customer> converter = new StringConverter<Customer>() {
+                @Override
+                public String toString(Customer customer) {
+                    return customer.getBusinessName();
+                }
+
+                @Override
+                public Customer fromString(String name) {
+                    Customer customer = cell.getItem();
+                    if (customer == null) {
+                        return null;
+                    } else {
+                        customer.setBusinessName(name);
                         return customer;
                     }
-                }));
+                }
+            };
+            cell.setConverter(converter);
+            return cell;
+        });
 
         businessName.setOnEditCommit(
                 (TableColumn.CellEditEvent<Order, Customer> t) -> {
@@ -263,37 +274,59 @@ public class ControllerSalesEdit implements Initializable{
                 }
         );
 
-        email.setCellFactory(TextFieldTableCell.<Order, Customer>forTableColumn(
-                new StringConverter<Customer>() {
-                    @Override
-                    public String toString(Customer value) {
-                        return value.getEmail();
-                    }
-                    @Override
-                    public Customer fromString(String email) {
+        email.setCellFactory(lv -> {
+            TextFieldTableCell<Order, Customer> cell = new TextFieldTableCell();
+            StringConverter<Customer> converter = new StringConverter<Customer>() {
+                @Override
+                public String toString(Customer customer) {
+                    return customer.getEmail();
+                }
+
+                @Override
+                public Customer fromString(String email) {
+                    Customer customer = cell.getItem();
+                    if (customer == null) {
+                        return null;
+                    } else {
                         customer.setEmail(email);
                         return customer;
                     }
-                }));
+                }
+            };
+            cell.setConverter(converter);
+            return cell;
+        });
 
         email.setOnEditCommit(
                 (TableColumn.CellEditEvent<Order, Customer> t) -> {
                     ((Order) t.getTableView().getItems().get(t.getTablePosition().getRow())).setCustomer(t.getNewValue());
                 }
         );
-// TODO: 13/04/2016 int
-        phoneNumber.setCellFactory(TextFieldTableCell.<Order, Customer>forTableColumn(
-                new StringConverter<Customer>() {
-                    @Override
-                    public String toString(Customer value) {
-                        return value.getFirstName();
-                    }
-                    @Override
-                    public Customer fromString(String firstName) {
-                        customer.setFirstName(firstName);
+
+        phoneNumber.setCellFactory(lv -> {
+            TextFieldTableCell<Order, Customer> cell = new TextFieldTableCell();
+            StringConverter<Customer> converter = new StringConverter<Customer>() {
+                @Override
+                public String toString(Customer customer) {
+                    Integer phoneNr =  customer.getPhoneNumber();
+                    return phoneNr.toString();
+                }
+
+                @Override
+                public Customer fromString(String phoneNrString) {
+                    Customer customer = cell.getItem();
+                    if (customer == null) {
+                        return null;
+                    } else {
+                        Integer phoneNr = Integer.parseInt(phoneNrString);
+                        customer.setPhoneNumber(phoneNr);
                         return customer;
                     }
-                }));
+                }
+            };
+            cell.setConverter(converter);
+            return cell;
+        });
 
         phoneNumber.setOnEditCommit(
                 (TableColumn.CellEditEvent<Order, Customer> t) -> {
@@ -301,18 +334,28 @@ public class ControllerSalesEdit implements Initializable{
                 }
         );
 
-        address.setCellFactory(TextFieldTableCell.<Order, Customer>forTableColumn(
-                new StringConverter<Customer>() {
-                    @Override
-                    public String toString(Customer value) {
-                        return value.getAddress().getAddress();
-                    }
-                    @Override
-                    public Customer fromString(String address) {
-                        customer.getAddress().setAddress(address);
+        address.setCellFactory(lv -> {
+            TextFieldTableCell<Order, Customer> cell = new TextFieldTableCell();
+            StringConverter<Customer> converter = new StringConverter<Customer>() {
+                @Override
+                public String toString(Customer customer) {
+                    return customer.getAddress().getAddress();
+                }
+
+                @Override
+                public Customer fromString(String addressString) {
+                    Customer customer = cell.getItem();
+                    if (customer == null) {
+                        return null;
+                    } else {
+                        customer.getAddress().setAddress(addressString);
                         return customer;
                     }
-                }));
+                }
+            };
+            cell.setConverter(converter);
+            return cell;
+        });
 
         address.setOnEditCommit(
                 (TableColumn.CellEditEvent<Order, Customer> t) -> {
@@ -327,108 +370,68 @@ public class ControllerSalesEdit implements Initializable{
                 }
         );
 
-        columns.get(1).setCellFactory(column -> {
-            return new TableCell<Order, Customer>() {
+        customerId.setCellFactory(lv -> {
+            TextFieldTableCell<Order, Customer> cell = new TextFieldTableCell();
+            StringConverter<Customer> converter = new StringConverter<Customer>() {
                 @Override
-                protected void updateItem(Customer item, boolean empty) {
-                    if(item == null || empty) {
-                        setText(null);
+                public String toString(Customer customer) {
+                    Integer customerId = customer.getCustomerId();
+                    return customerId.toString();
+                }
+
+                @Override
+                public Customer fromString(String customerIdString) {
+                    Customer customer = cell.getItem();
+                    if (customer == null) {
+                        return null;
                     } else {
-                        setText(Integer.toString(item.getCustomerId()));
+                        Integer customerId = Integer.parseInt(customerIdString);
+                        customer.setCustomerId(customerId);
+                        return customer;
                     }
                 }
             };
+            cell.setConverter(converter);
+            return cell;
         });
-        columns.get(2).setCellFactory(column -> {
-            return new TableCell<Order, Subscription>() {
+
+        customerId.setOnEditCommit(
+                (TableColumn.CellEditEvent<Order, Customer> t) -> {
+                    ((Order) t.getTableView().getItems().get(t.getTablePosition().getRow())).setCustomer(t.getNewValue());
+                }
+        );
+
+        subscriptionId.setCellFactory(lv -> {
+            TextFieldTableCell<Order, Subscription> cell = new TextFieldTableCell();
+            StringConverter<Subscription> converter = new StringConverter<Subscription>() {
                 @Override
-                protected void updateItem(Subscription item, boolean empty) {
-                    if(item == null || empty) {
-                        setText(null);
+                public String toString(Subscription subscription) {
+                    Integer subscriptionId = subscription.getSubscriptionId();
+                    return subscriptionId.toString();
+                }
+
+                @Override
+                public Subscription fromString(String subscriptionIdString) {
+                    Subscription subscription = cell.getItem();
+                    if (subscription == null) {
+                        return null;
                     } else {
-                        setText(Integer.toString(item.getSubscriptionId()));
+                        Integer subscriptionId = Integer.parseInt(subscriptionIdString);
+                        subscription.setSubscriptionId(subscriptionId);
+                        return subscription;
                     }
                 }
             };
+            cell.setConverter(converter);
+            return cell;
         });
-        /*
-        columns.get(3).setCellFactory(column -> {
-            return new TableCell<Order, Customer>() {
-                @Override
-                protected void updateItem(Customer item, boolean empty) {
-                    if(item == null || empty) {
-                        setText(null);
-                    } else {
-                        setText(item.getFirstName());
-                    }
+
+        subscriptionId.setOnEditCommit(
+                (TableColumn.CellEditEvent<Order, Subscription> t) -> {
+                    ((Order) t.getTableView().getItems().get(t.getTablePosition().getRow())).setSubscription(t.getNewValue());
                 }
-            };
-        });*/
-        /*
-        columns.get(4).setCellFactory(column -> {
-            return new TableCell<Order, Customer>() {
-                @Override
-                protected void updateItem(Customer item, boolean empty) {
-                    if(item == null || empty) {
-                        setText(null);
-                    } else {
-                        setText(item.getLastName());
-                    }
-                }
-            };
-        });*/
-        /*
-        columns.get(5).setCellFactory(column -> {
-            return new TableCell<Order, Customer>() {
-                @Override
-                protected void updateItem(Customer item, boolean empty) {
-                    if(item == null || empty) {
-                        setText(null);
-                    } else {
-                        setText(item.getBusinessName());
-                    }
-                }
-            };
-        });*/
-        /*
-        columns.get(6).setCellFactory(column -> {
-            return new TableCell<Order, Customer>() {
-                @Override
-                protected void updateItem(Customer item, boolean empty) {
-                    if(item == null || empty) {
-                        setText(null);
-                    } else {
-                        setText(item.getEmail());
-                    }
-                }
-            };
-        });*/
-        /*
-        columns.get(7).setCellFactory(column -> {
-            return new TableCell<Order, Customer>() {
-                @Override
-                protected void updateItem(Customer item, boolean empty) {
-                    if(item == null || empty) {
-                        setText(null);
-                    } else {
-                        setText(Integer.toString(item.getPhoneNumber()));
-                    }
-                }
-            };
-        });*/
-        /*
-        columns.get(11).setCellFactory(column -> {
-            return new TableCell<Order, Customer>() {
-                @Override
-                protected void updateItem(Customer item, boolean empty) {
-                    if (item == null || empty) {
-                        setText(null);
-                    } else {
-                        setText(item.getAddress().getAddress());
-                    }
-                }
-            };
-        });*/
+        );
+
         createOrderButton.setOnAction(createOrderEvent);
         deleteOrderButton.setOnAction(deleteOrderEvent);
         ordersTable.setItems(order);
