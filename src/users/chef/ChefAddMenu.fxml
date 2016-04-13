@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--> Axel </!-->
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.collections.FXCollections?>
+<?import java.lang.String?>
+
+<GridPane prefHeight="600.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml" hgap="20" vgap="15">
+    <children>
+        <TextField fx:id="menuNameTF" GridPane.rowIndex="0" GridPane.columnIndex="0" promptText="Menu name"/>
+        <TableView fx:id="selectDishes" GridPane.rowIndex="1" GridPane.columnIndex="0"  prefHeight="200" prefWidth="100">
+                <TableColumn fx:id="dishes" text="Select dishes"/>
+        </TableView>
+        <TextField fx:id="discountTF" GridPane.rowIndex="0" GridPane.columnIndex="1" promptText="Discount(%)"/>
+        <ListView fx:id="selectedDishes" GridPane.rowIndex="1" GridPane.columnIndex="1" accessibleText="Selected dishes" prefHeight="200" prefWidth="100"/>
+
+    </children>
+</GridPane>
