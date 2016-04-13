@@ -39,7 +39,6 @@
                    <children>
                        <Button fx:id="createOrderButton" prefHeight="20" prefWidth="50" text="Create order" styleClass="newOrderButton"/>
                        <Button fx:id="deleteOrderButton" prefHeight="20" prefWidth="50" text="Delete order" styleClass="newOrderButton"/>
-                       <Button fx:id="editOrderButton" prefHeight="20" prefWidth="50" text="Edit order" styleClass="newOrderButton"/>
                    </children>
                 </HBox>
             </bottom>

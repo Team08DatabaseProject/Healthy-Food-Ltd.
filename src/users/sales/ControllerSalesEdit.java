@@ -146,17 +146,46 @@ public class ControllerSalesEdit implements Initializable{
                     ((Order) t.getTableView().getItems().get(t.getTablePosition().getRow())).setOrderId(t.getNewValue());
                 }
         );
+// TODO: 13/04/2016 int
+      /*  customerId.setCellFactory(TextFieldTableCell.<Order, Customer>forTableColumn(
+                new StringConverter<Customer>() {
+                    @Override
+                    public String toString(Customer value) {
+                        return value.getCustomerId();
+                    }
+                    @Override
+                    public Customer fromString(int customerId) {
+                        customer.setCustomerId(customerId);
+                        return customer;
+                    }
+                }));
 
-        customerRequests.setCellFactory(TextFieldTableCell.<Order>forTableColumn());
-        customerRequests.setOnEditCommit(
-                (TableColumn.CellEditEvent<Order, String> t) -> {
-                    ((Order) t.getTableView().getItems().get(t.getTablePosition().getRow())).setCustomerRequests(t.getNewValue());
+        customerId.setOnEditCommit(
+                (TableColumn.CellEditEvent<Order, Customer> t) -> {
+                    ((Order) t.getTableView().getItems().get(t.getTablePosition().getRow())).setCustomer(t.getNewValue());
+                }
+        );*/
+// TODO: 13/04/2016 int
+        /*subscriptionId.setCellFactory(TextFieldTableCell.<Order, Subscription>forTableColumn(
+                new StringConverter<Subscription>() {
+                    @Override
+                    public String toString(Subscription value) {
+                        return value.getSubscriptionId();
+                    }
+                    @Override
+                    public Subscription fromString(int subscriptionId) {
+                        subscription.setSubscriptionId(subscriptionId);
+                        return subscription;
+                    }
+                }));
+*/
+        subscriptionId.setOnEditCommit(
+                (TableColumn.CellEditEvent<Order, Subscription> t) -> {
+                    ((Order) t.getTableView().getItems().get(t.getTablePosition().getRow())).setSubscription(t.getNewValue());
                 }
         );
 
-
-
-      fname.setCellFactory(TextFieldTableCell.<Order, Customer>forTableColumn(
+        fname.setCellFactory(TextFieldTableCell.<Order, Customer>forTableColumn(
                 new StringConverter<Customer>() {
                     @Override
                     public String toString(Customer value) {
@@ -172,6 +201,108 @@ public class ControllerSalesEdit implements Initializable{
         fname.setOnEditCommit(
                 (TableColumn.CellEditEvent<Order, Customer> t) -> {
                     ((Order) t.getTableView().getItems().get(t.getTablePosition().getRow())).setCustomer(t.getNewValue());
+                }
+        );
+
+        lname.setCellFactory(TextFieldTableCell.<Order, Customer>forTableColumn(
+                new StringConverter<Customer>() {
+                    @Override
+                    public String toString(Customer value) {
+                        return value.getLastName();
+                    }
+                    @Override
+                    public Customer fromString(String lastName) {
+                        customer.setLastName(lastName);
+                        return customer;
+                    }
+                }));
+
+        lname.setOnEditCommit(
+                (TableColumn.CellEditEvent<Order, Customer> t) -> {
+                    ((Order) t.getTableView().getItems().get(t.getTablePosition().getRow())).setCustomer(t.getNewValue());
+                }
+        );
+
+        businessName.setCellFactory(TextFieldTableCell.<Order, Customer>forTableColumn(
+                new StringConverter<Customer>() {
+                    @Override
+                    public String toString(Customer value) {
+                        return value.getBusinessName();
+                    }
+                    @Override
+                    public Customer fromString(String businessName) {
+                        customer.setBusinessName(businessName);
+                        return customer;
+                    }
+                }));
+
+        businessName.setOnEditCommit(
+                (TableColumn.CellEditEvent<Order, Customer> t) -> {
+                    ((Order) t.getTableView().getItems().get(t.getTablePosition().getRow())).setCustomer(t.getNewValue());
+                }
+        );
+
+        email.setCellFactory(TextFieldTableCell.<Order, Customer>forTableColumn(
+                new StringConverter<Customer>() {
+                    @Override
+                    public String toString(Customer value) {
+                        return value.getEmail();
+                    }
+                    @Override
+                    public Customer fromString(String email) {
+                        customer.setEmail(email);
+                        return customer;
+                    }
+                }));
+
+        email.setOnEditCommit(
+                (TableColumn.CellEditEvent<Order, Customer> t) -> {
+                    ((Order) t.getTableView().getItems().get(t.getTablePosition().getRow())).setCustomer(t.getNewValue());
+                }
+        );
+// TODO: 13/04/2016 int
+        phoneNumber.setCellFactory(TextFieldTableCell.<Order, Customer>forTableColumn(
+                new StringConverter<Customer>() {
+                    @Override
+                    public String toString(Customer value) {
+                        return value.getFirstName();
+                    }
+                    @Override
+                    public Customer fromString(String firstName) {
+                        customer.setFirstName(firstName);
+                        return customer;
+                    }
+                }));
+
+        phoneNumber.setOnEditCommit(
+                (TableColumn.CellEditEvent<Order, Customer> t) -> {
+                    ((Order) t.getTableView().getItems().get(t.getTablePosition().getRow())).setCustomer(t.getNewValue());
+                }
+        );
+
+        address.setCellFactory(TextFieldTableCell.<Order, Customer>forTableColumn(
+                new StringConverter<Customer>() {
+                    @Override
+                    public String toString(Customer value) {
+                        return value.getAddress().getAddress();
+                    }
+                    @Override
+                    public Customer fromString(String address) {
+                        customer.getAddress().setAddress(address);
+                        return customer;
+                    }
+                }));
+
+        address.setOnEditCommit(
+                (TableColumn.CellEditEvent<Order, Customer> t) -> {
+                    ((Order) t.getTableView().getItems().get(t.getTablePosition().getRow())).setCustomer(t.getNewValue());
+                }
+        );
+
+        customerRequests.setCellFactory(TextFieldTableCell.<Order>forTableColumn());
+        customerRequests.setOnEditCommit(
+                (TableColumn.CellEditEvent<Order, String> t) -> {
+                    ((Order) t.getTableView().getItems().get(t.getTablePosition().getRow())).setCustomerRequests(t.getNewValue());
                 }
         );
 
@@ -212,6 +343,7 @@ public class ControllerSalesEdit implements Initializable{
                 }
             };
         });*/
+        /*
         columns.get(4).setCellFactory(column -> {
             return new TableCell<Order, Customer>() {
                 @Override
@@ -223,7 +355,8 @@ public class ControllerSalesEdit implements Initializable{
                     }
                 }
             };
-        });
+        });*/
+        /*
         columns.get(5).setCellFactory(column -> {
             return new TableCell<Order, Customer>() {
                 @Override
@@ -235,7 +368,8 @@ public class ControllerSalesEdit implements Initializable{
                     }
                 }
             };
-        });
+        });*/
+        /*
         columns.get(6).setCellFactory(column -> {
             return new TableCell<Order, Customer>() {
                 @Override
@@ -247,7 +381,8 @@ public class ControllerSalesEdit implements Initializable{
                     }
                 }
             };
-        });
+        });*/
+        /*
         columns.get(7).setCellFactory(column -> {
             return new TableCell<Order, Customer>() {
                 @Override
@@ -259,7 +394,8 @@ public class ControllerSalesEdit implements Initializable{
                     }
                 }
             };
-        });
+        });*/
+        /*
         columns.get(11).setCellFactory(column -> {
             return new TableCell<Order, Customer>() {
                 @Override
@@ -271,7 +407,7 @@ public class ControllerSalesEdit implements Initializable{
                     }
                 }
             };
-        });
+        });*/
         createOrderButton.setOnAction(createOrderEvent);
         deleteOrderButton.setOnAction(deleteOrderEvent);
         ordersTable.setItems(order);
