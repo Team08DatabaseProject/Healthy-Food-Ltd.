@@ -8,10 +8,14 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.util.StringConverter;
+import javafx.util.converter.DoubleStringConverter;
+import javafx.util.converter.IntegerStringConverter;
 
 import java.net.URL;
 import java.time.LocalDate;
@@ -136,17 +140,100 @@ public class ControllerSalesEdit implements Initializable{
         columns.get(11).setCellValueFactory(new PropertyValueFactory<Order,Customer>("address")); //address
         columns.get(12).setCellValueFactory(new PropertyValueFactory<Order,String>("status"));
 
-        orderId.setCellFactory(TextFieldTableCell.<Order>forTableColumn());
+        orderId.setCellFactory(TextFieldTableCell.<Order, Integer>forTableColumn(new IntegerStringConverter()));
         orderId.setOnEditCommit(
                 (TableColumn.CellEditEvent<Order, Integer> t) -> {
                     ((Order) t.getTableView().getItems().get(t.getTablePosition().getRow())).setOrderId(t.getNewValue());
                 }
         );
+/*
+        fname.setCellFactory(TextFieldTableCell.<Order, Customer>forTableColumn(new StringConverter<Customer>() {
+        }));
+        fname.setOnEditCommit(
+                (TableColumn.CellEditEvent<Order, Customer> t) -> {
+                    Customer customer = t.getTableView().getItems().get(t.getTablePosition().getRow();
+                    customer.setFirstName(t.getNewValue().getFirstName());
+                    ((Order) t.getTableView().getItems().get(t.getTablePosition().getRow())).setCustomer(customer));
+                }
+        );
+
+        lname.setCellFactory(TextFieldTableCell.<Order, Customer>forTableColumn(new StringConverter<Customer>() {
+        }));
+        lname.setOnEditCommit(
+                (TableColumn.CellEditEvent<Order, Customer> t) -> {
+                    Customer customer = t.getTableView().getItems().get(t.getTablePosition().getRow();
+                    customer.setFirstName(t.getNewValue().getFirstName());
+                    ((Order) t.getTableView().getItems().get(t.getTablePosition().getRow())).setCustomer(customer));
+                }
+        );
+
+        businessName.setCellFactory(TextFieldTableCell.<Order, Customer>forTableColumn(new StringConverter<Customer>() {
+        }));
+        businessName.setOnEditCommit(
+                (TableColumn.CellEditEvent<Order, Customer> t) -> {
+                    Customer customer = t.getTableView().getItems().get(t.getTablePosition().getRow();
+                    customer.setFirstName(t.getNewValue().getFirstName());
+                    ((Order) t.getTableView().getItems().get(t.getTablePosition().getRow())).setCustomer(customer));
+                }
+        );
+
+        email.setCellFactory(TextFieldTableCell.<Order, Customer>forTableColumn(new StringConverter<Customer>() {
+        }));
+        email.setOnEditCommit(
+                (TableColumn.CellEditEvent<Order, Customer> t) -> {
+                    Customer customer = t.getTableView().getItems().get(t.getTablePosition().getRow();
+                    customer.setFirstName(t.getNewValue().getFirstName());
+                    ((Order) t.getTableView().getItems().get(t.getTablePosition().getRow())).setCustomer(customer));
+                }
+        );
+
+        phoneNumber.setCellFactory(TextFieldTableCell.<Order, Customer>forTableColumn(new StringConverter<Customer>() {
+        }));
+        phoneNumber.setOnEditCommit(
+                (TableColumn.CellEditEvent<Order, Customer> t) -> {
+                    Customer customer = t.getTableView().getItems().get(t.getTablePosition().getRow();
+                    customer.setFirstName(t.getNewValue().getFirstName());
+                    ((Order) t.getTableView().getItems().get(t.getTablePosition().getRow())).setCustomer(customer));
+                }
+        );
+
+        deadline.setCellFactory(TextFieldTableCell.<Order, Double>forTableColumn(new DoubleStringConverter() {
+        }));
+        deadline.setOnEditCommit(
+                (TableColumn.CellEditEvent<Order, LocalDate> t) -> {
+                    ((Order) t.getTableView().getItems().get(t.getTablePosition().getRow())).getDeadline(t.getNewValue()));
+                }
+        );*/
+
+        price.setCellFactory(TextFieldTableCell.<Order, Double>forTableColumn(new DoubleStringConverter()));
+        price.setOnEditCommit(
+                (TableColumn.CellEditEvent<Order, Double> t) -> {
+                    ((Order) t.getTableView().getItems().get(t.getTablePosition().getRow())).setPrice(t.getNewValue());
+                }
+        );
+/*
+        address.setCellFactory(TextFieldTableCell.<Order, Customer>forTableColumn());
+        address.setOnEditCommit(
+                (TableColumn.CellEditEvent<Order, Customer> t) -> {
+                    ((Order) t.getTableView().getItems().get(t.getTablePosition().getRow())).setCustomer(t.getNewValue());
+                }
+        );*/
 
         customerRequests.setCellFactory(TextFieldTableCell.<Order>forTableColumn());
         customerRequests.setOnEditCommit(
                 (TableColumn.CellEditEvent<Order, String> t) -> {
                     ((Order) t.getTableView().getItems().get(t.getTablePosition().getRow())).setCustomerRequests(t.getNewValue());
+                }
+        );
+
+        ObservableList<String> statusComboBoxValues = FXCollections.observableArrayList(
+                "Created", "In preparation", "Ready for delivery", "Under delivery", "Delivered"
+        );
+
+        status.setCellFactory(ComboBoxTableCell.forTableColumn(statusComboBoxValues));
+        status.setOnEditCommit(
+                (TableColumn.CellEditEvent<Order, String> t) -> {
+                    ((Order) t.getTableView().getItems().get(t.getTablePosition().getRow())).setStatus(t.getNewValue());
                 }
         );
 
