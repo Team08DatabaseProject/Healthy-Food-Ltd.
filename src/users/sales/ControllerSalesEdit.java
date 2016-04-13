@@ -185,18 +185,29 @@ public class ControllerSalesEdit implements Initializable{
                 }
         );
 
-        fname.setCellFactory(TextFieldTableCell.<Order, Customer>forTableColumn(
-                new StringConverter<Customer>() {
-                    @Override
-                    public String toString(Customer value) {
-                        return value.getFirstName();
-                    }
-                    @Override
-                    public Customer fromString(String firstName) {
-                        customer.setFirstName(firstName);
+
+        fname.setCellFactory(lv -> {
+            TextFieldTableCell<Order, Customer> cell = new TextFieldTableCell();
+            StringConverter<Customer> converter = new StringConverter<Customer>() {
+                @Override
+                public String toString(Customer customer) {
+                    return customer.getFirstName();
+                }
+
+                @Override
+                public Customer fromString(String name) {
+                    Customer customer = cell.getItem();
+                    if (customer == null) {
+                        return null;
+                    } else {
+                        customer.setFirstName(name);
                         return customer;
                     }
-                }));
+                }
+            };
+            cell.setConverter(converter);
+            return cell;
+        });
 
         fname.setOnEditCommit(
                 (TableColumn.CellEditEvent<Order, Customer> t) -> {
@@ -204,18 +215,28 @@ public class ControllerSalesEdit implements Initializable{
                 }
         );
 
-        lname.setCellFactory(TextFieldTableCell.<Order, Customer>forTableColumn(
-                new StringConverter<Customer>() {
-                    @Override
-                    public String toString(Customer value) {
-                        return value.getLastName();
-                    }
-                    @Override
-                    public Customer fromString(String lastName) {
-                        customer.setLastName(lastName);
+        lname.setCellFactory(lv -> {
+            TextFieldTableCell<Order, Customer> cell = new TextFieldTableCell();
+            StringConverter<Customer> converter = new StringConverter<Customer>() {
+                @Override
+                public String toString(Customer customer) {
+                    return customer.getLastName();
+                }
+
+                @Override
+                public Customer fromString(String name) {
+                    Customer customer = cell.getItem();
+                    if (customer == null) {
+                        return null;
+                    } else {
+                        customer.setLastName(name);
                         return customer;
                     }
-                }));
+                }
+            };
+            cell.setConverter(converter);
+            return cell;
+        });
 
         lname.setOnEditCommit(
                 (TableColumn.CellEditEvent<Order, Customer> t) -> {
