@@ -28,7 +28,7 @@ CREATE TABLE `address` (
   `address_id` int(11) NOT NULL AUTO_INCREMENT,
   `address` varchar(255) DEFAULT NULL,
   `zipcode` int(11) DEFAULT NULL,
-  `place` varchar(255) NOT NULL
+  `place` varchar(255) NOT NULL,
   PRIMARY KEY (`address_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1  AUTO_INCREMENT=3 ;
 

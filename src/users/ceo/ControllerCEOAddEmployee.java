@@ -106,10 +106,10 @@ public class ControllerCEOAddEmployee extends ControllerCEOEmployees implements 
 												String oldValue, String newValue) {
 			if(zipCodeField.validate(false, attemptedValidation)) {
 				int zipCode = Integer.parseInt(newValue);
-				/*ZipCode zip = db.getZipcodeByZipInt(zipCode);
+				ZipCode zip = db.getZipcodeByZipInt(zipCode);
 				if(zip != null && placeField.getText().length() == 0) {
 						placeField.setText(zip.getPlace());
-				}*/
+				}
 			}
 		}
 	};
@@ -183,7 +183,8 @@ public class ControllerCEOAddEmployee extends ControllerCEOEmployees implements 
 					selectedEmployee.seteMail(emailField.getText());
 					selectedEmployee.setUsername(usernameField.getText());
 					selectedEmployee.setSalary(salaryField.getDouble());
-					Address addressObject = new Address(addressField.getText(), zipCodeField.getInt(), placeField.getText());
+					selectedEmployee.setPosition(selectedPosition);
+					Address addressObject = new Address(selectedEmployee.getAddress().getAddressId(), addressField.getText(), zipCodeField.getInt(), placeField.getText());
 					selectedEmployee.setAddress(addressObject);
 					db.updateEmployee(selectedEmployee);
 				}
@@ -206,9 +207,15 @@ public class ControllerCEOAddEmployee extends ControllerCEOEmployees implements 
 		if(validFields) {
 			Employee testEmployee = db.getEmployeeByUsername(usernameField.getText());
 			if(testEmployee != null) {
-				usernameFieldErrorMsg.setText("Username is already taken.");
-				usernameFieldErrorMsg.setVisible(true);
-				return false;
+				if(employeeFormUpdate && testEmployee.getEmployeeId() != selectedEmployee.getEmployeeId()) {
+					usernameFieldErrorMsg.setText("Username is already taken.");
+					usernameFieldErrorMsg.setVisible(true);
+					return false;
+				} else if(!employeeFormUpdate) {
+					usernameFieldErrorMsg.setText("Username is already taken.");
+					usernameFieldErrorMsg.setVisible(true);
+					return false;
+				}
 			}
 		}
 		return validFields;

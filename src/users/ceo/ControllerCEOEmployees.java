@@ -114,7 +114,7 @@ public class ControllerCEOEmployees extends ControllerCEO  implements Initializa
 					if(item == null || empty) {
 						setText(null);
 					} else {
-						setText(item.getAddress() + "\n" + item.getZipCode().getZipCode() + " " + item.getZipCode().getPlace());
+						setText(item.getAddress() + "\n" + item.getZipCode() + " " + item.getPlace());
 					}
 				}
 			};
