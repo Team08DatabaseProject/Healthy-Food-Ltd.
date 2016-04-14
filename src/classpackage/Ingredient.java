@@ -6,31 +6,69 @@ package classpackage;
 
 public class Ingredient {
     private int ingredientId;
-    private final String ingName;
+    private final String description;
     private final String unit;
     private double quantityOwned;
     private double price;
     private int supplierId;
+    private Supplier supplier;
 
+
+    // TODO: 10.04.2016 Delete the first two constructors, only temporary because of other written classes
     // To database
-    public Ingredient(String ingName, String unit, double quantityOwned, double price, int supplierId) {
-        this.ingName = ingName;
+    public Ingredient(String description, String unit, double quantityOwned, double price, int supplierId) {
+        this.description = description;
         this.unit = unit;
         this.quantityOwned = quantityOwned;
         this.price = price;
         this.supplierId = supplierId;
     }
     // From database
-    public Ingredient(int ingredientId,String ingName, String unit, double quantityOwned, double price, int supplierId) {
+    public Ingredient(int ingredientId, String description, String unit, double quantityOwned, double price, int supplierId) {
         this.ingredientId = ingredientId;
-        this.ingName = ingName;
+        this.description = description;
         this.unit = unit;
         this.quantityOwned = quantityOwned;
         this.price = price;
         this.supplierId = supplierId;
     }
-    public String getIngName() {
-        return ingName;
+
+//    Constructors to be used under here:
+    public Ingredient(String description, String unit, double quantityOwned, double price, Supplier supplier) {
+        this.description = description;
+        this.unit = unit;
+        this.quantityOwned = quantityOwned;
+        this.price = price;
+        this.supplier = supplier;
+    }
+    // From database
+    public Ingredient(int ingredientId, String description, String unit, double quantityOwned, double price, Supplier supplier) {
+        this.ingredientId = ingredientId;
+        this.description = description;
+        this.unit = unit;
+        this.quantityOwned = quantityOwned;
+        this.price = price;
+        this.supplier = supplier;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    public String getDescription() {
+        return description;
     }
 
     public String getUnit() {
@@ -59,5 +97,26 @@ public class Ingredient {
 
     public void setIngredientId(int ingredientId) {
         this.ingredientId = ingredientId;
+    }
+
+    public Supplier getSupplier() {
+        return supplier;
+    }
+
+    public void setSupplier(Supplier supplier) {
+        this.supplier = supplier;
+    }
+
+    @Override
+    public String toString() {
+        return "Ingredient{" +
+                "ingredientId=" + ingredientId +
+                ", description='" + description + '\'' +
+                ", unit='" + unit + '\'' +
+                ", quantityOwned=" + quantityOwned +
+                ", price=" + price +
+                ", supplierId=" + supplierId +
+                ", supplier=" + supplier +
+                '}';
     }
 }

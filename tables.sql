@@ -197,7 +197,7 @@ INSERT INTO `ingredient` (`ingredient_id`, `quantity_owned`, `quantity_reserved`
 -- Tabellstruktur for tabell `ingredient_in_dish`
 --
 
-DROP TABLE IF EXISTS `ingredient_in_dish`;
+DROP TABLE IF EXISTS dish_line;
 CREATE TABLE `ingredient_in_dish` (
   `ingredient_id` int(11) NOT NULL DEFAULT '0',
   `dish_id` int(11) NOT NULL DEFAULT '0',
@@ -210,7 +210,7 @@ CREATE TABLE `ingredient_in_dish` (
 -- Dataark for tabell `ingredient_in_dish`
 --
 
-INSERT INTO `ingredient_in_dish` (`ingredient_id`, `dish_id`, `quantity`) VALUES
+INSERT INTO dish_line (`ingredient_id`, `dish_id`, `quantity`) VALUES
   (1, 1, 1),
   (2, 2, 1);
 
@@ -241,7 +241,7 @@ INSERT INTO `menu` (`menu_id`, `description`, `type_meal`) VALUES
 -- Tabellstruktur for tabell `menu_relation_dish`
 --
 
-DROP TABLE IF EXISTS `menu_relation_dish`;
+DROP TABLE IF EXISTS menu_line;
 CREATE TABLE `menu_relation_dish` (
   `dish_id` int(11) NOT NULL DEFAULT '0',
   `menu_id` int(11) NOT NULL DEFAULT '0',
@@ -254,7 +254,7 @@ CREATE TABLE `menu_relation_dish` (
 -- Dataark for tabell `menu_relation_dish`
 --
 
-INSERT INTO `menu_relation_dish` (`dish_id`, `menu_id`, `quantity`) VALUES
+INSERT INTO menu_line (`dish_id`, `menu_id`, `quantity`) VALUES
   (1, 1, 1);
 
 -- --------------------------------------------------------
@@ -400,14 +400,14 @@ ADD CONSTRAINT `ingredient_ibfk_1` FOREIGN KEY (`supplier_id`) REFERENCES `suppl
 --
 -- Begrensninger for tabell `ingredient_in_dish`
 --
-ALTER TABLE `ingredient_in_dish`
+ALTER TABLE dish_line
 ADD CONSTRAINT `ingredient_in_dish_ibfk_1` FOREIGN KEY (`ingredient_id`) REFERENCES `ingredient` (`ingredient_id`),
 ADD CONSTRAINT `ingredient_in_dish_ibfk_2` FOREIGN KEY (`dish_id`) REFERENCES `dish` (`dish_id`);
 
 --
 -- Begrensninger for tabell `menu_relation_dish`
 --
-ALTER TABLE `menu_relation_dish`
+ALTER TABLE menu_line
 ADD CONSTRAINT `menu_relation_dish_ibfk_1` FOREIGN KEY (`dish_id`) REFERENCES `dish` (`dish_id`),
 ADD CONSTRAINT `menu_relation_dish_ibfk_2` FOREIGN KEY (`menu_id`) REFERENCES `menu` (`menu_id`);
 

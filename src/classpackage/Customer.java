@@ -1,5 +1,6 @@
 package classpackage;
 
+import javafx.beans.property.*;
 import javafx.collections.ObservableList;
 
 /**
@@ -17,9 +18,47 @@ public class Customer {
     private String businessName = "";
     private Subscription subscription;
 
+
+
+   /* private IntegerProperty customerId = new SimpleIntegerProperty();
+    private BooleanProperty isBusiness = new SimpleBooleanProperty();
+    // desides if its a business client or not, set as a tinyInt (0 = false, 1 = true) has to be converted in fetching from database
+    private StringProperty email = new SimpleStringProperty();
+    private StringProperty firstName = new SimpleStringProperty();
+    private StringProperty lastName = new SimpleStringProperty();
+    private IntegerProperty phoneNumber = new SimpleIntegerProperty();
+    private Address address;
+    private StringProperty businessName = new SimpleStringProperty();
+    private Subscription subscription;
+
     // Fra database
     public Customer(int customerId, boolean isBusiness, String email, String firstName, String lastName,
                     int phoneNumber, String businessName) {
+        this.customerId.set(customerId);
+        this.isBusiness.set(isBusiness);
+        this.email.set(email);
+        this.firstName.set(firstName);
+        this.lastName.set(lastName);
+        this.phoneNumber.set(phoneNumber);
+        this.businessName.set(businessName);
+    }
+
+    // To database
+    public Customer(boolean isBusiness, String email, String firstName, String lastName, int phoneNumber,
+                    Address address, String businessName, Subscription subscription) {
+        this.isBusiness.set(isBusiness);
+        this.email.set( email);
+        this.firstName.set(firstName);
+        this.lastName.set(lastName);
+        this.phoneNumber.set(phoneNumber);
+        this.address = address;
+        this.businessName.set(businessName);
+        this.subscription = subscription;
+    }*/
+
+ // Fra database
+    public Customer(int customerId, boolean isBusiness, String email, String firstName, String lastName,
+                    int phoneNumber, String businessName, Address address) {
         this.customerId = customerId;
         this.isBusiness = isBusiness;
         this.email = email;
@@ -27,6 +66,7 @@ public class Customer {
         this.lastName = lastName;
         this.phoneNumber = phoneNumber;
         this.businessName = businessName;
+        this.address = address;
     }
 
     // To database
@@ -112,5 +152,14 @@ public class Customer {
 
     public void setSubscription(Subscription subscription) {
         this.subscription = subscription;
+    }
+
+    @Override
+    public String toString() {
+        return "Customer{" +
+                "businessName='" + businessName + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                '}' + "\tAddress: " + address.toString();
     }
 }
