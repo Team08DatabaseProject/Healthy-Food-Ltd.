@@ -21,7 +21,7 @@ public class ZipCodeField extends IntField {
 			if(canBeEmpty) {
 				valid = true;
 			} else {
-				error = "Required field.";
+				error = "Mandatory field.";
 			}
 		} else if(getText().matches("\\d{4}")) {
 			valid = true;

@@ -6,17 +6,20 @@ package classpackage;
 public class Address {
     private int addressId;
     private String address;
-    private ZipCode zipCode;
+    private int zipCode;
+    private String place;
 
-    public Address(int addressId, String address, ZipCode zipCode) {
+    public Address(int addressId, String address, int zipCode, String place) {
         this.addressId = addressId;
         this.address = address;
         this.zipCode = zipCode;
+        this.place = place;
     }
 
-    public Address(String address, ZipCode zipCode) {
+    public Address(String address, int zipCode, String place) {
         this.address = address;
         this.zipCode = zipCode;
+        this.place = place;
     }
 
     public int getAddressId() {
@@ -35,11 +38,19 @@ public class Address {
         this.address = address;
     }
 
-    public ZipCode getZipCode() {
+    public int getZipCode() {
         return zipCode;
     }
 
-    public void setZipCode(ZipCode zipCode) {
+    public void setZipCode(int zipCode) {
         this.zipCode = zipCode;
+    }
+
+    public String getPlace() {
+        return place;
+    }
+
+    public void setPlace(String place) {
+        this.place = place;
     }
 }

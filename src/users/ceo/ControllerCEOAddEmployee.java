@@ -159,8 +159,7 @@ public class ControllerCEOAddEmployee extends ControllerCEOEmployees implements 
 	              String username = usernameField.getText();
 	              double salary = salaryField.getDouble();
 	              String passHash = generatePassword(8);
-	              ZipCode zipCodeObject = new ZipCode(zipCode, place);
-	              Address addressObject = new Address(address, zipCodeObject);
+	              Address addressObject = new Address(address, zipCode, place);
 	              Employee newEmp = new Employee(username, firstName, lastName, phoneNo, eMail, salary, passHash, addressObject, selectedPosition);
 	              db.addEmployee(newEmp);
               }
@@ -184,10 +183,9 @@ public class ControllerCEOAddEmployee extends ControllerCEOEmployees implements 
 					selectedEmployee.seteMail(emailField.getText());
 					selectedEmployee.setUsername(usernameField.getText());
 					selectedEmployee.setSalary(salaryField.getDouble());
-					ZipCode zipCodeObject = new ZipCode(zipCodeField.getInt(), placeField.getText());
-					Address addressObject = new Address(addressField.getText(), zipCodeObject);
+					Address addressObject = new Address(addressField.getText(), zipCodeField.getInt(), placeField.getText());
 					selectedEmployee.setAddress(addressObject);
-					//db.updateEmployee(selectedEmployee);
+					db.updateEmployee(selectedEmployee);
 				}
 			} catch (Exception exc) {
 				System.out.println(exc);
@@ -205,14 +203,14 @@ public class ControllerCEOAddEmployee extends ControllerCEOEmployees implements 
 		validFields &= placeField.validate(mandatoryRule, attemptedValidation);
 		validFields &= usernameField.validate(nameRules, attemptedValidation);
 		validFields &= salaryField.validate(false, attemptedValidation);
-		/*if(validFields) {
+		if(validFields) {
 			Employee testEmployee = db.getEmployeeByUsername(usernameField.getText());
 			if(testEmployee != null) {
 				usernameFieldErrorMsg.setText("Username is already taken.");
 				usernameFieldErrorMsg.setVisible(true);
 				return false;
 			}
-		}*/
+		}
 		return validFields;
 	}
 
@@ -245,7 +243,7 @@ public class ControllerCEOAddEmployee extends ControllerCEOEmployees implements 
 	    phoneField.setInt(selectedEmployee.getPhoneNo());
 	    emailField.setText(selectedEmployee.geteMail());
 			addressField.setText(selectedEmployee.getAddress().getAddress());
-	    zipCodeField.setInt(selectedEmployee.getAddress().getZipCode().getZipCode());
+	    zipCodeField.setInt(selectedEmployee.getAddress().getZipCode());
 	    usernameField.setText(selectedEmployee.getUsername());
 	    salaryField.setDouble(selectedEmployee.getSalary());
 	    employeeSubmitButton.setText("Update employee");

@@ -28,8 +28,8 @@ CREATE TABLE `address` (
   `address_id` int(11) NOT NULL AUTO_INCREMENT,
   `address` varchar(255) DEFAULT NULL,
   `zipcode` int(11) DEFAULT NULL,
-  PRIMARY KEY (`address_id`),
-  KEY `zipcode` (`zipcode`)
+  `place` varchar(255) NOT NULL
+  PRIMARY KEY (`address_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1  AUTO_INCREMENT=3 ;
 
 --
@@ -371,12 +371,6 @@ INSERT INTO `zipcode` (`place`, `zipcode`) VALUES
 --
 -- Begrensninger for dumpede tabeller
 --
-
---
--- Begrensninger for tabell `address`
---
-ALTER TABLE `address`
-ADD CONSTRAINT `address_ibfk_1` FOREIGN KEY (`zipcode`) REFERENCES `zipcode` (`zipcode`);
 
 --
 -- Begrensninger for tabell `customer`
