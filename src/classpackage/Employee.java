@@ -17,8 +17,8 @@ public class Employee {
     private StringProperty eMail = new SimpleStringProperty();
     private DoubleProperty salary = new SimpleDoubleProperty();
     private StringProperty passHash = new SimpleStringProperty();
-    private Address address;
-    private EmployeePosition position;
+    private ObjectProperty<Address> address = new SimpleObjectProperty<>();
+    private ObjectProperty<EmployeePosition> position = new SimpleObjectProperty<>();
     private static final int ADMIN = 0;
     private static final int CEO = 1;
     private static final int CHEF = 2;
@@ -37,8 +37,8 @@ public class Employee {
         this.eMail.set(eMail);
         this.salary.set(salary);
         this.passHash.set(passHash);
-        this.address = address;
-        this.position = position;
+        this.address.set(address);
+        this.position.set(position);
         /* Kall til EncryptionService her for å generere passHash (og kanskje salt) */
         // Thomas: If a new employee is being created (i dont meant he object.. i mean a real new one to be added to the DB), the method to encrypt the password should called before and only the hash should be passed to the object.
         //passHash = "encryption-ting her";
@@ -54,8 +54,8 @@ public class Employee {
         this.eMail.set(eMail);
         this.salary.set(salary);
         this.passHash.set(passHash);
-        this.address = address;
-        this.position = position;
+        this.address.set(address);
+        this.position.set(position);
         /* Kall til EncryptionService her for å generere passHash (og kanskje salt) */
         // Thomas: If a new employee is being created (i dont meant he object.. i mean a real new one to be added to the DB), the method to encrypt the password should called before and only the hash should be passed to the object.
         //passHash = "encryption-ting her";
@@ -166,37 +166,45 @@ public class Employee {
     }
 
     public Address getAddress() {
+        return address.get();
+    }
+
+    public ObjectProperty<Address> addressProperty() {
         return address;
     }
 
     public void setAddress(Address address) {
-        this.address = address;
+        this.address.set(address);
     }
 
     public EmployeePosition getPosition() {
+        return position.get();
+    }
+
+    public ObjectProperty<EmployeePosition> positionProperty() {
         return position;
     }
 
     public void setPosition(EmployeePosition position) {
-        this.position = position;
+        this.position.set(position);
     }
 
     public boolean isAdmin(){
-        return (position.getId() == ADMIN);}
+        return (position.get().getId() == ADMIN);}
     public boolean isCEO() {
-        return (position.getId() == CEO);
+        return (position.get().getId() == CEO);
     }
     public boolean isChef() {
-        return (position.getId() == CHEF);
+        return (position.get().getId() == CHEF);
     }
     public boolean isDriver() {
-        return (position.getId() == DRIVER);
+        return (position.get().getId() == DRIVER);
     }
     public boolean isSales() {
-        return (position.getId() == SALES);
+        return (position.get().getId() == SALES);
     }
     public boolean isNutrition() {
-        return (position.getId() == NUTRITION);
+        return (position.get().getId() == NUTRITION);
     }
 
 
