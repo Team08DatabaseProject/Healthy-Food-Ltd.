@@ -1,5 +1,6 @@
 package classpackage;
 
+import javafx.beans.property.IntegerProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -9,31 +10,39 @@ import java.time.LocalDate;
  * Created by paul thomas on 17.03.2016.
  */
 public class Subscription {
-    private int subscriptionId;
+    private IntegerProperty subscriptionId;
     //LocalDate.of(2012, Month.DECEMBER, 12); // from values
     private LocalDate startSubscription;
     private LocalDate endSubscription;
-    private ObservableList<OrderLine> ordersOnThisSubscription = FXCollections.observableArrayList();
+    private ObservableList<Order> ordersOnThisSubscription = FXCollections.observableArrayList();
 
-
-    public Subscription(int subscriptionId, LocalDate startSubscription, LocalDate endSubscription, ObservableList ordersOnThisSubscription) {
-        this.subscriptionId = subscriptionId;
+    // From database
+    public Subscription(int subscriptionId, LocalDate startSubscription, LocalDate endSubscription,
+                        ObservableList ordersOnThisSubscription) {
+        this.subscriptionId.set(subscriptionId);
         this.startSubscription = startSubscription;
         this.endSubscription = endSubscription;
         this.ordersOnThisSubscription = ordersOnThisSubscription;
     }
-    public Subscription(LocalDate startSubscription, LocalDate endSubscription, ObservableList ordersOnThisSubscription) {
+
+    // To database
+    public Subscription(LocalDate startSubscription, LocalDate endSubscription,
+                        ObservableList ordersOnThisSubscription) {
         this.startSubscription = startSubscription;
         this.endSubscription = endSubscription;
         this.ordersOnThisSubscription = ordersOnThisSubscription;
     }
 
     public int getSubscriptionId() {
+        return subscriptionId.get();
+    }
+
+    public IntegerProperty subscriptionIdProperty() {
         return subscriptionId;
     }
 
     public void setSubscriptionId(int subscriptionId) {
-        this.subscriptionId = subscriptionId;
+        this.subscriptionId.set(subscriptionId);
     }
 
     public LocalDate getStartSubscription() {
@@ -52,11 +61,12 @@ public class Subscription {
         this.endSubscription = endSubscription;
     }
 
-    public ObservableList getOrdersOnThisSubscription() {
+    public ObservableList<Order> getOrdersOnThisSubscription() {
         return ordersOnThisSubscription;
     }
 
-    public void setOrdersOnThisSubscription(ObservableList ordersOnThisSubscription) {
+    public void setOrdersOnThisSubscription(ObservableList<Order> ordersOnThisSubscription) {
         this.ordersOnThisSubscription = ordersOnThisSubscription;
     }
+
 }
