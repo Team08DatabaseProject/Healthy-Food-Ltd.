@@ -147,7 +147,7 @@ INSERT INTO `employee` (`employee_id`, `first_name`, `last_name`, `phone`, `emai
 DROP TABLE IF EXISTS `employee_position`;
 CREATE TABLE `employee_position` (
   `pos_id` int(11) NOT NULL AUTO_INCREMENT,
-  `description` varchar(255) DEFAULT NULL,
+  `ingredientName` varchar(255) DEFAULT NULL,
   `default_salary` double NOT NULL,
   PRIMARY KEY (`pos_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=6 ;
@@ -156,7 +156,7 @@ CREATE TABLE `employee_position` (
 -- Dataark for tabell `employee_position`
 --
 
-INSERT INTO `employee_position` (`pos_id`, `description`, `default_salary`) VALUES
+INSERT INTO `employee_position` (`pos_id`, `ingredientName`, `default_salary`) VALUES
   (1, 'users.ceo', 800000),
   (2, 'users.chef', 700000),
   (3, 'users.driver', 400000),
@@ -177,7 +177,7 @@ CREATE TABLE `ingredient` (
   `unit` varchar(20) DEFAULT NULL,
   `price` double DEFAULT NULL,
   `supplier_id` int(11) DEFAULT NULL,
-  `description` varchar(255) DEFAULT NULL,
+  `ingredientName` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`ingredient_id`),
   KEY `supplier_id` (`supplier_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
@@ -186,7 +186,7 @@ CREATE TABLE `ingredient` (
 -- Dataark for tabell `ingredient`
 --
 
-INSERT INTO `ingredient` (`ingredient_id`, `quantity_owned`, `quantity_reserved`, `unit`, `price`, `supplier_id`, `description`) VALUES
+INSERT INTO `ingredient` (`ingredient_id`, `quantity_owned`, `quantity_reserved`, `unit`, `price`, `supplier_id`, `ingredientName`) VALUES
   (1, 200, 0, 'Kg', 35, 1, 'sugar'),
   (2, 300, 0, 'Kg', 353, 1, 'chocolate'),
   (3, 400, 0, 'Kg', 31, 1, 'flour');
@@ -223,7 +223,7 @@ INSERT INTO dish_line (`ingredient_id`, `dish_id`, `quantity`) VALUES
 DROP TABLE IF EXISTS `menu`;
 CREATE TABLE `menu` (
   `menu_id` int(11) NOT NULL AUTO_INCREMENT,
-  `description` varchar(100) DEFAULT NULL,
+  `ingredientName` varchar(100) DEFAULT NULL,
   `type_meal` varchar(70) DEFAULT NULL,
   PRIMARY KEY (`menu_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
@@ -232,7 +232,7 @@ CREATE TABLE `menu` (
 -- Dataark for tabell `menu`
 --
 
-INSERT INTO `menu` (`menu_id`, `description`, `type_meal`) VALUES
+INSERT INTO `menu` (`menu_id`, `ingredientName`, `type_meal`) VALUES
   (1, 'firstMenu', 'not vegan!');
 
 -- --------------------------------------------------------
