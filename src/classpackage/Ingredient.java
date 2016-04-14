@@ -1,89 +1,109 @@
 package classpackage;
 
+import javafx.beans.property.*;
+
 /** Created by Axel
  * 11.03.2016
  */
 
 public class Ingredient {
-    private int ingredientId;
-    private final String description;
-    private final String unit;
-    private double quantityOwned;
-    private double price;
-    private int supplierId;
+    private IntegerProperty ingredientId = new SimpleIntegerProperty();
+    private final StringProperty ingredientName =new SimpleStringProperty();
+    private final StringProperty unit = new SimpleStringProperty();
+    private DoubleProperty quantityOwned = new SimpleDoubleProperty();
+    private DoubleProperty price = new SimpleDoubleProperty();
+    private IntegerProperty supplierId = new SimpleIntegerProperty();
     private Supplier supplier;
 
-
-    // TODO: 10.04.2016 Delete the first two constructors, only temporary because of other written classes
-    // To database
-    public Ingredient(String description, String unit, double quantityOwned, double price, int supplierId) {
-        this.description = description;
-        this.unit = unit;
-        this.quantityOwned = quantityOwned;
-        this.price = price;
-        this.supplierId = supplierId;
-    }
-
     // From database
-    public Ingredient(int ingredientId, String description, String unit, double quantityOwned, double price, int supplierId) {
-        this.ingredientId = ingredientId;
-        this.description = description;
-        this.unit = unit;
-        this.quantityOwned = quantityOwned;
-        this.price = price;
-        this.supplierId = supplierId;
-    }
-
-    // Constructors to be used under here:
-    // From database
-    public Ingredient(int ingredientId, String description, String unit, double quantityOwned, double price, Supplier supplier) {
-        this.ingredientId = ingredientId;
-        this.description = description;
-        this.unit = unit;
-        this.quantityOwned = quantityOwned;
-        this.price = price;
+    public Ingredient(int ingredientId, String ingredientName, String unit, double quantityOwned, double price, Supplier supplier) {
+        this.ingredientId.set(ingredientId);
+        this.ingredientName.set(ingredientName);
+        this.unit.set(unit);
+        this.quantityOwned.set(quantityOwned);
+        this.price.set(price);
         this.supplier = supplier;
     }
 
     // to database
-    public Ingredient(String description, String unit, double quantityOwned, double price, Supplier supplier) {
-        this.description = description;
-        this.unit = unit;
-        this.quantityOwned = quantityOwned;
-        this.price = price;
+    public Ingredient(String ingredientName, String unit, double quantityOwned, double price, Supplier supplier) {
+        this.ingredientName.set(ingredientName);
+        this.unit.set(unit);
+        this.quantityOwned.set(quantityOwned);
+        this.price.set(price);
         this.supplier = supplier;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public String getUnit() {
-        return unit;
-    }
-
-    public double getQuantityOwned() {
-        return quantityOwned;
-    }
-
-    public double getPrice() {
-        return price;
-    }
-
-    public int getSupplierId() {
-        return supplierId;
-    }
-
-    public void setSupplierId(int supplierId) {
-        this.supplierId = supplierId;
-    }
-
     public int getIngredientId() {
+        return ingredientId.get();
+    }
+
+    public IntegerProperty ingredientIdProperty() {
         return ingredientId;
     }
 
     public void setIngredientId(int ingredientId) {
-        this.ingredientId = ingredientId;
+        this.ingredientId.set(ingredientId);
+    }
+
+    public String getIngredientName() {
+        return ingredientName.get();
+    }
+
+    public StringProperty ingredientNameProperty() {
+        return ingredientName;
+    }
+
+    public void setIngredientName(String ingredientName) {
+        this.ingredientName.set(ingredientName);
+    }
+
+    public String getUnit() {
+        return unit.get();
+    }
+
+    public StringProperty unitProperty() {
+        return unit;
+    }
+
+    public void setUnit(String unit) {
+        this.unit.set(unit);
+    }
+
+    public double getQuantityOwned() {
+        return quantityOwned.get();
+    }
+
+    public DoubleProperty quantityOwnedProperty() {
+        return quantityOwned;
+    }
+
+    public void setQuantityOwned(double quantityOwned) {
+        this.quantityOwned.set(quantityOwned);
+    }
+
+    public double getPrice() {
+        return price.get();
+    }
+
+    public DoubleProperty priceProperty() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price.set(price);
+    }
+
+    public int getSupplierId() {
+        return supplierId.get();
+    }
+
+    public IntegerProperty supplierIdProperty() {
+        return supplierId;
+    }
+
+    public void setSupplierId(int supplierId) {
+        this.supplierId.set(supplierId);
     }
 
     public Supplier getSupplier() {
@@ -98,7 +118,7 @@ public class Ingredient {
     public String toString() {
         return "Ingredient{" +
                 "ingredientId=" + ingredientId +
-                ", description='" + description + '\'' +
+                ", ingredientName='" + ingredientName + '\'' +
                 ", unit='" + unit + '\'' +
                 ", quantityOwned=" + quantityOwned +
                 ", price=" + price +
