@@ -9,7 +9,7 @@
 <!--> Table in submenu "Orders for Sales" </!-->
 
 <GridPane prefHeight="500" prefWidth="200.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8"
-          fx:controller="users.sales.ControllerSalesEdit" stylesheets="@/users/sales/SalesStyle.css">
+          fx:controller="users.sales.ControllerSalesOrders" stylesheets="@/users/sales/SalesStyle.css">
     <children>
         <BorderPane fx:id="rootPaneCreate">
             <center>

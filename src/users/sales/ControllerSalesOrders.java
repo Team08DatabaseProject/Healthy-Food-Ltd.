@@ -25,7 +25,7 @@ import java.util.ResourceBundle;
 /**
  * Created by Trym Todalshaug on 04/04/2016.
  */
-public class ControllerSalesEdit implements Initializable{
+public class ControllerSalesOrders implements Initializable{
 
     public Button createOrderButton; //Button for creating an order
     public Button deleteOrderButton; //Button for deleting an order

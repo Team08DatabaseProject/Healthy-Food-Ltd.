@@ -3,6 +3,7 @@ package users.sales;
 import classpackage.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -14,10 +15,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.BorderPane;
-
-import javafx.event.ActionEvent;
 import javafx.scene.layout.GridPane;
-import javafx.util.Callback;
 import javafx.util.StringConverter;
 
 import java.net.URL;
@@ -25,11 +23,10 @@ import java.time.LocalDate;
 import java.util.ResourceBundle;
 
 /**
- * Created by trymrt 28.03.2016
- * Controller for the Sales personnel
+ * Created by Trym Todalshaug on 14/04/2016.
  */
 
-public class ControllerSales implements Initializable {
+public class ControllerSalesSubs implements Initializable{
 
     /*
     ObservableList to get fetched  from database
@@ -54,19 +51,6 @@ public class ControllerSales implements Initializable {
     private SqlQueries query = new SqlQueries();
     //final ObservableList<Order> subsTest = query.getOrders(4);
 
-    EventHandler<ActionEvent> orderEvent = new EventHandler<ActionEvent>() {
-        @Override
-        public void handle(ActionEvent event) {
-            try {
-                FXMLLoader loader = new FXMLLoader();
-                loader.setLocation(getClass().getResource("OrdersTable.fxml"));
-                ordersTable = loader.load();
-                rootPaneSales.setCenter(ordersTable);
-            } catch (Exception e) {
-                System.out.println(e);
-            }
-        }
-    };
 
     EventHandler<ActionEvent> subsEvent = new EventHandler<ActionEvent>() {
         @Override
@@ -81,6 +65,7 @@ public class ControllerSales implements Initializable {
             }
         }
     };
+
 
     /*EventHandler<ActionEvent> subsEvent = new EventHandler<ActionEvent>() {
         @Override
@@ -170,9 +155,118 @@ public class ControllerSales implements Initializable {
 
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
 
+        subsTable.setEditable(true);
+        ObservableList<TableColumn> columns = subsTable.getColumns();
+        TableColumn<Customer, Subscription> subscriptionId = columns.get(0);
+        TableColumn<Customer, Subscription> startSub = columns.get(1);
+        TableColumn<Customer, Subscription> endSub = columns.get(2);
+        TableColumn<Customer, Integer> customerId = columns.get(3);
+        TableColumn<Customer, String> businessName = columns.get(4);
+        TableColumn<Customer, String> fname = columns.get(5);
+        TableColumn<Customer, String> lname = columns.get(6);
+        TableColumn<Customer, Address> address = columns.get(7);
+        TableColumn<Customer, String> email = columns.get(8);
+        TableColumn<Customer, Integer> phoneNumber = columns.get(9);
+
+        columns.get(0).setCellValueFactory(new PropertyValueFactory<Customer, Subscription>("subscriptionId"));
+        columns.get(1).setCellValueFactory(new PropertyValueFactory<Customer, Subscription>("startSubscription"));
+        columns.get(2).setCellValueFactory(new PropertyValueFactory<Customer, Subscription>("endSubscription"));
+        columns.get(3).setCellValueFactory(new PropertyValueFactory<Customer, Integer>("customerId"));
+        columns.get(4).setCellValueFactory(new PropertyValueFactory<Customer, String>("businessName"));
+        columns.get(5).setCellValueFactory(new PropertyValueFactory<Customer, String>("firstName"));
+        columns.get(6).setCellValueFactory(new PropertyValueFactory<Customer, String>("lastName"));
+        columns.get(7).setCellValueFactory(new PropertyValueFactory<Customer, Address>("address"));
+        columns.get(8).setCellValueFactory(new PropertyValueFactory<Customer, String>("email"));
+        columns.get(9).setCellValueFactory(new PropertyValueFactory<Customer, Integer>("phoneNumber"));
+
+        columns.get(0).setCellFactory(column -> {
+            return new TableCell<Customer, Subscription>() {
+                @Override
+                protected void updateItem(Subscription item, boolean empty) {
+                    if(item == null || empty) {
+                        setText(null);
+                    } else {
+                        setText(Integer.toString(item.getSubscriptionId()));
+                    }
+                }
+            };
+        });
+        /*startSub.setCellFactory(new Callback<TableColumn<Subscription, LocalDate>, TableCell<Subscription, LocalDate>>() {
+            @Override
+            public TableCell<Subscription, LocalDate> call(TableColumn<Subscription, LocalDate> param) {
+                DatePickerCellOrder datePick = new DatePickerCellOrder(subs);
+                return datePick;
+            }
+        });
+        columns.get(1).setCellFactory(column -> {
+            return new TableCell<Customer, Subscription>() {
+                @Override
+                protected void updateItem(Subscription item, boolean empty) {
+                    if(item == null || empty) {
+                        setText(null);
+                    } else {
+                        setText(Integer.toString(item.getStartSubscription()));
+                    }
+                }
+            };
+        });
+        columns.get(2).setCellFactory(column -> {
+            return new TableCell<Customer, Subscription>() {
+                @Override
+                protected void updateItem(Subscription item, boolean empty) {
+                    if(item == null || empty) {
+                        setText(null);
+                    } else {
+                        setText(item.getEndSubscription());
+                    }
+                }
+            };
+        });*/
+        columns.get(5).setCellFactory(column -> {
+            return new TableCell<Customer, Address>() {
+                @Override
+                protected void updateItem(Address item, boolean empty) {
+                    if(item == null || empty) {
+                        setText(null);
+                    } else {
+                        setText(item.getAddress());
+                    }
+                }
+            };
+        });
+
+        address.setCellFactory(lv -> {
+            TextFieldTableCell<Customer, Address> cell = new TextFieldTableCell();
+            StringConverter<Address> converter = new StringConverter<Address>() {
+                @Override
+                public String toString(Address address1) {
+                    return address1.getAddress();
+                }
+
+                @Override
+                public Address fromString(String addressString) {
+                    Address address1 = cell.getItem();
+                    if (address1 == null) {
+                        return null;
+                    } else {
+                        address1.setAddress(addressString);
+                        return address1;
+                    }
+                }
+            };
+            cell.setConverter(converter);
+            return cell;
+        });
+
+        address.setOnEditCommit(
+                (TableColumn.CellEditEvent<Customer, Address> t) -> {
+                    ((Customer) t.getTableView().getItems().get(t.getTablePosition().getRow())).setAddress(t.getNewValue());
+                }
+        );
+
         ordersButton.setOnAction(orderEvent);
         subsButton.setOnAction(subsEvent);
-        //subsTable.setItems(subs);
+        subsTable.setItems(subs);
 
     }
 }
