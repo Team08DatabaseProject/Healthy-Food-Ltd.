@@ -13,6 +13,7 @@ import javafx.scene.Scene;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -35,10 +36,14 @@ public class ControllerCEOEmployees extends ControllerCEO  implements Initializa
 
 	private ObservableList<Employee> employees;
 
+	protected static boolean employeeFormUpdate = false;
+	protected static Employee selectedEmployee;
+
 	private EventHandler<ActionEvent> addEmployeeForm = new EventHandler<ActionEvent>() {
 		@Override
 		public void handle(ActionEvent e) {
 			try {
+				employeeFormUpdate = false;
 				FXMLLoader loader = new FXMLLoader();
 				loader.setLocation(getClass().getResource("CEOEmployeeForm.fxml"));
 				GridPane addEmployeeTable = loader.load();
@@ -58,6 +63,28 @@ public class ControllerCEOEmployees extends ControllerCEO  implements Initializa
 		public void handle(ActionEvent e) {
 			employees = db.getEmployees();
 			employeesTable.setItems(employees);
+		}
+	};
+
+	private EventHandler<MouseEvent> updateEmployeeForm = new EventHandler<MouseEvent>() {
+		@Override
+		public void handle(MouseEvent event) {
+			if (event.isPrimaryButtonDown() && event.getClickCount() == 2) {
+				selectedEmployee = (Employee) employeesTable.getSelectionModel().getSelectedItem();
+				try {
+					employeeFormUpdate = true;
+					FXMLLoader loader = new FXMLLoader();
+					loader.setLocation(getClass().getResource("CEOEmployeeForm.fxml"));
+					GridPane addEmployeeTable = loader.load();
+					Scene formScene = new Scene(addEmployeeTable);
+					Stage formStage = new Stage();
+					formStage.setTitle("Update Employee");
+					formStage.setScene(formScene);
+					formStage.show();
+				} catch (Exception exc) {
+					System.out.println(exc);
+				}
+			}
 		}
 	};
 
@@ -119,6 +146,7 @@ public class ControllerCEOEmployees extends ControllerCEO  implements Initializa
 				}
 			};
 		});
+		employeesTable.setOnMousePressed(updateEmployeeForm);
 		employeesTable.setItems(employees);
 	}
 }

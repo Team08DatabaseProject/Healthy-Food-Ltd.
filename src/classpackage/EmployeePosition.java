@@ -1,7 +1,4 @@
 package classpackage;
-
-import java.util.Map;
-
 /**
  * Created by axelkvistad on 3/18/16.
  */
@@ -40,5 +37,9 @@ public class EmployeePosition {
 
 	public void setDefaultSalary(double defaultSalary) {
 		this.defaultSalary = defaultSalary;
+	}
+
+	public String toString() {
+		return id + ". " + description;
 	}
 }

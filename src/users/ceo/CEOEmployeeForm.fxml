@@ -11,58 +11,62 @@
 <!--> Textfields for registering new employee </!-->
 
 <?import div.*?>
-<GridPane fx:id="addEmployeeTable" hgap="10" vgap="10" prefHeight="500.0" prefWidth="300.0" BorderPane.alignment="CENTER"
+<GridPane fx:id="addEmployeeTable" hgap="10" vgap="10" prefHeight="500.0" prefWidth="400.0" BorderPane.alignment="CENTER"
           xmlns:fx="http://javafx.com/fxml" fx:controller="users.ceo.ControllerCEOAddEmployee">
     <padding><Insets top="40" right="25" bottom="25" left="25"/></padding>
 
     <Label text="First name:"
            GridPane.columnIndex="0" GridPane.rowIndex="1"/>
-    <TextField fx:id="fNameField"
+    <StringField fx:id="fNameField"
                GridPane.columnIndex="1" GridPane.rowIndex="1"/>
-
+    <Label fx:id="fNameFieldErrorMsg" GridPane.columnIndex="2" GridPane.rowIndex="1" visible="false" />
     <Label text="Last name:"
            GridPane.columnIndex="0" GridPane.rowIndex="2"/>
-    <TextField fx:id="lNameField"
+    <StringField fx:id="lNameField"
                GridPane.columnIndex="1" GridPane.rowIndex="2"/>
-
+    <Label fx:id="lNameFieldErrorMsg" GridPane.columnIndex="2" GridPane.rowIndex="2" visible="false" />
     <Label text="Phone:"
            GridPane.columnIndex="0" GridPane.rowIndex="3"/>
-    <TextField fx:id="phoneField"
+    <IntField fx:id="phoneField"
                GridPane.columnIndex="1" GridPane.rowIndex="3"/>
-
+    <Label fx:id="phoneFieldErrorMsg" GridPane.columnIndex="2" GridPane.rowIndex="3" visible="false" />
     <Label text="Email:"
            GridPane.columnIndex="0" GridPane.rowIndex="4"/>
-    <TextField fx:id="emailField"
+    <StringField fx:id="emailField"
                GridPane.columnIndex="1" GridPane.rowIndex="4"/>
-
+    <Label fx:id="emailFieldErrorMsg" GridPane.columnIndex="2" GridPane.rowIndex="4" visible="false" />
     <Label text="Address:"
            GridPane.columnIndex="0" GridPane.rowIndex="5"/>
-    <TextField fx:id="addressField"
+    <StringField fx:id="addressField"
                GridPane.columnIndex="1" GridPane.rowIndex="5"/>
-
+    <Label fx:id="addressFieldErrorMsg" GridPane.columnIndex="2" GridPane.rowIndex="5" visible="false" />
     <Label text="Zip code:"
            GridPane.columnIndex="0" GridPane.rowIndex="6"/>
     <ZipCodeField fx:id="zipCodeField"
               GridPane.columnIndex="1" GridPane.rowIndex="6"/>
-
+    <Label fx:id="zipCodeFieldErrorMsg" GridPane.columnIndex="2" GridPane.rowIndex="6" visible="false" />
     <Label text="Place:"
            GridPane.columnIndex="0" GridPane.rowIndex="7"/>
-    <TextField fx:id="placeField"
+    <StringField fx:id="placeField"
                GridPane.columnIndex="1" GridPane.rowIndex="7"/>
-
-    <Label text="Position id:"
+    <Label fx:id="placeFieldErrorMsg" GridPane.columnIndex="2" GridPane.rowIndex="7" visible="false" />
+    <Label text="Position:"
            GridPane.columnIndex="0" GridPane.rowIndex="8"/>
-    <TextField fx:id="posIdField"
+    <ComboBox fx:id="positionBox" editable="false"
                GridPane.columnIndex="1" GridPane.rowIndex="8"/>
-
     <Label text="Salary:"
            GridPane.columnIndex="0" GridPane.rowIndex="9"/>
-    <TextField fx:id="salaryField"
+    <DoubleField fx:id="salaryField"
                GridPane.columnIndex="1" GridPane.rowIndex="9"/>
-
+    <Label fx:id="salaryFieldErrorMsg" GridPane.columnIndex="2" GridPane.rowIndex="9" visible="false" />
+    <Label text="Username:"
+           GridPane.columnIndex="0" GridPane.rowIndex="10"/>
+    <StringField fx:id="usernameField"
+                 GridPane.columnIndex="1" GridPane.rowIndex="10"/>
+    <Label fx:id="usernameFieldErrorMsg" GridPane.columnIndex="2" GridPane.rowIndex="10" visible="false" />
     <HBox spacing="10" alignment="CENTER"
-          GridPane.columnIndex="0" GridPane.rowIndex="10" GridPane.columnSpan="2">
-        <Button styleClass="SmallButton" fx:id="addEmployeeButton" text="Add employee"/>
+          GridPane.columnIndex="0" GridPane.rowIndex="11" GridPane.columnSpan="2">
+        <Button styleClass="SmallButton" fx:id="employeeSubmitButton" text=""/>
     </HBox>
 
 </GridPane>

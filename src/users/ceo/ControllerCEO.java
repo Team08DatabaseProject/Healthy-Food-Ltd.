@@ -25,7 +25,7 @@ public class ControllerCEO implements Initializable {
     //public TableView tables2; // Retrieves TableView with fx:id="tables2"
     public Button employeesButton;
     public BorderPane rootPaneDriver;
-    protected SqlQueries db = new SqlQueries();
+    protected static SqlQueries db = new SqlQueries();
 
     private final int EMPLOYEES = 1;
     private int currentView;
