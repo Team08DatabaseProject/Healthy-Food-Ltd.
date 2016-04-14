@@ -16,12 +16,12 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.TableCell;
 import javafx.util.converter.LocalDateStringConverter;
 
-public class DatePickerCell<S, T> extends TableCell<Order, LocalDate> {
+public class DatePickerCellOrder<S, T> extends TableCell<Order, LocalDate> {
 
     private DatePicker datePicker;
     private ObservableList<Order> orderData;
 
-    public DatePickerCell(ObservableList<Order> listOrders) {
+    public DatePickerCellOrder(ObservableList<Order> listOrders) {
 
         super();
 

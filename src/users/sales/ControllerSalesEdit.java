@@ -1,14 +1,12 @@
 package users.sales;
 
 import classpackage.*;
-import com.sun.javafx.scene.control.behavior.DatePickerBehavior;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.SubScene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -17,11 +15,8 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
-import javafx.util.converter.DefaultStringConverter;
 import javafx.util.converter.DoubleStringConverter;
 import javafx.util.converter.IntegerStringConverter;
-import javafx.util.converter.LocalDateStringConverter;
-import users.sales.DatePickerCell;
 
 import java.net.URL;
 import java.time.LocalDate;
@@ -150,7 +145,7 @@ public class ControllerSalesEdit implements Initializable{
         deadline.setCellFactory(new Callback<TableColumn<Order, LocalDate>, TableCell<Order, LocalDate>>() {
             @Override
             public TableCell<Order, LocalDate> call(TableColumn<Order, LocalDate> param) {
-                DatePickerCell datePick = new DatePickerCell(order);
+                DatePickerCellOrder datePick = new DatePickerCellOrder(order);
                 return datePick;
             }
         });

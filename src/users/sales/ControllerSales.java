@@ -207,7 +207,7 @@ public class ControllerSales implements Initializable {
         startSub.setCellFactory(new Callback<TableColumn<Subscription, LocalDate>, TableCell<Subscription, LocalDate>>() {
             @Override
             public TableCell<Subscription, LocalDate> call(TableColumn<Subscription, LocalDate> param) {
-                DatePickerCell datePick = new DatePickerCell(subs);
+                DatePickerCellOrder datePick = new DatePickerCellOrder(subs);
                 return datePick;
             }
         });
