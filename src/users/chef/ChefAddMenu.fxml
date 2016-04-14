@@ -13,6 +13,5 @@
         </TableView>
         <TextField fx:id="discountTF" GridPane.rowIndex="0" GridPane.columnIndex="1" promptText="Discount(%)"/>
         <ListView fx:id="selectedDishes" GridPane.rowIndex="1" GridPane.columnIndex="1" accessibleText="Selected dishes" prefHeight="200" prefWidth="100"/>
-
     </children>
 </GridPane>

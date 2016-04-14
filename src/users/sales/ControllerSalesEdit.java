@@ -20,6 +20,7 @@ import javafx.util.converter.DefaultStringConverter;
 import javafx.util.converter.DoubleStringConverter;
 import javafx.util.converter.IntegerStringConverter;
 import javafx.util.converter.LocalDateStringConverter;
+import users.sales.DatePickerCell;
 
 import java.net.URL;
 import java.time.LocalDate;
@@ -145,14 +146,23 @@ public class ControllerSalesEdit implements Initializable{
         columns.get(12).setCellValueFactory(new PropertyValueFactory<Order,String>("status"));
 
         // Deadline
-        deadline.setCellFactory(TextFieldTableCell.<Order, LocalDate>forTableColumn(new LocalDateStringConverter()));
+        deadline.setCellFactory(new Callback<TableColumn<Order, LocalDate>, TableCell<Order, LocalDate>>() {
+                                    @Override
+                                    public TableCell<Order, LocalDate> call(TableColumn<Order, LocalDate> param) {
+                                        DatePickerCell datePick = new DatePickerCell(order);
+                                        return datePick;
+                                    }
+                                });
+/*
+                deadline.setCellFactory(TextFieldTableCell.<Order, LocalDate>forTableColumn(new LocalDateStringConverter()));
         deadline.setOnEditCommit(
                 (TableColumn.CellEditEvent<Order, LocalDate> t) -> {
                     ((Order) t.getTableView().getItems().get(t.getTablePosition().getRow())).setDeadline(t.getNewValue());
                 }
         );
+        */
 
-        /* Order */
+        // Order
         orderId.setCellFactory(TextFieldTableCell.<Order, Integer>forTableColumn(new IntegerStringConverter()));
         orderId.setOnEditCommit(
                 (TableColumn.CellEditEvent<Order, Integer> t) -> {
@@ -160,7 +170,7 @@ public class ControllerSalesEdit implements Initializable{
                 }
         );
 
-        /* First name */
+        // First name
         fname.setCellFactory(lv -> {
             TextFieldTableCell<Order, Customer> cell = new TextFieldTableCell();
             StringConverter<Customer> converter = new StringConverter<Customer>() {
