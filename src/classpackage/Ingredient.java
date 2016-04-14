@@ -23,6 +23,7 @@ public class Ingredient {
         this.price = price;
         this.supplierId = supplierId;
     }
+
     // From database
     public Ingredient(int ingredientId, String description, String unit, double quantityOwned, double price, int supplierId) {
         this.ingredientId = ingredientId;
@@ -33,14 +34,7 @@ public class Ingredient {
         this.supplierId = supplierId;
     }
 
-//    Constructors to be used under here:
-    public Ingredient(String description, String unit, double quantityOwned, double price, Supplier supplier) {
-        this.description = description;
-        this.unit = unit;
-        this.quantityOwned = quantityOwned;
-        this.price = price;
-        this.supplier = supplier;
-    }
+    // Constructors to be used under here:
     // From database
     public Ingredient(int ingredientId, String description, String unit, double quantityOwned, double price, Supplier supplier) {
         this.ingredientId = ingredientId;
@@ -51,21 +45,14 @@ public class Ingredient {
         this.supplier = supplier;
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    // to database
+    public Ingredient(String description, String unit, double quantityOwned, double price, Supplier supplier) {
+        this.description = description;
+        this.unit = unit;
+        this.quantityOwned = quantityOwned;
+        this.price = price;
+        this.supplier = supplier;
+    }
 
     public String getDescription() {
         return description;

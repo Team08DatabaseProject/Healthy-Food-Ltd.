@@ -11,14 +11,16 @@ public class Supplier {
     private int phoneNumber;
     private Address thisAddress;
     private StringProperty businessName = new SimpleStringProperty();
-//    from database
+
+    // from database
     public Supplier(int supplierId, int phoneNumber, Address thisAddress, String businessName) {
         this.supplierId = supplierId;
         this.phoneNumber = phoneNumber;
         this.thisAddress = thisAddress;
         this.businessName.set(businessName);
     }
-//    To database
+
+    // To database
     public Supplier(int phoneNumber, Address thisAddress) {
         this.phoneNumber = phoneNumber;
         this.thisAddress = thisAddress;

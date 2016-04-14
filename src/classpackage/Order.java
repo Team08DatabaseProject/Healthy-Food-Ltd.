@@ -11,18 +11,17 @@ import java.time.LocalDate;
 public class Order {
     private int orderId;
     private Customer customer;
-    private Subscription subscription;
+    //private Subscription subscription; //Denne skal ikke være her på grunn av at sub tar inn mange orders. Ikke omvendt!
     private double price;
     private String customerRequests; //Additional info from customer
     private LocalDate actualDeliveryDate; //Is set when order is delivered. Default null
     private LocalDate deadline; //Consists of date and time
     private String status;
     private Address address;
-    private ObservableList<Dish> dishesInThisOrder = FXCollections.observableArrayList();
+    private ObservableList<OrderLine> dishesInThisOrder = FXCollections.observableArrayList();
 
     // From the database
-    public Order(int orderId, String customerRequests, LocalDate deadline,
-                 double price, String status) {
+    public Order(int orderId, String customerRequests, LocalDate deadline, double price, String status) {
         this.orderId = orderId;
         this.customerRequests = customerRequests;
         this.deadline = deadline;
@@ -32,9 +31,8 @@ public class Order {
     }
 
     // To the database
-    public Order(Subscription subscription, String customerRequests, LocalDate deadline,
-                 double price, String status, Customer customer, ObservableList<Dish> dishesInThisOrder) {
-        this.subscription = subscription;
+    public Order(String customerRequests, LocalDate deadline,
+                 double price, String status, Customer customer, ObservableList dishesInThisOrder) {
         this.customerRequests = customerRequests;
         this.deadline = deadline;
         this.price = price;
@@ -108,19 +106,11 @@ public class Order {
         this.customer = customer;
     }
 
-    public ObservableList<Dish> getDishesInThisOrder() {
+    public ObservableList<OrderLine> getDishesInThisOrder() {
         return dishesInThisOrder;
     }
 
-    public void setDishesInThisOrder(ObservableList<Dish> dishesInThisOrder) {
+    public void setDishesInThisOrder(ObservableList<OrderLine> dishesInThisOrder) {
         this.dishesInThisOrder = dishesInThisOrder;
-    }
-
-    public Subscription getSubscription() {
-        return subscription;
-    }
-
-    public void setSubscription(Subscription subscription) {
-        this.subscription = subscription;
     }
 }

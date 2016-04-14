@@ -16,8 +16,8 @@
     <padding>
         <Insets bottom="25" left="30" right="20" top="25" />
     </padding>
-   <children>
-   
+    <children>
+        <!--> LEGG INN TEXTFIELDS FOR Å VELGE DISHES TIL ORDEN!!!  <!-->
        <TextField fx:id="fNameField" GridPane.columnIndex="0" GridPane.rowIndex="0" promptText="First name"/>
    
        <TextField fx:id="lNameField" GridPane.columnIndex="0" GridPane.rowIndex="1" promptText="Last name"/>

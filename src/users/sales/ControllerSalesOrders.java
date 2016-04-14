@@ -40,7 +40,7 @@ public class ControllerSalesOrders implements Initializable{
 
     LocalDate subStart = LocalDate.of(2015, 2, 11);
     LocalDate subEnd = LocalDate.of(2016, 2, 11);
-    Subscription subscription = new Subscription(subStart, subEnd);
+    Subscription subscription = new Subscription(subStart, subEnd, order);
 
     ObservableList<Dish> dishes = FXCollections.observableArrayList();
     Dish dish = new Dish(20, "Ravioli");
@@ -138,7 +138,7 @@ public class ControllerSalesOrders implements Initializable{
         columns.get(8).setCellValueFactory(new PropertyValueFactory<Order,String>("customerRequests"));
         columns.get(9).setCellValueFactory(new PropertyValueFactory<Order,LocalDate>("deadline"));
         columns.get(10).setCellValueFactory(new PropertyValueFactory<Order,Double>("price"));
-        columns.get(11).setCellValueFactory(new PropertyValueFactory<Order,Customer>("customer")); //address
+        columns.get(11).setCellValueFactory(new PropertyValueFactory<Order,Address>("address")); //address
         columns.get(12).setCellValueFactory(new PropertyValueFactory<Order,String>("status"));
 
         // Deadline
@@ -385,21 +385,21 @@ public class ControllerSalesOrders implements Initializable{
 
         // Address
         address.setCellFactory(lv -> {
-            TextFieldTableCell<Order, Customer> cell = new TextFieldTableCell();
-            StringConverter<Customer> converter = new StringConverter<Customer>() {
+            TextFieldTableCell<Order, Address> cell = new TextFieldTableCell();
+            StringConverter<Address> converter = new StringConverter<Address>() {
                 @Override
-                public String toString(Customer customer) {
-                    return customer.getAddress().getAddress();
+                public String toString(Address address) {
+                    return address.getAddress();
                 }
 
                 @Override
-                public Customer fromString(String addressString) {
-                    Customer customer = cell.getItem();
-                    if (customer == null) {
+                public Address fromString(String addressString) {
+                    Address address = cell.getItem();
+                    if (address == null) {
                         return null;
                     } else {
-                        customer.getAddress().setAddress(addressString);
-                        return customer;
+                        address.setAddress(addressString);
+                        return address;
                     }
                 }
             };
@@ -408,8 +408,8 @@ public class ControllerSalesOrders implements Initializable{
         });
 
         address.setOnEditCommit(
-                (TableColumn.CellEditEvent<Order, Customer> t) -> {
-                    ((Order) t.getTableView().getItems().get(t.getTablePosition().getRow())).setCustomer(t.getNewValue());
+                (TableColumn.CellEditEvent<Order, Address> t) -> {
+                    ((Order) t.getTableView().getItems().get(t.getTablePosition().getRow())).setAddress(t.getNewValue());
                 }
         );
 

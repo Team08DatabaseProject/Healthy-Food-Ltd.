@@ -10,10 +10,10 @@ import java.time.LocalDate;
  */
 public class Subscription {
     private int subscriptionId;
-    // LocalDate.of(2012, Month.DECEMBER, 12); // from values
+    //LocalDate.of(2012, Month.DECEMBER, 12); // from values
     private LocalDate startSubscription;
     private LocalDate endSubscription;
-    private ObservableList<Order> ordersOnThisSubscription = FXCollections.observableArrayList();
+    private ObservableList<OrderLine> ordersOnThisSubscription = FXCollections.observableArrayList();
 
 
     public Subscription(int subscriptionId, LocalDate startSubscription, LocalDate endSubscription, ObservableList ordersOnThisSubscription) {
@@ -22,9 +22,10 @@ public class Subscription {
         this.endSubscription = endSubscription;
         this.ordersOnThisSubscription = ordersOnThisSubscription;
     }
-    public Subscription(LocalDate startSubscription, LocalDate endSubscription) {
+    public Subscription(LocalDate startSubscription, LocalDate endSubscription, ObservableList ordersOnThisSubscription) {
         this.startSubscription = startSubscription;
         this.endSubscription = endSubscription;
+        this.ordersOnThisSubscription = ordersOnThisSubscription;
     }
 
     public int getSubscriptionId() {

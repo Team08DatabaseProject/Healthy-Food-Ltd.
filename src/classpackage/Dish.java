@@ -14,16 +14,17 @@ public class Dish {
     private String dishName;
     private ObservableList<Ingredient> allIngredientsForThisDish = FXCollections.observableArrayList();
 
-    public Dish(int dishId, double price, String dishName) {
+    public Dish(int dishId, double price, String dishName, ObservableList allIngredientsForThisDish) {
         this.dishId = dishId;
         this.price = price;
         this.dishName = dishName;
+        this.allIngredientsForThisDish = allIngredientsForThisDish;
     }
 
-    public Dish(double price, String dishName) {
-        this.dishId = dishId;
+    public Dish(double price, String dishName, ObservableList allIngredientsForThisDish) {
         this.price = price;
         this.dishName = dishName;
+        this.allIngredientsForThisDish = allIngredientsForThisDish;
     }
 
     public int getDishId() {

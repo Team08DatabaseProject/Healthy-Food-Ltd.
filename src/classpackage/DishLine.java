@@ -1,9 +1,7 @@
 package classpackage;
 
 import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleIntegerProperty;
 
 /**
  * Created by paul thomas on 10.04.2016.
