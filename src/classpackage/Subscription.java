@@ -13,7 +13,7 @@ public class Subscription {
     // LocalDate.of(2012, Month.DECEMBER, 12); // from values
     private LocalDate startSubscription;
     private LocalDate endSubscription;
-    private ObservableList ordersOnThisSubscription = FXCollections.observableArrayList();
+    private ObservableList<Order> ordersOnThisSubscription = FXCollections.observableArrayList();
 
 
     public Subscription(int subscriptionId, LocalDate startSubscription, LocalDate endSubscription, ObservableList ordersOnThisSubscription) {

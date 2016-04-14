@@ -5,10 +5,12 @@
 
 <!--> Table in submenu "Orders for Sales" </!-->
 <TableView fx:id="subsTable" prefHeight="200" prefWidth="200.0"
-           BorderPane.alignment="CENTER" xmlns:fx="http://javafx.com/fxml">
+           BorderPane.alignment="CENTER" xmlns:fx="http://javafx.com/fxml" fx:controller="users.sales.ControllerSalesSubs">
     <columns>
-        <TableColumn prefWidth="40.0" text="Subscription ID"/>
         <TableColumn prefWidth="40.0" text="Customer ID"/>
+        <TableColumn prefWidth="40.0" text="Subscription ID"/>
+        <TableColumn prefWidth="40.0" text="Subscription start"/>
+        <TableColumn prefWidth="40.0" text="Subscription end"/>
         <TableColumn prefWidth="40.0" text="Business name" />
         <TableColumn prefWidth="40.0" text="First name" />
         <TableColumn prefWidth="40.0" text="Last name" />

@@ -157,10 +157,10 @@ public class ControllerSalesSubs implements Initializable{
 
         subsTable.setEditable(true);
         ObservableList<TableColumn> columns = subsTable.getColumns();
-        TableColumn<Customer, Subscription> subscriptionId = columns.get(0);
-        TableColumn<Customer, Subscription> startSub = columns.get(1);
-        TableColumn<Customer, Subscription> endSub = columns.get(2);
-        TableColumn<Customer, Integer> customerId = columns.get(3);
+        TableColumn<Customer, Integer> customerId = columns.get(0);
+        TableColumn<Customer, Subscription> subscriptionId = columns.get(1);
+        TableColumn<Customer, Subscription> startSub = columns.get(2);
+        TableColumn<Customer, Subscription> endSub = columns.get(3);
         TableColumn<Customer, String> businessName = columns.get(4);
         TableColumn<Customer, String> fname = columns.get(5);
         TableColumn<Customer, String> lname = columns.get(6);
@@ -179,7 +179,7 @@ public class ControllerSalesSubs implements Initializable{
         columns.get(8).setCellValueFactory(new PropertyValueFactory<Customer, String>("email"));
         columns.get(9).setCellValueFactory(new PropertyValueFactory<Customer, Integer>("phoneNumber"));
 
-        columns.get(0).setCellFactory(column -> {
+        columns.get(1).setCellFactory(column -> {
             return new TableCell<Customer, Subscription>() {
                 @Override
                 protected void updateItem(Subscription item, boolean empty) {
@@ -198,7 +198,7 @@ public class ControllerSalesSubs implements Initializable{
                 return datePick;
             }
         });
-        columns.get(1).setCellFactory(column -> {
+        columns.get(2).setCellFactory(column -> {
             return new TableCell<Customer, Subscription>() {
                 @Override
                 protected void updateItem(Subscription item, boolean empty) {
@@ -210,7 +210,7 @@ public class ControllerSalesSubs implements Initializable{
                 }
             };
         });
-        columns.get(2).setCellFactory(column -> {
+        columns.get(3).setCellFactory(column -> {
             return new TableCell<Customer, Subscription>() {
                 @Override
                 protected void updateItem(Subscription item, boolean empty) {
@@ -222,18 +222,6 @@ public class ControllerSalesSubs implements Initializable{
                 }
             };
         });*/
-        columns.get(5).setCellFactory(column -> {
-            return new TableCell<Customer, Address>() {
-                @Override
-                protected void updateItem(Address item, boolean empty) {
-                    if(item == null || empty) {
-                        setText(null);
-                    } else {
-                        setText(item.getAddress());
-                    }
-                }
-            };
-        });
 
         address.setCellFactory(lv -> {
             TextFieldTableCell<Customer, Address> cell = new TextFieldTableCell();
@@ -264,8 +252,8 @@ public class ControllerSalesSubs implements Initializable{
                 }
         );
 
-        ordersButton.setOnAction(orderEvent);
-        subsButton.setOnAction(subsEvent);
+        /*ordersButton.setOnAction(orderEvent);
+        subsButton.setOnAction(subsEvent);*/
         subsTable.setItems(subs);
 
     }
