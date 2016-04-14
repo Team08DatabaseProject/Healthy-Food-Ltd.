@@ -26,8 +26,7 @@ public class Employee {
     private static final int SALES = 4;
     private static final int NUTRITION = 5;
 
-    // Constructor for getting an employee from the employee table
-
+    // Constructor for getting an employee from the employee table (in the DB)
     public Employee(int employeeId, String username, String firstName, String lastName, int phoneNo, String eMail, double salary, String passHash, Address address, EmployeePosition position) {
         this.employeeId.set(employeeId);
         this.username.set(username);
@@ -45,7 +44,6 @@ public class Employee {
     }
 
     // Constructor for creating a new employee object from GUI, missing employeeId
-
     public Employee(String username, String firstName, String lastName, int phoneNo, String eMail, double salary, String passHash, Address address, EmployeePosition position) {
         this.username.set(username);
         this.firstName.set(firstName);

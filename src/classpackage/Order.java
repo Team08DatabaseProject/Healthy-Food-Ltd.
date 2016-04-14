@@ -12,7 +12,6 @@ import java.time.LocalDate;
 
 public class Order {
     private IntegerProperty orderId = new SimpleIntegerProperty();
-    //private Subscription subscription; //Denne skal ikke være her på grunn av at sub tar inn mange orders. Ikke omvendt!
     private DoubleProperty price = new SimpleDoubleProperty();
     private StringProperty customerRequests = new SimpleStringProperty(); //Additional info from customer
     private LocalDate actualDeliveryDate; //Is set when order is delivered. Default null

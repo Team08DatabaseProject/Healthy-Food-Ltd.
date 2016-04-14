@@ -6,10 +6,6 @@ import javafx.collections.ObservableList;
 import java.sql.*;
 import java.util.*;
 
-import java.util.Date;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
-
 /**
  * Created by paul thomas on 17.03.2016.
  */
@@ -431,7 +427,7 @@ public class SqlQueries extends DBConnector {
             insertQuery.setDouble(2, ingredient.getQuantityOwned());
             insertQuery.setString(3, ingredient.getUnit());
             insertQuery.setDouble(4, ingredient.getPrice());
-            insertQuery.setString(5, ingredient.getDescription());
+            insertQuery.setString(5, ingredient.getIngredientName());
             insertQuery.executeUpdate();
 
             ResultSet res = insertQuery.getGeneratedKeys();

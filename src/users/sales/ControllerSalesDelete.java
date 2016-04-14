@@ -50,7 +50,7 @@ public class ControllerSalesDelete extends Application {
         return index;
     }
 
-    BorderPane rootPaneCreate;
+    BorderPane rootPaneOrders;
     TableView ordersTable;
     public ObservableList<Order> orders = FXCollections.observableArrayList();
 
@@ -60,7 +60,7 @@ public class ControllerSalesDelete extends Application {
             try{
                 FXMLLoader loader = new FXMLLoader();
                 loader.setLocation(getClass().getResource("OrdersTable.fxml"));
-                rootPaneCreate = loader.load();
+                rootPaneOrders = loader.load();
 
                 indexProperty().addListener(new ChangeListener() {
                     public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {

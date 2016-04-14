@@ -11,7 +11,7 @@
 <GridPane prefHeight="500" prefWidth="200.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8"
           fx:controller="users.sales.ControllerSalesOrders" stylesheets="@/users/sales/SalesStyle.css">
     <children>
-        <BorderPane fx:id="rootPaneCreate">
+        <BorderPane fx:id="rootPaneOrders">
             <center>
                 <TableView fx:id="ordersTable" editable="true" prefHeight="800.0" prefWidth="1600.0" GridPane.columnIndex="0"
                            GridPane.hgrow="SOMETIMES" GridPane.rowIndex="0" GridPane.vgrow="ALWAYS" GridPane.columnSpan="3">
