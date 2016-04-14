@@ -1,6 +1,7 @@
 package users.sales;
 
 import classpackage.*;
+import com.sun.javafx.scene.control.behavior.DatePickerBehavior;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -42,8 +43,8 @@ public class ControllerSalesEdit implements Initializable{
     Address addressTest = new Address(1, "Bugata 5", zip);
     Address addressTest2 = new Address(2, "Bugata 7", zip1);
 
-    LocalDate subStart = LocalDate.of(2015, 02, 11);
-    LocalDate subEnd = LocalDate.of(2016, 02, 11);
+    LocalDate subStart = LocalDate.of(2015, 2, 11);
+    LocalDate subEnd = LocalDate.of(2016, 2, 11);
     Subscription subscription = new Subscription(subStart, subEnd);
 
     ObservableList<Dish> dishes = FXCollections.observableArrayList();
@@ -147,12 +148,12 @@ public class ControllerSalesEdit implements Initializable{
 
         // Deadline
         deadline.setCellFactory(new Callback<TableColumn<Order, LocalDate>, TableCell<Order, LocalDate>>() {
-                                    @Override
-                                    public TableCell<Order, LocalDate> call(TableColumn<Order, LocalDate> param) {
-                                        DatePickerCell datePick = new DatePickerCell(order);
-                                        return datePick;
-                                    }
-                                });
+            @Override
+            public TableCell<Order, LocalDate> call(TableColumn<Order, LocalDate> param) {
+                DatePickerCell datePick = new DatePickerCell(order);
+                return datePick;
+            }
+        });
 /*
                 deadline.setCellFactory(TextFieldTableCell.<Order, LocalDate>forTableColumn(new LocalDateStringConverter()));
         deadline.setOnEditCommit(
@@ -162,11 +163,75 @@ public class ControllerSalesEdit implements Initializable{
         );
         */
 
-        // Order
+        // Order ID
         orderId.setCellFactory(TextFieldTableCell.<Order, Integer>forTableColumn(new IntegerStringConverter()));
         orderId.setOnEditCommit(
                 (TableColumn.CellEditEvent<Order, Integer> t) -> {
                     ((Order) t.getTableView().getItems().get(t.getTablePosition().getRow())).setOrderId(t.getNewValue());
+                }
+        );
+
+        // Customer ID
+        customerId.setCellFactory(lv -> {
+            TextFieldTableCell<Order, Customer> cell = new TextFieldTableCell();
+            StringConverter<Customer> converter = new StringConverter<Customer>() {
+                @Override
+                public String toString(Customer customer) {
+                    Integer customerId = customer.getCustomerId();
+                    return customerId.toString();
+                }
+
+                @Override
+                public Customer fromString(String customerIdString) {
+                    Customer customer = cell.getItem();
+                    if (customer == null) {
+                        return null;
+                    } else {
+                        Integer customerId = Integer.parseInt(customerIdString);
+                        customer.setCustomerId(customerId);
+                        return customer;
+                    }
+                }
+            };
+            cell.setConverter(converter);
+            return cell;
+        });
+
+        customerId.setOnEditCommit(
+                (TableColumn.CellEditEvent<Order, Customer> t) -> {
+                    ((Order) t.getTableView().getItems().get(t.getTablePosition().getRow())).setCustomer(t.getNewValue());
+                }
+        );
+
+        // Subscription ID
+        subscriptionId.setCellFactory(lv -> {
+            TextFieldTableCell<Order, Subscription> cell = new TextFieldTableCell();
+            StringConverter<Subscription> converter = new StringConverter<Subscription>() {
+                @Override
+                public String toString(Subscription subscription) {
+                    Integer subscriptionId = subscription.getSubscriptionId();
+                    return subscriptionId.toString();
+                }
+
+                @Override
+                public Subscription fromString(String subscriptionIdString) {
+                    Subscription subscription = cell.getItem();
+                    if (subscription == null) {
+                        return null;
+                    } else {
+                        Integer subscriptionId = Integer.parseInt(subscriptionIdString);
+                        subscription.setSubscriptionId(subscriptionId);
+                        return subscription;
+                    }
+                }
+            };
+            cell.setConverter(converter);
+            return cell;
+        });
+
+        subscriptionId.setOnEditCommit(
+                (TableColumn.CellEditEvent<Order, Subscription> t) -> {
+                    ((Order) t.getTableView().getItems().get(t.getTablePosition().getRow())).setSubscription(t.getNewValue());
                 }
         );
 
@@ -368,72 +433,6 @@ public class ControllerSalesEdit implements Initializable{
                     ((Order) t.getTableView().getItems().get(t.getTablePosition().getRow())).setPrice(t.getNewValue());
                 }
         );
-
-        // Customer ID
-        customerId.setCellFactory(lv -> {
-            TextFieldTableCell<Order, Customer> cell = new TextFieldTableCell();
-            StringConverter<Customer> converter = new StringConverter<Customer>() {
-                @Override
-                public String toString(Customer customer) {
-                    Integer customerId = customer.getCustomerId();
-                    return customerId.toString();
-                }
-
-                @Override
-                public Customer fromString(String customerIdString) {
-                    Customer customer = cell.getItem();
-                    if (customer == null) {
-                        return null;
-                    } else {
-                        Integer customerId = Integer.parseInt(customerIdString);
-                        customer.setCustomerId(customerId);
-                        return customer;
-                    }
-                }
-            };
-            cell.setConverter(converter);
-            return cell;
-        });
-
-        customerId.setOnEditCommit(
-                (TableColumn.CellEditEvent<Order, Customer> t) -> {
-                    ((Order) t.getTableView().getItems().get(t.getTablePosition().getRow())).setCustomer(t.getNewValue());
-                }
-        );
-
-
-        // Subscription ID
-        subscriptionId.setCellFactory(lv -> {
-            TextFieldTableCell<Order, Subscription> cell = new TextFieldTableCell();
-            StringConverter<Subscription> converter = new StringConverter<Subscription>() {
-                @Override
-                public String toString(Subscription subscription) {
-                    Integer subscriptionId = subscription.getSubscriptionId();
-                    return subscriptionId.toString();
-                }
-
-                @Override
-                public Subscription fromString(String subscriptionIdString) {
-                    Subscription subscription = cell.getItem();
-                    if (subscription == null) {
-                        return null;
-                    } else {
-                        Integer subscriptionId = Integer.parseInt(subscriptionIdString);
-                        subscription.setSubscriptionId(subscriptionId);
-                        return subscription;
-                    }
-                }
-            };
-            cell.setConverter(converter);
-            return cell;
-        });
-
-        subscriptionId.setOnEditCommit(
-                (TableColumn.CellEditEvent<Order, Subscription> t) -> {
-                    ((Order) t.getTableView().getItems().get(t.getTablePosition().getRow())).setSubscription(t.getNewValue());
-                }
-        );
-
 
         // Status
         ObservableList<String> statusComboBoxValues = FXCollections.observableArrayList(

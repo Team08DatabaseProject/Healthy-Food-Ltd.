@@ -9,3 +9,7 @@ Button {
     -fx-min-height: 50px;
     -fx-alignment: CENTER;
 }
+
+.column{
+    -fx-font-size: 10px;
+}
