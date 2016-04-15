@@ -12,10 +12,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableCell;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 
 import java.net.URL;
 import java.text.NumberFormat;
@@ -46,6 +43,7 @@ public class ControllerChefIngredients implements Initializable {
     public TableColumn ingSupplier;
     public Button addIngButton;
     public Button applyChangesButton;
+    public Button removeIngButton;
 
     private TestObjects testObjects = new TestObjects();
     private ObservableList<Ingredient> testIngredients = testObjects.allIngredients;
@@ -82,6 +80,27 @@ public class ControllerChefIngredients implements Initializable {
         }
     };
 
+    EventHandler<ActionEvent> removeIngButtonClick = new EventHandler<ActionEvent>() {
+        @Override
+        public void handle(ActionEvent event) {
+            try {
+                int selectedIndex = ingTable.getSelectionModel().getSelectedIndex();
+                if (selectedIndex > -1) {
+                    testIngredients.remove(ingTable.getItems().get(selectedIndex));
+                    ingTable.setItems(testIngredients);
+                } else {
+                    Alert alert = new Alert(Alert.AlertType.WARNING);
+                    alert.setTitle("No selection");
+                    alert.setHeaderText("No ingredient selected");
+                    alert.setContentText("Select an ingredient to delete it");
+                    alert.showAndWait();
+                }
+            } catch (Exception exc) {
+                System.out.println(exc);
+            }
+        }
+    };
+
     public void addIngredient(Ingredient newIngredient) {
         testIngredients.add(newIngredient);
     }
@@ -90,6 +109,7 @@ public class ControllerChefIngredients implements Initializable {
 
 
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
+
         final NumberFormat nf = NumberFormat.getNumberInstance();
         {
             nf.setMaximumFractionDigits(2);
@@ -159,6 +179,7 @@ public class ControllerChefIngredients implements Initializable {
         ingTable.setEditable(true);
         applyChangesButton.setOnAction(applyChangesButtonClick);
         addIngButton.setOnAction(addIngButtonClick);
+        removeIngButton.setOnAction(removeIngButtonClick);
 
     }
 }
