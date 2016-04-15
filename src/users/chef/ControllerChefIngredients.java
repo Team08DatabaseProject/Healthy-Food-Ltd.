@@ -1,0 +1,137 @@
+package users.chef;
+
+import classpackage.DishLine;
+import classpackage.Ingredient;
+import classpackage.Supplier;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.StringProperty;
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
+import javafx.scene.control.Button;
+import javafx.scene.control.TableCell;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+
+import java.net.URL;
+import java.text.NumberFormat;
+import java.text.ParseException;
+import java.util.ResourceBundle;
+import classpackage.TestObjects;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.util.Callback;
+import javafx.util.StringConverter;
+import javafx.scene.control.TableColumn.CellEditEvent;
+import javafx.beans.property.ReadOnlyProperty;
+import javafx.util.converter.DoubleStringConverter;
+
+
+/**
+ * Created by axelkvistad on 4/15/16.
+ */
+public class ControllerChefIngredients implements Initializable {
+
+    public TableView ingTable;
+    public TableColumn ingName;
+    public TableColumn ingUnit;
+    public TableColumn ingPrice;
+    public TableColumn ingQuantity;
+    public TableColumn ingSupplier;
+    public Button addIngButton;
+    public Button applyChangesButton;
+
+    private TestObjects testObjects = new TestObjects();
+    private ObservableList<Ingredient> testIngredients = testObjects.allIngredients;
+
+    // TODO: 4/15/16 Connect this to database
+    EventHandler<ActionEvent> applyChangesButtonClick = new EventHandler<ActionEvent>() {
+        @Override
+        public void handle(ActionEvent event) {
+            try {
+                for (Ingredient ing : testIngredients) {
+                    System.out.println(ing.getIngredientName());
+                }
+            } catch (Exception exc) {
+                System.out.println(exc);
+            }
+        }
+    };
+
+
+
+
+    public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
+        final NumberFormat nf = NumberFormat.getNumberInstance();
+        {
+            nf.setMaximumFractionDigits(2);
+        }
+        ingName.setCellValueFactory(new PropertyValueFactory<Ingredient, String>("ingredientName"));
+        ingUnit.setCellValueFactory(new PropertyValueFactory<Ingredient, String>("unit"));
+        ingPrice.setCellValueFactory(new PropertyValueFactory<Ingredient, Double>("price"));
+        ingQuantity.setCellValueFactory(new PropertyValueFactory<Ingredient, Double>("quantityOwned"));
+        ingSupplier.setCellValueFactory(new PropertyValueFactory<Ingredient, Supplier>("supplier"));
+
+        ingName.setCellFactory(TextFieldTableCell.forTableColumn());
+        ingName.setOnEditCommit(
+                new EventHandler<CellEditEvent<Ingredient, String>>() {
+                    @Override
+                    public void handle(CellEditEvent<Ingredient, String> event) {
+                        (event.getTableView().getItems().get(event.getTablePosition().
+                                getRow())).setIngredientName(event.getNewValue());
+                    }
+                });
+
+
+        ingUnit.setCellFactory(TextFieldTableCell.forTableColumn());
+        ingUnit.setOnEditCommit(
+                new EventHandler<CellEditEvent<Ingredient, String>>() {
+                    @Override
+                    public void handle(CellEditEvent<Ingredient, String> event) {
+                        (event.getTableView().getItems().get(event.getTablePosition().
+                                getRow())).setUnit(event.getNewValue());
+                    }
+                });
+
+        ingPrice.setCellFactory(TextFieldTableCell.<Ingredient, Double>forTableColumn(new DoubleStringConverter()));
+        ingPrice.setOnEditCommit(
+                new EventHandler<CellEditEvent<Ingredient, Double>>() {
+                    @Override
+                    public void handle(CellEditEvent<Ingredient, Double> event) {
+                        event.getTableView().getItems().get(event.getTablePosition().getRow()).setPrice(event.getNewValue());
+                    }
+                }
+        );
+
+        ingQuantity.setCellFactory(TextFieldTableCell.<Ingredient, Double>forTableColumn(new DoubleStringConverter()));
+        ingQuantity.setOnEditCommit(
+                new EventHandler<CellEditEvent<Ingredient, Double>>() {
+                    @Override
+                    public void handle(CellEditEvent<Ingredient, Double> event) {
+                        event.getTableView().getItems().get(event.getTablePosition().getRow()).setQuantityOwned(event.getNewValue());
+                    }
+                }
+        );
+
+        ingSupplier.setCellFactory(column -> {
+            return new TableCell<Ingredient, Supplier>() {
+                @Override
+                protected void updateItem(Supplier item, boolean empty) {
+                    if(item == null || empty) {
+                        setText(null);
+                    } else {
+                        setText(item.getBusinessName());
+                    }
+                }
+            };
+        });
+
+        ingTable.getColumns().setAll(ingName, ingUnit, ingPrice, ingQuantity, ingSupplier);
+        ingTable.setItems(testIngredients);
+        ingTable.setEditable(true);
+        applyChangesButton.setOnAction(applyChangesButtonClick);
+
+    }
+}
