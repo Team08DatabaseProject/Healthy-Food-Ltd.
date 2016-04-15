@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--> Axel </!-->
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.collections.FXCollections?>
+
+
+<?import java.lang.String?>
+<GridPane fx:id="ingredientsGP" fx:controller="users.chef.ControllerChefIngredients" prefHeight="400" prefWidth="400.0" xmlns:fx="http://javafx.com/fxml" hgap="20" vgap="15">
+    <children>
+        <TableView fx:id="ingTable" layoutX="50" layoutY="50" GridPane.columnIndex="0" GridPane.rowIndex="0" prefWidth="600">
+            <columnResizePolicy><TableView fx:constant="UNCONSTRAINED_RESIZE_POLICY"/></columnResizePolicy>
+            <columns>
+                <TableColumn fx:id="ingName" text="Ingredient" prefWidth="80"/>
+                <TableColumn fx:id="ingUnit" text="Unit" prefWidth="100"/>
+                <TableColumn fx:id="ingPrice" text="Price" prefWidth="100"/>
+                <TableColumn fx:id="ingQuantity" text="Quantity owned" prefWidth="80"/>
+                <TableColumn fx:id="ingSupplier" text="Supplier" prefWidth="180"/>
+            </columns>
+        </TableView>
+        <Button fx:id="addIngButton" text="Add new&#10;ingredient" prefWidth="100" prefHeight="50" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+        <Button fx:id="applyChangesButton" text="Apply changes" prefWidth="120" prefHeight="50" GridPane.rowIndex="1" translateX="110"/>
+        <Button fx:id="removeIngButton" text="Remove ingredient" prefWidth="120" prefHeight="50" GridPane.rowIndex="1" translateX="110"/>
+    </children>
+</GridPane>

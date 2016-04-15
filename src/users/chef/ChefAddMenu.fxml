@@ -2,16 +2,24 @@
 <!--> Axel </!-->
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.collections.FXCollections?>
-<?import java.lang.String?>
+<?import users.chef.CheckBoxCellFactory?>
 
-<GridPane prefHeight="600.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml" hgap="20" vgap="15">
+<GridPane fx:id="addMenuGP" fx:controller="users.chef.ControllerChefAddMenu" prefHeight="500.0" prefWidth="500.0" xmlns:fx="http://javafx.com/fxml" hgap="20" vgap="15">
     <children>
         <TextField fx:id="menuNameTF" GridPane.rowIndex="0" GridPane.columnIndex="0" promptText="Menu name"/>
-        <TableView fx:id="selectDishes" GridPane.rowIndex="1" GridPane.columnIndex="0"  prefHeight="200" prefWidth="100">
-                <TableColumn fx:id="dishes" text="Select dishes"/>
+        <TableView fx:id="selectDishes" GridPane.rowIndex="1" GridPane.columnIndex="0" prefWidth="190">
+            <TableColumn fx:id="nameLeft" prefWidth="80" text="Dish name"/>
+            <TableColumn fx:id="priceLeft" prefWidth="60" text="Price"/>
+            <TableColumn fx:id="checkBoxLeft" text="Select" prefWidth="30">
+                <cellFactory>
+                    <CheckBoxCellFactory/>
+                </cellFactory>
+            </TableColumn>
         </TableView>
         <TextField fx:id="discountTF" GridPane.rowIndex="0" GridPane.columnIndex="1" promptText="Discount(%)"/>
-        <ListView fx:id="selectedDishes" GridPane.rowIndex="1" GridPane.columnIndex="1" accessibleText="Selected dishes" prefHeight="200" prefWidth="100"/>
+        <TableView fx:id="selectedDishes" GridPane.rowIndex="1" GridPane.columnIndex="1" prefWidth="120">
+            <TableColumn fx:id="selectedRight" prefWidth="150" text="Selected dish"/>
+        </TableView>
+        <Button fx:id="addMenuButton" GridPane.rowIndex="1" GridPane.columnIndex="2" text="Add menu"/>
     </children>
 </GridPane>

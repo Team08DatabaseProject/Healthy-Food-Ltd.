@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--> Axel </!-->
+
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.collections.FXCollections?>
+
+<GridPane fx:id="addIngredientGP" fx:controller="users.chef.ControllerChefAddIngredient" hgap="10" prefHeight="500.0" prefWidth="600.0" vgap="10" BorderPane.alignment="CENTER" xmlns="http://javafx.com/javafx/8"
+          xmlns:fx="http://javafx.com/fxml/1">
+    <padding>
+        <Insets bottom="25" left="30" right="20" top="25" />
+    </padding>
+    <children>
+        <!--> LEGG INN TEXTFIELDS FOR Å VELGE DISHES TIL ORDEN!!!  <!-->
+        <TextField fx:id="ingNameField" GridPane.columnIndex="0" GridPane.rowIndex="0" promptText="Ingredient name"/>
+
+        <TextField fx:id="ingUnitField" GridPane.columnIndex="0" GridPane.rowIndex="1" promptText="Unit"/>
+
+        <TextField fx:id="ingPriceField" GridPane.columnIndex="0" GridPane.rowIndex="2" promptText="Price"/>
+
+        <TextField fx:id="ingQuantityField" GridPane.columnIndex="0" GridPane.rowIndex="3" promptText="Start quantity"/>
+
+        <ComboBox fx:id="ingSupplierCB" GridPane.columnIndex="1" GridPane.rowIndex="1" promptText="Supplier">
+            <items>
+                <FXCollections fx:factory="observableArrayList" >
+                </FXCollections>
+            </items>
+        </ComboBox>
+        <VBox alignment="BOTTOM_LEFT" spacing="10" GridPane.columnIndex="0" GridPane.rowIndex="4">
+            <children>
+                <Button fx:id="ingApplyButton" styleClass="newOrderButton" text="Apply" />
+            </children>
+        </VBox>
+    </children>
+</GridPane>

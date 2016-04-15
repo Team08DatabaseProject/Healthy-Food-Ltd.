@@ -71,40 +71,44 @@ public class TestObjects {
 
 
 
-    public static ObservableList<DishLine> allIngredients = FXCollections.observableArrayList(
+    public static ObservableList<Ingredient> allIngredients = FXCollections.observableArrayList(
+            sugar, milk, flour, chocolate, carrot, trout, salmon, potato, butter, beef, spaghetti, potatoChips, lettuce, paprika
+    );
+
+    public static ObservableList<DishLine> allIngredientsDL = FXCollections.observableArrayList(
             sugarDL, milkDL, flourDL, chocolateDL, carrotDL, troutDL, salmonDL, potatoDL, butterDL, beefDL, spaghettiDL, potatoChipsDL, lettuceDL, paprikaDL
     );
 
-    public static ObservableList<DishLine> ingredientList1 = FXCollections.observableArrayList(
+    public static ObservableList<DishLine> ingredientListDL1 = FXCollections.observableArrayList(
             sugarDL, milkDL, flourDL, chocolateDL, carrotDL
     );
 
-    public static ObservableList<DishLine> ingredientList2 = FXCollections.observableArrayList(
+    public static ObservableList<DishLine> ingredientListDL2 = FXCollections.observableArrayList(
             troutDL, potatoDL, butterDL, lettuceDL
     );
 
-    public static ObservableList<DishLine> ingredientList3 = FXCollections.observableArrayList(
+    public static ObservableList<DishLine> ingredientListDL3 = FXCollections.observableArrayList(
             beefDL, spaghettiDL, lettuceDL, paprikaDL
     );
 
-    public static ObservableList<DishLine> ingredientList4 = FXCollections.observableArrayList(
+    public static ObservableList<DishLine> ingredientListDL4 = FXCollections.observableArrayList(
             salmonDL, potatoDL, butterDL, paprikaDL
     );
 
-    public static ObservableList<DishLine> ingredientList5 = FXCollections.observableArrayList(
+    public static ObservableList<DishLine> ingredientListDL5 = FXCollections.observableArrayList(
             potatoChipsDL, lettuceDL, paprikaDL, butterDL, sugarDL, chocolateDL
     );
 
-    public static ObservableList<DishLine> ingredientList6 = FXCollections.observableArrayList(
+    public static ObservableList<DishLine> ingredientListDL6 = FXCollections.observableArrayList(
             lettuceDL, paprikaDL, potatoDL, carrotDL
     );
 
-    public static Dish carrotDish = new Dish(100, "Carrot cake", ingredientList1);
-    public static Dish troutDish = new Dish(200, "Trout with potato", ingredientList2);
-    public static Dish beefDish = new Dish(175, "Beef with spaghetti", ingredientList3);
-    public static Dish salmonDish = new Dish(200, "Salmon with potato", ingredientList4);
-    public static Dish weirdDish = new Dish(100, "Weird dish", ingredientList5);
-    public static Dish veggieDish = new Dish(75, "Veggie dish", ingredientList6);
+    public static Dish carrotDish = new Dish(100, "Carrot cake", ingredientListDL1);
+    public static Dish troutDish = new Dish(200, "Trout with potato", ingredientListDL2);
+    public static Dish beefDish = new Dish(175, "Beef with spaghetti", ingredientListDL3);
+    public static Dish salmonDish = new Dish(200, "Salmon with potato", ingredientListDL4);
+    public static Dish weirdDish = new Dish(100, "Weird dish", ingredientListDL5);
+    public static Dish veggieDish = new Dish(75, "Veggie dish", ingredientListDL6);
 
     public static MenuLine carrotML = new MenuLine(carrotDish, 1, 0.9);
     public static MenuLine troutML = new MenuLine(troutDish, 2, 0.7);

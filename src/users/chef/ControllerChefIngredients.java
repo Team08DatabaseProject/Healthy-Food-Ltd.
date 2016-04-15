@@ -8,8 +8,10 @@ import javafx.beans.property.StringProperty;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
@@ -22,6 +24,8 @@ import java.util.ResourceBundle;
 import classpackage.TestObjects;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.layout.GridPane;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
 import javafx.scene.control.TableColumn.CellEditEvent;
@@ -59,6 +63,28 @@ public class ControllerChefIngredients implements Initializable {
             }
         }
     };
+
+    EventHandler<ActionEvent> addIngButtonClick = new EventHandler<ActionEvent>() {
+        @Override
+        public void handle(ActionEvent event) {
+            try {
+                FXMLLoader loader = new FXMLLoader();
+                loader.setLocation(getClass().getResource("ChefAddIngredient.fxml"));
+                GridPane addIngGP = loader.load();
+                Scene formScene = new Scene(addIngGP);
+                Stage formStage = new Stage();
+                formStage.setTitle("Add new ingredient");
+                formStage.setScene(formScene);
+                formStage.show();
+            } catch (Exception exc) {
+                System.out.println(exc);
+            }
+        }
+    };
+
+    public void addIngredient(Ingredient newIngredient) {
+        testIngredients.add(newIngredient);
+    }
 
 
 
@@ -132,6 +158,7 @@ public class ControllerChefIngredients implements Initializable {
         ingTable.setItems(testIngredients);
         ingTable.setEditable(true);
         applyChangesButton.setOnAction(applyChangesButtonClick);
+        addIngButton.setOnAction(addIngButtonClick);
 
     }
 }

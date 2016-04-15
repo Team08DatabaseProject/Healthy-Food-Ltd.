@@ -34,6 +34,10 @@ public class Ingredient {
         this.supplier = supplier;
     }
 
+    public StringProperty getSupplierName() {
+        return supplier.businessNameProperty();
+    }
+
     public int getIngredientId() {
         return ingredientId.get();
     }

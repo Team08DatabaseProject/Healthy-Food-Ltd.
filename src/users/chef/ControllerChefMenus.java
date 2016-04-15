@@ -19,6 +19,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
+import classpackage.Menu;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -31,7 +32,12 @@ public class ControllerChefMenus implements Initializable{
     public Button addMenuButton;
     public ComboBox chooseMenuCB;
 
+    private ObservableList<Menu> menus = FXCollections.observableArrayList();
 
+    public void addMenu(Menu newMenu) {
+        menus.add(newMenu);
+        chooseMenuCB.setItems(menus);
+    }
 
     EventHandler<ActionEvent> addMenuButtonClick = new EventHandler<ActionEvent>() {
         @Override
@@ -47,10 +53,6 @@ public class ControllerChefMenus implements Initializable{
             }
         }
     };
-
-
-
-
 
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
         addMenuButton.setOnAction(addMenuButtonClick);
