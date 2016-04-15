@@ -21,9 +21,10 @@ public class Supplier {
     }
 
     // To database
-    public Supplier(int phoneNumber, Address thisAddress) {
+    public Supplier(int phoneNumber, Address thisAddress, String businessName) {
         this.phoneNumber = phoneNumber;
         this.thisAddress = thisAddress;
+        this.businessName.set(businessName);
     }
 
     public int getSupplierId() {

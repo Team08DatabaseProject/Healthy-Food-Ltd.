@@ -12,19 +12,19 @@ public class Dish {
     private int dishId;
     private double price;
     private String dishName;
-    private ObservableList<Ingredient> allIngredientsForThisDish = FXCollections.observableArrayList();
+    private ObservableList<DishLine> dishLines = FXCollections.observableArrayList();
 
-    public Dish(int dishId, double price, String dishName, ObservableList allIngredientsForThisDish) {
+    public Dish(int dishId, double price, String dishName, ObservableList dishLines) {
         this.dishId = dishId;
         this.price = price;
         this.dishName = dishName;
-        this.allIngredientsForThisDish = allIngredientsForThisDish;
+        this.dishLines = dishLines;
     }
 
-    public Dish(double price, String dishName, ObservableList allIngredientsForThisDish) {
+    public Dish(double price, String dishName, ObservableList dishLines) {
         this.price = price;
         this.dishName = dishName;
-        this.allIngredientsForThisDish = allIngredientsForThisDish;
+        this.dishLines = dishLines;
     }
 
     public int getDishId() {
@@ -55,12 +55,12 @@ public class Dish {
         return dishName;
     }
 
-    public ObservableList<Ingredient> getAllIngredientsForThisDish() {
-        return allIngredientsForThisDish;
+    public ObservableList<DishLine> getAllDishLinesForThisDish() {
+        return dishLines;
     }
 
-    public void setAllIngredientsForThisDish(ObservableList<Ingredient> allIngredientsForThisDish) {
-        this.allIngredientsForThisDish = allIngredientsForThisDish;
+    public void setAllDishLinesForThisDish(ObservableList<DishLine> dishLines) {
+        this.dishLines = dishLines;
     }
 
 }

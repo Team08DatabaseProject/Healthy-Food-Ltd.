@@ -1,5 +1,6 @@
 package classpackage;
 
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -14,14 +15,23 @@ import java.util.Map;
 
 public class Menu {
     private int menuId;
-    private String name;
-    private String mealType;
-    private Map<Dish, Integer> dishes = new HashMap<>();
+    private SimpleStringProperty name;
+    private SimpleStringProperty mealType;
+    private ObservableList<MenuLine> menuLines = FXCollections.observableArrayList();
 
-    public Menu(int menuId, String name, String mealType) {
+    // from database
+    public Menu(int menuId, String name, String mealType, ObservableList menuLines) {
         this.menuId = menuId;
-        this.name = name;
-        this.mealType = mealType;
+        this.name.set(name);
+        this.mealType.set(mealType);
+        this.menuLines = menuLines;
+    }
+
+    // to database
+    public Menu(String name, String mealType, ObservableList menuLines) {
+        this.name.set(name);
+        this.mealType.set(mealType);
+        this.menuLines = menuLines;
     }
 
     public int getMenuId() {
@@ -33,31 +43,34 @@ public class Menu {
     }
 
     public String getName() {
+        return name.get();
+    }
+
+    public SimpleStringProperty nameProperty() {
         return name;
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.name.set(name);
     }
 
     public String getMealType() {
+        return mealType.get();
+    }
+
+    public SimpleStringProperty mealTypeProperty() {
         return mealType;
     }
 
     public void setMealType(String mealType) {
-        this.mealType = mealType;
+        this.mealType.set(mealType);
     }
 
-    public String toString() {
-        return name;
+    public ObservableList<MenuLine> getMenuLines() {
+        return menuLines;
     }
 
-    public Map<Dish, Integer> getDishes() {
-        return dishes;
+    public void setMenuLines(ObservableList<MenuLine> menuLines) {
+        this.menuLines = menuLines;
     }
-
-    public void setDishes(Map<Dish, Integer> dishes) {
-        this.dishes = dishes;
-    }
-
 }

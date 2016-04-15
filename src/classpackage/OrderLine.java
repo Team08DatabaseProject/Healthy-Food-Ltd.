@@ -2,6 +2,7 @@ package classpackage;
 
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.collections.ObservableList;
 
 /**
  * Created by paul thomas on 13.04.2016.
