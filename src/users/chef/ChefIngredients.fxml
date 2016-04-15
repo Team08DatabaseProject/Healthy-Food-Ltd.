@@ -20,6 +20,6 @@
         </TableView>
         <Button fx:id="addIngButton" text="Add new&#10;ingredient" prefWidth="100" prefHeight="50" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
         <Button fx:id="applyChangesButton" text="Apply changes" prefWidth="120" prefHeight="50" GridPane.rowIndex="1" translateX="110"/>
-        <Button fx:id="removeIngButton" text="Remove ingredient" prefWidth="120" prefHeight="50" GridPane.rowIndex="1" translateX="110"/>
+        <Button fx:id="removeIngButton" text="Remove ingredient" prefWidth="120" prefHeight="50" GridPane.rowIndex="1" translateX="230"/>
     </children>
 </GridPane>
