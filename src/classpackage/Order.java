@@ -23,7 +23,7 @@ public class Order {
     // From the database
     public Order(int orderId, String customerRequests, LocalDate deadline,
                  LocalDate actualDeliveryDate, double price,
-                 String status, ObservableList dishesInThisOrder) {
+                 String status, ObservableList dishesInThisOrder, Address address) {
         this.orderId.set(orderId);
         this.customerRequests.set(customerRequests);
         this.deadline = deadline;
@@ -31,6 +31,7 @@ public class Order {
         this.status.set(status);
         this.actualDeliveryDate = actualDeliveryDate;
         this.dishesInThisOrder = dishesInThisOrder;
+        this.address = address;
     }
 
     // To the database
