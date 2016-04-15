@@ -15,14 +15,16 @@ public class Subscription {
     private LocalDate startSubscription;
     private LocalDate endSubscription;
     private ObservableList<Order> ordersOnThisSubscription = FXCollections.observableArrayList();
+    private int customerId;
 
     // From database
     public Subscription(int subscriptionId, LocalDate startSubscription, LocalDate endSubscription,
-                        ObservableList ordersOnThisSubscription) {
+                        ObservableList ordersOnThisSubscription, int customerId) {
         this.subscriptionId.set(subscriptionId);
         this.startSubscription = startSubscription;
         this.endSubscription = endSubscription;
         this.ordersOnThisSubscription = ordersOnThisSubscription;
+        this.customerId = customerId;
     }
 
     // To database
@@ -69,4 +71,7 @@ public class Subscription {
         this.ordersOnThisSubscription = ordersOnThisSubscription;
     }
 
+    public int getCustomerId() {
+        return customerId;
+    }
 }
