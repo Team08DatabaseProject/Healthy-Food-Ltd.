@@ -25,6 +25,7 @@ import java.util.concurrent.ThreadLocalRandom;
 /**
  * Created by HUMBUG on 06.04.2016.
  */
+/*
 public class ControllerCEOEmployees extends ControllerCEO  implements Initializable {
 
 	@FXML
@@ -149,4 +150,4 @@ public class ControllerCEOEmployees extends ControllerCEO  implements Initializa
 		employeesTable.setOnMousePressed(updateEmployeeForm);
 		employeesTable.setItems(employees);
 	}
-}
+*///}

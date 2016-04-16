@@ -23,6 +23,8 @@ import java.util.*;
 
 import static javax.swing.UIManager.put;
 
+/*
+
 public class ControllerCEOAddEmployee extends ControllerCEOEmployees implements Initializable {
 
     @FXML
@@ -262,4 +264,4 @@ public class ControllerCEOAddEmployee extends ControllerCEOEmployees implements 
 	    positionBox.getSelectionModel().selectFirst();
     }
   }
-}
+}*/
