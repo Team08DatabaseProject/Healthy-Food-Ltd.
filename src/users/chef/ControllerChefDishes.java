@@ -23,7 +23,7 @@ import java.util.ResourceBundle;
 /**
  * Created by axelkvistad on 4/16/16.
  */
-public class ControllerChefDishes implements Initializable {
+public class ControllerChefDishes extends ControllerChef implements Initializable {
 
     public GridPane dishesGP;
     public TableView dishTable;
@@ -33,10 +33,7 @@ public class ControllerChefDishes implements Initializable {
     public Button viewDishInfoButton;
     public Button removeDishButton;
 
-    protected static TestObjects testObjects = new TestObjects();
-    protected static ObservableList<MenuLine> testDishes = testObjects.allDishes;
     protected static MenuLine chosenDish;
-    protected int chosenDishTableIndex;
 
     EventHandler<ActionEvent> addDishButtonClick = new EventHandler<ActionEvent>() {
         @Override
@@ -61,7 +58,6 @@ public class ControllerChefDishes implements Initializable {
         public void handle(ActionEvent event) {
             try {
                 chosenDish = (MenuLine) dishTable.getSelectionModel().getSelectedItem();
-                chosenDishTableIndex = dishTable.getSelectionModel().getSelectedIndex();
                 if (chosenDish != null) {
                     FXMLLoader loader = new FXMLLoader();
                     loader.setLocation(getClass().getResource("ChefEditDish.fxml"));
@@ -84,8 +80,8 @@ public class ControllerChefDishes implements Initializable {
             try {
                 int selectedIndex = dishTable.getSelectionModel().getSelectedIndex();
                 if (selectedIndex > -1) {
-                    testDishes.remove(dishTable.getItems().get(selectedIndex));
-                    dishTable.setItems(testDishes);
+                    testDishLines.remove(dishTable.getItems().get(selectedIndex));
+                    dishTable.setItems(testDishLines);
                 } else {
                     Alert alert = new Alert(Alert.AlertType.WARNING);
                     alert.setTitle("No selection");
@@ -137,7 +133,7 @@ public class ControllerChefDishes implements Initializable {
 
 
         dishTable.getColumns().setAll(dishName, dishPrice);
-        dishTable.setItems(testDishes);
+        dishTable.setItems(testMenuLines);
         addDishButton.setOnAction(addDishButtonClick);
         viewDishInfoButton.setOnAction(viewInfoButtonClick);
 

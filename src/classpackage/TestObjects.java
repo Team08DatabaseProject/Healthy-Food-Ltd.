@@ -139,7 +139,7 @@ public class TestObjects {
 
     public static Menu menu1 = new Menu("Beef and carrot cake", "Non-vegetarian", dishList1);
     public static Menu menu2 = new Menu("Trout and carrot cake", "Non-vegetarian", dishList2);
-    public static Menu menu3 = new Menu("Weird menu", "Non-vegeterian", dishList3);
+    public static Menu menu3 = new Menu("Weird menu", "Non-vegetarian", dishList3);
     public static Menu menu4 = new Menu("Veggie menu", "Vegetarian", dishList4);
 
     public static ObservableList<Menu> allMenus = FXCollections.observableArrayList(

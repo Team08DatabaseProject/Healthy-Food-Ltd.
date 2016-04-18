@@ -73,8 +73,16 @@ public class ControllerChefAddMenu extends ControllerChefMenus implements Initia
         @Override
         public void handle(ActionEvent event) {
             try {
+                boolean add = true;
                 Menu newMenu = new Menu(menuNameString, selectedMealType, chosenDishes);
-                testMenus.add(newMenu);
+                for (Menu m : testMenus) {
+                    if (m.getName().equals(newMenu.getName())) {
+                        add = false;
+                    }
+                }
+                if (add) {
+                    testMenus.add(newMenu);
+                }
             } catch (Exception e) {
                 System.out.println(e);
             }
@@ -87,14 +95,15 @@ public class ControllerChefAddMenu extends ControllerChefMenus implements Initia
             try {
                 menuNameString = menuNameField.getText();
                 String priceFactorString = menuPriceFactorField.getText();
-                double priceFactor = Double.parseDouble(priceFactorString) / 100;
+                double priceFactor = Double.parseDouble(priceFactorString);
                 for (MenuLine ml : chosenDishes) {
                     menuPrice += ml.getDish().getPrice();
                 }
                 menuPrice *= priceFactor;
+                menuPrice = Math.round(menuPrice * 100.0) / 100.0;
                 menuPriceString = nf.format(menuPrice);
                 menuNameLabel.setText("Menu name: " + menuNameString);
-                menuPriceLabel.setText("Menu price: " + menuPriceString);
+                menuPriceLabel.setText("Menu price: " + menuPriceString + " NOK");
             } catch (Exception exc) {
                 System.out.println(exc);
             }
@@ -239,10 +248,7 @@ public class ControllerChefAddMenu extends ControllerChefMenus implements Initia
             };
         });
 
-
-
         chosenDishTable.getColumns().setAll(chosenDishName, chosenDishAmount, chosenDishPrice);
-
 
         addToMenuButton.setOnAction(addToMenuButtonClick);
         addMenuButton.setOnAction(addMenu);

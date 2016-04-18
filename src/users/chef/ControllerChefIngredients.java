@@ -33,7 +33,7 @@ import javafx.util.converter.DoubleStringConverter;
 /**
  * Created by axelkvistad on 4/15/16.
  */
-public class ControllerChefIngredients implements Initializable {
+public class ControllerChefIngredients extends ControllerChef implements Initializable {
 
     public TableView ingTable;
     public TableColumn ingName;
@@ -44,9 +44,6 @@ public class ControllerChefIngredients implements Initializable {
     public Button addIngButton;
     public Button applyChangesButton;
     public Button removeIngButton;
-
-    private TestObjects testObjects = new TestObjects();
-    private ObservableList<Ingredient> testIngredients = testObjects.allIngredients;
 
     // TODO: 4/15/16 Connect this to database
     EventHandler<ActionEvent> applyChangesButtonClick = new EventHandler<ActionEvent>() {

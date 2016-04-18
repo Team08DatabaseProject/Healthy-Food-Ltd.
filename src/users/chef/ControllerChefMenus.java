@@ -62,6 +62,21 @@ public class ControllerChefMenus implements Initializable{
         }
     };
 
+    EventHandler<ActionEvent> editMenuButtonClick = new EventHandler<ActionEvent>() {
+        @Override
+        public void handle(ActionEvent event) {
+            try {
+                final Stage editMenuStage = new Stage();
+                Parent root = FXMLLoader.load(getClass().getResource("ChefEditMenu.fxml"));
+                editMenuStage.setTitle("Edit menu: " + selectedMenu.getName());
+                editMenuStage.setScene(new Scene(root, 800, 800));
+                editMenuStage.show();
+            } catch (Exception exc) {
+                System.out.println(exc);
+            }
+        }
+    };
+
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
         chooseMenuCB.setItems(testMenus);
         chooseMenuCB.setConverter(new StringConverter<Menu>() {
@@ -82,5 +97,6 @@ public class ControllerChefMenus implements Initializable{
             }
         });
         addMenuButton.setOnAction(addMenuButtonClick);
+        editMenuButton.setOnAction(editMenuButtonClick);
     }
 }

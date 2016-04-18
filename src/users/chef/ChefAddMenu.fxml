@@ -46,7 +46,7 @@
         <VBox alignment="BASELINE_LEFT" spacing="10" GridPane.columnIndex="0" GridPane.rowIndex="2">
             <Button fx:id="applyButton" prefWidth="150" prefHeight="50" text="Apply"/>
             <Label fx:id="menuNameLabel" prefWidth="200" prefHeight="50" text="Menu name: "/>
-            <Label fx:id="menuPriceLabel" prefWidth="200" prefHeight="50" text="Price: "/>
+            <Label fx:id="menuPriceLabel" prefWidth="200" prefHeight="50" text="Menu Price: "/>
             <Button fx:id="addMenuButton" prefWidth="150" prefHeight="50" text="Add menu"/>
         </VBox>
 

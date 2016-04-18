@@ -43,10 +43,8 @@ public class ControllerChefAddDish extends ControllerChefDishes implements Initi
     public Label dishPriceLabel;
     public Button addDishApplyButton;
     public Button removeFromDishButton;
-    private TestObjects testObjects = new TestObjects();
     private DishLine selectedIngredient;
 
-    ObservableList<DishLine> testIngredients  = testObjects.allIngredientsDL;
     ObservableList<DishLine> chosenIngredients = FXCollections.observableArrayList();
 
 
@@ -63,14 +61,14 @@ public class ControllerChefAddDish extends ControllerChefDishes implements Initi
                 String priceFactorString = dishPriceFactorField.getText();
                 double priceFactor = Double.parseDouble(priceFactorString) / 100;
                 double price = 0;
-                for (DishLine dl : chosenIngredients) {
+                for (DishLine dl : testDishLines) {
                     price += (dl.getAmount() * dl.getIngredient().getPrice());
                 }
                 price *= priceFactor;
                 double finalPrice = Math.round(price * 100.0) / 100.0;
-                Dish newDish = new Dish(finalPrice, name, chosenIngredients);
+                Dish newDish = new Dish(finalPrice, name, testDishLines);
                 MenuLine menuLine = new MenuLine(newDish);
-                testDishes.add(menuLine);
+                testMenuLines.add(menuLine);
             } catch (Exception exc) {
                 System.out.println(exc);
             }
@@ -99,7 +97,7 @@ public class ControllerChefAddDish extends ControllerChefDishes implements Initi
                     String priceFactorString = dishPriceFactorField.getText();
                     double priceFactor = Double.parseDouble(priceFactorString) / 100;
                     double price = 0;
-                    for (DishLine dl : chosenIngredients) {
+                    for (DishLine dl : testDishLines) {
                         price += (dl.getAmount() * dl.getIngredient().getPrice());
                     }
                     price *= priceFactor;
@@ -172,9 +170,7 @@ public class ControllerChefAddDish extends ControllerChefDishes implements Initi
 
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
 
-
-
-        chooseIngredientCB.setItems(testIngredients);
+        chooseIngredientCB.setItems(testDishLines);
         chooseIngredientCB.setConverter(new StringConverter<DishLine>() {
             @Override
             public String toString(DishLine dishLine) {

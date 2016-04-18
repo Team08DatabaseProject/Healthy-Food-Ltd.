@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--> Axel </!-->
+
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.collections.FXCollections?>
+
+<?import javafx.scene.chart.BubbleChart?>
+<GridPane fx:id="editMenuGP" fx:controller="users.chef.ControllerChefEditMenu" hgap="5" prefHeight="500.0" prefWidth="800.0" vgap="10" BorderPane.alignment="CENTER" xmlns="http://javafx.com/javafx/8"
+          xmlns:fx="http://javafx.com/fxml/1">
+    <padding>
+        <Insets bottom="25" left="30" right="20" top="25" />
+    </padding>
+
+    <children>
+        <VBox alignment="TOP_LEFT" spacing="10" GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.fillWidth="false" prefWidth="135">
+            <children>
+                <TextField fx:id="editMenuNameField" promptText="Menu name"/>
+                <ComboBox fx:id="editMealTypeCB" promptText="Meal type"/>
+            </children>
+        </VBox>
+
+        <HBox alignment="BASELINE_LEFT" spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="1">
+            <children>
+                <ComboBox fx:id="editDishCB" promptText="Choose dish">
+                    <items>
+                        <FXCollections fx:factory="observableArrayList"/>
+                    </items>
+                </ComboBox>
+                <Button fx:id="editAddToMenuButton" prefWidth="150" prefHeight="50" text="Add to menu"/>
+                <Button fx:id="editRemoveFromMenuButton" prefWidth="150" prefHeight="50" text="Remove dish&#10;from menu"/>
+            </children>
+        </HBox>
+
+        <TableView fx:id="currentDishTable" GridPane.columnIndex="1" GridPane.rowIndex="0" prefWidth="450" >
+            <TableColumn fx:id="currentDishNameCol" prefWidth="150" text="Dish name"/>
+            <TableColumn fx:id="currentDishAmountCol" prefWidth="100" text="Amount"/>
+            <TableColumn fx:id="currentDishPriceCol" prefWidth="100" text="Price"/>
+        </TableView>
+
+        <VBox alignment="BASELINE_LEFT" spacing="10" GridPane.columnIndex="0" GridPane.rowIndex="2">
+            <Button fx:id="editApplyButton" prefWidth="150" prefHeight="50" text="Apply changes"/>
+            <Label fx:id="editMenuNameLabel" prefWidth="200" prefHeight="50" text="Menu name: "/>
+            <Label fx:id="editMenuPriceLabel" prefWidth="200" prefHeight="50" text="Menu Price: "/>
+            <Button fx:id="commitEditButton" prefWidth="150" prefHeight="50" text="Commit changes"/>
+        </VBox>
+
+    </children>
+</GridPane>

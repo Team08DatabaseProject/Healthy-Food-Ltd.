@@ -35,7 +35,7 @@ import classpackage.TestObjects;
  * Created by axelkvistad on 4/15/16.
  */
 
-public class ControllerChefAddIngredient implements Initializable {
+public class ControllerChefAddIngredient extends ControllerChefIngredients implements Initializable {
 
     public GridPane addIngredientGP;
     public TextField ingNameField;
@@ -59,8 +59,9 @@ public class ControllerChefAddIngredient implements Initializable {
                 double price = Double.parseDouble(ingPriceField.getText());
                 double quantity = Double.parseDouble(ingQuantityField.getText());
                 Ingredient newIngredient = new Ingredient(name, unit, quantity, price, selectedSupplier);
-                ControllerChefIngredients cci = new ControllerChefIngredients();
-                cci.addIngredient(newIngredient);
+                testIngredients.add(newIngredient);
+                DishLine newDL = new DishLine(newIngredient);
+                testDishLines.add(newDL);
             } catch (Exception exc) {
                 System.out.println(exc);
             }
