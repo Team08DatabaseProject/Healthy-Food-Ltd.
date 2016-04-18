@@ -2,7 +2,7 @@ package users.ceo;
 
 import classpackage.Address;
 import classpackage.*;
-import div.PopupDialog;
+import div.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -18,12 +18,13 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
-import javafx.stage.PopupWindow;
 import javafx.stage.Stage;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.concurrent.ThreadLocalRandom;
+
+import static div.PopupDialog.newPasswordEmail;
 
 /**
  * Created by HUMBUG on 06.04.2016.
@@ -46,7 +47,7 @@ public class ControllerCEOEmployees extends ControllerCEO  implements Initializa
 	public TableColumn<Employee, EmployeePosition> positionCol;
 	public TableColumn<Employee, Double> salaryCol;
 
-	private ObservableList<Employee> employees;
+	protected static ObservableList<Employee> employees;
 
 	protected static boolean employeeFormUpdate = false;
 	protected static Employee selectedEmployee;
@@ -113,6 +114,8 @@ public class ControllerCEOEmployees extends ControllerCEO  implements Initializa
 						if(!db.updateEmployee(emp)) {
 							ok = false;
 							result += "Could not update " + emp.getFirstName() + " " + emp.getLastName() + "\n";
+						} else {
+							PopupDialog.newPasswordEmail(emp, newPassword);
 						}
 					}
 				}
@@ -131,12 +134,19 @@ public class ControllerCEOEmployees extends ControllerCEO  implements Initializa
 			if(PopupDialog.confirmationDialog("Question", "Are you sure you want to delete the selected employees?")) {
 				String result = "";
 				boolean ok = true;
-				for(Employee emp : employeesTable.getItems()) {
+				ObservableList<Employee> checkedEmps = FXCollections.observableArrayList();
+				for(Employee emp : employeesTable.getItems()) { // Can't delete from employeesTable list while iterating over it. Performs deletions in separate loop
 					if(emp.isChecked()) {
-						if(!db.deleteEmployee(emp)) {
-							ok = false;
-							result += "Could not delete " + emp.getFirstName() + " " + emp.getLastName() + "\n";
-						}
+						checkedEmps.add(emp);
+					}
+				}
+				for(int i = 0; i < checkedEmps.size(); i++) {
+					Employee emp = checkedEmps.get(i);
+					if(!db.deleteEmployee(emp)) {
+						ok = false;
+						result += "Could not delete " + emp.getFirstName() + " " + emp.getLastName() + "\n";
+					} else {
+						employeesTable.getItems().remove(emp);
 					}
 				}
 				if(!ok) {
