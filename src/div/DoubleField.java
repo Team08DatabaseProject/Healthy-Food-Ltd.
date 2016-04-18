@@ -1,5 +1,6 @@
 package div;
 
+import javafx.css.PseudoClass;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
@@ -7,6 +8,8 @@ import javafx.scene.control.TextField;
  * Created by HUMBUG on 12.04.2016.
  */
 public class DoubleField extends TextField {
+
+	private final PseudoClass errorClass = PseudoClass.getPseudoClass("error");
 
 	@Override
 	public void replaceText(int i, int il, String string) {
@@ -56,6 +59,11 @@ public class DoubleField extends TextField {
 				} else {
 					errorMsg.setVisible(false);
 				}
+			}
+			if(valid) {
+				pseudoClassStateChanged(errorClass, false);
+			} else {
+				pseudoClassStateChanged(errorClass, true);
 			}
 		}
 		return valid;

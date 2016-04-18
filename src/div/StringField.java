@@ -1,5 +1,6 @@
 package div;
 
+import javafx.css.PseudoClass;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
@@ -9,6 +10,8 @@ import java.util.Map;
  * Created by HUMBUG on 12.04.2016.
  */
 public class StringField extends TextField {
+
+	private final PseudoClass errorClass = PseudoClass.getPseudoClass("error");
 
 	public static final int CAN_BE_EMPTY = 0;
 	public static final int MIN_LENGTH = 1;
@@ -49,6 +52,11 @@ public class StringField extends TextField {
 					errorMsg.setVisible(false);
 				}
 			}
+		}
+		if(valid) {
+			pseudoClassStateChanged(errorClass, false);
+		} else {
+			pseudoClassStateChanged(errorClass, true);
 		}
 		return valid;
 	}

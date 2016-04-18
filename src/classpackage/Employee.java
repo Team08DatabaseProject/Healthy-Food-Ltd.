@@ -18,6 +18,7 @@ public class Employee {
     private StringProperty passHash = new SimpleStringProperty();
     private ObjectProperty<Address> address = new SimpleObjectProperty<>();
     private ObjectProperty<EmployeePosition> position = new SimpleObjectProperty<>();
+    private BooleanProperty checked = new SimpleBooleanProperty();
     private static final int ADMIN = 0;
     private static final int CEO = 1;
     private static final int CHEF = 2;
@@ -186,6 +187,18 @@ public class Employee {
         this.position.set(position);
     }
 
+    public boolean isChecked() {
+        return checked.get();
+    }
+
+    public BooleanProperty checkedProperty() {
+        return checked;
+    }
+
+    public void setChecked(boolean checked) {
+        this.checked.set(checked);
+    }
+
     public boolean isAdmin(){
         return (position.get().getId() == ADMIN);}
     public boolean isCEO() {
@@ -203,18 +216,4 @@ public class Employee {
     public boolean isNutrition() {
         return (position.get().getId() == NUTRITION);
     }
-
-
-    // Usage:
-    // Employee a = LoadEmployee(5);
-    /*
-    public static Employee LoadEmployee(int p_personId)
-    {
-        Statement statement = statics.db.createStatement();
-        ResultSet res = statement.executeQuery("SELECT * FROM `employee` WHERE person_id = '" + p_personId + "' LIMIT 1");
-        while (res.next())
-            return new Employee(res.getInt("person_id"), res.getString("username"), res.getInt("pos_id"), res.getDouble("salary"), res.getString("passhash"));
-        return null;
-    }
-    */
 }
