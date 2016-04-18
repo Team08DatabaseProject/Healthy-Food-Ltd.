@@ -1,13 +1,12 @@
 package classpackage;
 
-
 import javafx.beans.property.*;
-
 import java.util.ArrayList;
 
 /**
  * Created by axelkvistad on 3/16/16.
  */
+
 public class Employee {
     private IntegerProperty employeeId = new SimpleIntegerProperty();
     private StringProperty username = new SimpleStringProperty();

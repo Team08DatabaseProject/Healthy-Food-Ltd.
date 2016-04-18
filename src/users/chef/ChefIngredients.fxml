@@ -6,9 +6,9 @@
 
 
 <?import java.lang.String?>
-<GridPane fx:id="ingredientsGP" fx:controller="users.chef.ControllerChefIngredients" prefHeight="400" prefWidth="400.0" xmlns:fx="http://javafx.com/fxml" hgap="20" vgap="15">
+<GridPane fx:id="ingredientsGP" fx:controller="users.chef.ControllerChefIngredients" prefHeight="300" prefWidth="400.0" xmlns:fx="http://javafx.com/fxml" hgap="20" vgap="15">
     <children>
-        <TableView fx:id="ingTable" layoutX="50" layoutY="50" GridPane.columnIndex="0" GridPane.rowIndex="0" prefWidth="600">
+        <TableView fx:id="ingTable" layoutX="50" layoutY="50" GridPane.columnIndex="0" GridPane.rowIndex="0" prefWidth="610" prefHeight="300">
             <columnResizePolicy><TableView fx:constant="UNCONSTRAINED_RESIZE_POLICY"/></columnResizePolicy>
             <columns>
                 <TableColumn fx:id="ingName" text="Ingredient" prefWidth="80"/>

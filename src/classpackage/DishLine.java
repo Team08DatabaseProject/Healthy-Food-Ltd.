@@ -15,6 +15,11 @@ public class DishLine {
         this.amount.set(amount);
     }
 
+    public DishLine(Ingredient ingredient) {
+        this.ingredient = ingredient;
+        this.amount.set(1);
+    }
+
     public Ingredient getIngredient() {
         return ingredient;
     }

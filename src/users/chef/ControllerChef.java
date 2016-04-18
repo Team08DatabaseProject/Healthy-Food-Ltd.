@@ -60,9 +60,24 @@ public class ControllerChef implements Initializable{
         }
     };
 
+    EventHandler<ActionEvent> dishesButtonClick = new EventHandler<ActionEvent>() {
+        @Override
+        public void handle(ActionEvent event) {
+            try {
+                FXMLLoader loader = new FXMLLoader();
+                loader.setLocation(getClass().getResource("ChefDishes.fxml"));
+                centerDisplay = loader.load();
+                rootPaneDriver.setCenter(centerDisplay);
+            } catch (Exception exc) {
+                System.out.println(exc);
+            }
+        }
+    };
+
 
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
         menusButton.setOnAction(menuButtonClick);
         ingredientsButton.setOnAction(ingredientsButtonClick);
+        dishesButton.setOnAction(dishesButtonClick);
     }
 }

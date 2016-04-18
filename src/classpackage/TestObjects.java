@@ -54,20 +54,20 @@ public class TestObjects {
     public static Ingredient lettuce = new Ingredient("Lettuce", "Kilogram", 8, 20, vegetableSupplier);
     public static Ingredient paprika = new Ingredient("Paprika", "Kilogram", 4, 25, vegetableSupplier);
 
-    public static DishLine sugarDL = new DishLine(sugar, 30);
-    public static DishLine milkDL = new DishLine(milk, 30);
-    public static DishLine flourDL = new DishLine(flour, 30);
-    public static DishLine chocolateDL = new DishLine(chocolate, 30);
-    public static DishLine carrotDL = new DishLine(carrot, 30);
-    public static DishLine troutDL = new DishLine(trout, 30);
-    public static DishLine salmonDL = new DishLine(salmon, 30);
-    public static DishLine potatoDL = new DishLine(potato, 30);
-    public static DishLine butterDL = new DishLine(butter, 30);
-    public static DishLine beefDL = new DishLine(beef, 30);
-    public static DishLine spaghettiDL = new DishLine(spaghetti, 30);
-    public static DishLine potatoChipsDL = new DishLine(potatoChips, 30);
-    public static DishLine lettuceDL = new DishLine(lettuce, 30);
-    public static DishLine paprikaDL = new DishLine(paprika, 30);
+    public static DishLine sugarDL = new DishLine(sugar);
+    public static DishLine milkDL = new DishLine(milk);
+    public static DishLine flourDL = new DishLine(flour);
+    public static DishLine chocolateDL = new DishLine(chocolate);
+    public static DishLine carrotDL = new DishLine(carrot);
+    public static DishLine troutDL = new DishLine(trout);
+    public static DishLine salmonDL = new DishLine(salmon);
+    public static DishLine potatoDL = new DishLine(potato);
+    public static DishLine butterDL = new DishLine(butter);
+    public static DishLine beefDL = new DishLine(beef);
+    public static DishLine spaghettiDL = new DishLine(spaghetti);
+    public static DishLine potatoChipsDL = new DishLine(potatoChips);
+    public static DishLine lettuceDL = new DishLine(lettuce);
+    public static DishLine paprikaDL = new DishLine(paprika);
 
 
 

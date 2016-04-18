@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--> Axel </!-->
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.collections.FXCollections?>
+
+
+<?import java.lang.String?>
+<GridPane fx:id="dishesGP" fx:controller="users.chef.ControllerChefDishes" gridLinesVisible="false" prefHeight="300" prefWidth="400.0" xmlns:fx="http://javafx.com/fxml" hgap="20" vgap="15">
+    <children>
+        <TableView fx:id="dishTable" layoutX="50" layoutY="50" GridPane.columnIndex="0" GridPane.rowIndex="0" prefHeight="300" prefWidth="402">
+            <columnResizePolicy><TableView fx:constant="UNCONSTRAINED_RESIZE_POLICY"/></columnResizePolicy>
+            <columns>
+                <TableColumn fx:id="dishName" text="Dish" prefWidth="200"/>
+                <TableColumn fx:id="dishPrice" text="Price" prefWidth="200"/>
+            </columns>
+        </TableView>
+        <Button fx:id="addDishButton" text="Add new&#10;dish" prefWidth="100" prefHeight="50" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+        <Button fx:id="viewDishInfoButton" text="View/change&#10;info" prefWidth="120" prefHeight="50" GridPane.rowIndex="1" translateX="110"/>
+        <Button fx:id="removeDishButton" text="Remove dish" prefWidth="150" prefHeight="50" GridPane.rowIndex="1" translateX="240"/>
+    </children>
+</GridPane>

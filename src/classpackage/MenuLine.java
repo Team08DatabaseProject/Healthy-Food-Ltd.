@@ -27,6 +27,12 @@ public class MenuLine {
         this.priceFactor.set(1);
     }
 
+    public MenuLine(Dish dish) {
+        this.dish = dish;
+        this.amount.set(1);
+        this.priceFactor.set(1);
+    }
+
     public Dish getDish() {
         return dish;
     }

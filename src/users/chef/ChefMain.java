@@ -34,10 +34,10 @@ import java.util.*;
 
 public class ChefMain extends Application {
 
-// TODO: 4/6/16 change  
+// TODO: 4/6/16 change
     // TODO: 4/7/16 Don't use mapping for dishMap! Use ObservableList instead
 
-    
+
     @Override
     public void start(Stage primaryStage) throws Exception {
 
@@ -55,7 +55,7 @@ public class ChefMain extends Application {
         currentDishes.add(new Dish(3, 2, "lasagna"));
 
         ObservableList<Dish> displayedDishes = FXCollections.observableArrayList(); // Dishes which are currently displayed on screen in the bottom right table
-        
+
         Map<Dish, Integer> dishMap = new HashMap<>(); // Map consisting of dishes and the number of each dish. Used for
 
         for (Dish d : currentDishes) {

@@ -1,6 +1,7 @@
 package classpackage;
 
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -15,8 +16,8 @@ import java.util.Map;
 
 public class Menu {
     private int menuId;
-    private SimpleStringProperty name;
-    private SimpleStringProperty mealType;
+    private StringProperty name = new SimpleStringProperty();
+    private StringProperty mealType = new SimpleStringProperty();
     private ObservableList<MenuLine> menuLines = FXCollections.observableArrayList();
 
     // from database
@@ -46,7 +47,7 @@ public class Menu {
         return name.get();
     }
 
-    public SimpleStringProperty nameProperty() {
+    public StringProperty nameProperty() {
         return name;
     }
 
@@ -58,7 +59,7 @@ public class Menu {
         return mealType.get();
     }
 
-    public SimpleStringProperty mealTypeProperty() {
+    public StringProperty mealTypeProperty() {
         return mealType;
     }
 
