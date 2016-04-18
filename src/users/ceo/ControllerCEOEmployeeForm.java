@@ -164,13 +164,16 @@ public class ControllerCEOEmployeeForm extends ControllerCEOEmployees implements
 	              Employee newEmp = new Employee(username, firstName, lastName, phoneNo, eMail, salary, passHash, addressObject, selectedPosition);
 	              if(db.addEmployee(newEmp)) {
 		              PopupDialog.informationDialog("Result", "Employee " + firstName + " " + lastName + " successfully added to the database.");
-		              closeWindow();
+									employees.add(newEmp);
+									PopupDialog.newUserEmail(newEmp, newEmp.getPassHash());
+									closeWindow();
 	              } else {
 		              PopupDialog.errorDialog("Result", "Error: Failed to add employee " + firstName + " " + lastName + " to the database.");
 	              }
               }
           } catch (Exception exc) {
               System.out.println(exc);
+							exc.printStackTrace();
           }
       }
   };
