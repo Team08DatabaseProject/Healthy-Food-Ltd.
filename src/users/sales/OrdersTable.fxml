@@ -2,7 +2,6 @@
 
 <!--> Axel </!-->
 
-<?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
@@ -13,35 +12,40 @@
     <children>
         <BorderPane fx:id="rootPaneOrders">
             <center>
-                <TableView fx:id="ordersTable" editable="true" prefHeight="800.0" prefWidth="1600.0" GridPane.columnIndex="0"
-                           GridPane.hgrow="SOMETIMES" GridPane.rowIndex="0" GridPane.vgrow="ALWAYS" GridPane.columnSpan="3">
+                <TableView BorderPane.alignment="TOP_CENTER" fx:id="ordersTable" editable="true" minHeight="200" prefWidth="1600.0" GridPane.columnIndex="0"
+                           GridPane.hgrow="ALWAYS" GridPane.rowIndex="0" GridPane.vgrow="ALWAYS" GridPane.columnSpan="1">
                     <columns>
                         <TableColumn prefWidth="20.0" text="Order ID" styleClass="column"/>
-                        <TableColumn prefWidth="30.0" text="Customer ID" styleClass="column"/>
+                        <!--><TableColumn prefWidth="30.0" text="Customer ID" styleClass="column"/>
                         <TableColumn prefWidth="35.0" text="Subscription ID" styleClass="column"/>
                         <TableColumn prefWidth="40.0" text="First name" styleClass="column"/>
                         <TableColumn prefWidth="40.0" text="Last name" styleClass="column"/>
                         <TableColumn prefWidth="40.0" text="Business name" styleClass="column"/>
                         <TableColumn prefWidth="40.0" text="Email" styleClass="column"/>
                         <TableColumn prefWidth="40.0" text="Phone number" styleClass="column"/>
-                        <TableColumn prefWidth="40.0" text="Customer requests" styleClass="column"/>
+                        <TableColumn prefWidth="40.0" text="Customer requests" styleClass="column"/><!-->
                         <TableColumn prefWidth="40.0" text="Deadline" styleClass="column"/>
                         <TableColumn prefWidth="40.0" text="Price" styleClass="column"/>
-                        <TableColumn prefWidth="40.0" text="Address" styleClass="column"/>
+                        <!--><TableColumn prefWidth="40.0" text="Address" styleClass="column"/><!-->
                         <TableColumn prefWidth="40.0" text="Status" styleClass="column"/>
                     </columns>
                     <columnResizePolicy>
-                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" /> <!--> fix vgrow <!-->
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                     </columnResizePolicy>
                 </TableView>
             </center>
+            <right>
+                <VBox BorderPane.alignment="BOTTOM_CENTER" xmlns:fx="http://javafx.com/fxml" prefHeight="50">
+                    <children>
+                        <Button fx:id="createOrderButton" prefHeight="20" prefWidth="50" text="Create order"
+                                styleClass="newOrderButton"/>
+                        <Button fx:id="deleteOrderButton" prefHeight="20" prefWidth="50" text="Delete order"
+                                styleClass="newOrderButton"/>
+                    </children>
+                </VBox>
+            </right>
             <bottom>
-                <HBox GridPane.columnIndex="0" GridPane.rowIndex="1" xmlns:fx="http://javafx.com/fxml" prefHeight="50">
-                   <children>
-                       <Button fx:id="createOrderButton" prefHeight="20" prefWidth="50" text="Create order" styleClass="newOrderButton"/>
-                       <Button fx:id="deleteOrderButton" prefHeight="20" prefWidth="50" text="Delete order" styleClass="newOrderButton"/>
-                   </children>
-                </HBox>
+
             </bottom>
         </BorderPane>
     </children>

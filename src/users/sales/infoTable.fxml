@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--> Axel </!-->
+<!--> Textfields for registering new order </!-->
+
+<?import javafx.collections.FXCollections?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import java.lang.*?>
+
+<GridPane fx:id="infoGrid" prefHeight="200.0" prefWidth="1600.0" BorderPane.alignment="CENTER" xmlns="http://javafx.com/javafx/8"
+          xmlns:fx="http://javafx.com/fxml/1" fx:controller="users.sales.ControllerSalesInfo" stylesheets="SalesStyle.css">
+
+    <padding>
+        <Insets bottom="25" left="30" right="20" top="25" />
+    </padding>
+    <children>
+        <Label fx:id="orderIdLabel" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+
+        <Label fx:id="customerIdLabel" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+
+        <Label fx:id="subscriptionIdLabel" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+
+        <TextField fx:id="fNameField" GridPane.columnIndex="0" GridPane.rowIndex="3" promptText="First name"/>
+
+        <TextField fx:id="lNameField" GridPane.columnIndex="0" GridPane.rowIndex="4" promptText="Last name"/>
+
+        <CheckBox fx:id="businessBox" GridPane.columnIndex="0" GridPane.rowIndex="5" text="Business:"/>
+
+        <TextField fx:id="businessNameField" GridPane.columnIndex="0" GridPane.rowIndex="6" promptText="Business name"/>
+
+        <!--next collumn><!-->
+
+        <TextField fx:id="phoneField" GridPane.columnIndex="1" GridPane.rowIndex="0" promptText="Phone number"/>
+
+        <TextField fx:id="emailField" GridPane.columnIndex="1" GridPane.rowIndex="1" promptText="Email address"/>
+
+        <TextField fx:id="addressField" GridPane.columnIndex="1" GridPane.rowIndex="2" promptText="Delivery address"/>
+
+        <TextField fx:id="zipCodeField" GridPane.columnIndex="1" GridPane.rowIndex="3" promptText="ZIP Code"/>
+
+        <TextField fx:id="placeField" GridPane.columnIndex="1" GridPane.rowIndex="4" promptText="City"/>
+
+        <DatePicker fx:id="deadlinePicker" GridPane.columnIndex="1" GridPane.rowIndex="5" promptText="Delivery date"/>
+
+        <TextField fx:id="priceField" GridPane.columnIndex="1" GridPane.rowIndex="6" promptText="Price"/>
+
+        <!--next collumn><!-->
+
+        <ComboBox fx:id="statusBox" GridPane.columnIndex="2" GridPane.rowIndex="0" promptText="Status">
+            <items>
+                <FXCollections fx:factory="observableArrayList" >
+                    <String fx:value="Created" />
+                    <String fx:value="In preparation" />
+                    <String fx:value="Ready for Delivery" />
+                    <String fx:value="In delivery" />
+                    <String fx:value="Delivered" />
+                </FXCollections>
+            </items>
+        </ComboBox>
+
+        <!--next collumn><!-->
+
+        <TextArea fx:id="customerRequestsArea" GridPane.columnIndex="2" GridPane.rowIndex="1" GridPane.rowSpan="6" prefWidth="200"
+                  promptText="Extra requests"/>
+
+        <HBox alignment="BOTTOM_LEFT" spacing="10" GridPane.columnIndex="0" GridPane.rowIndex="10">
+            <children>
+                <Button fx:id="applyButton" styleClass="newOrderButton" text="Apply" />
+            </children>
+        </HBox>
+    </children>
+</GridPane>

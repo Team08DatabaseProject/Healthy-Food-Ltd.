@@ -14,7 +14,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 
 import java.net.URL;
-import java.time.LocalDate;
 import java.util.ResourceBundle;
 
 /**
@@ -82,7 +81,7 @@ public class ControllerSales implements Initializable {
                 FXMLLoader loader = new FXMLLoader();
                 loader.setLocation(getClass().getResource("SubsTable.fxml"));
                 subsTable = loader.load();
-                rootPaneSales.setCenter(subsTable);
+                rootPaneOrders.setCenter(subsTable);
                 ObservableList<TableColumn> columns = subsTable.getColumns();
                 columns.get(0).setCellValueFactory(new PropertyValueFactory<Customer, Subscription>("subscription"));
                 columns.get(1).setCellValueFactory(new PropertyValueFactory<Customer, Integer>("customerId"));
@@ -101,57 +100,9 @@ public class ControllerSales implements Initializable {
         }
     };*/
 
-    private LocalDate startSubscription = LocalDate.of(2015, 12, 1);
-    private LocalDate endSubscription = LocalDate.of(2016, 1, 2);
-    private LocalDate startSubscription1 = LocalDate.of(2015, 3, 13);
-    private LocalDate endSubscription1 = LocalDate.of(2016, 2, 2);
-
-    ZipCode zip = new ZipCode(7031, "Trondheim");
-    ZipCode zip1 = new ZipCode(7042, "Trondheim");
-
-    Address addressTest = new Address("Bugata 5", 7031, "Oslo");
-    Address addressTest2 = new Address("Bugata 7", 7042, "Trondheim");
-
-    LocalDate subStart = LocalDate.of(2015, 2, 11);
-    LocalDate subEnd = LocalDate.of(2016, 2, 11);
-    LocalDate deadline = LocalDate.of(2016, 9, 11);
-
-    Dish dish = new Dish(20, "Ravioli", null);
-
-    final ObservableList<OrderLine> orderLines = FXCollections.observableArrayList(
-            new OrderLine(dish, 2)
-    );
-
-    final ObservableList<Order> order = FXCollections.observableArrayList(
-            new Order("More pickles", deadline, 367.00, "Created", orderLines),
-            new Order("Less pickles", deadline, 367.00, "Created", orderLines),
-            new Order("More pickles", deadline, 367.00, "Created", orderLines),
-            new Order("More pickles", deadline, 367.00, "Created", orderLines)
-    );
-
-    final ObservableList<Order> order1 = FXCollections.observableArrayList(
-            new Order("More pickles", deadline, 367.00, "Created", orderLines),
-            new Order("Less pickles", deadline, 507.00, "In preparation", orderLines),
-            new Order("More pickles", deadline, 800.00, "Created", orderLines),
-            new Order("More pickles", deadline, 1245.00, "In delivery", orderLines)
-    );
-
-    Subscription subscription = new Subscription(subStart, subEnd, order);
-    Subscription subscription1 = new Subscription(subStart, subEnd, order1);
-
-    final ObservableList<Customer> customersSinSub = FXCollections.observableArrayList(
-            new Customer(false, "arne@gmail.com", "Arne", "Knudsen", 41333183, addressTest, ""),
-            new Customer(true, "truls@gmail.com", "Truls", "Knudsen", 41333183, addressTest2, "Business1"),
-            new Customer(false, "arne@gmail.com", "Arne", "Knudsen", 41333183, addressTest, ""),
-            new Customer(false, "arne@gmail.com", "Arne", "Knudsen", 41333183, addressTest2, "")
-    );
-
-    final ObservableList<Customer> customersConSub = FXCollections.observableArrayList(
-            new Customer(false, "arne@gmail.com", "Arne", "Knudsen", 41333183, addressTest, "", subscription, order),
-            new Customer(true, "truls@gmail.com", "Truls", "Ola", 41333183, addressTest2, "Business1", subscription1, order1),
-            new Customer(false, "pål@gmail.com", "Pål", "Arnfinnsson", 41333183, addressTest, "", subscription, order),
-            new Customer(false, "knut@gmail.com", "Knut", "Ludvigsen", 41333183, addressTest2, "", subscription1, order1)
-    );
+    private TestObjects testObjects = new TestObjects();
+    ObservableList<Order> orders = testObjects.allOrders;
+    ObservableList<Customer> customers = testObjects.allCustomers;
 
     public ObservableList<Order> getAllOrdersForSales() {
         return allOrdersForSales;
@@ -206,7 +157,6 @@ public class ControllerSales implements Initializable {
 
         ordersButton.setOnAction(orderEvent);
         subsButton.setOnAction(subsEvent);
-        //subsTable.setItems(subs);
 
     }
 }

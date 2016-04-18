@@ -1,26 +1,28 @@
 package users.sales;
 
 import classpackage.*;
-import java.lang.String;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
 
 /**
- * Created by Trym Todalshaug on 07/04/2016.
+ * Created by Trym Todalshaug on 18/04/2016.
  */
-public class ControllerSalesTextField implements Initializable{
+public class ControllerSalesInfo implements Initializable{
 
-    public TextField orderIdField;
-    public TextField customerIdField;
-    public TextField subscriptionIdField;
+    public Label orderIdLabel;
+    public Label customerIdLabel;
+    public Label subscriptionIdLabel;
     public TextField startSubscription;
     public TextField endSubscription;
     public TextField fNameField;
@@ -32,24 +34,34 @@ public class ControllerSalesTextField implements Initializable{
     public TextField addressField;
     public TextField zipCodeField;
     public TextField placeField;
-    public TextField customerRequestsField;
+    public TextArea customerRequestsArea;
     public DatePicker deadlinePicker;
     public TextField priceField;
-    public Button createButton;
-
     ObservableList<String> statusComboBoxValues = FXCollections.observableArrayList(
-        "Created", "In preparation", "Ready for delivery", "Under delivery", "Delivered"
+            "Created", "In preparation", "Ready for delivery", "Under delivery", "Delivered"
     );
 
     public ComboBox statusBox = new ComboBox(statusComboBoxValues);
+    public Button apply;
 
     private TestObjects testObjects = new TestObjects();
     ObservableList<Order> orders = testObjects.allOrders;
 
-    EventHandler<ActionEvent> createOrderEvent = new EventHandler<ActionEvent>() {
+    @FXML
+    public BorderPane rootPaneOrders;
+    public GridPane infoGrid;
+    public TableView<Order> ordersTable;
+
+    protected static Order selectedOrder;
+    protected static boolean ordersTableUpdate = false;
+
+    EventHandler<ActionEvent> editInfoEvent = new EventHandler<ActionEvent>() {
         @Override
         public void handle(ActionEvent e) {
             try {
+                int orderId = Integer.parseInt(orderIdLabel.getText());
+                int customerId = Integer.parseInt(customerIdLabel.getText());
+                int subcriptionId = Integer.parseInt(subscriptionIdLabel.getText());
                 String firstName = fNameField.getText();
                 String lastName = lNameField.getText();
                 boolean isBusiness = businessBox.isArmed();
@@ -60,13 +72,10 @@ public class ControllerSalesTextField implements Initializable{
                 int zipCodeInt = Integer.parseInt(zipCodeField.getText());
                 String place = placeField.getText();
                 ZipCode zipCode = new ZipCode(zipCodeInt, place);
-                String customerRequests = customerRequestsField.getText();
+                String customerRequests = customerRequestsArea.getText();
                 LocalDate deadline = deadlinePicker.getValue();
                 double price = Double.parseDouble(priceField.getText());
                 String status = (String)statusBox.getValue();
-                int orderId = Integer.parseInt(orderIdField.getText());
-                int customerId = Integer.parseInt(customerIdField.getText());
-                int subcriptionId = Integer.parseInt(subscriptionIdField.getText());
                 LocalDate startSubscription = deadlinePicker.getValue();
                 LocalDate endSubscription = deadlinePicker.getValue();
                 String dishName = "";
@@ -92,7 +101,8 @@ public class ControllerSalesTextField implements Initializable{
         }
     };
 
+
     public void initialize(URL fxmlFileLocation, ResourceBundle resources){
-        createButton.setOnAction(createOrderEvent);
+        apply.setOnAction(editInfoEvent);
     }
 }

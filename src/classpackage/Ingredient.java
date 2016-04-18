@@ -6,7 +6,7 @@ import javafx.beans.property.*;
  * 11.03.2016
  */
 
-public class Ingredient {
+public class    Ingredient {
     private IntegerProperty ingredientId = new SimpleIntegerProperty();
     private final StringProperty ingredientName =new SimpleStringProperty();
     private final StringProperty unit = new SimpleStringProperty();

@@ -55,7 +55,7 @@ public class ControllerSalesSubs implements Initializable{
                 FXMLLoader loader = new FXMLLoader();
                 loader.setLocation(getClass().getResource("SubsTable.fxml"));
                 subsTable = loader.load();
-                rootPaneSales.setCenter(subsTable);
+                rootPaneOrders.setCenter(subsTable);
                 ObservableList<TableColumn> columns = subsTable.getColumns();
                 columns.get(0).setCellValueFactory(new PropertyValueFactory<Customer, Subscription>("subscription"));
                 columns.get(1).setCellValueFactory(new PropertyValueFactory<Customer, Integer>("customerId"));
