@@ -46,7 +46,7 @@ public class ControllerSalesTextField implements Initializable{
     private TestObjects testObjects = new TestObjects();
     ObservableList<Order> orders = testObjects.allOrders;
 
-    EventHandler<ActionEvent> createOrderEvent = new EventHandler<ActionEvent>() {
+    EventHandler<ActionEvent> createOrderEventField = new EventHandler<ActionEvent>() {
         @Override
         public void handle(ActionEvent e) {
             try {
@@ -87,12 +87,12 @@ public class ControllerSalesTextField implements Initializable{
                         newAddress, businessName, subscription, order);
 
             } catch(Exception exc) {
-                System.out.println("createOrderEvent: " + exc);
+                System.out.println("createOrderEventField: " + exc);
             }
         }
     };
 
     public void initialize(URL fxmlFileLocation, ResourceBundle resources){
-        createButton.setOnAction(createOrderEvent);
+        createButton.setOnAction(createOrderEventField);
     }
 }

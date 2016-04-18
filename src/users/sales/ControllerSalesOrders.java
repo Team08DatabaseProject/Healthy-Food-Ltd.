@@ -1,22 +1,20 @@
 package users.sales;
 
-import classpackage.*;
-import javafx.collections.FXCollections;
+import classpackage.Order;
+import classpackage.TestObjects;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.control.*;
-import javafx.scene.control.cell.ComboBoxTableCell;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
-import javafx.util.Callback;
-import javafx.util.StringConverter;
-import javafx.util.converter.IntegerStringConverter;
 
 import java.net.URL;
 import java.time.LocalDate;
@@ -47,6 +45,7 @@ public class ControllerSalesOrders implements Initializable{
                 salesTextField = loader.load();
                 rootPaneOrders.setCenter(salesTextField);
                 rootPaneOrders.setBottom(null);
+                rootPaneOrders.setRight(null);
             } catch (Exception e) {
                 System.out.println(e);
             }

@@ -16,11 +16,11 @@
         <Insets bottom="25" left="30" right="20" top="25" />
     </padding>
     <children>
-        <Label fx:id="orderIdLabel" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+        <Label fx:id="orderIdLabel" GridPane.columnIndex="0" GridPane.rowIndex="0" text="order id: "/>
 
-        <Label fx:id="customerIdLabel" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+        <Label fx:id="customerIdLabel" GridPane.columnIndex="0" GridPane.rowIndex="1" text="customer id: "/>
 
-        <Label fx:id="subscriptionIdLabel" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+        <Label fx:id="subscriptionIdLabel" GridPane.columnIndex="0" GridPane.rowIndex="2" text="subscription id: "/>
 
         <TextField fx:id="fNameField" GridPane.columnIndex="0" GridPane.rowIndex="3" promptText="First name"/>
 

@@ -42,7 +42,7 @@ public class ControllerSalesInfo implements Initializable{
     );
 
     public ComboBox statusBox = new ComboBox(statusComboBoxValues);
-    public Button apply;
+    public Button applyButton;
 
     private TestObjects testObjects = new TestObjects();
     ObservableList<Order> orders = testObjects.allOrders;
@@ -78,31 +78,15 @@ public class ControllerSalesInfo implements Initializable{
                 String status = (String)statusBox.getValue();
                 LocalDate startSubscription = deadlinePicker.getValue();
                 LocalDate endSubscription = deadlinePicker.getValue();
-                String dishName = "";
-                Address newAddress = new Address(address, zipCodeInt, place);
-                Supplier supplier = new Supplier(12345678, newAddress, "Business as");
-                Ingredient ingredient = new Ingredient("Ravioli", "grams", 2000, 20, supplier);
-                ObservableList<DishLine> dishLines = FXCollections.observableArrayList(
-                        new DishLine(ingredient, 7.0),
-                        new DishLine(ingredient, 2.0)
-                );
-                Dish dishes = new Dish(price, dishName, dishLines);
-                ObservableList<Dish> dishesInThisOrder = FXCollections.observableArrayList();
-                ObservableList<Order> order = FXCollections.observableArrayList(
-                        new Order(customerRequests, deadline, price, status, dishesInThisOrder)
-                );
-                Subscription subscription = new Subscription(startSubscription, endSubscription, order);
-                Customer customer = new Customer(isBusiness, email, firstName, lastName, phoneNumber,
-                        newAddress, businessName, subscription, order);
 
             } catch(Exception exc) {
-                System.out.println("createOrderEvent: " + exc);
+                System.out.println("createOrderEventField: " + exc);
             }
         }
     };
 
 
     public void initialize(URL fxmlFileLocation, ResourceBundle resources){
-        apply.setOnAction(editInfoEvent);
+        applyButton.setOnAction(editInfoEvent);
     }
 }
