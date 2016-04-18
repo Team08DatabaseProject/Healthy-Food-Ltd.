@@ -16,18 +16,17 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
+import javafx.stage.Stage;
 
 
 import java.net.URL;
 import java.util.*;
 
-import static javax.swing.UIManager.put;
 
-/*
-
-public class ControllerCEOAddEmployee extends ControllerCEOEmployees implements Initializable {
+public class ControllerCEOEmployeeForm extends ControllerCEOEmployees implements Initializable {
 
     @FXML
+    public GridPane addEmployeeTable;
     public Button employeeSubmitButton;
     public StringField fNameField;
     public StringField lNameField;
@@ -163,10 +162,13 @@ public class ControllerCEOAddEmployee extends ControllerCEOEmployees implements 
 	              String passHash = generatePassword(8);
 	              Address addressObject = new Address(address, zipCode, place);
 	              Employee newEmp = new Employee(username, firstName, lastName, phoneNo, eMail, salary, passHash, addressObject, selectedPosition);
-	              db.addEmployee(newEmp);
+	              if(db.addEmployee(newEmp)) {
+		              PopupDialog.informationDialog("Result", "Employee " + firstName + " " + lastName + " successfully added to the database.");
+		              closeWindow();
+	              } else {
+		              PopupDialog.errorDialog("Result", "Error: Failed to add employee " + firstName + " " + lastName + " to the database.");
+	              }
               }
-
-
           } catch (Exception exc) {
               System.out.println(exc);
           }
@@ -188,7 +190,12 @@ public class ControllerCEOAddEmployee extends ControllerCEOEmployees implements 
 					selectedEmployee.setPosition(selectedPosition);
 					Address addressObject = new Address(selectedEmployee.getAddress().getAddressId(), addressField.getText(), zipCodeField.getInt(), placeField.getText());
 					selectedEmployee.setAddress(addressObject);
-					db.updateEmployee(selectedEmployee);
+					if(db.updateEmployee(selectedEmployee)) {
+						PopupDialog.informationDialog("Result", "Employee " + selectedEmployee.getFirstName() + " " + selectedEmployee.getLastName() + " successfully updated.");
+						closeWindow();
+					} else {
+						PopupDialog.errorDialog("Result", "Error: Failed to update employee " + selectedEmployee.getFirstName() + " " + selectedEmployee.getLastName() + ".");
+					}
 				}
 			} catch (Exception exc) {
 				System.out.println(exc);
@@ -209,11 +216,7 @@ public class ControllerCEOAddEmployee extends ControllerCEOEmployees implements 
 		if(validFields) {
 			Employee testEmployee = db.getEmployeeByUsername(usernameField.getText());
 			if(testEmployee != null) {
-				if(employeeFormUpdate && testEmployee.getEmployeeId() != selectedEmployee.getEmployeeId()) {
-					usernameFieldErrorMsg.setText("Username is already taken.");
-					usernameFieldErrorMsg.setVisible(true);
-					return false;
-				} else if(!employeeFormUpdate) {
+				if((employeeFormUpdate && testEmployee.getEmployeeId() != selectedEmployee.getEmployeeId()) || !employeeFormUpdate) {
 					usernameFieldErrorMsg.setText("Username is already taken.");
 					usernameFieldErrorMsg.setVisible(true);
 					return false;
@@ -221,6 +224,11 @@ public class ControllerCEOAddEmployee extends ControllerCEOEmployees implements 
 			}
 		}
 		return validFields;
+	}
+
+	public void closeWindow() {
+		Stage stage = (Stage) addEmployeeTable.getScene().getWindow();
+		stage.close();
 	}
 
   public void initialize(URL fxmlFileLocation, ResourceBundle resources) { // Required method for Initializable, runs at program launch
@@ -264,4 +272,4 @@ public class ControllerCEOAddEmployee extends ControllerCEOEmployees implements 
 	    positionBox.getSelectionModel().selectFirst();
     }
   }
-}*/
+}

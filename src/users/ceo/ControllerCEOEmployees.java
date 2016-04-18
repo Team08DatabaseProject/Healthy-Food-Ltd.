@@ -2,6 +2,7 @@ package users.ceo;
 
 import classpackage.Address;
 import classpackage.*;
+import div.PopupDialog;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -12,10 +13,12 @@ import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.PopupWindow;
 import javafx.stage.Stage;
 
 import java.net.URL;
@@ -25,15 +28,23 @@ import java.util.concurrent.ThreadLocalRandom;
 /**
  * Created by HUMBUG on 06.04.2016.
  */
-/*
+
 public class ControllerCEOEmployees extends ControllerCEO  implements Initializable {
 
 	@FXML
-	private TableView employeesTable;
-	@FXML
-	private Button addEmployeeFormButton;
-	@FXML
-	private Button refreshEmployeesButton;
+	public TableView<Employee> employeesTable;
+	public Button addEmployeeFormButton;
+	public Button refreshEmployeesButton;
+	public Button newPasswordButton;
+	public Button deleteEmployeesButton;
+	public TableColumn<Employee, Boolean> checkedCol;
+	public TableColumn<Employee, String> fNameCol;
+	public TableColumn<Employee, String> lNameCol;
+	public TableColumn<Employee, String> eMailCol;
+	public TableColumn<Employee, Integer> phoneNoCol;
+	public TableColumn<Employee, Address> addressCol;
+	public TableColumn<Employee, EmployeePosition> positionCol;
+	public TableColumn<Employee, Double> salaryCol;
 
 	private ObservableList<Employee> employees;
 
@@ -48,9 +59,9 @@ public class ControllerCEOEmployees extends ControllerCEO  implements Initializa
 				FXMLLoader loader = new FXMLLoader();
 				loader.setLocation(getClass().getResource("CEOEmployeeForm.fxml"));
 				GridPane addEmployeeTable = loader.load();
-				Scene formScene = new Scene(addEmployeeTable);
+				Scene formScene = new Scene(addEmployeeTable, 300, 550);
 				Stage formStage = new Stage();
-				formStage.setTitle("Add Employee");
+				formStage.setTitle("New employee");
 				formStage.setScene(formScene);
 				formStage.show();
 			} catch (Exception exc) {
@@ -71,13 +82,13 @@ public class ControllerCEOEmployees extends ControllerCEO  implements Initializa
 		@Override
 		public void handle(MouseEvent event) {
 			if (event.isPrimaryButtonDown() && event.getClickCount() == 2) {
-				selectedEmployee = (Employee) employeesTable.getSelectionModel().getSelectedItem();
+				selectedEmployee = employeesTable.getSelectionModel().getSelectedItem();
 				try {
 					employeeFormUpdate = true;
 					FXMLLoader loader = new FXMLLoader();
 					loader.setLocation(getClass().getResource("CEOEmployeeForm.fxml"));
 					GridPane addEmployeeTable = loader.load();
-					Scene formScene = new Scene(addEmployeeTable);
+					Scene formScene = new Scene(addEmployeeTable, 300, 550);
 					Stage formStage = new Stage();
 					formStage.setTitle("Update Employee");
 					formStage.setScene(formScene);
@@ -89,10 +100,58 @@ public class ControllerCEOEmployees extends ControllerCEO  implements Initializa
 		}
 	};
 
+	private EventHandler<ActionEvent> newPassword = new EventHandler<ActionEvent>() {
+		@Override
+		public void handle(ActionEvent e) {
+			if(PopupDialog.confirmationDialog("Question", "Generate new passwords for selected employees?")) {
+				String result = "";
+				boolean ok = true;
+				for(Employee emp : employeesTable.getItems()) {
+					if(emp.isChecked()) {
+						String newPassword = generatePassword(8);
+						emp.setPassHash(newPassword);
+						if(!db.updateEmployee(emp)) {
+							ok = false;
+							result += "Could not update " + emp.getFirstName() + " " + emp.getLastName() + "\n";
+						}
+					}
+				}
+				if(!ok) {
+					PopupDialog.errorDialog("Error", result);
+				} else {
+					PopupDialog.informationDialog("Result", "Selected employees updated successfully.");
+				}
+			}
+		}
+	};
+
+	private EventHandler<ActionEvent> deleteEmployees = new EventHandler<ActionEvent>() {
+		@Override
+		public void handle(ActionEvent e) {
+			if(PopupDialog.confirmationDialog("Question", "Are you sure you want to delete the selected employees?")) {
+				String result = "";
+				boolean ok = true;
+				for(Employee emp : employeesTable.getItems()) {
+					if(emp.isChecked()) {
+						if(!db.deleteEmployee(emp)) {
+							ok = false;
+							result += "Could not delete " + emp.getFirstName() + " " + emp.getLastName() + "\n";
+						}
+					}
+				}
+				if(!ok) {
+					PopupDialog.errorDialog("Error", result);
+				} else {
+					PopupDialog.informationDialog("Result", "Selected employees deleted successfully.");
+				}
+			}
+		}
+	};
+
 	public String generatePassword(int length) {
 		String characters = "ABCDEFGHIJKLMNOPQRTSUVWXYZÆØÅabcdefghijklmnopqrstuvwxyzæøå1234567890.,:;!\"#+-";
 		String password = "";
-		for(int i = 0; i < characters.length(); i++) {
+		for(int i = 0; i < length; i++) {
 			password += characters.charAt(ThreadLocalRandom.current().nextInt(characters.length()));
 		}
 		return password;
@@ -101,14 +160,18 @@ public class ControllerCEOEmployees extends ControllerCEO  implements Initializa
 	public void initialize(URL fxmlFileLocation, ResourceBundle resources) { // Required method for Initializable, runs at program launch
 		addEmployeeFormButton.setOnAction(addEmployeeForm);
 		refreshEmployeesButton.setOnAction(refreshEmployees);
+		newPasswordButton.setOnAction(newPassword);
+		deleteEmployeesButton.setOnAction(deleteEmployees);
 		employees = db.getEmployees();
-		ObservableList<TableColumn> columns = employeesTable.getColumns();
-		columns.get(0).setCellValueFactory(new PropertyValueFactory<Employee, String>("firstName"));
-		columns.get(1).setCellValueFactory(new PropertyValueFactory<Employee, String>("lastName"));
-		columns.get(2).setCellValueFactory(new PropertyValueFactory<Employee, String>("eMail"));
-		columns.get(3).setCellValueFactory(new PropertyValueFactory<Employee, Integer>("phoneNo"));
-		columns.get(4).setCellValueFactory(new PropertyValueFactory<Employee, Address>("address"));
-		columns.get(4).setCellFactory(column -> {
+		checkedCol.setCellValueFactory(new PropertyValueFactory<>("checked"));
+		checkedCol.setCellFactory(CheckBoxTableCell.forTableColumn(checkedCol));
+		checkedCol.setEditable(true);
+		fNameCol.setCellValueFactory(new PropertyValueFactory<>("firstName"));
+		lNameCol.setCellValueFactory(new PropertyValueFactory<>("lastName"));
+		eMailCol.setCellValueFactory(new PropertyValueFactory<>("eMail"));
+		phoneNoCol.setCellValueFactory(new PropertyValueFactory<>("phoneNo"));
+		addressCol.setCellValueFactory(new PropertyValueFactory<>("address"));
+		addressCol.setCellFactory(column -> {
 			return new TableCell<Employee, Address>() {
 				@Override
 				protected void updateItem(Address item, boolean empty) {
@@ -120,8 +183,8 @@ public class ControllerCEOEmployees extends ControllerCEO  implements Initializa
 				}
 			};
 		});
-		columns.get(5).setCellValueFactory(new PropertyValueFactory<Employee, EmployeePosition>("position"));
-		columns.get(5).setCellFactory(column -> {
+		positionCol.setCellValueFactory(new PropertyValueFactory<>("position"));
+		positionCol.setCellFactory(column -> {
 			return new TableCell<Employee, EmployeePosition>() {
 				@Override
 				protected void updateItem(EmployeePosition item, boolean empty) {
@@ -133,8 +196,8 @@ public class ControllerCEOEmployees extends ControllerCEO  implements Initializa
 				}
 			};
 		});
-		columns.get(6).setCellValueFactory(new PropertyValueFactory<Employee, Double>("salary"));
-		columns.get(6).setCellFactory(column -> {
+		salaryCol.setCellValueFactory(new PropertyValueFactory<>("salary"));
+		salaryCol.setCellFactory(column -> {
 			return new TableCell<Employee, Double>() {
 				@Override
 				protected void updateItem(Double item, boolean empty) {
@@ -147,7 +210,8 @@ public class ControllerCEOEmployees extends ControllerCEO  implements Initializa
 				}
 			};
 		});
+		employeesTable.setEditable(true);
 		employeesTable.setOnMousePressed(updateEmployeeForm);
 		employeesTable.setItems(employees);
 	}
-*///}
+}

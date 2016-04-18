@@ -1,11 +1,16 @@
 package div;
 
+import javafx.css.PseudoClass;
 import javafx.scene.control.Label;
+import javafx.scene.layout.Border;
+import javafx.scene.layout.BorderStroke;
 
 /**
  * Created by HUMBUG on 07.04.2016.
  */
 public class ZipCodeField extends IntField {
+
+	private final PseudoClass errorClass = PseudoClass.getPseudoClass("error");
 
 	@Override
 	public void replaceText(int i, int il, String string) {
@@ -37,6 +42,11 @@ public class ZipCodeField extends IntField {
 				} else {
 					errorMsg.setVisible(false);
 				}
+			}
+			if(valid) {
+				pseudoClassStateChanged(errorClass, false);
+			} else {
+				pseudoClassStateChanged(errorClass, true);
 			}
 		}
 		return valid;

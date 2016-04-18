@@ -18,13 +18,14 @@
     <children>
       <TableView fx:id="employeesTable" GridPane.columnIndex="0" GridPane.hgrow="SOMETIMES" GridPane.rowIndex="0" GridPane.vgrow="ALWAYS">
           <columns>
-              <TableColumn prefWidth="40.0" text="First name" />
-              <TableColumn prefWidth="40.0" text="Last name" />
-              <TableColumn prefWidth="40.0" text="E-mail" />
-              <TableColumn prefWidth="20.0" text="Phone no." />
-              <TableColumn prefWidth="60.0" text="Address" />
-              <TableColumn prefWidth="30.0" text="Position" />
-              <TableColumn prefWidth="30.0" text="Salary (NOK)" />
+              <TableColumn fx:id="checkedCol" prefWidth="20.0" text="" />
+              <TableColumn fx:id="fNameCol" prefWidth="40.0" text="First name" />
+              <TableColumn fx:id="lNameCol" prefWidth="40.0" text="Last name" />
+              <TableColumn fx:id="eMailCol" prefWidth="40.0" text="E-mail" />
+              <TableColumn fx:id="phoneNoCol" prefWidth="20.0" text="Phone no." />
+              <TableColumn fx:id="addressCol" prefWidth="60.0" text="Address" />
+              <TableColumn fx:id="positionCol" prefWidth="30.0" text="Position" />
+              <TableColumn fx:id="salaryCol" prefWidth="30.0" text="Salary (NOK)" />
           </columns>
           <columnResizePolicy>
               <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" /> <!--> fix vgrow <!-->
@@ -34,8 +35,10 @@
          </GridPane.margin>
       </TableView>
       <HBox fx:id="employeesButtons" GridPane.columnIndex="0" GridPane.rowIndex="1" xmlns:fx="http://javafx.com/fxml">
-          <Button fx:id="addEmployeeFormButton" mnemonicParsing="false" styleClass="SmallButton" text="Add employee" textAlignment="CENTER" />
+          <Button fx:id="addEmployeeFormButton" mnemonicParsing="false" styleClass="SmallButton" text="New" textAlignment="CENTER" />
           <Button fx:id="refreshEmployeesButton" mnemonicParsing="false" styleClass="SmallButton" text="Refresh" textAlignment="CENTER" />
+          <Button fx:id="newPasswordButton" mnemonicParsing="false" styleClass="SmallButton" text="Generate new password" textAlignment="CENTER" />
+          <Button fx:id="deleteEmployeesButton" mnemonicParsing="false" styleClass="SmallButton" text="Delete" textAlignment="CENTER" />
          <GridPane.margin>
             <Insets left="4.0" right="4.0" top="4.0" />
          </GridPane.margin>

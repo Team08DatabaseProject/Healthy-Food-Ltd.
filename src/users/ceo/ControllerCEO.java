@@ -18,7 +18,7 @@ import javafx.scene.layout.HBox;
 
 import java.net.URL;
 import java.util.ResourceBundle;
-/*
+
 public class ControllerCEO implements Initializable {
 
     @FXML
@@ -51,4 +51,3 @@ public class ControllerCEO implements Initializable {
         employeesButton.setOnAction(viewEmployees);
     }
 }
-*/
