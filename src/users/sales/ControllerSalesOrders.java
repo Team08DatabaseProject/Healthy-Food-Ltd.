@@ -163,7 +163,7 @@ public class ControllerSalesOrders implements Initializable{
         columns.get(12).setCellValueFactory(new PropertyValueFactory<Customer,Order>("order")); //status
 
         // Order ID
-        orderId.setCellFactory(lv -> {
+        /*orderId.setCellFactory(lv -> {
             TextFieldTableCell<Customer, Order> cell = new TextFieldTableCell();
             StringConverter<Order> converter = new StringConverter<Order>() {
                 @Override
@@ -193,7 +193,7 @@ public class ControllerSalesOrders implements Initializable{
                     t.getTableView().getItems().get(t.getTablePosition().getRow()).getOrders().get(t.getTablePosition().
                             getRow()).setOrderId(Integer.parseInt(t.getNewValue().toString()));
                 }
-        );
+        );*/
 
         // Customer ID
         /*customerId.setCellFactory(TextFieldTableCell.<Customer, Integer>forTableColumn(new IntegerStringConverter()));
@@ -204,7 +204,7 @@ public class ControllerSalesOrders implements Initializable{
         );*/
 
         // Subscription ID
-        subscriptionId.setCellFactory(lv -> {
+        /*subscriptionId.setCellFactory(lv -> {
             TextFieldTableCell<Customer, Subscription> cell = new TextFieldTableCell();
             StringConverter<Subscription> converter = new StringConverter<Subscription>() {
                 @Override
@@ -227,7 +227,7 @@ public class ControllerSalesOrders implements Initializable{
             };
             cell.setConverter(converter);
             return cell;
-        });
+        });*/
 
         subscriptionId.setOnEditCommit(
                 (TableColumn.CellEditEvent<Customer, Subscription> t) -> {

@@ -116,7 +116,7 @@ public class Login extends Application {
                     */
                     Employee emp = new Employee(1, "test", "test", "test", 1234, "test", 1234.56,
                              "hash", new Address("Testveien 1", 1234, "testZip"),
-                              new EmployeePosition(1, "test", 23.34));
+                              new EmployeePosition(4, "test", 23.34));
                     if (emp != null) {
                         switch(emp.getPosition().getId()) {
                             case CEO : {

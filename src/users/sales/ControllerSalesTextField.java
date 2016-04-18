@@ -67,14 +67,21 @@ public class ControllerSalesTextField implements Initializable{
                 LocalDate startSubscription = deadlinePicker.getValue();
                 LocalDate endSubscription = deadlinePicker.getValue();
                 String dishName = "";
-                Address newAddress = new Address(address, zipCode);
-                Subscription subscription = new Subscription(startSubscription, endSubscription);
-                Customer customer = new Customer(isBusiness, email, firstName, lastName, phoneNumber,
-                        newAddress, businessName, subscription);
-                Dish dishes = new Dish(price, dishName);
+                Address newAddress = new Address(address, zipCodeInt, place);
+                Supplier supplier = new Supplier(12345678, newAddress, "Business as");
+                Ingredient ingredient = new Ingredient("Ravioli", "grams", 2000, 20, supplier);
+                ObservableList<DishLine> dishLines = FXCollections.observableArrayList(
+                        new DishLine(ingredient, 7.0),
+                        new DishLine(ingredient, 2.0)
+                );
+                Dish dishes = new Dish(price, dishName, dishLines);
                 ObservableList<Dish> dishesInThisOrder = FXCollections.observableArrayList();
-                Order order = new Order(subscription, customerRequests, deadline,
-                        price, status, customer, dishesInThisOrder);
+                ObservableList<Order> order = FXCollections.observableArrayList(
+                        new Order(customerRequests, deadline, price, status, dishesInThisOrder)
+                );
+                Subscription subscription = new Subscription(startSubscription, endSubscription, order);
+                Customer customer = new Customer(isBusiness, email, firstName, lastName, phoneNumber,
+                        newAddress, businessName, subscription, order);
 
             } catch(Exception exc) {
                 System.out.println("createOrderEvent: " + exc);
