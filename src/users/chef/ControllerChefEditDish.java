@@ -12,42 +12,39 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.GridPane;
-import javafx.util.Callback;
 import javafx.util.StringConverter;
-import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.util.converter.DoubleStringConverter;
-import javafx.util.converter.IntegerStringConverter;
 
 import java.net.URL;
 import java.text.NumberFormat;
 import java.util.ResourceBundle;
 
 /**
- * Created by axelkvistad on 4/16/16.
+ * Created by axelkvistad on 4/18/16.
  */
-public class ControllerChefAddDish implements Initializable {
+public class ControllerChefEditDish extends ControllerChefDishes implements Initializable {
 
-    public GridPane addDishGP;
-    public TextField dishNameField;
-    public TextField dishPriceFactorField;
-    public ComboBox<DishLine> chooseIngredientCB;
-    public Button addToDishButton;
-    public TableView chosenIngTable;
-    public TableColumn chosenIngName;
-    public TableColumn chosenIngAmount;
-    public TableColumn chosenIngUnit;
-    public TableColumn chosenIngPrice;
-    public Button setDishNameButton;
-    public Button setPriceButton;
-    public Label dishNameLabel;
-    public Label dishPriceLabel;
-    public Button addDishApplyButton;
-    public Button removeFromDishButton;
+    public GridPane editDishGP;
+    public TextField editDishNameField;
+    public TextField editDishPriceFactorField;
+    public ComboBox<DishLine> editIngredientCB;
+    public Button addIngButton;
+    public Button removeIngButton;
+    public TableView currentIngTable;
+    public TableColumn currentIngName;
+    public TableColumn currentIngAmount;
+    public TableColumn currentIngUnit;
+    public TableColumn currentIngPrice;
+    public Button editDishNameButton;
+    public Button editPriceButton;
+    public Label currentNameLabel;
+    public Label currentPriceLabel;
+    public Button editDishApplyButton;
     private TestObjects testObjects = new TestObjects();
     private DishLine selectedIngredient;
 
     ObservableList<DishLine> testIngredients  = testObjects.allIngredientsDL;
-    ObservableList<DishLine> chosenIngredients = FXCollections.observableArrayList();
+    ObservableList<DishLine> currentIngredients = chosenDish.getDish().getAllDishLinesForThisDish();
 
 
     private final NumberFormat nf = NumberFormat.getNumberInstance();
@@ -55,23 +52,22 @@ public class ControllerChefAddDish implements Initializable {
         nf.setMaximumFractionDigits(2);
     }
 
-    EventHandler<ActionEvent> addDishApplyButtonClick = new EventHandler<ActionEvent>() {
+    EventHandler<ActionEvent> editDishApplyButtonClick = new EventHandler<ActionEvent>() {
         @Override
         public void handle(ActionEvent event) {
             try {
-                String name = dishNameField.getText();
-                String priceFactorString = dishPriceFactorField.getText();
+                String name = editDishNameField.getText();
+                String priceFactorString = editDishPriceFactorField.getText();
                 double priceFactor = Double.parseDouble(priceFactorString) / 100;
                 double price = 0;
-                for (DishLine dl : chosenIngredients) {
+                for (DishLine dl : currentIngredients) {
                     price += (dl.getAmount() * dl.getIngredient().getPrice());
                 }
                 price *= priceFactor;
                 double finalPrice = Math.round(price * 100.0) / 100.0;
-                Dish newDish = new Dish(finalPrice, name, chosenIngredients);
-                MenuLine menuLine = new MenuLine(newDish);
-                ControllerChefDishes ccd = new ControllerChefDishes();
-                ccd.addDish(menuLine);
+                Dish newDish = new Dish(finalPrice, name, currentIngredients);
+                chosenDish.setDish(newDish);
+                chosenDish.setPriceFactor(priceFactor);
             } catch (Exception exc) {
                 System.out.println(exc);
             }
@@ -82,9 +78,9 @@ public class ControllerChefAddDish implements Initializable {
         @Override
         public void handle(ActionEvent event) {
             try {
-                if (!dishNameField.getText().isEmpty()) {
-                    String name = dishNameField.getText();
-                    dishNameLabel.setText("Dish name: " + name);
+                if (!editDishNameField.getText().isEmpty()) {
+                    String name = editDishNameField.getText();
+                    currentNameLabel.setText("Dish name: " + name);
                 }
             } catch (Exception exc) {
                 System.out.println(exc);
@@ -96,15 +92,15 @@ public class ControllerChefAddDish implements Initializable {
         @Override
         public void handle(ActionEvent event) {
             try {
-                if (!dishPriceFactorField.getText().isEmpty() && !chosenIngredients.isEmpty()) {
-                    String priceFactorString = dishPriceFactorField.getText();
+                if (!editDishPriceFactorField.getText().isEmpty() && !currentIngredients.isEmpty()) {
+                    String priceFactorString = editDishPriceFactorField.getText();
                     double priceFactor = Double.parseDouble(priceFactorString) / 100;
                     double price = 0;
-                    for (DishLine dl : chosenIngredients) {
+                    for (DishLine dl : currentIngredients) {
                         price += (dl.getAmount() * dl.getIngredient().getPrice());
                     }
                     price *= priceFactor;
-                    dishPriceLabel.setText("Price: " + nf.format(price) + " NOK");
+                    currentPriceLabel.setText("Price: " + nf.format(price) + " NOK");
                 }
             } catch (Exception exc) {
                 System.out.println(exc);
@@ -118,14 +114,14 @@ public class ControllerChefAddDish implements Initializable {
             try {
                 boolean remove = false;
                 if (selectedIngredient != null) {
-                    for (DishLine dl : chosenIngredients) {
+                    for (DishLine dl : currentIngredients) {
                         if (dl.getIngredient().getIngredientName().equals(selectedIngredient.getIngredient().getIngredientName())) {
                             remove = true;
                         }
                     }
                     if (remove) {
-                        chosenIngredients.remove(selectedIngredient);
-                        chosenIngTable.setItems(chosenIngredients);
+                        currentIngredients.remove(selectedIngredient);
+                        currentIngTable.setItems(currentIngredients);
                     } else {
                         Alert alert = new Alert(Alert.AlertType.WARNING);
                         alert.setTitle("Error");
@@ -146,14 +142,14 @@ public class ControllerChefAddDish implements Initializable {
             try {
                 boolean add = true;
                 if (selectedIngredient != null) {
-                    for (DishLine dl : chosenIngredients) {
+                    for (DishLine dl : currentIngredients) {
                         if (dl.getIngredient().getIngredientName().equals(selectedIngredient.getIngredient().getIngredientName())) {
                             add = false;
                         }
                     }
                     if (add) {
-                        chosenIngredients.add(selectedIngredient);
-                        chosenIngTable.setItems(chosenIngredients);
+                        currentIngredients.add(selectedIngredient);
+                        currentIngTable.setItems(currentIngredients);
                     } else {
                         Alert alert = new Alert(Alert.AlertType.WARNING);
                         alert.setTitle("Error");
@@ -173,10 +169,12 @@ public class ControllerChefAddDish implements Initializable {
 
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
 
-
-
-        chooseIngredientCB.setItems(testIngredients);
-        chooseIngredientCB.setConverter(new StringConverter<DishLine>() {
+        editIngredientCB.setItems(testIngredients);
+        editDishNameField.setText(chosenDish.getDish().getDishName());
+        editDishPriceFactorField.setText(nf.format(chosenDish.getPriceFactor() * 100));
+        currentNameLabel.setText("Dish name: " + chosenDish.getDish().getDishName());
+        currentPriceLabel.setText("Price: " + chosenDish.getDish().getPrice());
+        editIngredientCB.setConverter(new StringConverter<DishLine>() {
             @Override
             public String toString(DishLine dishLine) {
                 if (dishLine == null) {
@@ -185,27 +183,26 @@ public class ControllerChefAddDish implements Initializable {
                     return dishLine.getIngredient().getIngredientName();
                 }
             }
-
             @Override
             public DishLine fromString(String string) {
                 return null;
             }
         });
 
-        chooseIngredientCB.valueProperty().addListener(new ChangeListener<DishLine>() {
+        editIngredientCB.valueProperty().addListener(new ChangeListener<DishLine>() {
             @Override
             public void changed(ObservableValue<? extends DishLine> observable, DishLine oldValue, DishLine newValue) {
                 selectedIngredient = newValue;
             }
         });
 
-        chosenIngName.setCellValueFactory(new PropertyValueFactory<DishLine, Ingredient>("ingredient"));
-        chosenIngAmount.setCellValueFactory(new PropertyValueFactory<DishLine, Double>("amount"));
-        chosenIngUnit.setCellValueFactory(new PropertyValueFactory<DishLine, Ingredient>("ingredient"));
-        chosenIngPrice.setCellValueFactory(new PropertyValueFactory<DishLine, Ingredient>("ingredient"));
+        currentIngName.setCellValueFactory(new PropertyValueFactory<DishLine, Ingredient>("ingredient"));
+        currentIngAmount.setCellValueFactory(new PropertyValueFactory<DishLine, Double>("amount"));
+        currentIngUnit.setCellValueFactory(new PropertyValueFactory<DishLine, Ingredient>("ingredient"));
+        currentIngPrice.setCellValueFactory(new PropertyValueFactory<DishLine, Ingredient>("ingredient"));
 
 
-        chosenIngName.setCellFactory(column -> {
+        currentIngName.setCellFactory(column -> {
             return new TableCell<DishLine, Ingredient>() {
                 @Override
                 protected void updateItem(Ingredient ingredient, boolean empty) {
@@ -218,17 +215,17 @@ public class ControllerChefAddDish implements Initializable {
             };
         });
 
-        chosenIngAmount.setCellFactory(TextFieldTableCell.forTableColumn(new DoubleStringConverter()));
-        chosenIngAmount.setOnEditCommit(
-                new EventHandler<CellEditEvent<DishLine, Double>>() {
+        currentIngAmount.setCellFactory(TextFieldTableCell.forTableColumn(new DoubleStringConverter()));
+        currentIngAmount.setOnEditCommit(
+                new EventHandler<TableColumn.CellEditEvent<DishLine, Double>>() {
                     @Override
-                    public void handle(CellEditEvent<DishLine, Double> event) {
+                    public void handle(TableColumn.CellEditEvent<DishLine, Double> event) {
                         event.getTableView().getItems().get(event.getTablePosition().getRow()).setAmount(event.getNewValue());
                         // = event.getNewValue();
                     }
                 });
 
-        chosenIngPrice.setCellFactory(column -> {
+        currentIngPrice.setCellFactory(column -> {
             return new TableCell<DishLine, Ingredient>() {
                 @Override
                 protected void updateItem(Ingredient ingredient, boolean empty) {
@@ -236,7 +233,6 @@ public class ControllerChefAddDish implements Initializable {
                         setText(null);
                     } else {
                         setText(nf.format(ingredient.getPrice()));
-
                     }
                 }
             };
@@ -259,7 +255,7 @@ public class ControllerChefAddDish implements Initializable {
         });
 
 */
-        chosenIngUnit.setCellFactory(column -> {
+        currentIngUnit.setCellFactory(column -> {
             return new TableCell<DishLine, Ingredient>() {
                 @Override
                 protected void updateItem(Ingredient ingredient, boolean empty) {
@@ -273,17 +269,15 @@ public class ControllerChefAddDish implements Initializable {
         });
 
 
+        currentIngTable.getColumns().setAll(currentIngName, currentIngAmount, currentIngUnit, currentIngPrice);
+        currentIngTable.setEditable(true);
+        currentIngTable.setItems(currentIngredients);
 
-
-        chosenIngTable.getColumns().setAll(chosenIngName, chosenIngAmount, chosenIngUnit, chosenIngPrice);
-        chosenIngTable.setEditable(true);
-        chosenIngTable.setItems(chosenIngredients);
-
-        addToDishButton.setOnAction(addToDishButtonClick);
-        setDishNameButton.setOnAction(setDishNameButtonClick);
-        setPriceButton.setOnAction(setPriceButtonClick);
-        removeFromDishButton.setOnAction(removeFromDishButtonClick);
-        addDishApplyButton.setOnAction(addDishApplyButtonClick);
+        addIngButton.setOnAction(addToDishButtonClick);
+        editDishNameButton.setOnAction(setDishNameButtonClick);
+        editPriceButton.setOnAction(setPriceButtonClick);
+        removeIngButton.setOnAction(removeFromDishButtonClick);
+        editDishApplyButton.setOnAction(editDishApplyButtonClick);
 
     }
 }

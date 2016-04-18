@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--> Axel </!-->
+
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.collections.FXCollections?>
+
+<?import javafx.scene.chart.BubbleChart?>
+<GridPane fx:id="editDishGP" fx:controller="users.chef.ControllerChefEditDish" hgap="5" prefHeight="500.0" prefWidth="800.0" vgap="10" BorderPane.alignment="CENTER" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+    <padding>
+        <Insets bottom="25" left="30" right="20" top="25" />
+    </padding>
+
+    <children>
+        <VBox alignment="TOP_LEFT" spacing="10" GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.fillWidth="false" prefWidth="135">
+            <children>
+                <TextField fx:id="editDishNameField" promptText="Dish name"/>
+                <TextField fx:id="editDishPriceFactorField" promptText="Price reduction(%)"/>
+            </children>
+        </VBox>
+        <VBox alignment="TOP_LEFT" spacing="10" GridPane.columnIndex="0" GridPane.rowIndex="0" translateX="140">
+            <children>
+                <Button fx:id="editDishNameButton" text="Apply"/>
+                <Button fx:id="editPriceButton" text="Apply"/>
+            </children>
+        </VBox>
+
+
+        <HBox alignment="BASELINE_LEFT" spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="1">
+            <children>
+                <ComboBox fx:id="editIngredientCB" promptText="Choose ingredient">
+                    <items>
+                        <FXCollections fx:factory="observableArrayList"/>
+                    </items>
+                </ComboBox>
+                <Button fx:id="addIngButton" prefWidth="150" prefHeight="50" text="Add to dish"/>
+                <Button fx:id="removeIngButton" prefWidth="150" prefHeight="50" text="Remove ingredient&#10;from dish"/>
+            </children>
+        </HBox>
+
+        <TableView fx:id="currentIngTable" GridPane.columnIndex="1" GridPane.rowIndex="0" prefWidth="450" >
+            <TableColumn fx:id="currentIngName" prefWidth="150" text="Ingredient name"/>
+            <TableColumn fx:id="currentIngAmount" prefWidth="100" text="Amount (unit)"/>
+            <TableColumn fx:id="currentIngUnit" prefWidth="100" text="Unit"/>
+            <TableColumn fx:id="currentIngPrice" prefWidth="100" text="Price per unit"/>
+        </TableView>
+
+        <VBox alignment="BASELINE_LEFT" spacing="10" GridPane.columnIndex="0" GridPane.rowIndex="2">
+            <Label fx:id="currentNameLabel" prefWidth="200" prefHeight="50" text="Dish name: "/>
+            <Label fx:id="currentPriceLabel" prefWidth="200" prefHeight="50" text="Price: "/>
+            <Button fx:id="editDishApplyButton" prefWidth="150" prefHeight="50" text="Apply"/>
+        </VBox>
+
+    </children>
+</GridPane>

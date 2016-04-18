@@ -31,8 +31,9 @@ public class ControllerChefDishes implements Initializable {
     public Button viewDishInfoButton;
     public Button removeDishButton;
 
-    private TestObjects testObjects = new TestObjects();
-    private ObservableList<MenuLine> testDishes = testObjects.allDishes;
+    private static TestObjects testObjects = new TestObjects();
+    protected static ObservableList<MenuLine> testDishes = testObjects.allDishes;
+    public static MenuLine chosenDish;
 
     EventHandler<ActionEvent> addDishButtonClick = new EventHandler<ActionEvent>() {
         @Override
@@ -56,8 +57,16 @@ public class ControllerChefDishes implements Initializable {
         @Override
         public void handle(ActionEvent event) {
             try {
-                int selectedIndex = dishTable.getSelectionModel().getSelectedIndex();
-                if (selectedIndex > -1) {
+                chosenDish = (MenuLine) dishTable.getSelectionModel().getSelectedItem();
+                if (chosenDish != null) {
+                    FXMLLoader loader = new FXMLLoader();
+                    loader.setLocation(getClass().getResource("ChefEditDish.fxml"));
+                    GridPane editDishGP = loader.load();
+                    Scene formScene = new Scene(editDishGP);
+                    Stage formStage = new Stage();
+                    formStage.setTitle("Edit dish");
+                    formStage.setScene(formScene);
+                    formStage.show();
                 }
             } catch (Exception exc) {
                 System.out.println(exc);
@@ -89,9 +98,6 @@ public class ControllerChefDishes implements Initializable {
     public void addDish(MenuLine newDish) {
         testDishes.add(newDish);
     }
-
-
-
 
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
 
@@ -133,6 +139,7 @@ public class ControllerChefDishes implements Initializable {
         dishTable.getColumns().setAll(dishName, dishPrice);
         dishTable.setItems(testDishes);
         addDishButton.setOnAction(addDishButtonClick);
+        viewDishInfoButton.setOnAction(viewInfoButtonClick);
 
 
     }
