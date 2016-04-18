@@ -29,47 +29,131 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+import javafx.util.StringConverter;
 
 import java.net.URL;
+import java.text.NumberFormat;
 import java.util.ResourceBundle;
 
-public class ControllerChefAddMenu implements Initializable{
+public class ControllerChefAddMenu extends ControllerChefMenus implements Initializable{
 
     @FXML
     public GridPane addMenuGP;
-    public TextField menuNameTF;
-    public TableView selectDishes;
-    public TextField discountTF;
-    public TableView selectedDishes;
-    public TableColumn nameLeft;
-    public TableColumn priceLeft;
-    public TableColumn checkBoxLeft;
-    public TableColumn selectedRight;
+    public TextField menuNameField;
+    public TextField menuPriceFactorField;
+    public ComboBox<String> mealTypeCB;
+    public ComboBox<MenuLine> chooseDishCB;
+    public Button addToMenuButton;
+    public Button removeFromMenuButton;
+    public TableView chosenDishTable;
+    public TableColumn chosenDishName;
+    public TableColumn chosenDishAmount;
+    public TableColumn chosenDishPrice;
+    public Label menuNameLabel;
+    public Label menuPriceLabel;
     public Button addMenuButton;
+    public Button applyButton;
 
-    TestObjects to = new TestObjects();
-    final ObservableList<DishLine> ingredients = to.ingredientListDL1;
+    private String selectedMealType;
+    private String menuNameString;
+    private double menuPrice = 0;
+    private String menuPriceString;
 
-    final ObservableList<Dish> dishesLeft = FXCollections.observableArrayList(
-            new Dish(100, "Bacon", ingredients),
-            new Dish(150, "Taco", ingredients),
-            new Dish(245, "Fish 'n' chips", ingredients),
-            new Dish(130, "Steak", ingredients)
+    private ObservableList<MenuLine> chosenDishes = FXCollections.observableArrayList();
+    private ObservableList<String> mealTypes = FXCollections.observableArrayList(
+            "Non-vegetarian", "Vegetarian", "Vegan"
     );
 
-    final ObservableList<Dish> dishesRight = FXCollections.observableArrayList();
+    private final NumberFormat nf = NumberFormat.getNumberInstance();
+    {
+        nf.setMaximumFractionDigits(2);
+    }
 
     EventHandler<ActionEvent> addMenu = new EventHandler<ActionEvent>() {
         @Override
         public void handle(ActionEvent event) {
             try {
-                String menuName = menuNameTF.getText();
-                String mealType = "dinner";
-                Menu newMenu = new Menu(menuName, mealType, dishesRight);
-                ControllerChefMenus ccm = new ControllerChefMenus();
-                ccm.addMenu(newMenu);
+                Menu newMenu = new Menu(menuNameString, selectedMealType, chosenDishes);
+                testMenus.add(newMenu);
             } catch (Exception e) {
                 System.out.println(e);
+            }
+        }
+    };
+
+    EventHandler<ActionEvent> applyChanges = new EventHandler<ActionEvent>() {
+        @Override
+        public void handle(ActionEvent event) {
+            try {
+                menuNameString = menuNameField.getText();
+                String priceFactorString = menuPriceFactorField.getText();
+                double priceFactor = Double.parseDouble(priceFactorString) / 100;
+                for (MenuLine ml : chosenDishes) {
+                    menuPrice += ml.getDish().getPrice();
+                }
+                menuPrice *= priceFactor;
+                menuPriceString = nf.format(menuPrice);
+                menuNameLabel.setText("Menu name: " + menuNameString);
+                menuPriceLabel.setText("Menu price: " + menuPriceString);
+            } catch (Exception exc) {
+                System.out.println(exc);
+            }
+        }
+    };
+
+    EventHandler<ActionEvent> addToMenuButtonClick = new EventHandler<ActionEvent>() {
+        @Override
+        public void handle(ActionEvent event) {
+            try {
+                boolean add = true;
+                if (selectedDish != null) {
+                    for (MenuLine ml : chosenDishes) {
+                        if (ml.getDish().getDishName().equals(selectedDish.getDish().getDishName())) {
+                            add = false;
+                        }
+                    }
+                    if (add) {
+                        chosenDishes.add(selectedDish);
+                        chosenDishTable.setItems(chosenDishes);
+                    } else {
+                        Alert alert = new Alert(Alert.AlertType.WARNING);
+                        alert.setTitle("Error");
+                        alert.setHeaderText("Dish cannot be added");
+                        alert.setContentText("This dish cannot be added to the menu,\nas the menu already contains it.");
+                        alert.showAndWait();
+                    }
+                }
+
+            } catch (Exception exc) {
+                System.out.println(exc);
+            }
+        }
+    };
+
+    EventHandler<ActionEvent> removeFromMenuButtonClick = new EventHandler<ActionEvent>() {
+        @Override
+        public void handle(ActionEvent event) {
+            try {
+                boolean remove = false;
+                if (selectedDish != null) {
+                    for (MenuLine ml : chosenDishes) {
+                        if (ml.getDish().getDishName().equals(selectedDish.getDish().getDishName())) {
+                            remove = true;
+                        }
+                    }
+                    if (remove) {
+                        chosenDishes.remove(selectedDish);
+                        chosenDishTable.setItems(chosenDishes);
+                    } else {
+                        Alert alert = new Alert(Alert.AlertType.WARNING);
+                        alert.setTitle("Error");
+                        alert.setHeaderText("Dish cannot be removed");
+                        alert.setContentText("The selected dish cannot be removed from the menu,\nas the menu does not contain it.");
+                        alert.showAndWait();
+                    }
+                }
+            } catch(Exception exc) {
+                System.out.println(exc);
             }
         }
     };
@@ -80,51 +164,90 @@ public class ControllerChefAddMenu implements Initializable{
 
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
 
-        nameLeft.setCellValueFactory(new PropertyValueFactory<Dish, String>("dishName"));
-        priceLeft.setCellValueFactory(new PropertyValueFactory<Dish, Double>("price"));
-        selectedRight.setCellValueFactory(new PropertyValueFactory<Dish, String>("dishName"));
-        selectDishes.setEditable(true);
-        selectedDishes.setEditable(true);
-
-        checkBoxLeft.setCellFactory(CheckBoxTableCell.forTableColumn(new Callback<Integer, ObservableValue<Boolean>>() {
+        mealTypeCB.setItems(mealTypes);
+        mealTypeCB.valueProperty().addListener(new ChangeListener<String>() {
             @Override
-            public ObservableValue<Boolean> call(Integer index) {
-                BooleanProperty observable = new SimpleBooleanProperty();
-                observable.addListener(new ChangeListener<Boolean>() {
-                    @Override
-                    public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                        if (newValue) {
-                            dishesRight.add(dishesLeft.get(index));
-                        } else {
-                            dishesRight.remove(dishesLeft.get(index));
-                        }
-                    }
-                });
-                return observable;
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                selectedMealType = newValue;
             }
-        }));
+        });
+        chooseDishCB.setItems(testDishes);
+        chooseDishCB.setConverter(new StringConverter<MenuLine>() {
+            @Override
+            public String toString(MenuLine menuLine) {
+                if (menuLine == null) {
+                    return null;
+                } else {
+                    return menuLine.getDish().getDishName();
+                }
+            }
+            @Override
+            public MenuLine fromString(String string) {
+                return null;
+            }
+        });
 
-        checkBoxLeft.setOnEditCommit(
-                new EventHandler<TableColumn.CellEditEvent<Dish, Boolean>>() {
-                    @Override
-                    public void handle(TableColumn.CellEditEvent<Dish, Boolean> event) {
-                        if (event.getNewValue()) {
-                            dishesRight.add(event.getRowValue());
-                            selectedDishes.setItems(dishesRight);
-                        }
+        chooseDishCB.valueProperty().addListener(new ChangeListener<MenuLine>() {
+            @Override
+            public void changed(ObservableValue<? extends MenuLine> observable, MenuLine oldValue, MenuLine newValue) {
+                selectedDish = newValue;
+            }
+        });
+
+        chosenDishTable.setEditable(true);
+
+        chosenDishName.setCellValueFactory(new PropertyValueFactory<MenuLine, Dish>("dish"));
+        chosenDishAmount.setCellValueFactory(new PropertyValueFactory<MenuLine, Integer>("amount"));
+        chosenDishPrice.setCellValueFactory(new PropertyValueFactory<MenuLine, Dish>("dish"));
+
+        chosenDishName.setCellFactory(column -> {
+            return new TableCell<MenuLine, Dish>() {
+                @Override
+                protected void updateItem(Dish dish, boolean empty) {
+                    if(dish == null || empty) {
+                        setText(null);
+                    } else {
+                        setText(dish.getDishName());
                     }
-                });
+                }
+            };
+        });
+
+        chosenDishAmount.setCellFactory(column -> {
+            return new TableCell<MenuLine, Integer>() {
+                @Override
+                protected void updateItem(Integer amount, boolean empty) {
+                    if(amount == null || empty) {
+                        setText(null);
+                    } else {
+                        setText(amount.toString());
+                    }
+                }
+            };
+        });
+
+        chosenDishPrice.setCellFactory(column -> {
+            return new TableCell<MenuLine, Dish>() {
+                @Override
+                protected void updateItem(Dish dish, boolean empty) {
+                    if(dish == null || empty) {
+                        setText(null);
+                    } else {
+                        setText(nf.format(dish.getPrice()));
+                    }
+                }
+            };
+        });
 
 
 
-        ObservableList<TableColumn> leftColumns = FXCollections.observableArrayList(nameLeft, priceLeft, checkBoxLeft);
-        selectDishes.getColumns().setAll(leftColumns);
-        selectDishes.setItems(dishesLeft);
+        chosenDishTable.getColumns().setAll(chosenDishName, chosenDishAmount, chosenDishPrice);
 
-        ObservableList<TableColumn> rightColumns = FXCollections.observableArrayList(selectedRight);
-        selectedDishes.getColumns().setAll(rightColumns);
-        selectedDishes.setItems(dishesRight);
+
+        addToMenuButton.setOnAction(addToMenuButtonClick);
         addMenuButton.setOnAction(addMenu);
+        removeFromMenuButton.setOnAction(removeFromMenuButtonClick);
+        applyButton.setOnAction(applyChanges);
 
     }
 }

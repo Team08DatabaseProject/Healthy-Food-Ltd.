@@ -149,17 +149,7 @@ public class TestObjects {
 
 
 
-    public static Customer customer1 = new Customer(false, "email1", "fName1", "lName1", 12345678, addressList.get(0), null);
-    public static Customer customer2 = new Customer(false, "email2", "fName2", "lName2", 22345678, addressList.get(1), null);
-    public static Customer customer3 = new Customer(true, "email3", "fName3", "lName3", 32345678, addressList.get(2), "Business1");
-    public static Customer customer4 = new Customer(false, "email4", "fName4", "lName4", 42345678, addressList.get(3), null);
-    public static Customer customer5 = new Customer(true, "email5", "fName5", "lName5", 52345678, addressList.get(4), "Business2");
-    public static Customer customer6 = new Customer(false, "email6", "fName6", "lName6", 62345678, addressList.get(5), null);
-    public static Customer customer7 = new Customer(true, "email7", "fName7", "lName7", 72345678, addressList.get(6), "Business3");
 
-    public static ObservableList<Customer> allCustomers = FXCollections.observableArrayList(
-            customer1, customer2, customer3, customer4, customer5, customer6, customer7
-    );
 
 
 
@@ -205,12 +195,54 @@ public class TestObjects {
             subOrder1, subOrder2, subOrder3, subOrder4
     );
 
+    public static ObservableList<Order> orders1 = FXCollections.observableArrayList(
+            order1, order2
+    );
+
+    public static ObservableList<Order> orders2 = FXCollections.observableArrayList(
+            order3, order4
+    );
+
+    public static ObservableList<Order> orders3 = FXCollections.observableArrayList(
+            order5
+    );
+
+    public static ObservableList<Order> orders4 = FXCollections.observableArrayList(
+            subOrder1
+    );
+
+    public static ObservableList<Order> orders5 = FXCollections.observableArrayList(
+            subOrder2
+    );
+
+    public static ObservableList<Order> orders6 = FXCollections.observableArrayList(
+            subOrder3
+    );
+
+    public static ObservableList<Order> orders7 = FXCollections.observableArrayList(
+            subOrder4
+    );
+
     public static ObservableList<Order> subOrderList1 = FXCollections.observableArrayList(
             subOrder1, subOrder2, subOrder3, subOrder4
     );
 
-
     public static Subscription subscription1 = new Subscription(subStart1, subEnd1, subOrderList1);
+
+    public static Customer customer1 = new Customer(false, "email1", "fName1", "lName1", 12345678, addressList.get(0), null, null, orders1);
+    public static Customer customer2 = new Customer(false, "email2", "fName2", "lName2", 22345678, addressList.get(1), null, null, orders2);
+    public static Customer customer3 = new Customer(true, "email3", "fName3", "lName3", 32345678, addressList.get(2), "Business1", null, orders3);
+    public static Customer customer4 = new Customer(false, "email4", "fName4", "lName4", 42345678, addressList.get(3), null, null, orders4);
+    public static Customer customer5 = new Customer(true, "email5", "fName5", "lName5", 52345678, addressList.get(4), "Business2", null, orders5);
+    public static Customer customer6 = new Customer(false, "email6", "fName6", "lName6", 62345678, addressList.get(5), null, null, orders6);
+    public static Customer customer7 = new Customer(true, "email7", "fName7", "lName7", 72345678, addressList.get(6), "Business3", null, orders7);
+
+    public static ObservableList<Customer> allCustomers = FXCollections.observableArrayList(
+            customer1, customer2, customer3, customer4, customer5, customer6, customer7
+    );
+
+
+
 
 
 }

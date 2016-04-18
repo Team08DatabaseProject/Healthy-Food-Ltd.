@@ -1,9 +1,6 @@
 package classpackage;
 
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -11,34 +8,38 @@ import javafx.collections.ObservableList;
  * Created by paul thomas on 07.04.2016.
  */
 public class MenuLine {
-    private Dish dish;
+    private ObjectProperty<Dish> dish = new SimpleObjectProperty<>();
     private IntegerProperty amount = new SimpleIntegerProperty();
     private DoubleProperty priceFactor = new SimpleDoubleProperty();
 
     public MenuLine(Dish dish, int amount, double priceFactor) {
-        this.dish = dish;
+        this.dish.set(dish);
         this.amount.set(amount);
         this.priceFactor.set(priceFactor);
     }
 
     public MenuLine(Dish dish, int amount) {
-        this.dish = dish;
+        this.dish.set(dish);
         this.amount.set(amount);
         this.priceFactor.set(1);
     }
 
     public MenuLine(Dish dish) {
-        this.dish = dish;
+        this.dish.set(dish);
         this.amount.set(1);
         this.priceFactor.set(1);
     }
 
     public Dish getDish() {
+        return dish.get();
+    }
+
+    public ObjectProperty<Dish> dishProperty() {
         return dish;
     }
 
     public void setDish(Dish dish) {
-        this.dish = dish;
+        this.dish.set(dish);
     }
 
     public int getAmount() {

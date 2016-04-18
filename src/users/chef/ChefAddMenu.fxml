@@ -1,25 +1,54 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <!--> Axel </!-->
+
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import users.chef.CheckBoxCellFactory?>
+<?import javafx.collections.FXCollections?>
 
-<GridPane fx:id="addMenuGP" fx:controller="users.chef.ControllerChefAddMenu" prefHeight="500.0" prefWidth="500.0" xmlns:fx="http://javafx.com/fxml" hgap="20" vgap="15">
+<?import javafx.scene.chart.BubbleChart?>
+<GridPane fx:id="addMenuGP" fx:controller="users.chef.ControllerChefAddMenu" hgap="5" prefHeight="500.0" prefWidth="800.0" vgap="10" BorderPane.alignment="CENTER" xmlns="http://javafx.com/javafx/8"
+          xmlns:fx="http://javafx.com/fxml/1">
+    <padding>
+        <Insets bottom="25" left="30" right="20" top="25" />
+    </padding>
+
     <children>
-        <TextField fx:id="menuNameTF" GridPane.rowIndex="0" GridPane.columnIndex="0" promptText="Menu name"/>
-        <TableView fx:id="selectDishes" GridPane.rowIndex="1" GridPane.columnIndex="0" prefWidth="190">
-            <TableColumn fx:id="nameLeft" prefWidth="80" text="Dish name"/>
-            <TableColumn fx:id="priceLeft" prefWidth="60" text="Price"/>
-            <TableColumn fx:id="checkBoxLeft" text="Select" prefWidth="30">
-                <cellFactory>
-                    <CheckBoxCellFactory/>
-                </cellFactory>
-            </TableColumn>
+        <VBox alignment="TOP_LEFT" spacing="10" GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.fillWidth="false" prefWidth="135">
+            <children>
+                <TextField fx:id="menuNameField" promptText="Menu name"/>
+                <TextField fx:id="menuPriceFactorField" promptText="Price factor(%)"/>
+                <ComboBox fx:id="mealTypeCB" promptText="Meal type"/>
+            </children>
+        </VBox>
+
+        <HBox alignment="BASELINE_LEFT" spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="1">
+            <children>
+                <ComboBox fx:id="chooseDishCB" promptText="Choose dish">
+                    <items>
+                        <FXCollections fx:factory="observableArrayList"/>
+                    </items>
+                </ComboBox>
+                <Button fx:id="addToMenuButton" prefWidth="150" prefHeight="50" text="Add to menu"/>
+                <Button fx:id="removeFromMenuButton" prefWidth="150" prefHeight="50" text="Remove dish&#10;from menu"/>
+            </children>
+        </HBox>
+
+        <TableView fx:id="chosenDishTable" GridPane.columnIndex="1" GridPane.rowIndex="0" prefWidth="450" >
+            <TableColumn fx:id="chosenDishName" prefWidth="150" text="Dish name"/>
+            <TableColumn fx:id="chosenDishAmount" prefWidth="100" text="Amount"/>
+            <TableColumn fx:id="chosenDishPrice" prefWidth="100" text="Price"/>
         </TableView>
-        <TextField fx:id="discountTF" GridPane.rowIndex="0" GridPane.columnIndex="1" promptText="Discount(%)"/>
-        <TableView fx:id="selectedDishes" GridPane.rowIndex="1" GridPane.columnIndex="1" prefWidth="120">
-            <TableColumn fx:id="selectedRight" prefWidth="150" text="Selected dish"/>
-        </TableView>
-        <Button fx:id="addMenuButton" GridPane.rowIndex="1" GridPane.columnIndex="2" text="Add menu"/>
+
+        <VBox alignment="BASELINE_LEFT" spacing="10" GridPane.columnIndex="0" GridPane.rowIndex="2">
+            <Button fx:id="applyButton" prefWidth="150" prefHeight="50" text="Apply"/>
+            <Label fx:id="menuNameLabel" prefWidth="200" prefHeight="50" text="Menu name: "/>
+            <Label fx:id="menuPriceLabel" prefWidth="200" prefHeight="50" text="Price: "/>
+            <Button fx:id="addMenuButton" prefWidth="150" prefHeight="50" text="Add menu"/>
+        </VBox>
+
     </children>
 </GridPane>

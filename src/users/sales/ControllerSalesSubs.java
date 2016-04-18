@@ -22,12 +22,14 @@ import java.util.ResourceBundle;
 /**
  * Created by Trym Todalshaug on 14/04/2016.
  */
+/*
 
 public class ControllerSalesSubs implements Initializable{
 
     /*
     ObservableList to get fetched  from database
     */
+/*
     private ObservableList<Order> allOrdersForSales = FXCollections.observableArrayList();
     private ObservableList<Subscription> allSubscriptions = FXCollections.observableArrayList();
     private ObservableList<Dish> allDishes = FXCollections.observableArrayList();
@@ -73,7 +75,7 @@ public class ControllerSalesSubs implements Initializable{
             }
         }
     };*/
-
+/*
     ZipCode zip = new ZipCode(7031, "Trondheim");
     ZipCode zip1 = new ZipCode(7042, "Trondheim");
 
@@ -239,7 +241,7 @@ public class ControllerSalesSubs implements Initializable{
                 }
             };
         });*/
-
+/*
         address.setCellFactory(lv -> {
             TextFieldTableCell<Customer, Address> cell = new TextFieldTableCell();
             StringConverter<Address> converter = new StringConverter<Address>() {
@@ -271,8 +273,9 @@ public class ControllerSalesSubs implements Initializable{
 
         /*ordersButton.setOnAction(orderEvent);
         subsButton.setOnAction(subsEvent);*/
+/*
         subsTable.setItems(customersConSub);
         subsTable.setItems(customersSinSub);
 
     }
-}
+}*/

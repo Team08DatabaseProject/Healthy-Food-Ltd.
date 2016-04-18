@@ -16,6 +16,7 @@ import java.util.ResourceBundle;
 /**
  * Created by Trym Todalshaug on 07/04/2016.
  */
+/*
 public class ControllerSalesTextField implements Initializable{
 
     public TextField orderIdField;
@@ -95,4 +96,4 @@ public class ControllerSalesTextField implements Initializable{
     public void initialize(URL fxmlFileLocation, ResourceBundle resources){
         createButton.setOnAction(createOrderEventField);
     }
-}
+*///}

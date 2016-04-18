@@ -1,6 +1,7 @@
 package users.chef;
 
 import classpackage.*;
+import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -16,6 +17,7 @@ import javafx.util.converter.DoubleStringConverter;
 
 import java.net.URL;
 import java.text.NumberFormat;
+import java.util.List;
 import java.util.ResourceBundle;
 
 /**
@@ -31,9 +33,10 @@ public class ControllerChefDishes implements Initializable {
     public Button viewDishInfoButton;
     public Button removeDishButton;
 
-    private static TestObjects testObjects = new TestObjects();
+    protected static TestObjects testObjects = new TestObjects();
     protected static ObservableList<MenuLine> testDishes = testObjects.allDishes;
-    public static MenuLine chosenDish;
+    protected static MenuLine chosenDish;
+    protected int chosenDishTableIndex;
 
     EventHandler<ActionEvent> addDishButtonClick = new EventHandler<ActionEvent>() {
         @Override
@@ -58,6 +61,7 @@ public class ControllerChefDishes implements Initializable {
         public void handle(ActionEvent event) {
             try {
                 chosenDish = (MenuLine) dishTable.getSelectionModel().getSelectedItem();
+                chosenDishTableIndex = dishTable.getSelectionModel().getSelectedIndex();
                 if (chosenDish != null) {
                     FXMLLoader loader = new FXMLLoader();
                     loader.setLocation(getClass().getResource("ChefEditDish.fxml"));
@@ -94,10 +98,6 @@ public class ControllerChefDishes implements Initializable {
             }
         }
     };
-
-    public void addDish(MenuLine newDish) {
-        testDishes.add(newDish);
-    }
 
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
 

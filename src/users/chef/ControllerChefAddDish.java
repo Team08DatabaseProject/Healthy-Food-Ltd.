@@ -25,7 +25,7 @@ import java.util.ResourceBundle;
 /**
  * Created by axelkvistad on 4/16/16.
  */
-public class ControllerChefAddDish implements Initializable {
+public class ControllerChefAddDish extends ControllerChefDishes implements Initializable {
 
     public GridPane addDishGP;
     public TextField dishNameField;
@@ -70,8 +70,7 @@ public class ControllerChefAddDish implements Initializable {
                 double finalPrice = Math.round(price * 100.0) / 100.0;
                 Dish newDish = new Dish(finalPrice, name, chosenIngredients);
                 MenuLine menuLine = new MenuLine(newDish);
-                ControllerChefDishes ccd = new ControllerChefDishes();
-                ccd.addDish(menuLine);
+                testDishes.add(menuLine);
             } catch (Exception exc) {
                 System.out.println(exc);
             }

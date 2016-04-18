@@ -17,7 +17,7 @@ public class Order {
     private LocalDate actualDeliveryDate; //Is set when order is delivered. Default null
     private LocalDate deadline; //Consists of date and time
     private StringProperty status = new SimpleStringProperty();
-    private Address address;
+    private ObjectProperty<Address> address = new SimpleObjectProperty<>();
     private ObservableList<OrderLine> dishesInThisOrder = FXCollections.observableArrayList();
 
     // From the database
@@ -31,7 +31,7 @@ public class Order {
         this.status.set(status);
         this.actualDeliveryDate = actualDeliveryDate;
         this.dishesInThisOrder = dishesInThisOrder;
-        this.address = address;
+        this.address.set(address);
     }
 
     // To the database
@@ -112,11 +112,15 @@ public class Order {
     }
 
     public Address getAddress() {
+        return address.get();
+    }
+
+    public ObjectProperty<Address> addressProperty() {
         return address;
     }
 
     public void setAddress(Address address) {
-        this.address = address;
+        this.address.set(address);
     }
 
     public ObservableList<OrderLine> getDishesInThisOrder() {

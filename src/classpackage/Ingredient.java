@@ -6,14 +6,14 @@ import javafx.beans.property.*;
  * 11.03.2016
  */
 
-public class    Ingredient {
+public class Ingredient {
     private IntegerProperty ingredientId = new SimpleIntegerProperty();
     private final StringProperty ingredientName =new SimpleStringProperty();
     private final StringProperty unit = new SimpleStringProperty();
     private DoubleProperty quantityOwned = new SimpleDoubleProperty();
     private DoubleProperty price = new SimpleDoubleProperty();
     private IntegerProperty supplierId = new SimpleIntegerProperty();
-    private Supplier supplier;
+    private ObjectProperty<Supplier> supplier = new SimpleObjectProperty<>();
 
     // From database
     public Ingredient(int ingredientId, String ingredientName, String unit, double quantityOwned, double price, Supplier supplier) {
@@ -22,7 +22,7 @@ public class    Ingredient {
         this.unit.set(unit);
         this.quantityOwned.set(quantityOwned);
         this.price.set(price);
-        this.supplier = supplier;
+        this.supplier.set(supplier);
     }
 
     // to database
@@ -31,11 +31,7 @@ public class    Ingredient {
         this.unit.set(unit);
         this.quantityOwned.set(quantityOwned);
         this.price.set(price);
-        this.supplier = supplier;
-    }
-
-    public StringProperty getSupplierName() {
-        return supplier.businessNameProperty();
+        this.supplier.set(supplier);
     }
 
     public int getIngredientId() {
@@ -111,11 +107,15 @@ public class    Ingredient {
     }
 
     public Supplier getSupplier() {
+        return supplier.get();
+    }
+
+    public ObjectProperty<Supplier> supplierProperty() {
         return supplier;
     }
 
     public void setSupplier(Supplier supplier) {
-        this.supplier = supplier;
+        this.supplier.set(supplier);
     }
 
     @Override

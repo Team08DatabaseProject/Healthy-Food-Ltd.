@@ -1,5 +1,6 @@
 package users.sales;
 
+import classpackage.Customer;
 import classpackage.Order;
 import classpackage.TestObjects;
 import javafx.collections.ObservableList;
@@ -30,11 +31,13 @@ public class ControllerSalesOrders implements Initializable{
     public TableView ordersTable;
     public BorderPane rootPaneOrders;
 
-    private TestObjects testObjects = new TestObjects();
-    ObservableList<Order> orders = testObjects.allOrders;
+    protected static TestObjects testObjects = new TestObjects();
+    protected static ObservableList<Order> orders = testObjects.allOrders;
+    protected static ObservableList<Customer> customerList = testObjects.allCustomers;
 
     public GridPane salesTextField;
     protected static Order selectedOrder;
+    protected static Customer selectedCustomer;
 
     EventHandler<ActionEvent> createOrderEvent = new EventHandler<ActionEvent>() {
         @Override
@@ -79,6 +82,13 @@ public class ControllerSalesOrders implements Initializable{
         public void handle(MouseEvent event) {
             if (event.isPrimaryButtonDown() && event.getClickCount() == 1) {
                 selectedOrder = (Order)ordersTable.getSelectionModel().getSelectedItem();
+                for (Customer customer : customerList) {
+                    for (Order order : customer.getOrders()) {
+                        if (order.getPrice() == selectedOrder.getPrice() && order.getAddress() == selectedOrder.getAddress()) {
+                            selectedCustomer = customer;
+                        }
+                    }
+                }
                 try {
                     FXMLLoader loader = new FXMLLoader();
                     loader.setLocation(getClass().getResource("infoTable.fxml"));

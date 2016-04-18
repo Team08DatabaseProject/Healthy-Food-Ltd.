@@ -46,6 +46,10 @@
 
         <TextField fx:id="priceField" GridPane.columnIndex="1" GridPane.rowIndex="6" promptText="Price"/>
 
+        <DatePicker fx:id="startSubscription" GridPane.columnIndex="1" GridPane.rowIndex="7"/>
+
+        <DatePicker fx:id="endSubscription" GridPane.columnIndex="1" GridPane.rowIndex="8"/>
+
         <!--next collumn><!-->
 
         <ComboBox fx:id="statusBox" GridPane.columnIndex="2" GridPane.rowIndex="0" promptText="Status">
