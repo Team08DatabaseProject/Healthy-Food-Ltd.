@@ -16,9 +16,9 @@ public class Customer {
     private StringProperty firstName = new SimpleStringProperty();
     private StringProperty lastName = new SimpleStringProperty();
     private IntegerProperty phoneNumber = new SimpleIntegerProperty();
-    private Address address;
+    private ObjectProperty<Address> address = new SimpleObjectProperty<>();
     private StringProperty businessName = new SimpleStringProperty();
-    private Subscription subscription;
+    private ObjectProperty<Subscription> subscription = new SimpleObjectProperty<>();
     private ObservableList<Order> orders = FXCollections.observableArrayList();
 
     // From database
@@ -41,9 +41,9 @@ public class Customer {
         this.firstName.set(firstName);
         this.lastName.set(lastName);
         this.phoneNumber.set(phoneNumber);
-        this.address = address;
+        this.address.set(address);
         this.businessName.set(businessName);
-        this.subscription = subscription;
+        this.subscription.set(subscription);
         this.orders = orders;
     }
 
@@ -55,8 +55,16 @@ public class Customer {
         this.firstName.set(firstName);
         this.lastName.set(lastName);
         this.phoneNumber.set(phoneNumber);
-        this.address = address;
+        this.address.set(address);
         this.businessName.set(businessName);
+    }
+
+    public ObservableList<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(ObservableList<Order> orders) {
+        this.orders = orders;
     }
 
     public int getCustomerId() {
@@ -132,11 +140,15 @@ public class Customer {
     }
 
     public Address getAddress() {
+        return address.get();
+    }
+
+    public ObjectProperty<Address> addressProperty() {
         return address;
     }
 
     public void setAddress(Address address) {
-        this.address = address;
+        this.address.set(address);
     }
 
     public String getBusinessName() {
@@ -152,19 +164,15 @@ public class Customer {
     }
 
     public Subscription getSubscription() {
+        return subscription.get();
+    }
+
+    public ObjectProperty<Subscription> subscriptionProperty() {
         return subscription;
     }
 
     public void setSubscription(Subscription subscription) {
-        this.subscription = subscription;
-    }
-
-    public ObservableList<Order> getOrders() {
-        return orders;
-    }
-
-    public void setOrders(ObservableList<Order> orders) {
-        this.orders = orders;
+        this.subscription.set(subscription);
     }
 
     @Override

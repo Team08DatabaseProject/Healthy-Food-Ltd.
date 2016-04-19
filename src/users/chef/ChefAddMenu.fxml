@@ -17,37 +17,39 @@
     </padding>
 
     <children>
-        <VBox alignment="TOP_LEFT" spacing="10" GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.fillWidth="false" prefWidth="135">
+        <VBox alignment="TOP_LEFT" spacing="10" GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.fillWidth="false" prefWidth="180">
             <children>
                 <TextField fx:id="menuNameField" promptText="Menu name"/>
-                <TextField fx:id="menuPriceFactorField" promptText="Price factor(%)"/>
                 <ComboBox fx:id="mealTypeCB" promptText="Meal type"/>
+                <Button fx:id="applyButton" prefWidth="120" prefHeight="30" text="Apply properties"/>
             </children>
         </VBox>
 
         <HBox alignment="BASELINE_LEFT" spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="1">
             <children>
-                <ComboBox fx:id="chooseDishCB" promptText="Choose dish">
+                <ComboBox fx:id="chooseDishCB" promptText="Choose dish" prefWidth="130">
                     <items>
                         <FXCollections fx:factory="observableArrayList"/>
                     </items>
                 </ComboBox>
-                <Button fx:id="addToMenuButton" prefWidth="150" prefHeight="50" text="Add to menu"/>
-                <Button fx:id="removeFromMenuButton" prefWidth="150" prefHeight="50" text="Remove dish&#10;from menu"/>
+                <VBox spacing="5">
+                    <Button fx:id="addToMenuButton" prefWidth="170" prefHeight="30" text="Add dish to menu"/>
+                    <Button fx:id="removeFromMenuButton" prefWidth="170" prefHeight="30" text="Remove dish from menu"/>
+                </VBox>
             </children>
         </HBox>
 
-        <TableView fx:id="chosenDishTable" GridPane.columnIndex="1" GridPane.rowIndex="0" prefWidth="450" >
-            <TableColumn fx:id="chosenDishName" prefWidth="150" text="Dish name"/>
-            <TableColumn fx:id="chosenDishAmount" prefWidth="100" text="Amount"/>
-            <TableColumn fx:id="chosenDishPrice" prefWidth="100" text="Price"/>
+        <TableView fx:id="chosenDishTable" GridPane.columnIndex="1" GridPane.rowIndex="0" prefWidth="400" >
+            <TableColumn fx:id="chosenDishName" prefWidth="170" text="Dish name"/>
+            <TableColumn fx:id="chosenDishAmount" prefWidth="108" text="Amount"/>
+            <TableColumn fx:id="chosenDishPrice" prefWidth="120" text="Price (NOK)"/>
+            <TableColumn fx:id="chosenDishPriceFactor" prefWidth="120" text="Price factor"/>
         </TableView>
 
         <VBox alignment="BASELINE_LEFT" spacing="10" GridPane.columnIndex="0" GridPane.rowIndex="2">
-            <Button fx:id="applyButton" prefWidth="150" prefHeight="50" text="Apply"/>
             <Label fx:id="menuNameLabel" prefWidth="200" prefHeight="50" text="Menu name: "/>
             <Label fx:id="menuPriceLabel" prefWidth="200" prefHeight="50" text="Menu Price: "/>
-            <Button fx:id="addMenuButton" prefWidth="150" prefHeight="50" text="Add menu"/>
+            <Button fx:id="addMenuButton" prefWidth="150" prefHeight="50" text="Commit menu"/>
         </VBox>
 
     </children>

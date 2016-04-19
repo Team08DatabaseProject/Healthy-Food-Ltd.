@@ -1,9 +1,6 @@
 package classpackage;
 
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import javafx.beans.property.*;
 
 /**
  * Created by paul thomas on 16.03.2016.
@@ -11,21 +8,21 @@ import javafx.beans.property.StringProperty;
 public class Supplier {
     private IntegerProperty supplierId = new SimpleIntegerProperty();
     private IntegerProperty phoneNumber = new SimpleIntegerProperty();
-    private Address thisAddress;
+    private ObjectProperty<Address> thisAddress = new SimpleObjectProperty<>();
     private StringProperty businessName = new SimpleStringProperty();
 
     // from database
     public Supplier(int supplierId, int phoneNumber, Address thisAddress, String businessName) {
         this.supplierId.set(supplierId);
         this.phoneNumber.set(phoneNumber);
-        this.thisAddress = thisAddress;
+        this.thisAddress.set(thisAddress);
         this.businessName.set(businessName);
     }
 
     // To database
     public Supplier(int phoneNumber, Address thisAddress, String businessName) {
         this.phoneNumber.set(phoneNumber);
-        this.thisAddress = thisAddress;
+        this.thisAddress.set(thisAddress);
         this.businessName.set(businessName);
     }
 
@@ -54,11 +51,15 @@ public class Supplier {
     }
 
     public Address getThisAddress() {
+        return thisAddress.get();
+    }
+
+    public ObjectProperty<Address> thisAddressProperty() {
         return thisAddress;
     }
 
     public void setThisAddress(Address thisAddress) {
-        this.thisAddress = thisAddress;
+        this.thisAddress.set(thisAddress);
     }
 
     public String getBusinessName() {

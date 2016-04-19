@@ -19,16 +19,10 @@
         <VBox alignment="TOP_LEFT" spacing="10" GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.fillWidth="false" prefWidth="135">
             <children>
                 <TextField fx:id="editDishNameField" promptText="Dish name"/>
-                <TextField fx:id="editDishPriceFactorField" promptText="Price reduction(%)"/>
+                <TextField fx:id="editDishPriceFactorField" promptText="Price factor(%)"/>
+                <Button fx:id="applyDishChangesButton" prefWidth="100" text="Apply new&#10;name/price"/>
             </children>
         </VBox>
-        <VBox alignment="TOP_LEFT" spacing="10" GridPane.columnIndex="0" GridPane.rowIndex="0" translateX="140">
-            <children>
-                <Button fx:id="editDishNameButton" text="Apply"/>
-                <Button fx:id="editPriceButton" text="Apply"/>
-            </children>
-        </VBox>
-
 
         <HBox alignment="BASELINE_LEFT" spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="1">
             <children>
@@ -52,7 +46,7 @@
         <VBox alignment="BASELINE_LEFT" spacing="10" GridPane.columnIndex="0" GridPane.rowIndex="2">
             <Label fx:id="currentNameLabel" prefWidth="200" prefHeight="50" text="Dish name: "/>
             <Label fx:id="currentPriceLabel" prefWidth="200" prefHeight="50" text="Price: "/>
-            <Button fx:id="editDishApplyButton" prefWidth="150" prefHeight="50" text="Apply"/>
+            <Button fx:id="editDishCommitButton" prefWidth="150" prefHeight="50" text="Commit changes"/>
         </VBox>
 
     </children>

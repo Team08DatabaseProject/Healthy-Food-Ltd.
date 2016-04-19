@@ -9,6 +9,7 @@ import java.util.ArrayList;
 /**
  * Created by paul thomas on 16.03.2016.
  */
+
 public class Dish {
     private IntegerProperty dishId = new SimpleIntegerProperty();
     private DoubleProperty price = new SimpleDoubleProperty();

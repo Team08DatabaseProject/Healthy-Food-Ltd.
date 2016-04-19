@@ -11,18 +11,25 @@
 
 <?import javafx.scene.chart.BubbleChart?>
 <GridPane fx:id="editMenuGP" fx:controller="users.chef.ControllerChefEditMenu" hgap="5" prefHeight="500.0" prefWidth="800.0" vgap="10" BorderPane.alignment="CENTER" xmlns="http://javafx.com/javafx/8"
-          xmlns:fx="http://javafx.com/fxml/1">
+          xmlns:fx="http://javafx.com/fxml/1" stylesheets="@/users/chef/ChefStyle.css" gridLinesVisible="true">
     <padding>
         <Insets bottom="25" left="30" right="20" top="25" />
     </padding>
-
     <children>
-        <VBox alignment="TOP_LEFT" spacing="10" GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.fillWidth="false" prefWidth="135">
+        <VBox alignment="TOP_LEFT" spacing="10" GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.fillWidth="false" prefWidth="180">
             <children>
-                <TextField fx:id="editMenuNameField" promptText="Menu name"/>
+                <TextField fx:id="editMenuNameField" promptText="Menu name" styleClass="QuestrialMedium"/>
                 <ComboBox fx:id="editMealTypeCB" promptText="Meal type"/>
+                <Button fx:id="editApplyButton" prefWidth="180" prefHeight="30" text="Apply changes" styleClass="QuestrialMedium"/>
             </children>
         </VBox>
+
+        <TableView fx:id="currentDishTable" GridPane.columnIndex="1" GridPane.rowIndex="0" prefWidth="400">
+            <columnResizePolicy><TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/></columnResizePolicy>
+            <TableColumn fx:id="currentDishNameCol" prefWidth="170" text="Dish name"/>
+            <TableColumn fx:id="currentDishAmountCol" prefWidth="108" text="Amount"/>
+            <TableColumn fx:id="currentDishPriceCol" prefWidth="120" text="Price (NOK)"/>
+        </TableView>
 
         <HBox alignment="BASELINE_LEFT" spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="1">
             <children>
@@ -31,23 +38,23 @@
                         <FXCollections fx:factory="observableArrayList"/>
                     </items>
                 </ComboBox>
-                <Button fx:id="editAddToMenuButton" prefWidth="150" prefHeight="50" text="Add to menu"/>
-                <Button fx:id="editRemoveFromMenuButton" prefWidth="150" prefHeight="50" text="Remove dish&#10;from menu"/>
+                <VBox spacing="5">
+                    <Button fx:id="editAddToMenuButton" prefWidth="170" prefHeight="30" text="Add dish to menu"/>
+                    <Button fx:id="editRemoveFromMenuButton" prefWidth="170" prefHeight="30" text="Remove dish from menu"/>
+                </VBox>
             </children>
         </HBox>
 
-        <TableView fx:id="currentDishTable" GridPane.columnIndex="1" GridPane.rowIndex="0" prefWidth="450" >
-            <TableColumn fx:id="currentDishNameCol" prefWidth="150" text="Dish name"/>
-            <TableColumn fx:id="currentDishAmountCol" prefWidth="100" text="Amount"/>
-            <TableColumn fx:id="currentDishPriceCol" prefWidth="100" text="Price"/>
-        </TableView>
-
-        <VBox alignment="BASELINE_LEFT" spacing="10" GridPane.columnIndex="0" GridPane.rowIndex="2">
-            <Button fx:id="editApplyButton" prefWidth="150" prefHeight="50" text="Apply changes"/>
-            <Label fx:id="editMenuNameLabel" prefWidth="200" prefHeight="50" text="Menu name: "/>
-            <Label fx:id="editMenuPriceLabel" prefWidth="200" prefHeight="50" text="Menu Price: "/>
-            <Button fx:id="commitEditButton" prefWidth="150" prefHeight="50" text="Commit changes"/>
+        <VBox spacing="5" GridPane.columnIndex="0" GridPane.rowIndex="2" styleClass="QuestrialBig" GridPane.columnSpan="2">
+            <Label fx:id="editMenuNameLabel" prefWidth="400" prefHeight="30" wrapText="true" text="Menu name: "/>
+            <Label fx:id="editMenuPriceLabel" prefWidth="400" prefHeight="30" text="Menu price: "/>
+            <Label fx:id="editMealTypeLabel" prefWidth="400" prefHeight="30" text="Meal type: "/>
+            <Button fx:id="commitEditButton" prefWidth="200" prefHeight="50" text="Commit changes"/>
         </VBox>
 
     </children>
+    <columnConstraints>
+        <ColumnConstraints hgrow="SOMETIMES" maxWidth="300"/>
+        <ColumnConstraints hgrow="SOMETIMES" prefWidth="400"/>
+    </columnConstraints>
 </GridPane>

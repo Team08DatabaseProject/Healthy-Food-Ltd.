@@ -81,9 +81,21 @@ public class ControllerChefIngredients extends ControllerChef implements Initial
         @Override
         public void handle(ActionEvent event) {
             try {
-                int selectedIndex = ingTable.getSelectionModel().getSelectedIndex();
-                if (selectedIndex > -1) {
-                    testIngredients.remove(ingTable.getItems().get(selectedIndex));
+                /*
+                * Everything here to do with DishLine is due to the fact that
+                * testDishLines is used in other classes, while this class uses
+                * testIngredients, and we need to make sure that they match each other.
+                * Hopefully this will have a nicer solution once database is implemented.
+                 */
+                selectedIngredient = (Ingredient) ingTable.getSelectionModel().getSelectedItem();
+                testDishLines.forEach(dl -> {
+                    if (selectedIngredient.equals(dl.getIngredient()));
+                    selectedDishLine = dl;
+                });
+
+                if (selectedIngredient != null && selectedDishLine != null) {
+                    testIngredients.remove(selectedIngredient);
+                    testDishLines.remove(selectedDishLine);
                     ingTable.setItems(testIngredients);
                 } else {
                     Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -97,11 +109,6 @@ public class ControllerChefIngredients extends ControllerChef implements Initial
             }
         }
     };
-
-    public void addIngredient(Ingredient newIngredient) {
-        testIngredients.add(newIngredient);
-    }
-
 
 
 

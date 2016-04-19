@@ -29,18 +29,13 @@ import javafx.util.StringConverter;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class ControllerChefMenus implements Initializable{
+public class ControllerChefMenus extends ControllerChef implements Initializable{
 
     @FXML
     public GridPane ChefMenus;
     public Button editMenuButton;
     public Button addMenuButton;
     public ComboBox<Menu> chooseMenuCB;
-    protected static TestObjects testObjects = new TestObjects();
-    protected static ObservableList<Menu> testMenus = testObjects.allMenus;
-    protected static ObservableList<MenuLine> testDishes = testObjects.allDishes;
-    protected static Menu selectedMenu;
-    protected static MenuLine selectedDish;
 /*
     public void addMenu(Menu newMenu) {
         menus.add(newMenu);
@@ -66,11 +61,19 @@ public class ControllerChefMenus implements Initializable{
         @Override
         public void handle(ActionEvent event) {
             try {
-                final Stage editMenuStage = new Stage();
-                Parent root = FXMLLoader.load(getClass().getResource("ChefEditMenu.fxml"));
-                editMenuStage.setTitle("Edit menu: " + selectedMenu.getName());
-                editMenuStage.setScene(new Scene(root, 800, 800));
-                editMenuStage.show();
+                if (selectedMenu != null) {
+                    final Stage editMenuStage = new Stage();
+                    Parent root = FXMLLoader.load(getClass().getResource("ChefEditMenu.fxml"));
+                    editMenuStage.setTitle("Edit menu: " + selectedMenu.getName());
+                    editMenuStage.setScene(new Scene(root, 800, 800));
+                    editMenuStage.show();
+                } else {
+                    Alert alert = new Alert(Alert.AlertType.WARNING);
+                    alert.setTitle("Error");
+                    alert.setHeaderText("No menu selected");
+                    alert.setContentText("Select a menu to edit it.");
+                    alert.showAndWait();
+                }
             } catch (Exception exc) {
                 System.out.println(exc);
             }
@@ -88,6 +91,13 @@ public class ControllerChefMenus implements Initializable{
             @Override
             public Menu fromString(String string) {
                 return null;
+            }
+        });
+
+        chooseMenuCB.valueProperty().addListener(new ChangeListener<Menu>() {
+            @Override
+            public void changed(ObservableValue<? extends Menu> observable, Menu oldValue, Menu newValue) {
+                selectedMenu = newValue;
             }
         });
         chooseMenuCB.valueProperty().addListener(new ChangeListener<Menu>() {

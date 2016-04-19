@@ -19,3 +19,18 @@
     -fx-spacing: 15 15 15 15;
 }
 
+.QuestrialBig {
+    -fx-font-family: "Questrial";
+    -fx-font-size: 15pt;
+}
+
+.QuestrialMedium {
+    -fx-font-family: "Questrial";
+    -fx-font-size: 12pt;
+}
+
+.BigText {
+    -fx-pref-width: 200px;
+    -fx-pref-height: 100px;
+    -fx-font-size: 10pt;
+}

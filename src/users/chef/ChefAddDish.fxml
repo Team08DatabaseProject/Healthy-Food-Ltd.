@@ -21,25 +21,19 @@
             <children>
                 <TextField fx:id="dishNameField" promptText="Dish name"/>
                 <TextField fx:id="dishPriceFactorField" promptText="Price reduction(%)"/>
+                <Button fx:id="applyNewDishChangesButton" prefWidth="100" text="Apply&#10;name/price"/>
             </children>
         </VBox>
-        <VBox alignment="TOP_LEFT" spacing="10" GridPane.columnIndex="0" GridPane.rowIndex="0" translateX="140">
-            <children>
-                <Button fx:id="setDishNameButton" text="Apply"/>
-                <Button fx:id="setPriceButton" text="Apply"/>
-            </children>
-        </VBox>
-
 
         <HBox alignment="BASELINE_LEFT" spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="1">
             <children>
-                <ComboBox fx:id="chooseIngredientCB" promptText="Choose ingredient">
+                <ComboBox fx:id="ingredientComboBox" promptText="Choose ingredient">
                     <items>
                         <FXCollections fx:factory="observableArrayList"/>
                     </items>
                 </ComboBox>
-                <Button fx:id="addToDishButton" prefWidth="150" prefHeight="50" text="Add to dish"/>
-                <Button fx:id="removeFromDishButton" prefWidth="150" prefHeight="50" text="Remove ingredient&#10;from dish"/>
+                <Button fx:id="addIngToDishButton" prefWidth="150" prefHeight="50" text="Add to dish"/>
+                <Button fx:id="removeIngFromDishButton" prefWidth="150" prefHeight="50" text="Remove ingredient&#10;from dish"/>
             </children>
         </HBox>
 
@@ -53,7 +47,7 @@
         <VBox alignment="BASELINE_LEFT" spacing="10" GridPane.columnIndex="0" GridPane.rowIndex="2">
             <Label fx:id="dishNameLabel" prefWidth="200" prefHeight="50" text="Dish name: "/>
             <Label fx:id="dishPriceLabel" prefWidth="200" prefHeight="50" text="Price: "/>
-            <Button fx:id="addDishApplyButton" prefWidth="150" prefHeight="50" text="Apply"/>
+            <Button fx:id="commitNewDishButton" prefWidth="200" prefHeight="50" text="Commit new dish"/>
         </VBox>
 
     </children>

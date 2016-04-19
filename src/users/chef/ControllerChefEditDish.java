@@ -24,12 +24,13 @@ import java.util.function.UnaryOperator;
 /**
  * Created by axelkvistad on 4/18/16.
  */
-public class ControllerChefEditDish extends ControllerChefDishes implements Initializable {
+public class ControllerChefEditDish extends ControllerChef implements Initializable {
 
     public GridPane editDishGP;
     public TextField editDishNameField;
     public TextField editDishPriceFactorField;
     public ComboBox<DishLine> editIngredientCB;
+    public Button applyDishChangesButton;
     public Button addIngButton;
     public Button removeIngButton;
     public TableView currentIngTable;
@@ -41,12 +42,16 @@ public class ControllerChefEditDish extends ControllerChefDishes implements Init
     public Button editPriceButton;
     public Label currentNameLabel;
     public Label currentPriceLabel;
-    public Button editDishApplyButton;
-    private TestObjects testObjects = new TestObjects();
-    private DishLine selectedIngredient;
+    public Button editDishCommitButton;
+    protected DishLine selectedDishLine;
 
-    ObservableList<DishLine> testIngredients  = testObjects.allIngredientsDL;
-    ObservableList<DishLine> currentIngredients = chosenDish.getDish().getAllDishLinesForThisDish();
+    private String dishNameString;
+    private double dishPriceFactor;
+    private String dishPriceFactorString;
+    private double dishPrice = 0;
+
+    // Current DishLines (ingredients) in the dish being edited
+    ObservableList<DishLine> currentDishLines = selectedDish.getAllDishLinesForThisDish();
 
 
     private final NumberFormat nf = NumberFormat.getNumberInstance();
@@ -54,7 +59,7 @@ public class ControllerChefEditDish extends ControllerChefDishes implements Init
         nf.setMaximumFractionDigits(2);
     }
 
-    EventHandler<ActionEvent> editDishApplyButtonClick = new EventHandler<ActionEvent>() {
+    EventHandler<ActionEvent> commitChanges = new EventHandler<ActionEvent>() {
         @Override
         public void handle(ActionEvent event) {
             try {
@@ -62,68 +67,61 @@ public class ControllerChefEditDish extends ControllerChefDishes implements Init
                 String priceFactorString = editDishPriceFactorField.getText();
                 double priceFactor = Double.parseDouble(priceFactorString) / 100;
                 double price = 0;
-                for (DishLine dl : currentIngredients) {
+                for (DishLine dl : currentDishLines) {
                     price += (dl.getAmount() * dl.getIngredient().getPrice());
                 }
                 price *= priceFactor;
                 double finalPrice = Math.round(price * 100.0) / 100.0;
-                Dish newDish = new Dish(finalPrice, name, currentIngredients);
-                chosenDish.setDish(newDish);
-                chosenDish.setPriceFactor(priceFactor);
+
+                selectedDish.setDishName(name);
+                selectedDish.setPrice(finalPrice);
+                selectedDish.setAllDishLinesForThisDish(currentDishLines);
             } catch (Exception exc) {
                 System.out.println(exc);
             }
         }
     };
 
-    EventHandler<ActionEvent> setDishNameButtonClick = new EventHandler<ActionEvent>() {
+    EventHandler<ActionEvent> applyChanges = new EventHandler<ActionEvent>() {
         @Override
         public void handle(ActionEvent event) {
             try {
-                if (!editDishNameField.getText().isEmpty()) {
-                    String name = editDishNameField.getText();
-                    currentNameLabel.setText("Dish name: " + name);
-                }
-            } catch (Exception exc) {
-                System.out.println(exc);
-            }
-        }
-    };
-
-    EventHandler<ActionEvent> setPriceButtonClick = new EventHandler<ActionEvent>() {
-        @Override
-        public void handle(ActionEvent event) {
-            try {
-                if (!editDishPriceFactorField.getText().isEmpty() && !currentIngredients.isEmpty()) {
-                    String priceFactorString = editDishPriceFactorField.getText();
-                    double priceFactor = Double.parseDouble(priceFactorString) / 100;
-                    double price = 0;
-                    for (DishLine dl : currentIngredients) {
-                        price += (dl.getAmount() * dl.getIngredient().getPrice());
+                if (!(editDishNameField.getText().isEmpty() || editDishPriceFactorField.getText().isEmpty() || currentDishLines.isEmpty())) {
+                    dishNameString = editDishNameField.getText();;
+                    dishPriceFactorString = editDishPriceFactorField.getText();
+                    dishPriceFactor = Double.parseDouble(dishPriceFactorString) / 100.0;
+                    dishPrice = 0;
+                    for (DishLine dl : currentDishLines) {
+                        dishPrice += (dl.getAmount() * dl.getIngredient().getPrice());
                     }
-                    price *= priceFactor;
-                    currentPriceLabel.setText("Price: " + nf.format(price) + " NOK");
+                    dishPrice *= dishPriceFactor;
+                    dishPrice = Math.round(dishPrice * 100.0) / 100.0;
+                    String dishPriceString = nf.format(dishPrice);
+
+                    currentNameLabel.setText("Dish name: " + dishNameString);
+                    currentPriceLabel.setText("Dish price: " + dishPriceString + " NOK");
                 }
             } catch (Exception exc) {
                 System.out.println(exc);
             }
         }
     };
+
 
     EventHandler<ActionEvent> removeFromDishButtonClick = new EventHandler<ActionEvent>() {
         @Override
         public void handle(ActionEvent event) {
             try {
                 boolean remove = false;
-                if (selectedIngredient != null) {
-                    for (DishLine dl : currentIngredients) {
-                        if (dl.getIngredient().getIngredientName().equals(selectedIngredient.getIngredient().getIngredientName())) {
+                if (selectedDishLine != null) {
+                    for (DishLine dl : currentDishLines) {
+                        if (dl.getIngredient().getIngredientName().equals(selectedDishLine.getIngredient().getIngredientName())) {
                             remove = true;
                         }
                     }
                     if (remove) {
-                        currentIngredients.remove(selectedIngredient);
-                        currentIngTable.setItems(currentIngredients);
+                        currentDishLines.remove(selectedDishLine);
+                        currentIngTable.setItems(currentDishLines);
                     } else {
                         Alert alert = new Alert(Alert.AlertType.WARNING);
                         alert.setTitle("Error");
@@ -143,15 +141,15 @@ public class ControllerChefEditDish extends ControllerChefDishes implements Init
         public void handle(ActionEvent event) {
             try {
                 boolean add = true;
-                if (selectedIngredient != null) {
-                    for (DishLine dl : currentIngredients) {
-                        if (dl.getIngredient().getIngredientName().equals(selectedIngredient.getIngredient().getIngredientName())) {
+                if (selectedDishLine != null) {
+                    for (DishLine dl : currentDishLines) {
+                        if (dl.getIngredient().getIngredientName().equals(selectedDishLine.getIngredient().getIngredientName())) {
                             add = false;
                         }
                     }
                     if (add) {
-                        currentIngredients.add(selectedIngredient);
-                        currentIngTable.setItems(currentIngredients);
+                        currentDishLines.add(selectedDishLine);
+                        currentIngTable.setItems(currentDishLines);
                     } else {
                         Alert alert = new Alert(Alert.AlertType.WARNING);
                         alert.setTitle("Error");
@@ -167,15 +165,24 @@ public class ControllerChefEditDish extends ControllerChefDishes implements Init
         }
     };
 
+    public double getDishPriceFactor() {
+        double ingPriceTotal = 0;
+        for (DishLine dl : selectedDish.getAllDishLinesForThisDish()) {
+            ingPriceTotal += dl.getIngredient().getPrice() * dl.getAmount();
+        }
+        System.out.println(selectedDish.getPrice() / ingPriceTotal);
+        return Math.round((selectedDish.getPrice() / ingPriceTotal * 100.0));
+    }
 
 
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
 
-        editIngredientCB.setItems(testIngredients);
-        editDishNameField.setText(chosenDish.getDish().getDishName());
-        editDishPriceFactorField.setText(nf.format(chosenDish.getPriceFactor() * 100));
-        currentNameLabel.setText("Dish name: " + chosenDish.getDish().getDishName());
-        currentPriceLabel.setText("Price: " + chosenDish.getDish().getPrice());
+        editIngredientCB.setItems(testDishLines);
+        editDishNameField.setText(selectedDish.getDishName());
+        editDishPriceFactorField.setText(nf.format(getDishPriceFactor()));
+        currentNameLabel.setText("Dish name: " + selectedDish.getDishName());
+        currentPriceLabel.setText("Price: " + selectedDish.getPrice());
+
         editIngredientCB.setConverter(new StringConverter<DishLine>() {
             @Override
             public String toString(DishLine dishLine) {
@@ -194,7 +201,7 @@ public class ControllerChefEditDish extends ControllerChefDishes implements Init
         editIngredientCB.valueProperty().addListener(new ChangeListener<DishLine>() {
             @Override
             public void changed(ObservableValue<? extends DishLine> observable, DishLine oldValue, DishLine newValue) {
-                selectedIngredient = newValue;
+                selectedDishLine = newValue;
             }
         });
 
@@ -273,13 +280,12 @@ public class ControllerChefEditDish extends ControllerChefDishes implements Init
 
         currentIngTable.getColumns().setAll(currentIngName, currentIngAmount, currentIngUnit, currentIngPrice);
         currentIngTable.setEditable(true);
-        currentIngTable.setItems(currentIngredients);
+        currentIngTable.setItems(currentDishLines);
 
         addIngButton.setOnAction(addToDishButtonClick);
-        editDishNameButton.setOnAction(setDishNameButtonClick);
-        editPriceButton.setOnAction(setPriceButtonClick);
         removeIngButton.setOnAction(removeFromDishButtonClick);
-        editDishApplyButton.setOnAction(editDishApplyButtonClick);
+        editDishCommitButton.setOnAction(commitChanges);
+        applyDishChangesButton.setOnAction(applyChanges);
 
     }
 }

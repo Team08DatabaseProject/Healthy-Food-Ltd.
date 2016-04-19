@@ -35,7 +35,7 @@ import classpackage.TestObjects;
  * Created by axelkvistad on 4/15/16.
  */
 
-public class ControllerChefAddIngredient extends ControllerChefIngredients implements Initializable {
+public class ControllerChefAddIngredient extends ControllerChef implements Initializable {
 
     public GridPane addIngredientGP;
     public TextField ingNameField;
@@ -44,10 +44,6 @@ public class ControllerChefAddIngredient extends ControllerChefIngredients imple
     public TextField ingQuantityField;
     public ComboBox<Supplier> ingSupplierCB;
     public Button ingApplyButton;
-    private TestObjects testObjects = new TestObjects();
-    private Supplier selectedSupplier;
-
-    ObservableList<Supplier> suppliers = testObjects.supplierList;
 
 
     EventHandler<ActionEvent> ingApplyButtonClick = new EventHandler<ActionEvent>() {
@@ -72,7 +68,7 @@ public class ControllerChefAddIngredient extends ControllerChefIngredients imple
 
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
 
-        ingSupplierCB.setItems(suppliers);
+        ingSupplierCB.setItems(testSuppliers);
         ingSupplierCB.setPromptText("Supplier");
 
         ingSupplierCB.setConverter(new StringConverter<Supplier>() {

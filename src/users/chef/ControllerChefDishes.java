@@ -13,6 +13,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import javafx.util.converter.DoubleStringConverter;
 
 import java.net.URL;
@@ -32,8 +33,6 @@ public class ControllerChefDishes extends ControllerChef implements Initializabl
     public Button addDishButton;
     public Button viewDishInfoButton;
     public Button removeDishButton;
-
-    protected static MenuLine chosenDish;
 
     EventHandler<ActionEvent> addDishButtonClick = new EventHandler<ActionEvent>() {
         @Override
@@ -57,8 +56,8 @@ public class ControllerChefDishes extends ControllerChef implements Initializabl
         @Override
         public void handle(ActionEvent event) {
             try {
-                chosenDish = (MenuLine) dishTable.getSelectionModel().getSelectedItem();
-                if (chosenDish != null) {
+                selectedDish = (Dish) dishTable.getSelectionModel().getSelectedItem();
+                if (selectedDish != null) {
                     FXMLLoader loader = new FXMLLoader();
                     loader.setLocation(getClass().getResource("ChefEditDish.fxml"));
                     GridPane editDishGP = loader.load();
@@ -78,10 +77,10 @@ public class ControllerChefDishes extends ControllerChef implements Initializabl
         @Override
         public void handle(ActionEvent event) {
             try {
-                int selectedIndex = dishTable.getSelectionModel().getSelectedIndex();
-                if (selectedIndex > -1) {
-                    testDishLines.remove(dishTable.getItems().get(selectedIndex));
-                    dishTable.setItems(testDishLines);
+                selectedDish = (Dish) dishTable.getSelectionModel().getSelectedItem();
+                if (selectedDish != null) {
+                    testDishes.remove(selectedDish);
+                    dishTable.setItems(testDishes);
                 } else {
                     Alert alert = new Alert(Alert.AlertType.WARNING);
                     alert.setTitle("No selection");
@@ -102,30 +101,30 @@ public class ControllerChefDishes extends ControllerChef implements Initializabl
             nf.setMaximumFractionDigits(2);
         }
 
-        dishName.setCellValueFactory(new PropertyValueFactory<MenuLine, Dish>("dish"));
-        dishPrice.setCellValueFactory(new PropertyValueFactory<MenuLine, Dish>("dish"));
+        dishName.setCellValueFactory(new PropertyValueFactory<Dish, String>("dishName"));
+        dishPrice.setCellValueFactory(new PropertyValueFactory<Dish, Double>("price"));
 
         dishName.setCellFactory(column -> {
-            return new TableCell<MenuLine, Dish>() {
+            return new TableCell<Dish, String>() {
                 @Override
-                protected void updateItem(Dish item, boolean empty) {
-                    if(item == null || empty) {
+                protected void updateItem(String name, boolean empty) {
+                    if(name == null || empty) {
                         setText(null);
                     } else {
-                        setText(item.getDishName());
+                        setText(name);
                     }
                 }
             };
         });
 
         dishPrice.setCellFactory(column -> {
-            return new TableCell<MenuLine, Dish>() {
+            return new TableCell<Dish, Double>() {
                 @Override
-                protected void updateItem(Dish item, boolean empty) {
-                    if(item == null || empty) {
+                protected void updateItem(Double price, boolean empty) {
+                    if(price == null || empty) {
                         setText(null);
                     } else {
-                        setText((String.valueOf(item.getPrice())));
+                        setText(nf.format(price));
                     }
                 }
             };
@@ -133,8 +132,9 @@ public class ControllerChefDishes extends ControllerChef implements Initializabl
 
 
         dishTable.getColumns().setAll(dishName, dishPrice);
-        dishTable.setItems(testMenuLines);
+        dishTable.setItems(testDishes);
         addDishButton.setOnAction(addDishButtonClick);
+        removeDishButton.setOnAction(removeDishButtonClick);
         viewDishInfoButton.setOnAction(viewInfoButtonClick);
 
 

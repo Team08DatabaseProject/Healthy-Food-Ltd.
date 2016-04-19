@@ -3,10 +3,7 @@ package users.chef;
 /**
  * Created by Axel Kvistad on 13.04.2016
  */
-import classpackage.DishLine;
-import classpackage.Ingredient;
-import classpackage.MenuLine;
-import classpackage.TestObjects;
+import classpackage.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -15,7 +12,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
-import javafx.scene.control.Menu;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -40,10 +36,18 @@ public class ControllerChef implements Initializable{
     protected static ObservableList<DishLine> testDishLines = testObjects.allIngredientsDL;
     protected static ObservableList<MenuLine> testMenuLines = testObjects.allDishes;
     protected static ObservableList<classpackage.Menu> testMenus = testObjects.allMenus;
+    protected static ObservableList<Supplier> testSuppliers = testObjects.supplierList;
+    protected static ObservableList<Dish> testDishes = testObjects.dishList;
+    protected static Ingredient selectedIngredient;
+    protected static Dish selectedDish;
+    protected static DishLine selectedDishLine;
+    protected static MenuLine selectedMenuLine;
+    protected static Menu selectedMenu;
+    protected static Supplier selectedSupplier;
 
 
 
-    EventHandler<ActionEvent> menuButtonClick = new EventHandler<ActionEvent>() {
+    EventHandler<ActionEvent> showMenusEvent = new EventHandler<ActionEvent>() {
         @Override
         public void handle(ActionEvent event) {
             try {
@@ -57,7 +61,7 @@ public class ControllerChef implements Initializable{
         }
     };
 
-    EventHandler<ActionEvent> ingredientsButtonClick = new EventHandler<ActionEvent>() {
+    EventHandler<ActionEvent> showIngredientsEvent = new EventHandler<ActionEvent>() {
         @Override
         public void handle(ActionEvent event) {
             try {
@@ -71,7 +75,7 @@ public class ControllerChef implements Initializable{
         }
     };
 
-    EventHandler<ActionEvent> dishesButtonClick = new EventHandler<ActionEvent>() {
+    EventHandler<ActionEvent> showDishesEvent = new EventHandler<ActionEvent>() {
         @Override
         public void handle(ActionEvent event) {
             try {
@@ -87,8 +91,8 @@ public class ControllerChef implements Initializable{
 
 
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
-        menusButton.setOnAction(menuButtonClick);
-        ingredientsButton.setOnAction(ingredientsButtonClick);
-        dishesButton.setOnAction(dishesButtonClick);
+        menusButton.setOnAction(showMenusEvent);
+        ingredientsButton.setOnAction(showIngredientsEvent);
+        dishesButton.setOnAction(showDishesEvent);
     }
 }

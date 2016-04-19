@@ -110,12 +110,16 @@ public class TestObjects {
     public static Dish weirdDish = new Dish(100, "Weird dish", ingredientListDL5);
     public static Dish veggieDish = new Dish(75, "Veggie dish", ingredientListDL6);
 
-    public static MenuLine carrotML = new MenuLine(carrotDish, 1, 0.9);
-    public static MenuLine troutML = new MenuLine(troutDish, 2, 0.7);
-    public static MenuLine beefML = new MenuLine(beefDish, 1, 0.9);
-    public static MenuLine salmonML = new MenuLine(salmonDish, 1, 0.8);
-    public static MenuLine weirdML = new MenuLine(weirdDish, 4, 0.9);
-    public static MenuLine veggieML = new MenuLine(veggieDish, 3, 0.9);
+    public static ObservableList<Dish> dishList = FXCollections.observableArrayList(
+            carrotDish, troutDish, beefDish, salmonDish, weirdDish, veggieDish
+    );
+
+    public static MenuLine carrotML = new MenuLine(carrotDish);
+    public static MenuLine troutML = new MenuLine(troutDish);
+    public static MenuLine beefML = new MenuLine(beefDish);
+    public static MenuLine salmonML = new MenuLine(salmonDish);
+    public static MenuLine weirdML = new MenuLine(weirdDish);
+    public static MenuLine veggieML = new MenuLine(veggieDish);
 
     public static ObservableList<MenuLine> allDishes = FXCollections.observableArrayList(
             carrotML, troutML, beefML, salmonML, weirdML
