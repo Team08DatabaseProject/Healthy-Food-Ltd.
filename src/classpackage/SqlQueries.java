@@ -2,7 +2,9 @@ package classpackage;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import sun.plugin2.gluegen.runtime.CPU;
 
+import javax.xml.transform.Result;
 import java.sql.*;
 import java.sql.Date;
 import java.time.LocalDate;
@@ -26,6 +28,7 @@ import java.util.*;
 
 public class SqlQueries extends DBConnector {
 
+    // TODO: 18.04.2016 Fix addEmployee
     // TODO: 10.04.2016 Need to reevaluate how F.ex addEmployee and addSupplier creates new address when run, what to do with collisions?
     // TODO: 11.04.2016 Agree on wether customers should have several subscriptions
 
@@ -121,8 +124,10 @@ public class SqlQueries extends DBConnector {
             updateQuery.setString(2, address.getAddress());
             updateQuery.setString(3, address.getPlace());
             updateQuery.setInt(4, address.getAddressId());
-            updateQuery.executeUpdate();
-            success = true;
+            int rowsAffected = updateQuery.executeUpdate();
+            if (rowsAffected == 1) {
+                return true;
+            }
         } catch (SQLException e) {
             e.printStackTrace();
             System.out.println("method updateAddress failed");
@@ -131,11 +136,29 @@ public class SqlQueries extends DBConnector {
         return success;
     }
 
+    public boolean deleteAddress(Address address) {
+        boolean success = false;
+        try {
+            String sql = "DELETE FROM address WHERE address_id = ?;";
+            PreparedStatement deleteQuery = con.prepareStatement(sql);
+            deleteQuery.setInt(1, address.getAddressId());
+            if (deleteQuery.executeUpdate() == 1) {
+                success = true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("method updateAddress failed");
+            success = false;
+        }
+        return success;
+    }
+
+
     /*Customer methods:*/
     //Method for registering Customer
     public boolean addCustomer(Customer theCustomer) {
         boolean success = false;
-
+        ResultSet res = null;
         try {
             con.setAutoCommit(false);
             if (addAddress(theCustomer.getAddress())) {
@@ -157,17 +180,16 @@ public class SqlQueries extends DBConnector {
             insertQuery.setInt(7, isBusiness); // 0 is not business, 1 is!
             insertQuery.execute();
 
-            ResultSet res = insertQuery.getGeneratedKeys();
+            res = insertQuery.getGeneratedKeys();
             res.next();
             theCustomer.setCustomerId(res.getInt(1));
-            // TODO: 31.03.2016 compare registerAddress with how this method should be done!
             success = true;
         } catch (SQLException e) {
             e.printStackTrace();
             System.out.println("Method addCustomer failed");
-            SqlCleanup.lukkForbindelse(con);
+            SqlCleanup.rullTilbake(con);
         } finally {
-            SqlCleanup.lukkSetning(insertQuery);
+            closeEverything(res, insertQuery, con);
         }
         return success;
     }
@@ -191,45 +213,55 @@ public class SqlQueries extends DBConnector {
             updateQuery.setString(6, customer.getEmail());
             updateQuery.setInt(7, isBusiness);
             updateQuery.setInt(8, customer.getCustomerId());
-            updateQuery.executeUpdate();
-            success = true;
+            int rowsAffected = updateQuery.executeUpdate();
+            if (rowsAffected == 1) {
+                return true;
+            }
         } catch (SQLException e) {
             e.printStackTrace();
             System.out.println("method updateCustomer failed");
             success = false;
+        } finally {
+            closeEverything(null, updateQuery, con);
         }
-        return success;
+        return false;
     }
 
 
     public ArrayList<Integer> getOrderIdsBySubscription(Subscription subscription) {
         ArrayList<Integer> orderIds = new ArrayList<Integer>();
+        ResultSet res = null;
         try {
             String selectSql = "SELECT order_id FROM subscription_relation_order WHERE subscription_id = " + subscription.getSubscriptionId();
             selectQuery = con.prepareStatement(selectSql);
-            ResultSet res = selectQuery.executeQuery();
+            res = selectQuery.executeQuery();
             while (res.next()) {
                 orderIds.add(res.getInt("order_id"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
             System.out.println("method getOrderIdsByOrderIds failed");
+        } finally {
+            closeEverything(res, insertQuery, con);
         }
         return orderIds;
     }
 
     public ArrayList<Integer> getOrderIdsByCustomer(Customer customer) {
         ArrayList<Integer> orderIds = new ArrayList<Integer>();
+        ResultSet res = null;
         try {
             String selectSql = "SELECT order_id FROM n_order WHERE customer_id = " + customer.getCustomerId();
             selectQuery = con.prepareStatement(selectSql);
-            ResultSet res = selectQuery.executeQuery();
+            res = selectQuery.executeQuery();
             while (res.next()) {
                 orderIds.add(res.getInt("order_id"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
             System.out.println("method getOrderIdsByCustomer failed");
+        } finally {
+            closeEverything(res, selectQuery, con);
         }
         return orderIds;
     }
@@ -240,10 +272,11 @@ public class SqlQueries extends DBConnector {
     public ObservableList<Customer> getAllCustomers(ObservableList<Order> allOrders) {
         ObservableList<Subscription> allSubscriptions = getAllSubscriptions();
         ObservableList<Customer> customers = FXCollections.observableArrayList();
+        ResultSet res = null;
         try {
             String selectSql = "SELECT * FROM customer";
             selectQuery = con.prepareStatement(selectSql);
-            ResultSet res = selectQuery.executeQuery();
+            res = selectQuery.executeQuery();
             while (res.next()) {
                 boolean isBusiness = false;
                 if (res.getInt("isBusiness") == 1) {
@@ -300,6 +333,8 @@ public class SqlQueries extends DBConnector {
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("method getAllCustomers failed, not Sql exception!");
+        } finally {
+            closeEverything(res, selectQuery, con);
         }
         return customers;
     }
@@ -340,48 +375,79 @@ public class SqlQueries extends DBConnector {
 
     public boolean addDish(Dish theDish) {
         boolean success = false;
+        ResultSet res = null;
         try {
             String sqlSetning = "INSERT INTO dish(price, name) VALUES(?,?)";
             insertQuery = con.prepareStatement(sqlSetning, Statement.RETURN_GENERATED_KEYS);
             insertQuery.setDouble(1, theDish.getPrice());
             insertQuery.setString(2, theDish.getDishName());
             insertQuery.execute();
-            ResultSet res = insertQuery.getGeneratedKeys();
+            res = insertQuery.getGeneratedKeys();
             res.next();
             theDish.setDishId(res.getInt(1));
             success = true;
         } catch (SQLException e) {
             e.printStackTrace();
             System.out.println("Method addDish failed");
-            SqlCleanup.lukkForbindelse(con);
         } finally {
-            SqlCleanup.lukkSetning(insertQuery);
+            closeEverything(res, insertQuery, con);
         }
         return success;
     }
 
     //    Method for updating/changing a Dish
     public boolean updateDish(Dish dish) {
-        boolean success = false;
         try {
             String sql = "UPDATE dish SET price = ?, name = ? WHERE dish_id = ?";
             updateQuery = con.prepareStatement(sql);
             updateQuery.setDouble(1, dish.getPrice());
             updateQuery.setString(2, dish.getDishName());
             updateQuery.setInt(7, dish.getDishId());
-            updateQuery.executeUpdate();
-            success = true;
+            int rowsAffected = updateQuery.executeUpdate();
+            if (rowsAffected == 1) {
+                return true;
+            }
         } catch (SQLException e) {
             e.printStackTrace();
             System.out.println("method updateDish failed");
-            success = false;
+        } finally {
+            closeEverything(null, updateQuery, con);
         }
-        return success;
+        return false;
+    }
+
+    public ObservableList<Dish> getAllDishes(ObservableList<Ingredient> allIngredients) {
+        ObservableList<Dish> allDishes = FXCollections.observableArrayList();
+        ResultSet res = null;
+        try {
+            String selectSql = "SELECT * FROM dish";
+            selectQuery = con.prepareStatement(selectSql);
+            res = selectQuery.executeQuery();
+            while (res.next()) {
+                int dishId = res.getInt("dish_id");
+                double price = res.getDouble("price");
+                String name = res.getString("name");
+
+                Dish dish = new Dish(dishId, price, name, null);
+                dish.setAllDishLinesForThisDish(getDishLinesByDish(dish, allIngredients));
+                allDishes.add(dish);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("method getAllDishes failed");
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("method getAllDishes failed, not SQL exception");
+        } finally {
+            closeEverything(res, selectQuery, con);
+        }
+        return allDishes;
     }
 
 
     //    Method for adding Dish in Menu
-    public boolean addDishInMenu(Menu menu, ObservableList<MenuLine> menuLine) {
+    public boolean addDishesInMenu(Menu menu, ObservableList<MenuLine> menuLine) {
         boolean success = false;
         try {
             con.setAutoCommit(false);
@@ -399,22 +465,53 @@ public class SqlQueries extends DBConnector {
             success = true;
         } catch (SQLException e) {
             e.printStackTrace();
-            System.out.println("Method addDishInMenu failed");
+            System.out.println("Method addDishesInMenu failed");
             SqlCleanup.lukkForbindelse(con);
         } finally {
-            SqlCleanup.lukkSetning(insertQuery);
+            closeEverything(null, insertQuery, con);
+        }
+        return success;
+    }
+
+
+    //    Method for removing dishes in a menu
+    public boolean deleteDishesInMenu(Menu menu, ObservableList<MenuLine> menuLines) {
+        boolean success = false;
+        PreparedStatement deleteQuery = null;
+        try {
+            con.setAutoCommit(false);
+            String sqlSetning = "DELETE FROM menu_line WHERE dish_id = ? AND menu_id = ?";
+            deleteQuery = con.prepareStatement(sqlSetning);
+            for (MenuLine oneLine :
+                    menuLines) {
+                deleteQuery.setInt(1, oneLine.getDish().getDishId());
+                deleteQuery.setInt(2, menu.getMenuId());
+                deleteQuery.execute();
+            }
+            con.commit();
+            success = true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Method deleteDishesInMenu failed");
+            SqlCleanup.lukkForbindelse(con);
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Exception in deleteDishesInMenu, not Sql Exception");
+        } finally {
+            closeEverything(null, deleteQuery, con);
         }
         return success;
     }
 
 
     public ObservableList<DishLine> getDishLinesByDish(Dish dish, ObservableList<Ingredient> allIngredients) {
+        ResultSet res = null;
         ObservableList<DishLine> dishLines = FXCollections.observableArrayList();
         Map<Integer, Double> collection = new HashMap<>();
         try {
             String selectSql = "SELECT ingredient_id, quantity FROM dish_line WHERE dish_id = " + dish.getDishId();
             selectQuery = con.prepareStatement(selectSql);
-            ResultSet res = selectQuery.executeQuery();
+            res = selectQuery.executeQuery();
             while (res.next()) {
                 collection.put(res.getInt(1), res.getDouble("quantity"));
             }
@@ -432,6 +529,8 @@ public class SqlQueries extends DBConnector {
         } catch (SQLException e) {
             e.printStackTrace();
             System.out.println("method getDishLinesByDish failed");
+        } finally {
+            closeEverything(res, selectQuery, con);
         }
 
         allIngredients.forEach(ingredient -> System.out.println("All ingredients:\t" + ingredient.toString()));
@@ -439,39 +538,8 @@ public class SqlQueries extends DBConnector {
         return dishLines;
     }
 
-
-
-
-
-
-
-
-
-
-    /*Employee methods*/
-
-    // TODO: 14.04.2016 Change to Rogers update
-    /*
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-6:20PM
-
-*/
-
     public boolean addEmployee(Employee newEmp) {
-        boolean ok = false;
+        ResultSet res = null;
 
         try {
             con.setAutoCommit(false);
@@ -480,24 +548,23 @@ public class SqlQueries extends DBConnector {
                 SqlCleanup.settAutoCommit(con);
                 return false;
             }
-            String insertSql = "INSERT INTO employee VALUES(?,?,?,?,?,?,?,?,?,?)";
-            insertQuery = con.prepareStatement(insertSql);
-            insertQuery.setInt(1, newEmp.getEmployeeId());
-            insertQuery.setString(2, newEmp.getFirstName());
-            insertQuery.setString(3, newEmp.getLastName());
-            insertQuery.setInt(4, newEmp.getPhoneNo());
-            insertQuery.setString(5, newEmp.geteMail());
-            insertQuery.setInt(6, newEmp.getAddress().getAddressId());
-            insertQuery.setString(7, newEmp.getUsername());
-            insertQuery.setInt(8, newEmp.getPosition().getId());
-            insertQuery.setDouble(9, newEmp.getSalary());
-            insertQuery.setString(10, newEmp.getPassHash());
+            String insertSql = "INSERT INTO employee (first_name, last_name, phone, email, address_id, username, pos_id, salary, passhash) VALUES(?,?,?,?,?,?,?,?,?)";
+            insertQuery = con.prepareStatement(insertSql, Statement.RETURN_GENERATED_KEYS);
+            insertQuery.setString(1, newEmp.getFirstName());
+            insertQuery.setString(2, newEmp.getLastName());
+            insertQuery.setInt(3, newEmp.getPhoneNo());
+            insertQuery.setString(4, newEmp.geteMail());
+            insertQuery.setInt(5, newEmp.getAddress().getAddressId());
+            insertQuery.setString(6, newEmp.getUsername());
+            insertQuery.setInt(7, newEmp.getPosition().getId());
+            insertQuery.setDouble(8, newEmp.getSalary());
+            insertQuery.setString(9, newEmp.getPassHash());
             insertQuery.executeUpdate();
 
-            ResultSet res = insertQuery.getGeneratedKeys();
+            res = insertQuery.getGeneratedKeys();
             res.next();
             newEmp.setEmployeeId(res.getInt(1));
-            ok = true;
+            return true;
         } catch (SQLIntegrityConstraintViolationException e) {
             e.printStackTrace();
             System.out.println("Restraint violation in addEmployee");
@@ -505,10 +572,9 @@ public class SqlQueries extends DBConnector {
             System.out.println("Something went wrong: user registration failed in method addEmployee");
             SqlCleanup.rullTilbake(con);
         } finally {
-            SqlCleanup.lukkSetning(insertQuery);
-            SqlCleanup.settAutoCommit(con);
+            closeEverything(res, insertQuery, con);
         }
-        return ok;
+        return false;
     }
 
 
@@ -548,7 +614,7 @@ public class SqlQueries extends DBConnector {
             int posId = -1;
             double salary = -1;
             int attempts = 0;
-            boolean ok = false;
+            boolean success = false;
             do {
                 try {
     //                con.setAutoCommit(false);
@@ -562,14 +628,14 @@ public class SqlQueries extends DBConnector {
                     posId = res.getInt("pos_id");
                     salary = res.getDouble("salary");
                     //       con.commit();
-                    ok = true;
+                    success = true;
                 } catch (SQLException e) {
                     e.printStackTrace();
                 } finally {
                     SqlCleanup.lukkResSet(res);
                     SqlCleanup.settAutoCommit(con);
                 }
-            } while (!ok);
+            } while (!success);
             if (personId != -1) {
                 return new Employee(personId, username, posId, salary);
             }
@@ -577,11 +643,12 @@ public class SqlQueries extends DBConnector {
         }
     */
     public ObservableList<EmployeePosition> getEmployeePositions() {
+        ResultSet res = null;
         ObservableList<EmployeePosition> employeePositions = FXCollections.observableArrayList();
         try {
             String selectSql = "SELECT pos_id, description, default_salary FROM employee_position";
             Statement s = con.createStatement();
-            ResultSet res = s.executeQuery(selectSql);
+            res = s.executeQuery(selectSql);
             while (res.next()) {
                 EmployeePosition employeePosition = new EmployeePosition(res.getInt(1), res.getString(2), res.getDouble(3));
                 employeePositions.add(employeePosition);
@@ -589,15 +656,18 @@ public class SqlQueries extends DBConnector {
             return employeePositions;
         } catch (SQLException e) {
             System.out.println(e);
+        } finally {
+            closeEverything(res, insertQuery, con);
         }
         return null;
     }
 
     public EmployeePosition getEmployeePosition(int posId) {
+        ResultSet res = null;
         try {
             String selectSql = "SELECT description, default_salary FROM employee_position WHERE pos_id = " + posId;
             selectQuery = con.prepareStatement(selectSql);
-            ResultSet res = selectQuery.executeQuery();
+            res = selectQuery.executeQuery();
             if (!res.next()) return null;
 
             String description = res.getString(1);
@@ -606,17 +676,20 @@ public class SqlQueries extends DBConnector {
         } catch (SQLException e) {
             e.printStackTrace();
             System.out.println("method getAddress failed");
+        } finally {
+            closeEverything(res, insertQuery, con);
         }
         return null;
     }
 
     public Employee getEmployeeByUsername(String username) {
+        ResultSet res = null;
         try {
             String selectSql = "SELECT e.employee_id, e.first_name, e.last_name, e.phone, e.email, e.username, e.salary, e.passhash, e.pos_id, e.address_id" +
                     " FROM employee e WHERE e.username = ?;";
             selectQuery = con.prepareStatement(selectSql);
             selectQuery.setString(1, username);
-            ResultSet res = selectQuery.executeQuery();
+            res = selectQuery.executeQuery();
             if (res.next()) {
                 int employeeId = res.getInt(1);
                 String firstName = res.getString(2);
@@ -634,15 +707,18 @@ public class SqlQueries extends DBConnector {
         } catch (SQLException e) {
             e.printStackTrace();
             System.out.println("method getEmployeeByUsername failed");
+        } finally {
+            closeEverything(res, insertQuery, con);
         }
         return null;
     }
 
     public boolean updateEmployee(Employee employee) {
+        PreparedStatement updateEmpQuery = null;
         try {
             String updateSql = "UPDATE employee SET first_name = ?, last_name = ?, phone = ?, email = ?," +
                     " username = ?, pos_id = ?, salary = ?, passhash = ? WHERE employee_id = ?;";
-            PreparedStatement updateEmpQuery = con.prepareStatement(updateSql);
+            updateEmpQuery = con.prepareStatement(updateSql);
             con.setAutoCommit(false);
             if (!updateAddress(employee.getAddress())) {
                 SqlCleanup.rullTilbake(con);
@@ -658,20 +734,49 @@ public class SqlQueries extends DBConnector {
             updateEmpQuery.setDouble(7, employee.getSalary());
             updateEmpQuery.setString(8, employee.getPassHash());
             updateEmpQuery.setInt(9, employee.getEmployeeId());
-            updateEmpQuery.executeUpdate();
+            int rowsAffected = updateEmpQuery.executeUpdate();
             con.commit();
-            con.setAutoCommit(true);
-            return true;
+            if (rowsAffected == 1) {
+                return true;
+            }
+            return false;
         } catch (SQLException e) {
             e.printStackTrace();
             System.out.println("method updateEmployee failed");
             SqlCleanup.rullTilbake(con);
             SqlCleanup.settAutoCommit(con);
+        } finally {
+            closeEverything(null, updateEmpQuery, con);
         }
         return false;
     }
 
-
+    public boolean deleteEmployee(Employee employee) {
+        boolean success = false;
+        try {
+            con.setAutoCommit(false);
+            String sql = "DELETE FROM employee WHERE employee_id = ?;";
+            PreparedStatement deleteQuery = con.prepareStatement(sql);
+            deleteQuery.setInt(1, employee.getEmployeeId());
+            if (deleteQuery.executeUpdate() == 1) {
+                if (deleteAddress(employee.getAddress())) {
+                    con.commit();
+                    success = true;
+                } else {
+                    SqlCleanup.rullTilbake(con);
+                }
+            } else {
+                SqlCleanup.rullTilbake(con);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            SqlCleanup.rullTilbake(con);
+            System.out.println("method deleteEmployee failed");
+        } finally {
+            SqlCleanup.settAutoCommit(con);
+        }
+        return success;
+    }
 
 
 
@@ -681,9 +786,8 @@ public class SqlQueries extends DBConnector {
 
     //    Method is usable for adding ingredient with or without new supplier
     public boolean addIngredient(Ingredient ingredient) {
-        boolean ok = false;
-
-
+        boolean success = false;
+        ResultSet res = null;
         try {
 
 
@@ -704,10 +808,10 @@ public class SqlQueries extends DBConnector {
             insertQuery.setString(5, ingredient.getIngredientName());
             insertQuery.executeUpdate();
 
-            ResultSet res = insertQuery.getGeneratedKeys();
+            res = insertQuery.getGeneratedKeys();
             res.next();
             ingredient.setIngredientId(res.getInt(1));
-            ok = true;
+            success = true;
         } catch (SQLIntegrityConstraintViolationException e) {
             e.printStackTrace();
             System.out.println("Restraint violation in addIngredient");
@@ -715,15 +819,13 @@ public class SqlQueries extends DBConnector {
             System.out.println("Something went wrong: user registration failed in method addIngredient");
             SqlCleanup.rullTilbake(con);
         } finally {
-            SqlCleanup.lukkSetning(insertQuery);
-            SqlCleanup.settAutoCommit(con);
+            closeEverything(res, insertQuery, con);
         }
-        return ok;
+        return success;
     }
 
     //    Method for updating an Ingredient
     public boolean updateIngredient(Ingredient ingredient) {
-        boolean success = false;
         try {
             String sql = "UPDATE ingredient SET supplier_id = ?, quantity_owned = ?, unit = ?, " +
                     "price = ?, description = ? WHERE ingredient_id = ?";
@@ -734,22 +836,233 @@ public class SqlQueries extends DBConnector {
             updateQuery.setDouble(4, ingredient.getPrice());
             updateQuery.setString(5, ingredient.getIngredientName());
             updateQuery.setInt(6, ingredient.getIngredientId());
-            updateQuery.executeUpdate();
-            success = true;
+            int rowsAffected = updateQuery.executeUpdate();
+            if (rowsAffected == 1) {
+                return true;
+            }
         } catch (SQLException e) {
             e.printStackTrace();
             System.out.println("method updateIngredient failed");
-            success = false;
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("Exception in updateIngredient, not Sql Exception");
+        } finally {
+            closeEverything(null, updateQuery, con);
+        }
+        return false;
+    }
+
+
+    // TODO: 28.03.2016 needs to enable a selector in the windows of the individual employee positions that lets you select elements and send them to methods
+
+    /*Method for registering ingredients in DISH
+    * */
+    public boolean addIngredientInDish(Dish dish, ObservableList<DishLine> dishLine) {
+        boolean success = false;
+        try {
+            con.setAutoCommit(false);
+            for (DishLine oneLine :
+                    dishLine) {
+
+                String sqlSetning = "INSERT INTO dish_line VALUES(?,?,?)";
+                insertQuery = con.prepareStatement(sqlSetning);
+                insertQuery.setInt(1, oneLine.getIngredient().getIngredientId());
+                insertQuery.setInt(2, dish.getDishId());
+                insertQuery.setDouble(3, oneLine.getAmount());
+                insertQuery.execute();
+            }
+            con.commit();
+            success = true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Method addIngredientInDish failed");
+            SqlCleanup.rullTilbake(con);
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Exception in addIngredientsInDish, not Sql Exception");
+        } finally {
+            closeEverything(null, insertQuery, con);
+        }
+        return success;
+    }
+
+    //    Method for removing rows aka dishlines from dishline. Dishlines sent it is removed from the table.
+    public boolean deleteIngredientsInDish(Dish dish, ObservableList<DishLine> dishLines) {
+        boolean success = false;
+        PreparedStatement deleteQuery = null;
+        try {
+            con.setAutoCommit(false);
+            String sqlSetning = "DELETE FROM dish_line WHERE ingredient_id = ? AND dish_id = ?";
+            deleteQuery = con.prepareStatement(sqlSetning);
+            for (DishLine oneLine :
+                    dishLines) {
+                deleteQuery.setInt(1, oneLine.getIngredient().getIngredientId());
+                deleteQuery.setInt(2, dish.getDishId());
+                deleteQuery.execute();
+            }
+            con.commit();
+            con.setAutoCommit(true);
+            success = true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Method addIngredientInDish failed");
+            SqlCleanup.lukkForbindelse(con);
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Exception in removeIngredientIndDish, not Sql Exception");
+        } finally {
+            closeEverything(null, deleteQuery, con);
         }
         return success;
     }
 
 
+    public ObservableList<Ingredient> getAllIngredients(ObservableList<Supplier> allSuppliers) {
+        ObservableList<Ingredient> ingredients = FXCollections.observableArrayList();
+        ResultSet res = null;
+        try {
+            String selectSql = "SELECT * FROM ingredient";
+            selectQuery = con.prepareStatement(selectSql);
+            res = selectQuery.executeQuery();
+            while (res.next()) {
+                int ingredientId = res.getInt("ingredient_id");
+                int supplierId = res.getInt("supplier_id");
+                Double quantityOwned = res.getDouble("quantity_owned");
+                String unit = res.getString("unit");
+                Double price = res.getDouble("price");
+                String name = res.getString("description");
+
+
+                ObservableList<Supplier> tempSupplier = FXCollections.observableArrayList();
+                allSuppliers.filtered(supplier -> supplier.getSupplierId() == supplierId).forEach(supplier1 -> tempSupplier.add(supplier1));
+
+                try {
+                    Ingredient tempIngredient = new Ingredient(ingredientId, name, unit, quantityOwned, price, tempSupplier.get(0));
+                    ingredients.add(tempIngredient);
+                } catch (Exception e) {
+                    System.out.println("method getAllIngredients failed, when trying to get index of temporary arraylist");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("method getAllIngredients failed");
+        } finally {
+            closeEverything(res, selectQuery, con);
+        }
+        return ingredients;
+    }
+
+    /*Menu methods*/
+
+    //    method for adding menu
+    public boolean addMenu(Menu menu) {
+        boolean success = false;
+        ResultSet res = null;
+        try {
+
+            String insertSql = "INSERT INTO menu(description, type_meal) VALUES(?,?)";
+            insertQuery = con.prepareStatement(insertSql, Statement.RETURN_GENERATED_KEYS);
+            insertQuery.setString(1, menu.getName());
+            insertQuery.setString(2, menu.getMealType());
+            insertQuery.executeUpdate();
+
+            res = insertQuery.getGeneratedKeys();
+            res.next();
+            menu.setMenuId(res.getInt(1));
+            success = true;
+        } catch (SQLException e) {
+            System.out.println("Something went wrong: failed in method addMenu");
+        } finally {
+            SqlCleanup.lukkSetning(insertQuery);
+            SqlCleanup.settAutoCommit(con);
+        }
+        return success;
+    }
+
+    //    Method for deleting a menu
+    public boolean deleteMenu(Menu menu) {
+        boolean success = false;
+        try {
+            String sqlSetning = "DELETE FROM menu WHERE menu_id = ?";
+            PreparedStatement deleteQuery = con.prepareStatement(sqlSetning);
+            deleteQuery.setInt(1, menu.getMenuId());
+            deleteQuery.executeUpdate();
+            success = true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Method deleteMenu failed");
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Exception in deleteMenu, not Sql Exception");
+        } finally {
+            closeEverything(null, insertQuery, con);
+        }
+        return success;
+    }
+
+    public ObservableList<Menu> getAllMenus(ObservableList<Dish> allDishes) {
+        ObservableList<Menu> menus = FXCollections.observableArrayList();
+        ResultSet res = null;
+        try {
+            String selectSql = "SELECT * FROM menu";
+            selectQuery = con.prepareStatement(selectSql);
+            res = selectQuery.executeQuery();
+            while (res.next()) {
+                int menuId = res.getInt("menu_id");
+                String descriptin = res.getString("description");
+                String typeMeal = res.getString("type_meal");
+                Menu existingMenu = new Menu(menuId, descriptin, typeMeal, null);
+                existingMenu.setMenuLines(getMenuLinesByMenu(existingMenu, allDishes));
+                menus.add(new Menu(menuId, descriptin, typeMeal, null));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("method getAllSuppliers failed");
+        } finally {
+            closeEverything(res, selectQuery, con);
+        }
+        return menus;
+    }
+
+
+    /*MenuLine methods*/
+
+    public ObservableList<MenuLine> getMenuLinesByMenu(Menu menu, ObservableList<Dish> allDishes) {
+        ObservableList<MenuLine> menuLines = FXCollections.observableArrayList();
+        ResultSet res = null;
+        try {
+            String selectSql = "SELECT * FROM menu_line WHERE menu_id = " + menu.getMenuId();
+            selectQuery = con.prepareStatement(selectSql);
+            res = selectQuery.executeQuery();
+            while (res.next()) {
+                int dishId = res.getInt("dish_id");
+                int amount = res.getInt("quantity");
+                double priceFactor = res.getDouble("price_factor");
+                for (Dish dish :
+                        allDishes) {
+                    if (dish.getDishId() == dishId) {
+                        menuLines.add(new MenuLine(dish, amount, priceFactor));
+                        break;
+                    }
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("method getAllSuppliers failed");
+        } finally {
+            closeEverything(res, selectQuery, con);
+        }
+        return menuLines;
+    }
+
+
+    /*Order Methods*/
+//    Method for getting orders based on position id
     public ObservableList<Order> getOrders(int posId) {
         ObservableList<Order> orders = FXCollections.observableArrayList();
+        ResultSet res = null;
         try {
             String selectSql = "";
             //ceo and sales
@@ -776,7 +1089,7 @@ public class SqlQueries extends DBConnector {
                 //SALES
             }
             selectQuery = con.prepareStatement(selectSql);
-            ResultSet res = selectQuery.executeQuery();
+            res = selectQuery.executeQuery();
             while (res.next()) {
                 int orderId = res.getInt("order_id");
                 int customerId = res.getInt("customer_id");
@@ -793,111 +1106,119 @@ public class SqlQueries extends DBConnector {
         } catch (SQLException e) {
             e.printStackTrace();
             System.out.println("error in method getOrders, most likely to do when calling DRIVER, because results clash (created by Paul)");
+        } finally {
+            closeEverything(res, selectQuery, con);
         }
         return orders;
     }
 
+/*Method for adding order, takes in either a customer or a subscription to put the order under,
+     customer_id will be set to null if customer is null. the order will be added to subscription_relation order
+    if subscription is NOT null*/
 
-    // TODO: 28.03.2016 needs to enable a selector in the windows of the individual employee positions that lets you select elements and send them to methods
-
-    /*Method for registering ingredients in DISH
-    * */
-    public boolean addIngredientInDish(Dish dish, ObservableList<DishLine> dishLine) {
+    public boolean addOrder(Customer customer, Order order, Subscription subscription) {
         boolean success = false;
+        ResultSet res = null;
         try {
             con.setAutoCommit(false);
-            for (DishLine oneLine :
-                    dishLine) {
+            boolean customersuccess = false;
+            String insertSql = "INSERT INTO n_order(customer_id, customer_requests, delivery_date, delivered_date, " +
+                    "price, address, status) VALUES(?,?,?,?,?,?,?)";
+            insertQuery = con.prepareStatement(insertSql, Statement.RETURN_GENERATED_KEYS);
 
-                String sqlSetning = "INSERT INTO dish_line VALUES(?,?,?)";
-                insertQuery = con.prepareStatement(sqlSetning);
-                insertQuery.setInt(1, oneLine.getIngredient().getIngredientId());
-                insertQuery.setInt(2, dish.getDishId());
-                insertQuery.setDouble(3, oneLine.getAmount());
-                insertQuery.execute();
+
+            insertQuery.setString(2, order.getCustomerRequests());
+            insertQuery.setDate(3, Date.valueOf(order.getDeadline()));
+            insertQuery.setDate(4, Date.valueOf(order.getActualDeliveryDate()));
+            insertQuery.setDouble(5, order.getPrice());
+            insertQuery.setInt(6, order.getAddress().getAddressId());
+            insertQuery.setString(7, order.getStatus());
+            if (!(customer == null)) {
+                insertQuery.setInt(1, customer.getCustomerId());
+            } else {
+                insertQuery.setNull(1, Types.INTEGER);
             }
+            insertQuery.executeQuery();
+            res = insertQuery.getGeneratedKeys();
+            res.next();
+            order.setOrderId(res.getInt(1));
+            addOrderInSubscription(subscription, order);
+            con.commit();
             success = true;
         } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("Method addIngredientInDish failed");
-            SqlCleanup.lukkForbindelse(con);
+            System.out.println("Something went wrong: user registration failed in method addOrder");
+            SqlCleanup.rullTilbake(con);
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.println("Exception in addIngredientsInDish, not Sql Exception");
+            System.out.println("error in method addOrder, not SQL exception");
         } finally {
-            SqlCleanup.lukkSetning(insertQuery);
+            closeEverything(res, insertQuery, con);
         }
         return success;
     }
 
-    //    Method for removing rows aka dishlines from dishline. Dishlines sent it is removed from the table.
-    public boolean deleteIngredientsInDish(ObservableList<DishLine> dishLines) {
-        boolean success = false;
+    public boolean updateOrder(Order order, Customer customer) {
         try {
-            con.setAutoCommit(false);
-            for (DishLine oneLine :
-                    dishLines) {
+            String sql = "UPDATE n_order SET ";
 
-                String sqlSetning = "DELETE FROM dish_line WHERE ingredient_id = ?";
-                PreparedStatement deleteQuery = con.prepareStatement(sqlSetning);
-                deleteQuery = con.prepareStatement(sqlSetning);
-                deleteQuery.setInt(1, oneLine.getIngredient().getIngredientId());
-                deleteQuery.execute();
+            sql += "customer_requests = ?, delivery_date = ?, " +
+                    "delivered_date = ?, price = ?, address = ?, status = ?";
+            if (!(customer == null)) {
+                sql += ", customer_id = ?";
             }
-            success = true;
+            sql += " WHERE order_id = ?";
+            updateQuery = con.prepareStatement(sql);
+            if (!(customer == null)) {
+                updateQuery.setInt(7, customer.getCustomerId());
+            }
+            updateQuery.setString(1, order.getCustomerRequests());
+            updateQuery.setDate(2, Date.valueOf(order.getDeadline()));
+            updateQuery.setDate(3, Date.valueOf(order.getActualDeliveryDate()));
+            updateQuery.setDouble(4, order.getPrice());
+            updateQuery.setInt(5, order.getAddress().getAddressId());
+            int rowsAffected = updateQuery.executeUpdate();
+            if (rowsAffected == 1) {
+                return true;
+            }
         } catch (SQLException e) {
             e.printStackTrace();
-            System.out.println("Method addIngredientInDish failed");
-            SqlCleanup.lukkForbindelse(con);
+            System.out.println("method updateOrder failed");
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.println("Exception in removeIngredientIndDish, not Sql Exception");
+            System.out.println("Exception in updateOrder, not Sql Exception");
         } finally {
-            SqlCleanup.lukkSetning(insertQuery);
+            closeEverything(null, updateQuery, con);
+        }
+        return false;
+    }
+
+    //    Method for adding a order in the junction table between order and subscription
+    public boolean addOrderInSubscription(Subscription subscription, Order order) {
+        boolean success = false;
+        try {
+            String insertSql = "INSERT INTO subscription_relation_order(order_id, subscription_id) VALUES(?,?)";
+            insertQuery = con.prepareStatement(insertSql);
+            insertQuery.setInt(1, order.getOrderId());
+            insertQuery.setInt(2, subscription.getSubscriptionId());
+            insertQuery.executeQuery();
+
+            success = true;
+        } catch (SQLException e) {
+            System.out.println("Something went wrong: user registration failed in method addSubscription");
+        } finally {
+            closeEverything(null, insertQuery, con);
         }
         return success;
     }
 
-
-    public ObservableList<Ingredient> getAllIngredients(ObservableList<Supplier> allSuppliers) {
-        ObservableList<Ingredient> ingredients = FXCollections.observableArrayList();
-        try {
-            String selectSql = "SELECT * FROM ingredient";
-            selectQuery = con.prepareStatement(selectSql);
-            ResultSet res = selectQuery.executeQuery();
-            while (res.next()) {
-                int ingredientId = res.getInt("ingredient_id");
-                int supplierId = res.getInt("supplier_id");
-                Double quantityOwned = res.getDouble("quantity_owned");
-                String unit = res.getString("unit");
-                Double price = res.getDouble("price");
-                String name = res.getString("description");
-
-
-                ObservableList<Supplier> tempSupplier = FXCollections.observableArrayList();
-                allSuppliers.filtered(supplier -> supplier.getSupplierId() == supplierId).forEach(supplier1 -> tempSupplier.add(supplier1));
-
-                try {
-                    Ingredient tempIngredient = new Ingredient(ingredientId, name, unit, quantityOwned, price, tempSupplier.get(0));
-                    ingredients.add(tempIngredient);
-                } catch (Exception e) {
-                    System.out.println("method getAllIngredients failed, when trying to get index of temporary arraylist");
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("method getAllIngredients failed");
-        }
-        return ingredients;
-    }
 
 
 
     /*Subscription methods:*/
 
     public boolean addSubscription(Subscription subscription) {
-        boolean ok = false;
-
+        boolean success = false;
+        ResultSet res = null;
         try {
             String insertSql = "INSERT INTO subscription(start_date, end_date) VALUES(?,?)";
             insertQuery = con.prepareStatement(insertSql, Statement.RETURN_GENERATED_KEYS);
@@ -905,27 +1226,26 @@ public class SqlQueries extends DBConnector {
             insertQuery.setDate(2, java.sql.Date.valueOf(subscription.getEndSubscription()));
             insertQuery.executeQuery();
 
-            ResultSet res = insertQuery.getGeneratedKeys();
+            res = insertQuery.getGeneratedKeys();
             res.next();
             subscription.setSubscriptionId(res.getInt(1));
-            ok = true;
+            success = true;
         } catch (SQLException e) {
             System.out.println("Something went wrong: user registration failed in method addSubscription");
-            SqlCleanup.rullTilbake(con);
         } finally {
-            SqlCleanup.lukkSetning(insertQuery);
-            SqlCleanup.settAutoCommit(con);
+            closeEverything(res, insertQuery, con);
         }
-        return ok;
+        return success;
     }
 
 
     public ObservableList<Subscription> getAllSubscriptions() {
         ObservableList<Subscription> subscriptions = FXCollections.observableArrayList();
+        ResultSet res = null;
         try {
             String selectSql = "SELECT * FROM subscription";
             selectQuery = con.prepareStatement(selectSql);
-            ResultSet res = selectQuery.executeQuery();
+            res = selectQuery.executeQuery();
             while (res.next()) {
                 int supplierId = res.getInt("subscription_id");
                 LocalDate startDate = res.getDate("start_date").toLocalDate();
@@ -936,13 +1256,14 @@ public class SqlQueries extends DBConnector {
         } catch (SQLException e) {
             e.printStackTrace();
             System.out.println("method getAllSuppliers failed");
+        } finally {
+            closeEverything(res, selectQuery, con);
         }
         return subscriptions;
     }
 
     //    Method for updating a subscription
     public boolean updateSubscription(Subscription subscription) {
-        boolean success = false;
         try {
             String sql = "UPDATE subscription SET customer_id = ?, start_date = ?, " +
                     "end_date = ? WHERE subscription_id = ?";
@@ -951,17 +1272,20 @@ public class SqlQueries extends DBConnector {
             updateQuery.setDate(2, Date.valueOf(subscription.getStartSubscription()));
             updateQuery.setDate(3, Date.valueOf(subscription.getEndSubscription()));
             updateQuery.setInt(4, subscription.getSubscriptionId());
-            updateQuery.executeUpdate();
-            success = true;
+            int rowsAffected = updateQuery.executeUpdate();
+            if (rowsAffected == 1) {
+                return true;
+            }
         } catch (SQLException e) {
             e.printStackTrace();
             System.out.println("method updateSubscription failed");
-            success = false;
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("method updateSubscription failed, not SQL exeption");
+        } finally {
+            closeEverything(null, insertQuery, con);
         }
-        return success;
+        return false;
     }
 
 
@@ -969,8 +1293,8 @@ public class SqlQueries extends DBConnector {
     /*Supplier methods:*/
 
     public boolean addSupplier(Supplier supplier) {
-        boolean ok = false;
-
+        boolean success = false;
+        ResultSet res = null;
         try {
             con.setAutoCommit(false);
             if (!addAddress(supplier.getThisAddress())) {
@@ -984,10 +1308,10 @@ public class SqlQueries extends DBConnector {
             insertQuery.setInt(3, supplier.getPhoneNumber());
             insertQuery.executeQuery();
 
-            ResultSet res = insertQuery.getGeneratedKeys();
+            res = insertQuery.getGeneratedKeys();
             res.next();
             supplier.setSupplierId(res.getInt(1));
-            ok = true;
+            success = true;
         } catch (SQLIntegrityConstraintViolationException e) {
             e.printStackTrace();
             System.out.println("Restraint violation in addSupplier");
@@ -995,18 +1319,18 @@ public class SqlQueries extends DBConnector {
             System.out.println("Something went wrong: user registration failed in method addSupplier");
             SqlCleanup.rullTilbake(con);
         } finally {
-            SqlCleanup.lukkSetning(insertQuery);
-            SqlCleanup.settAutoCommit(con);
+            closeEverything(res, insertQuery, con);
         }
-        return ok;
+        return success;
     }
 
     public ObservableList<Supplier> getAllSuppliers() {
         ObservableList<Supplier> suppliers = FXCollections.observableArrayList();
+        ResultSet res = null;
         try {
             String selectSql = "SELECT * FROM supplier";
             selectQuery = con.prepareStatement(selectSql);
-            ResultSet res = selectQuery.executeQuery();
+            res = selectQuery.executeQuery();
             while (res.next()) {
                 int supplierId = res.getInt(1);
                 String businessName = res.getString("business_name");
@@ -1018,42 +1342,46 @@ public class SqlQueries extends DBConnector {
         } catch (SQLException e) {
             e.printStackTrace();
             System.out.println("method getAllSuppliers failed");
+        } finally {
+            closeEverything(res, selectQuery, con);
         }
         return suppliers;
     }
 
-//    Method for updating supplyer
-public boolean updateSupplier(Supplier supplier) {
-    boolean success = false;
-    try {
-        String sql = "UPDATE supplier SET address_id = ?, business_name = ?, " +
-                "phone = ? WHERE supplier_id = ?";
-        updateQuery = con.prepareStatement(sql);
-        updateQuery.setInt(1, supplier.getSupplierId());
-        updateQuery.setString(2, supplier.getBusinessName());
-        updateQuery.setInt(3, supplier.getPhoneNumber());
-        updateQuery.setInt(4, supplier.getSupplierId());
-        updateQuery.executeUpdate();
-        success = true;
-    } catch (SQLException e) {
-        e.printStackTrace();
-        System.out.println("method updateSupplier failed");
-        success = false;
-    } catch (Exception e) {
-        e.printStackTrace();
-        System.out.println("method updateSupplier failed, not SQL exception");
+    //    Method for updating supplyer
+    public boolean updateSupplier(Supplier supplier) {
+        try {
+            String sql = "UPDATE supplier SET address_id = ?, business_name = ?, " +
+                    "phone = ? WHERE supplier_id = ?";
+            updateQuery = con.prepareStatement(sql);
+            updateQuery.setInt(1, supplier.getSupplierId());
+            updateQuery.setString(2, supplier.getBusinessName());
+            updateQuery.setInt(3, supplier.getPhoneNumber());
+            updateQuery.setInt(4, supplier.getSupplierId());
+            int rowsAffected = updateQuery.executeUpdate();
+            if (rowsAffected == 1) {
+                return true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("method updateSupplier failed");
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("method updateSupplier failed, not SQL exception");
+        } finally {
+            closeEverything(null, updateQuery, con);
+        }
+        return false;
     }
-    return success;
-}
 
 
     public ZipCode getZipcodeByZipInt(int zipcode) {
-
+        ResultSet res = null;
         try {
             String selectSql = "SELECT * FROM zipcode WHERE zipcode = ?";
             selectQuery = con.prepareStatement(selectSql);
             selectQuery.setInt(1, zipcode);
-            ResultSet res = selectQuery.executeQuery();
+            res = selectQuery.executeQuery();
             if (!res.next()) {
                 return null;
             } else {
@@ -1062,61 +1390,22 @@ public boolean updateSupplier(Supplier supplier) {
         } catch (SQLException e) {
             e.printStackTrace();
             System.out.println("error in method getZipcode");
+        } finally {
+            closeEverything(res, selectQuery, con);
         }
         return null;
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    /* Miscelleanous Methods:*/
-
-
-    // Method for reseting password, only to be used by ceo or admin!!!!!!!!!!!!!!!!
-    public boolean resetPasswordForUser(Employee theEmployee, String newPasshash) {
-        boolean success = false;
-        /*
-        String query = "update users set num_points = ? where first_name = ?";
-      PreparedStatement preparedStmt = conn.prepareStatement(query);
-      preparedStmt.setInt   (1, 6000);
-      preparedStmt.setString(2, "Fred");
-
-      // execute the java preparedstatement
-      preparedStmt.executeUpdate();
-         */
-        try {
-            con.setAutoCommit(false);
-            String query = "UPDATE employee SET passhash = ? WHERE employee_id = ?";
-            updateQuery = con.prepareStatement(query);
-            updateQuery.setString(1, newPasshash);
-            updateQuery.setInt(2, theEmployee.getEmployeeId());
-            updateQuery.executeUpdate();
-            con.commit();
-            success = true;
-
-        } catch (SQLException e) {
-            System.out.println("update of password failed in method resetPasswordForUser");
+    public void closeEverything(ResultSet res, PreparedStatement query, Connection con) {
+        if (!(res == null)) {
+            SqlCleanup.lukkResSet(res);
         }
-        return success;
+        if (!(query == null)) {
+            SqlCleanup.lukkSetning(query);
+        }
+        if (!(con == null)) {
+            SqlCleanup.settAutoCommit(con);
+        }
     }
 
 
