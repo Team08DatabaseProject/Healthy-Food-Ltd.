@@ -28,10 +28,8 @@ import java.util.*;
 
 public class SqlQueries extends DBConnector {
 
-    // TODO: 18.04.2016 Fix addEmployee
-    // TODO: 10.04.2016 Need to reevaluate how F.ex addEmployee and addSupplier creates new address when run, what to do with collisions?
-    // TODO: 11.04.2016 Agree on wether customers should have several subscriptions
 
+    // TODO: 19.04.2016 Refine methods to give confirmations on both execute() and executeUpdate()
     // TODO: 04.04.2016 the strings for Gui that deals with Orders should use just so we have this standardized
     public final String CREATED = "Created";
     public final String INPREPARATION = "In preparation";
@@ -365,6 +363,7 @@ public class SqlQueries extends DBConnector {
             res = insertQuery.getGeneratedKeys();
             res.next();
             theDish.setDishId(res.getInt(1));
+            return true;
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -388,6 +387,23 @@ public class SqlQueries extends DBConnector {
             e.printStackTrace();
         } finally {
             closeEverything(null, updateQuery, con);
+        }
+        return false;
+    }
+
+    //    Method for deleting a dish
+    public boolean deleteDish(Dish dish) {
+        try {
+            String sqlSetning = "DELETE FROM dish WHERE dish_id = ?";
+            PreparedStatement deleteQuery = con.prepareStatement(sqlSetning);
+            deleteQuery.setInt(1, dish.getDishId());
+            if (deleteQuery.executeUpdate() != 0) {
+                return true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            closeEverything(null, insertQuery, con);
         }
         return false;
     }
@@ -694,7 +710,6 @@ public class SqlQueries extends DBConnector {
             if (rowsAffected == 1) {
                 return true;
             }
-            return false;
         } catch (SQLException e) {
             e.printStackTrace();
             SqlCleanup.rullTilbake(con);
@@ -931,8 +946,7 @@ public class SqlQueries extends DBConnector {
             String sqlSetning = "DELETE FROM menu WHERE menu_id = ?";
             PreparedStatement deleteQuery = con.prepareStatement(sqlSetning);
             deleteQuery.setInt(1, menu.getMenuId());
-            int deleted = deleteQuery.executeUpdate();
-            if (deleted != 0) {
+            if (deleteQuery.executeUpdate() != 0) {
                 return true;
             }
         } catch (SQLException e) {
@@ -1144,6 +1158,24 @@ public class SqlQueries extends DBConnector {
         return false;
     }
 
+//    Method for deleting an order
+public boolean deleteOrder(Order order) {
+    try {
+        String sqlSetning = "DELETE FROM n_order WHERE order_id = ?";
+        PreparedStatement deleteQuery = con.prepareStatement(sqlSetning);
+        deleteQuery.setInt(1, order.getOrderId());
+        if (deleteQuery.executeUpdate() != 0){
+            return true;
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    } finally {
+        closeEverything(null, insertQuery, con);
+    }
+    return false;
+}
+
+
 
 
 
@@ -1296,10 +1328,6 @@ public class SqlQueries extends DBConnector {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            System.out.println("method updateSupplier failed");
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("method updateSupplier failed, not SQL exception");
         } finally {
             closeEverything(null, updateQuery, con);
         }
