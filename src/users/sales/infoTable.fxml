@@ -66,8 +66,13 @@
 
         <!--next collumn><!-->
 
-        <TextArea fx:id="customerRequestsArea" GridPane.columnIndex="2" GridPane.rowIndex="1" GridPane.rowSpan="6" prefWidth="200"
+        <TextArea fx:id="customerRequestsArea" GridPane.columnIndex="2" GridPane.rowIndex="1" GridPane.rowSpan="4" prefWidth="200"
                   promptText="Extra requests"/>
+
+        <DatePicker fx:id="startSubscription" GridPane.columnIndex="2" GridPane.rowIndex="6" />
+
+        <DatePicker fx:id="endSubscription" GridPane.columnIndex="2" GridPane.rowIndex="7" />
+
 
         <HBox alignment="BOTTOM_LEFT" spacing="10" GridPane.columnIndex="0" GridPane.rowIndex="10">
             <children>

@@ -10,8 +10,8 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.collections.FXCollections?>
 
-<GridPane fx:id="textGrid" hgap="10" prefHeight="500.0" prefWidth="1600.0" vgap="10" BorderPane.alignment="CENTER" xmlns="http://javafx.com/javafx/8"
-          xmlns:fx="http://javafx.com/fxml/1">
+<GridPane fx:id="textGrid" hgap="10" prefHeight="500.0" prefWidth="1600.0" vgap="10" BorderPane.alignment="CENTER"
+          xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="users.sales.ControllerSalesTextField">
 
     <padding>
         <Insets bottom="25" left="30" right="20" top="25" />
@@ -60,14 +60,23 @@
 
        <TextField fx:id="customerIdField" GridPane.columnIndex="2" GridPane.rowIndex="1" promptText="Customer ID (leave empty)"/>
 
-       <TextField fx:id="subcriptionIdField" GridPane.columnIndex="2" GridPane.rowIndex="2" promptText="Subscription ID (leave empty)"/>
+       <TextField fx:id="subscriptionIdField" GridPane.columnIndex="2" GridPane.rowIndex="2" promptText="Subscription ID (leave empty)"/>
 
        <TextArea fx:id="customerRequestsField" GridPane.columnIndex="2" GridPane.rowIndex="3" GridPane.rowSpan="4" prefWidth="200"
                  promptText="Extra requests"/>
 
+        <ComboBox fx:id="chooseDishes" GridPane.columnIndex="0" GridPane.rowIndex="7" promptText="Dishes">
+            <items>
+                <FXCollections fx:factory="observableArrayList" >
+                </FXCollections>
+            </items>
+        </ComboBox>
+
+        <Button fx:id="addDishButton" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+
        <VBox alignment="BOTTOM_LEFT" spacing="10" GridPane.columnIndex="0" GridPane.rowIndex="10">
            <children>
-              <Button fx:id="createOrderButton" styleClass="newOrderButton" text="Create new order" />
+              <Button fx:id="createButton" styleClass="newOrderButton" text="Create new order" />
            </children>
        </VBox>
    </children>

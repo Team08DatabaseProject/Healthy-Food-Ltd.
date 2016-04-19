@@ -2,12 +2,17 @@ package users.sales;
 
 import classpackage.*;
 import java.lang.String;
+
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.util.StringConverter;
 
 import java.net.URL;
 import java.time.LocalDate;
@@ -16,9 +21,10 @@ import java.util.ResourceBundle;
 /**
  * Created by Trym Todalshaug on 07/04/2016.
  */
-/*
-public class ControllerSalesTextField implements Initializable{
 
+public class ControllerSalesTextField extends ControllerSales implements Initializable{
+
+    @FXML
     public TextField orderIdField;
     public TextField customerIdField;
     public TextField subscriptionIdField;
@@ -33,19 +39,18 @@ public class ControllerSalesTextField implements Initializable{
     public TextField addressField;
     public TextField zipCodeField;
     public TextField placeField;
-    public TextField customerRequestsField;
+    public TextArea customerRequestsField;
     public DatePicker deadlinePicker;
     public TextField priceField;
     public Button createButton;
+    public ComboBox<Dish> chooseDishes;
+    public Button addDishButton;
 
     ObservableList<String> statusComboBoxValues = FXCollections.observableArrayList(
         "Created", "In preparation", "Ready for delivery", "Under delivery", "Delivered"
     );
 
     public ComboBox statusBox = new ComboBox(statusComboBoxValues);
-
-    private TestObjects testObjects = new TestObjects();
-    ObservableList<Order> orders = testObjects.allOrders;
 
     EventHandler<ActionEvent> createOrderEventField = new EventHandler<ActionEvent>() {
         @Override
@@ -94,6 +99,29 @@ public class ControllerSalesTextField implements Initializable{
     };
 
     public void initialize(URL fxmlFileLocation, ResourceBundle resources){
+        chooseDishes.setItems(dishes);
+        chooseDishes.setConverter(new StringConverter<Dish>() {
+            @Override
+            public String toString(Dish dish) {
+                if (dish == null){
+                    return null;
+                } else {
+                    return dish.getDishName();
+                }
+            }
+
+            @Override
+            public Dish fromString(String string) {
+                return null;
+            }
+        });
+        chooseDishes.valueProperty().addListener(new ChangeListener<Dish>() {
+            @Override
+            public void changed(ObservableValue<? extends Dish> observable, Dish oldValue, Dish newValue) {
+                selectedDish = newValue;
+            }
+        });
+
         createButton.setOnAction(createOrderEventField);
     }
-*///}
+}

@@ -33,6 +33,11 @@ public class ControllerSales implements Initializable {
     private ObservableList<Address> allAdresses = FXCollections.observableArrayList();
     private ObservableList<Menu> allMenus = FXCollections.observableArrayList();
 
+    protected static TestObjects testObjects = new TestObjects();
+    protected static ObservableList<Order> orders = testObjects.allOrders;
+    protected static ObservableList<Dish> dishes = testObjects.dishList;
+    protected static ObservableList<Customer> customers = testObjects.allCustomers;
+    protected static Dish selectedDish;
 
     @FXML
     public BorderPane rootPaneSales; //RootPane
@@ -100,9 +105,6 @@ public class ControllerSales implements Initializable {
         }
     };*/
 
-    private TestObjects testObjects = new TestObjects();
-    ObservableList<Order> orders = testObjects.allOrders;
-    ObservableList<Customer> customers = testObjects.allCustomers;
 
     public ObservableList<Order> getAllOrdersForSales() {
         return allOrdersForSales;
