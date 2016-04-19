@@ -93,15 +93,15 @@ public class SqlQueries extends DBConnector {
             success = true;
         } catch (SQLException e) {
             e.printStackTrace();
-            System.out.println("method addAddress failed");
         }
         return success;
     }
 
     public Address getAddress(int addressId) {
         try {
-            String selectSql = "SELECT address, zipcode, place FROM address WHERE address_id = " + addressId;
+            String selectSql = "SELECT address, zipcode, place FROM address WHERE address_id = ?";
             selectQuery = con.prepareStatement(selectSql);
+            selectQuery.setInt(1, addressId);
             ResultSet res = selectQuery.executeQuery();
             if (!res.next()) return null;
             String address = res.getString(1);
@@ -110,13 +110,11 @@ public class SqlQueries extends DBConnector {
             return new Address(addressId, address, zipCode, place);
         } catch (SQLException e) {
             e.printStackTrace();
-            System.out.println("method getAddress failed");
         }
         return null;
     }
 
     public boolean updateAddress(Address address) {
-        boolean success = false;
         try {
             String sql = "UPDATE address SET zipcode = ?, address = ?, place = ? WHERE address_ID = ?;";
             updateQuery = con.prepareStatement(sql);
@@ -124,40 +122,33 @@ public class SqlQueries extends DBConnector {
             updateQuery.setString(2, address.getAddress());
             updateQuery.setString(3, address.getPlace());
             updateQuery.setInt(4, address.getAddressId());
-            int rowsAffected = updateQuery.executeUpdate();
-            if (rowsAffected == 1) {
+            if(updateQuery.executeUpdate() == 1){
                 return true;
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            System.out.println("method updateAddress failed");
-            success = false;
         }
-        return success;
+        return false;
     }
 
     public boolean deleteAddress(Address address) {
-        boolean success = false;
         try {
             String sql = "DELETE FROM address WHERE address_id = ?;";
             PreparedStatement deleteQuery = con.prepareStatement(sql);
             deleteQuery.setInt(1, address.getAddressId());
             if (deleteQuery.executeUpdate() == 1) {
-                success = true;
+                return true;
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            System.out.println("method updateAddress failed");
-            success = false;
         }
-        return success;
+        return false;
     }
 
 
     /*Customer methods:*/
     //Method for registering Customer
     public boolean addCustomer(Customer theCustomer) {
-        boolean success = false;
         ResultSet res = null;
         try {
             con.setAutoCommit(false);
@@ -183,20 +174,17 @@ public class SqlQueries extends DBConnector {
             res = insertQuery.getGeneratedKeys();
             res.next();
             theCustomer.setCustomerId(res.getInt(1));
-            success = true;
+            return true;
         } catch (SQLException e) {
             e.printStackTrace();
-            System.out.println("Method addCustomer failed");
-            SqlCleanup.rullTilbake(con);
         } finally {
             closeEverything(res, insertQuery, con);
         }
-        return success;
+        return false;
     }
 
 
     public boolean updateCustomer(Customer customer) {
-        boolean success = false;
         try {
             String sql = "UPDATE customer SET address_id = ?, business_name = ?, first_name = ?, " +
                     "last_name = ?, phone = ?, email = ?, isbusiness = ? WHERE c_id = ?";
@@ -213,14 +201,11 @@ public class SqlQueries extends DBConnector {
             updateQuery.setString(6, customer.getEmail());
             updateQuery.setInt(7, isBusiness);
             updateQuery.setInt(8, customer.getCustomerId());
-            int rowsAffected = updateQuery.executeUpdate();
-            if (rowsAffected == 1) {
+            if(updateQuery.executeUpdate() == 1){
                 return true;
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            System.out.println("method updateCustomer failed");
-            success = false;
         } finally {
             closeEverything(null, updateQuery, con);
         }
@@ -232,15 +217,15 @@ public class SqlQueries extends DBConnector {
         ArrayList<Integer> orderIds = new ArrayList<Integer>();
         ResultSet res = null;
         try {
-            String selectSql = "SELECT order_id FROM subscription_relation_order WHERE subscription_id = " + subscription.getSubscriptionId();
+            String selectSql = "SELECT order_id FROM subscription_relation_order WHERE subscription_id = ?";
             selectQuery = con.prepareStatement(selectSql);
+            selectQuery.setInt(1, subscription.getSubscriptionId());
             res = selectQuery.executeQuery();
             while (res.next()) {
                 orderIds.add(res.getInt("order_id"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            System.out.println("method getOrderIdsByOrderIds failed");
         } finally {
             closeEverything(res, insertQuery, con);
         }
@@ -251,15 +236,15 @@ public class SqlQueries extends DBConnector {
         ArrayList<Integer> orderIds = new ArrayList<Integer>();
         ResultSet res = null;
         try {
-            String selectSql = "SELECT order_id FROM n_order WHERE customer_id = " + customer.getCustomerId();
+            String selectSql = "SELECT order_id FROM n_order WHERE customer_id = ?";
             selectQuery = con.prepareStatement(selectSql);
+            selectQuery.setInt(1, customer.getCustomerId());
             res = selectQuery.executeQuery();
             while (res.next()) {
                 orderIds.add(res.getInt("order_id"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            System.out.println("method getOrderIdsByCustomer failed");
         } finally {
             closeEverything(res, selectQuery, con);
         }
@@ -329,10 +314,6 @@ public class SqlQueries extends DBConnector {
 
         } catch (SQLException e) {
             e.printStackTrace();
-            System.out.println("method getAllCustomers failed");
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("method getAllCustomers failed, not Sql exception!");
         } finally {
             closeEverything(res, selectQuery, con);
         }
@@ -374,7 +355,6 @@ public class SqlQueries extends DBConnector {
     // Method for  Registering Dish in database
 
     public boolean addDish(Dish theDish) {
-        boolean success = false;
         ResultSet res = null;
         try {
             String sqlSetning = "INSERT INTO dish(price, name) VALUES(?,?)";
@@ -385,14 +365,12 @@ public class SqlQueries extends DBConnector {
             res = insertQuery.getGeneratedKeys();
             res.next();
             theDish.setDishId(res.getInt(1));
-            success = true;
         } catch (SQLException e) {
             e.printStackTrace();
-            System.out.println("Method addDish failed");
         } finally {
             closeEverything(res, insertQuery, con);
         }
-        return success;
+        return false;
     }
 
     //    Method for updating/changing a Dish
@@ -403,13 +381,11 @@ public class SqlQueries extends DBConnector {
             updateQuery.setDouble(1, dish.getPrice());
             updateQuery.setString(2, dish.getDishName());
             updateQuery.setInt(7, dish.getDishId());
-            int rowsAffected = updateQuery.executeUpdate();
-            if (rowsAffected == 1) {
+            if(updateQuery.executeUpdate() == 1){
                 return true;
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            System.out.println("method updateDish failed");
         } finally {
             closeEverything(null, updateQuery, con);
         }
@@ -435,10 +411,6 @@ public class SqlQueries extends DBConnector {
 
         } catch (SQLException e) {
             e.printStackTrace();
-            System.out.println("method getAllDishes failed");
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("method getAllDishes failed, not SQL exception");
         } finally {
             closeEverything(res, selectQuery, con);
         }
@@ -448,7 +420,6 @@ public class SqlQueries extends DBConnector {
 
     //    Method for adding Dish in Menu
     public boolean addDishesInMenu(Menu menu, ObservableList<MenuLine> menuLine) {
-        boolean success = false;
         try {
             con.setAutoCommit(false);
             for (MenuLine oneLine :
@@ -462,21 +433,18 @@ public class SqlQueries extends DBConnector {
                 insertQuery.setDouble(4, oneLine.getPriceFactor());
                 insertQuery.execute();
             }
-            success = true;
+            return true;
         } catch (SQLException e) {
             e.printStackTrace();
-            System.out.println("Method addDishesInMenu failed");
-            SqlCleanup.lukkForbindelse(con);
         } finally {
             closeEverything(null, insertQuery, con);
         }
-        return success;
+        return false;
     }
 
 
     //    Method for removing dishes in a menu
     public boolean deleteDishesInMenu(Menu menu, ObservableList<MenuLine> menuLines) {
-        boolean success = false;
         PreparedStatement deleteQuery = null;
         try {
             con.setAutoCommit(false);
@@ -489,18 +457,12 @@ public class SqlQueries extends DBConnector {
                 deleteQuery.execute();
             }
             con.commit();
-            success = true;
         } catch (SQLException e) {
             e.printStackTrace();
-            System.out.println("Method deleteDishesInMenu failed");
-            SqlCleanup.lukkForbindelse(con);
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("Exception in deleteDishesInMenu, not Sql Exception");
         } finally {
             closeEverything(null, deleteQuery, con);
         }
-        return success;
+        return false;
     }
 
 
@@ -528,13 +490,10 @@ public class SqlQueries extends DBConnector {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            System.out.println("method getDishLinesByDish failed");
         } finally {
             closeEverything(res, selectQuery, con);
         }
 
-        allIngredients.forEach(ingredient -> System.out.println("All ingredients:\t" + ingredient.toString()));
-        dishLines.forEach(dishLine -> System.out.println("Final:\t" + dishLine.toString()));
         return dishLines;
     }
 
@@ -548,7 +507,8 @@ public class SqlQueries extends DBConnector {
                 SqlCleanup.settAutoCommit(con);
                 return false;
             }
-            String insertSql = "INSERT INTO employee (first_name, last_name, phone, email, address_id, username, pos_id, salary, passhash) VALUES(?,?,?,?,?,?,?,?,?)";
+            String insertSql = "INSERT INTO employee (first_name, last_name, phone, email, address_id, username, pos_id, salary, passhash) " +
+                    "VALUES(?,?,?,?,?,?,?,?,?)";
             insertQuery = con.prepareStatement(insertSql, Statement.RETURN_GENERATED_KEYS);
             insertQuery.setString(1, newEmp.getFirstName());
             insertQuery.setString(2, newEmp.getLastName());
@@ -559,7 +519,7 @@ public class SqlQueries extends DBConnector {
             insertQuery.setInt(7, newEmp.getPosition().getId());
             insertQuery.setDouble(8, newEmp.getSalary());
             insertQuery.setString(9, newEmp.getPassHash());
-            insertQuery.executeUpdate();
+            insertQuery.execute();
 
             res = insertQuery.getGeneratedKeys();
             res.next();
@@ -567,9 +527,7 @@ public class SqlQueries extends DBConnector {
             return true;
         } catch (SQLIntegrityConstraintViolationException e) {
             e.printStackTrace();
-            System.out.println("Restraint violation in addEmployee");
         } catch (SQLException e) {
-            System.out.println("Something went wrong: user registration failed in method addEmployee");
             SqlCleanup.rullTilbake(con);
         } finally {
             closeEverything(res, insertQuery, con);
@@ -603,7 +561,6 @@ public class SqlQueries extends DBConnector {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            System.out.println("method getEmployees failed");
         }
         return employees;
     }
@@ -655,7 +612,6 @@ public class SqlQueries extends DBConnector {
             }
             return employeePositions;
         } catch (SQLException e) {
-            System.out.println(e);
         } finally {
             closeEverything(res, insertQuery, con);
         }
@@ -665,8 +621,9 @@ public class SqlQueries extends DBConnector {
     public EmployeePosition getEmployeePosition(int posId) {
         ResultSet res = null;
         try {
-            String selectSql = "SELECT description, default_salary FROM employee_position WHERE pos_id = " + posId;
+            String selectSql = "SELECT description, default_salary FROM employee_position WHERE pos_id = ?";
             selectQuery = con.prepareStatement(selectSql);
+            selectQuery.setInt(1, posId);
             res = selectQuery.executeQuery();
             if (!res.next()) return null;
 
@@ -675,7 +632,6 @@ public class SqlQueries extends DBConnector {
             return new EmployeePosition(posId, description, salary);
         } catch (SQLException e) {
             e.printStackTrace();
-            System.out.println("method getAddress failed");
         } finally {
             closeEverything(res, insertQuery, con);
         }
@@ -686,7 +642,7 @@ public class SqlQueries extends DBConnector {
         ResultSet res = null;
         try {
             String selectSql = "SELECT e.employee_id, e.first_name, e.last_name, e.phone, e.email, e.username, e.salary, e.passhash, e.pos_id, e.address_id" +
-                    " FROM employee e WHERE e.username = ?;";
+                    " FROM employee e WHERE e.username = ?";
             selectQuery = con.prepareStatement(selectSql);
             selectQuery.setString(1, username);
             res = selectQuery.executeQuery();
@@ -706,7 +662,6 @@ public class SqlQueries extends DBConnector {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            System.out.println("method getEmployeeByUsername failed");
         } finally {
             closeEverything(res, insertQuery, con);
         }
@@ -717,7 +672,7 @@ public class SqlQueries extends DBConnector {
         PreparedStatement updateEmpQuery = null;
         try {
             String updateSql = "UPDATE employee SET first_name = ?, last_name = ?, phone = ?, email = ?," +
-                    " username = ?, pos_id = ?, salary = ?, passhash = ? WHERE employee_id = ?;";
+                    " username = ?, pos_id = ?, salary = ?, passhash = ? WHERE employee_id = ?";
             updateEmpQuery = con.prepareStatement(updateSql);
             con.setAutoCommit(false);
             if (!updateAddress(employee.getAddress())) {
@@ -742,9 +697,7 @@ public class SqlQueries extends DBConnector {
             return false;
         } catch (SQLException e) {
             e.printStackTrace();
-            System.out.println("method updateEmployee failed");
             SqlCleanup.rullTilbake(con);
-            SqlCleanup.settAutoCommit(con);
         } finally {
             closeEverything(null, updateEmpQuery, con);
         }
@@ -752,16 +705,15 @@ public class SqlQueries extends DBConnector {
     }
 
     public boolean deleteEmployee(Employee employee) {
-        boolean success = false;
         try {
             con.setAutoCommit(false);
-            String sql = "DELETE FROM employee WHERE employee_id = ?;";
+            String sql = "DELETE FROM employee WHERE employee_id = ?";
             PreparedStatement deleteQuery = con.prepareStatement(sql);
             deleteQuery.setInt(1, employee.getEmployeeId());
             if (deleteQuery.executeUpdate() == 1) {
                 if (deleteAddress(employee.getAddress())) {
                     con.commit();
-                    success = true;
+                    return true;
                 } else {
                     SqlCleanup.rullTilbake(con);
                 }
@@ -771,11 +723,10 @@ public class SqlQueries extends DBConnector {
         } catch (SQLException e) {
             e.printStackTrace();
             SqlCleanup.rullTilbake(con);
-            System.out.println("method deleteEmployee failed");
         } finally {
             SqlCleanup.settAutoCommit(con);
         }
-        return success;
+        return false;
     }
 
 
@@ -786,7 +737,6 @@ public class SqlQueries extends DBConnector {
 
     //    Method is usable for adding ingredient with or without new supplier
     public boolean addIngredient(Ingredient ingredient) {
-        boolean success = false;
         ResultSet res = null;
         try {
 
@@ -806,22 +756,21 @@ public class SqlQueries extends DBConnector {
             insertQuery.setString(3, ingredient.getUnit());
             insertQuery.setDouble(4, ingredient.getPrice());
             insertQuery.setString(5, ingredient.getIngredientName());
-            insertQuery.executeUpdate();
+            insertQuery.execute();
 
             res = insertQuery.getGeneratedKeys();
             res.next();
             ingredient.setIngredientId(res.getInt(1));
-            success = true;
+            return true;
         } catch (SQLIntegrityConstraintViolationException e) {
             e.printStackTrace();
-            System.out.println("Restraint violation in addIngredient");
+            SqlCleanup.rullTilbake(con);
         } catch (SQLException e) {
-            System.out.println("Something went wrong: user registration failed in method addIngredient");
             SqlCleanup.rullTilbake(con);
         } finally {
             closeEverything(res, insertQuery, con);
         }
-        return success;
+        return false;
     }
 
     //    Method for updating an Ingredient
@@ -836,29 +785,37 @@ public class SqlQueries extends DBConnector {
             updateQuery.setDouble(4, ingredient.getPrice());
             updateQuery.setString(5, ingredient.getIngredientName());
             updateQuery.setInt(6, ingredient.getIngredientId());
-            int rowsAffected = updateQuery.executeUpdate();
-            if (rowsAffected == 1) {
+            if(updateQuery.executeUpdate() == 1){
                 return true;
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            System.out.println("method updateIngredient failed");
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("Exception in updateIngredient, not Sql Exception");
         } finally {
             closeEverything(null, updateQuery, con);
         }
         return false;
     }
 
+    public boolean deleteIngredient(Ingredient ingredient) {
+        try {
+            String sqlSetning = "DELETE FROM ingredient WHERE ingredient_id = ?";
+            PreparedStatement deleteQuery = con.prepareStatement(sqlSetning);
+            deleteQuery.setInt(1, ingredient.getIngredientId());
+            deleteQuery.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            closeEverything(null, insertQuery, con);
+        }
+        return false;
+    }
 
     // TODO: 28.03.2016 needs to enable a selector in the windows of the individual employee positions that lets you select elements and send them to methods
 
     /*Method for registering ingredients in DISH
     * */
     public boolean addIngredientInDish(Dish dish, ObservableList<DishLine> dishLine) {
-        boolean success = false;
         try {
             con.setAutoCommit(false);
             for (DishLine oneLine :
@@ -872,23 +829,18 @@ public class SqlQueries extends DBConnector {
                 insertQuery.execute();
             }
             con.commit();
-            success = true;
+            return true;
         } catch (SQLException e) {
             e.printStackTrace();
-            System.out.println("Method addIngredientInDish failed");
             SqlCleanup.rullTilbake(con);
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("Exception in addIngredientsInDish, not Sql Exception");
         } finally {
             closeEverything(null, insertQuery, con);
         }
-        return success;
+        return false;
     }
 
     //    Method for removing rows aka dishlines from dishline. Dishlines sent it is removed from the table.
     public boolean deleteIngredientsInDish(Dish dish, ObservableList<DishLine> dishLines) {
-        boolean success = false;
         PreparedStatement deleteQuery = null;
         try {
             con.setAutoCommit(false);
@@ -902,18 +854,13 @@ public class SqlQueries extends DBConnector {
             }
             con.commit();
             con.setAutoCommit(true);
-            success = true;
+            return true;
         } catch (SQLException e) {
             e.printStackTrace();
-            System.out.println("Method addIngredientInDish failed");
-            SqlCleanup.lukkForbindelse(con);
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("Exception in removeIngredientIndDish, not Sql Exception");
         } finally {
             closeEverything(null, deleteQuery, con);
         }
-        return success;
+        return false;
     }
 
 
@@ -940,12 +887,12 @@ public class SqlQueries extends DBConnector {
                     Ingredient tempIngredient = new Ingredient(ingredientId, name, unit, quantityOwned, price, tempSupplier.get(0));
                     ingredients.add(tempIngredient);
                 } catch (Exception e) {
+                    e.printStackTrace();
                     System.out.println("method getAllIngredients failed, when trying to get index of temporary arraylist");
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            System.out.println("method getAllIngredients failed");
         } finally {
             closeEverything(res, selectQuery, con);
         }
@@ -956,7 +903,6 @@ public class SqlQueries extends DBConnector {
 
     //    method for adding menu
     public boolean addMenu(Menu menu) {
-        boolean success = false;
         ResultSet res = null;
         try {
 
@@ -969,35 +915,32 @@ public class SqlQueries extends DBConnector {
             res = insertQuery.getGeneratedKeys();
             res.next();
             menu.setMenuId(res.getInt(1));
-            success = true;
+            return true;
         } catch (SQLException e) {
-            System.out.println("Something went wrong: failed in method addMenu");
+            e.printStackTrace();
         } finally {
             SqlCleanup.lukkSetning(insertQuery);
             SqlCleanup.settAutoCommit(con);
         }
-        return success;
+        return false;
     }
 
     //    Method for deleting a menu
     public boolean deleteMenu(Menu menu) {
-        boolean success = false;
         try {
             String sqlSetning = "DELETE FROM menu WHERE menu_id = ?";
             PreparedStatement deleteQuery = con.prepareStatement(sqlSetning);
             deleteQuery.setInt(1, menu.getMenuId());
-            deleteQuery.executeUpdate();
-            success = true;
+            int deleted = deleteQuery.executeUpdate();
+            if (deleted != 0) {
+                return true;
+            }
         } catch (SQLException e) {
             e.printStackTrace();
-            System.out.println("Method deleteMenu failed");
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("Exception in deleteMenu, not Sql Exception");
         } finally {
             closeEverything(null, insertQuery, con);
         }
-        return success;
+        return false;
     }
 
     public ObservableList<Menu> getAllMenus(ObservableList<Dish> allDishes) {
@@ -1018,7 +961,6 @@ public class SqlQueries extends DBConnector {
 
         } catch (SQLException e) {
             e.printStackTrace();
-            System.out.println("method getAllSuppliers failed");
         } finally {
             closeEverything(res, selectQuery, con);
         }
@@ -1032,8 +974,9 @@ public class SqlQueries extends DBConnector {
         ObservableList<MenuLine> menuLines = FXCollections.observableArrayList();
         ResultSet res = null;
         try {
-            String selectSql = "SELECT * FROM menu_line WHERE menu_id = " + menu.getMenuId();
+            String selectSql = "SELECT * FROM menu_line WHERE menu_id = ?";
             selectQuery = con.prepareStatement(selectSql);
+            selectQuery.setInt(1, menu.getMenuId());
             res = selectQuery.executeQuery();
             while (res.next()) {
                 int dishId = res.getInt("dish_id");
@@ -1050,7 +993,6 @@ public class SqlQueries extends DBConnector {
 
         } catch (SQLException e) {
             e.printStackTrace();
-            System.out.println("method getAllSuppliers failed");
         } finally {
             closeEverything(res, selectQuery, con);
         }
@@ -1105,7 +1047,6 @@ public class SqlQueries extends DBConnector {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            System.out.println("error in method getOrders, most likely to do when calling DRIVER, because results clash (created by Paul)");
         } finally {
             closeEverything(res, selectQuery, con);
         }
@@ -1117,11 +1058,9 @@ public class SqlQueries extends DBConnector {
     if subscription is NOT null*/
 
     public boolean addOrder(Customer customer, Order order, Subscription subscription) {
-        boolean success = false;
         ResultSet res = null;
         try {
             con.setAutoCommit(false);
-            boolean customersuccess = false;
             String insertSql = "INSERT INTO n_order(customer_id, customer_requests, delivery_date, delivered_date, " +
                     "price, address, status) VALUES(?,?,?,?,?,?,?)";
             insertQuery = con.prepareStatement(insertSql, Statement.RETURN_GENERATED_KEYS);
@@ -1144,17 +1083,13 @@ public class SqlQueries extends DBConnector {
             order.setOrderId(res.getInt(1));
             addOrderInSubscription(subscription, order);
             con.commit();
-            success = true;
+            return true;
         } catch (SQLException e) {
-            System.out.println("Something went wrong: user registration failed in method addOrder");
             SqlCleanup.rullTilbake(con);
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("error in method addOrder, not SQL exception");
         } finally {
             closeEverything(res, insertQuery, con);
         }
-        return success;
+        return false;
     }
 
     public boolean updateOrder(Order order, Customer customer) {
@@ -1194,21 +1129,19 @@ public class SqlQueries extends DBConnector {
 
     //    Method for adding a order in the junction table between order and subscription
     public boolean addOrderInSubscription(Subscription subscription, Order order) {
-        boolean success = false;
         try {
             String insertSql = "INSERT INTO subscription_relation_order(order_id, subscription_id) VALUES(?,?)";
             insertQuery = con.prepareStatement(insertSql);
             insertQuery.setInt(1, order.getOrderId());
             insertQuery.setInt(2, subscription.getSubscriptionId());
             insertQuery.executeQuery();
-
-            success = true;
+            return true;
         } catch (SQLException e) {
             System.out.println("Something went wrong: user registration failed in method addSubscription");
         } finally {
             closeEverything(null, insertQuery, con);
         }
-        return success;
+        return false;
     }
 
 
@@ -1358,8 +1291,7 @@ public class SqlQueries extends DBConnector {
             updateQuery.setString(2, supplier.getBusinessName());
             updateQuery.setInt(3, supplier.getPhoneNumber());
             updateQuery.setInt(4, supplier.getSupplierId());
-            int rowsAffected = updateQuery.executeUpdate();
-            if (rowsAffected == 1) {
+            if(updateQuery.executeUpdate() == 1){
                 return true;
             }
         } catch (SQLException e) {
@@ -1389,7 +1321,6 @@ public class SqlQueries extends DBConnector {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            System.out.println("error in method getZipcode");
         } finally {
             closeEverything(res, selectQuery, con);
         }
