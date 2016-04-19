@@ -1013,7 +1013,7 @@ public class SqlQueries extends DBConnector {
                 String typeMeal = res.getString("type_meal");
                 Menu existingMenu = new Menu(menuId, descriptin, typeMeal, null);
                 existingMenu.setMenuLines(getMenuLinesByMenu(existingMenu, allDishes));
-                menus.add(new Menu(menuId, descriptin, typeMeal, null));
+                menus.add(existingMenu);
             }
 
         } catch (SQLException e) {
