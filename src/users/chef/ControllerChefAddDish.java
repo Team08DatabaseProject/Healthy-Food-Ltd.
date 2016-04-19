@@ -30,7 +30,7 @@ public class ControllerChefAddDish extends ControllerChef implements Initializab
     public GridPane addDishGP;
     public TextField dishNameField;
     public TextField dishPriceFactorField;
-    public ComboBox<DishLine> ingredientComboBox;
+    public ComboBox<Ingredient> ingredientComboBox;
     public Button addIngToDishButton;
     public Button removeIngFromDishButton;
     public TableView chosenIngTable;
@@ -161,26 +161,26 @@ public class ControllerChefAddDish extends ControllerChef implements Initializab
 
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
 
-        ingredientComboBox.setItems(testDishLines);
-        ingredientComboBox.setConverter(new StringConverter<DishLine>() {
+        ingredientComboBox.setItems(testIngredients);
+        ingredientComboBox.setConverter(new StringConverter<Ingredient>() {
             @Override
-            public String toString(DishLine dishLine) {
-                if (dishLine == null) {
+            public String toString(Ingredient ingredient) {
+                if (ingredient == null) {
                     return null;
                 } else {
-                    return dishLine.getIngredient().getIngredientName();
+                    return ingredient.getIngredientName();
                 }
             }
             @Override
-            public DishLine fromString(String string) {
+            public Ingredient fromString(String string) {
                 return null;
             }
         });
 
-        ingredientComboBox.valueProperty().addListener(new ChangeListener<DishLine>() {
+        ingredientComboBox.valueProperty().addListener(new ChangeListener<Ingredient>() {
             @Override
-            public void changed(ObservableValue<? extends DishLine> observable, DishLine oldValue, DishLine newValue) {
-                selectedDishLine = newValue;
+            public void changed(ObservableValue<? extends Ingredient> observable, Ingredient oldValue, Ingredient newValue) {
+                selectedIngredient = newValue;
             }
         });
 
@@ -222,7 +222,6 @@ public class ControllerChefAddDish extends ControllerChef implements Initializab
                         setText(null);
                     } else {
                         setText(nf.format(ingredient.getPrice()));
-
                     }
                 }
             };

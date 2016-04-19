@@ -44,8 +44,8 @@ public class ControllerChefIngredients extends ControllerChef implements Initial
     public Button addIngButton;
     public Button applyChangesButton;
     public Button removeIngButton;
+    public Button refreshIngTableButton;
 
-    // TODO: 4/15/16 Connect this to database
     EventHandler<ActionEvent> applyChangesButtonClick = new EventHandler<ActionEvent>() {
         @Override
         public void handle(ActionEvent event) {
@@ -53,6 +53,18 @@ public class ControllerChefIngredients extends ControllerChef implements Initial
                 for (Ingredient ing : testIngredients) {
                     System.out.println(ing.getIngredientName());
                 }
+            } catch (Exception exc) {
+                System.out.println(exc);
+            }
+        }
+    };
+
+    EventHandler<ActionEvent> refreshIngredients = new EventHandler<ActionEvent>() {
+        @Override
+        public void handle(ActionEvent event) {
+            try {
+                testIngredients = db.getAllIngredients(testSuppliers);
+                ingTable.setItems(testIngredients);
             } catch (Exception exc) {
                 System.out.println(exc);
             }
@@ -88,14 +100,14 @@ public class ControllerChefIngredients extends ControllerChef implements Initial
                 * Hopefully this will have a nicer solution once database is implemented.
                  */
                 selectedIngredient = (Ingredient) ingTable.getSelectionModel().getSelectedItem();
-                testDishLines.forEach(dl -> {
-                    if (selectedIngredient.equals(dl.getIngredient()));
-                    selectedDishLine = dl;
-                });
+                testIngredients.forEach(ing -> {
+                    if (selectedIngredient.equals(ing)) {
+                        selectedIngredient = ing;
+                    }
+                 });
 
-                if (selectedIngredient != null && selectedDishLine != null) {
+                if (selectedIngredient != null) {
                     testIngredients.remove(selectedIngredient);
-                    testDishLines.remove(selectedDishLine);
                     ingTable.setItems(testIngredients);
                 } else {
                     Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -184,6 +196,7 @@ public class ControllerChefIngredients extends ControllerChef implements Initial
         applyChangesButton.setOnAction(applyChangesButtonClick);
         addIngButton.setOnAction(addIngButtonClick);
         removeIngButton.setOnAction(removeIngButtonClick);
+        refreshIngTableButton.setOnAction(refreshIngredients);
 
     }
 }

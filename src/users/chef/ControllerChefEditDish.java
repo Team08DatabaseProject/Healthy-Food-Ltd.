@@ -29,7 +29,7 @@ public class ControllerChefEditDish extends ControllerChef implements Initializa
     public GridPane editDishGP;
     public TextField editDishNameField;
     public TextField editDishPriceFactorField;
-    public ComboBox<DishLine> editIngredientCB;
+    public ComboBox<Ingredient> editIngredientCB;
     public Button applyDishChangesButton;
     public Button addIngButton;
     public Button removeIngButton;
@@ -113,9 +113,10 @@ public class ControllerChefEditDish extends ControllerChef implements Initializa
         public void handle(ActionEvent event) {
             try {
                 boolean remove = false;
-                if (selectedDishLine != null) {
+                if (selectedIngredient != null) {
                     for (DishLine dl : currentDishLines) {
-                        if (dl.getIngredient().getIngredientName().equals(selectedDishLine.getIngredient().getIngredientName())) {
+                        if (dl.getIngredient().getIngredientName().equals(selectedIngredient.getIngredientName())) {
+                            selectedDishLine = dl;
                             remove = true;
                         }
                     }
@@ -141,14 +142,15 @@ public class ControllerChefEditDish extends ControllerChef implements Initializa
         public void handle(ActionEvent event) {
             try {
                 boolean add = true;
-                if (selectedDishLine != null) {
+                if (selectedIngredient != null) {
                     for (DishLine dl : currentDishLines) {
-                        if (dl.getIngredient().getIngredientName().equals(selectedDishLine.getIngredient().getIngredientName())) {
+                        if (dl.getIngredient().getIngredientName().equals(selectedIngredient.getIngredientName())) {
                             add = false;
                         }
                     }
                     if (add) {
-                        currentDishLines.add(selectedDishLine);
+                        DishLine newDL = new DishLine(selectedIngredient);
+                        currentDishLines.add(newDL);
                         currentIngTable.setItems(currentDishLines);
                     } else {
                         Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -170,6 +172,9 @@ public class ControllerChefEditDish extends ControllerChef implements Initializa
         for (DishLine dl : selectedDish.getAllDishLinesForThisDish()) {
             ingPriceTotal += dl.getIngredient().getPrice() * dl.getAmount();
         }
+        if (ingPriceTotal == 0) {
+            return 100.0;
+        }
         System.out.println(selectedDish.getPrice() / ingPriceTotal);
         return Math.round((selectedDish.getPrice() / ingPriceTotal * 100.0));
     }
@@ -177,31 +182,31 @@ public class ControllerChefEditDish extends ControllerChef implements Initializa
 
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
 
-        editIngredientCB.setItems(testDishLines);
+        editIngredientCB.setItems(testIngredients);
         editDishNameField.setText(selectedDish.getDishName());
         editDishPriceFactorField.setText(nf.format(getDishPriceFactor()));
         currentNameLabel.setText("Dish name: " + selectedDish.getDishName());
         currentPriceLabel.setText("Price: " + selectedDish.getPrice());
 
-        editIngredientCB.setConverter(new StringConverter<DishLine>() {
+        editIngredientCB.setConverter(new StringConverter<Ingredient>() {
             @Override
-            public String toString(DishLine dishLine) {
-                if (dishLine == null) {
+            public String toString(Ingredient ingredient) {
+                if (ingredient == null) {
                     return null;
                 } else {
-                    return dishLine.getIngredient().getIngredientName();
+                    return ingredient.getIngredientName();
                 }
             }
             @Override
-            public DishLine fromString(String string) {
+            public Ingredient fromString(String string) {
                 return null;
             }
         });
 
-        editIngredientCB.valueProperty().addListener(new ChangeListener<DishLine>() {
+        editIngredientCB.valueProperty().addListener(new ChangeListener<Ingredient>() {
             @Override
-            public void changed(ObservableValue<? extends DishLine> observable, DishLine oldValue, DishLine newValue) {
-                selectedDishLine = newValue;
+            public void changed(ObservableValue<? extends Ingredient> observable, Ingredient oldValue, Ingredient newValue) {
+                selectedIngredient = newValue;
             }
         });
 

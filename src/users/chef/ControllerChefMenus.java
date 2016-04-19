@@ -98,6 +98,7 @@ public class ControllerChefMenus extends ControllerChef implements Initializable
             @Override
             public void changed(ObservableValue<? extends Menu> observable, Menu oldValue, Menu newValue) {
                 selectedMenu = newValue;
+                System.out.println(selectedMenu.getName());
             }
         });
         chooseMenuCB.valueProperty().addListener(new ChangeListener<Menu>() {

@@ -1,5 +1,6 @@
 package users.chef;
 
+import div.PopupDialog;
 import classpackage.DishLine;
 import classpackage.Ingredient;
 import classpackage.Supplier;
@@ -55,9 +56,12 @@ public class ControllerChefAddIngredient extends ControllerChef implements Initi
                 double price = Double.parseDouble(ingPriceField.getText());
                 double quantity = Double.parseDouble(ingQuantityField.getText());
                 Ingredient newIngredient = new Ingredient(name, unit, quantity, price, selectedSupplier);
-                testIngredients.add(newIngredient);
-                DishLine newDL = new DishLine(newIngredient);
-                testDishLines.add(newDL);
+                if(db.addIngredient(newIngredient)) {
+                    testIngredients.add(newIngredient);
+                    PopupDialog.confirmationDialog("Result", "Ingredient \"" + newIngredient.getIngredientName() + "\" added.");
+                } else {
+                    PopupDialog.errorDialog("Error", "Could not add ingredient.");
+                }
             } catch (Exception exc) {
                 System.out.println(exc);
             }

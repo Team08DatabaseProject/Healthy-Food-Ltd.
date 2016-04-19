@@ -4,6 +4,7 @@ package users.chef;
  * Created by Axel Kvistad on 13.04.2016
  */
 import classpackage.*;
+import classpackage.Menu;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -31,6 +32,20 @@ public class ControllerChef implements Initializable{
     public Button dishesButton;
     public Button ingredientsButton;
     private GridPane centerDisplay;
+    protected static SqlQueries db = new SqlQueries();
+    protected static ObservableList<Supplier> testSuppliers = db.getAllSuppliers();
+    protected static ObservableList<Ingredient> testIngredients = db.getAllIngredients(testSuppliers);
+    protected static ObservableList<Dish> testDishes = db.getAllDishes(testIngredients);
+    protected static ObservableList<Menu> testMenus = db.getAllMenus(testDishes);
+
+
+    protected static Ingredient selectedIngredient;
+    protected static Dish selectedDish;
+    protected static DishLine selectedDishLine;
+    protected static MenuLine selectedMenuLine;
+    protected static Menu selectedMenu;
+    protected static Supplier selectedSupplier;
+    /*
     protected static TestObjects testObjects = new TestObjects();
     protected static ObservableList<Ingredient> testIngredients = testObjects.allIngredients;
     protected static ObservableList<DishLine> testDishLines = testObjects.allIngredientsDL;
@@ -44,7 +59,7 @@ public class ControllerChef implements Initializable{
     protected static MenuLine selectedMenuLine;
     protected static Menu selectedMenu;
     protected static Supplier selectedSupplier;
-
+*/
 
 
     EventHandler<ActionEvent> showMenusEvent = new EventHandler<ActionEvent>() {
