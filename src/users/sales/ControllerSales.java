@@ -43,14 +43,19 @@ public class ControllerSales implements Initializable {
     protected static ObservableList<Order> orders = testObjects.allOrders;
     protected static ObservableList<Dish> dishes = testObjects.dishList;
     protected static ObservableList<Customer> customers = testObjects.allCustomers;
+    protected static ObservableList<Subscription> subscriptions = testObjects.allSubscriptions;
     protected static Dish selectedDish;
+
+    protected static Order selectedOrder;
+    protected static Customer selectedCustomer;
+    protected static Subscription selectedSubscription;
 
     @FXML
     public BorderPane rootPaneSales; //RootPane
-    public GridPane ordersTable; // Retrieves TableView with fx:id="ordersTable"
-    public TableView subsTable; // Retrieves Tableview with fx:id="subsTable"
     public Button ordersButton; //Button for showing orders
     public Button subsButton;
+    private GridPane ordersTable; // Retrieves TableView with fx:id="ordersTable"
+    private GridPane subsTable; // Retrieves Tableview with fx:id="subsTable"
 
     private SqlQueries query = new SqlQueries();
     //final ObservableList<Order> subsTest = query.getOrders(4);

@@ -16,7 +16,7 @@ import java.util.ResourceBundle;
 /**
  * Created by Trym Todalshaug on 18/04/2016.
  */
-public class ControllerSalesInfo extends ControllerSalesOrders implements Initializable{
+public class ControllerSalesOrdersInfo extends ControllerSalesOrders implements Initializable{
 
     @FXML
     public Label orderIdLabel;
@@ -36,6 +36,7 @@ public class ControllerSalesInfo extends ControllerSalesOrders implements Initia
     public TextArea customerRequestsArea;
     public DatePicker deadlinePicker;
     public TextField priceField;
+
     ObservableList<String> statusComboBoxValues = FXCollections.observableArrayList(
             "Created", "In preparation", "Ready for delivery", "Under delivery", "Delivered"
     );

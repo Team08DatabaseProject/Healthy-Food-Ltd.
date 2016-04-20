@@ -1,24 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--> Axel </!-->
+<!--> Trym </!-->
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
 <!--> Table in submenu "Orders for Sales" </!-->
-<TableView fx:id="subsTable" prefHeight="200" prefWidth="200.0"
-           BorderPane.alignment="CENTER" xmlns:fx="http://javafx.com/fxml" fx:controller="users.sales.ControllerSalesSubs">
-    <columns>
-        <TableColumn prefWidth="40.0" text="Customer ID"/>
-        <TableColumn prefWidth="40.0" text="Subscription ID"/>
-        <TableColumn prefWidth="40.0" text="Subscription start"/>
-        <TableColumn prefWidth="40.0" text="Subscription end"/>
-        <TableColumn prefWidth="40.0" text="Business name" />
-        <TableColumn prefWidth="40.0" text="First name" />
-        <TableColumn prefWidth="40.0" text="Last name" />
-        <TableColumn prefWidth="40.0" text="Address"/>
-        <TableColumn prefWidth="40.0" text="Email" />
-        <TableColumn prefWidth="40.0" text="Phone number" />
-    </columns>
-    <columnResizePolicy>
-        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/> <!--> fix vgrow <!-->
-    </columnResizePolicy>
-</TableView>
+
+<GridPane prefHeight="500" prefWidth="200.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8"
+          fx:controller="users.sales.ControllerSalesSubs" stylesheets="@/users/sales/SalesStyle.css">
+<children>
+    <BorderPane fx:id="rootPaneSubs">
+        <center>
+            <TableView fx:id="subsTable" minHeight="200" prefWidth="1600.0"
+                       BorderPane.alignment="CENTER" xmlns:fx="http://javafx.com/fxml" >
+                <columns>
+                    <TableColumn fx:id="subscriptionIdCol" prefWidth="40.0" text="Subscription ID"/>
+                    <TableColumn fx:id="customerIdCol" prefWidth="40.0" text="Customer ID"/>
+                    <TableColumn fx:id="fNameCol" prefWidth="40.0" text="First name" />
+                    <TableColumn fx:id="lNameCol" prefWidth="40.0" text="Last name" />
+                </columns>
+                <columnResizePolicy>
+                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+                </columnResizePolicy>
+            </TableView>
+        </center>
+        <bottom>
+
+        </bottom>
+    </BorderPane>
+</children>
+<columnConstraints>
+    <ColumnConstraints />
+</columnConstraints>
+<rowConstraints>
+    <RowConstraints />
+</rowConstraints>
+</GridPane>
