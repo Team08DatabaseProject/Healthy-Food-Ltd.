@@ -16,14 +16,14 @@ public class Order {
     private StringProperty customerRequests = new SimpleStringProperty(); //Additional info from customer
     private LocalDate actualDeliveryDate; //Is set when order is delivered. Default null
     private LocalDate deadline; //Consists of date and time
-    private StringProperty status = new SimpleStringProperty();
+    private ObjectProperty<OrderStatus> status = new SimpleObjectProperty<>();
     private ObjectProperty<Address> address = new SimpleObjectProperty<>();
     private ObservableList<OrderLine> dishesInThisOrder = FXCollections.observableArrayList();
 
     // From the database
     public Order(int orderId, String customerRequests, LocalDate deadline,
                  LocalDate actualDeliveryDate, double price,
-                 String status, ObservableList dishesInThisOrder, Address address) {
+                 OrderStatus status, ObservableList dishesInThisOrder, Address address) {
         this.orderId.set(orderId);
         this.customerRequests.set(customerRequests);
         this.deadline = deadline;
@@ -36,7 +36,7 @@ public class Order {
 
     // To the database
     public Order(String customerRequests, LocalDate deadline, double price,
-                 String status, ObservableList dishesInThisOrder) {
+                 OrderStatus status, ObservableList dishesInThisOrder) {
         this.customerRequests.set(customerRequests);
         this.deadline = deadline;
         this.price.set(price);
@@ -99,15 +99,15 @@ public class Order {
         this.deadline = deadline;
     }
 
-    public String getStatus() {
+    public OrderStatus getStatus() {
         return status.get();
     }
 
-    public StringProperty statusProperty() {
+    public ObjectProperty<OrderStatus> statusProperty() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(OrderStatus status) {
         this.status.set(status);
     }
 

@@ -38,6 +38,7 @@
     <left>
         <HBox styleClass="SideMenu">
             <Button fx:id="employeesButton" mnemonicParsing="false" styleClass="SmallButton" text="Employees" textAlignment="CENTER" />
+            <Button fx:id="inventoryButton" mnemonicParsing="false" styleClass="SmallButton" text="Inventory" textAlignment="CENTER" />
         </HBox>
     </left>
     <center>
