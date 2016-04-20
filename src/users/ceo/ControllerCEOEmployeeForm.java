@@ -183,21 +183,25 @@ public class ControllerCEOEmployeeForm extends ControllerCEOEmployees implements
 		public void handle(ActionEvent e) {
 			try {
 				attemptedValidation = true;
-				if(validateFields()) {
-					selectedEmployee.setFirstName(fNameField.getText());
-					selectedEmployee.setLastName(lNameField.getText());
-					selectedEmployee.setPhoneNo(phoneField.getInt());
-					selectedEmployee.seteMail(emailField.getText());
-					selectedEmployee.setUsername(usernameField.getText());
-					selectedEmployee.setSalary(salaryField.getDouble());
-					selectedEmployee.setPosition(selectedPosition);
-					Address addressObject = new Address(selectedEmployee.getAddress().getAddressId(), addressField.getText(), zipCodeField.getInt(), placeField.getText());
-					selectedEmployee.setAddress(addressObject);
-					if(db.updateEmployee(selectedEmployee)) {
-						PopupDialog.informationDialog("Result", "Employee " + selectedEmployee.getFirstName() + " " + selectedEmployee.getLastName() + " successfully updated.");
+				if(validateFields()) { // Create new object instead of writing directly to object in table in case database update doesn't go through.
+					String firstName = fNameField.getText();
+					String lastName = lNameField.getText();
+					int phoneNo = phoneField.getInt();
+					String eMail = emailField.getText();
+					String address = addressField.getText();
+					int zipCode = zipCodeField.getInt();
+					String place = placeField.getText();
+					String username = usernameField.getText();
+					double salary = salaryField.getDouble();
+					String passHash = generatePassword(8);
+					Address addressObject = new Address(address, zipCode, place);
+					Employee updatedEmp = new Employee(selectedEmployee.getEmployeeId(), username, firstName, lastName, phoneNo, eMail, salary, passHash, addressObject, selectedPosition);
+					if(db.updateEmployee(updatedEmp)) {
+						PopupDialog.informationDialog("Result", "Employee " + updatedEmp.getFirstName() + " " + updatedEmp.getLastName() + " successfully updated.");
+						employees.set(employees.indexOf(selectedEmployee), updatedEmp);
 						closeWindow();
 					} else {
-						PopupDialog.errorDialog("Result", "Error: Failed to update employee " + selectedEmployee.getFirstName() + " " + selectedEmployee.getLastName() + ".");
+						PopupDialog.errorDialog("Result", "Error: Failed to update employee " + updatedEmp.getFirstName() + " " + updatedEmp.getLastName() + ".");
 					}
 				}
 			} catch (Exception exc) {
