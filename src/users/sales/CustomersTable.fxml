@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--> Axel </!-->
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<!--> Table in submenu "Orders for Sales" </!-->
+
+<GridPane prefHeight="500" prefWidth="200.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8"
+          fx:controller="users.sales.ControllerSalesCustomer" stylesheets="@/users/sales/SalesStyle.css">
+    <children>
+        <BorderPane fx:id="rootPaneCustomers">
+            <center>
+                <TableView BorderPane.alignment="TOP_CENTER" fx:id="customersTable" editable="true" minHeight="200" prefWidth="1600.0"
+                           GridPane.columnIndex="0" GridPane.rowIndex="0" >
+                    <columns>
+                        <TableColumn fx:id="customerIdCol" prefWidth="20.0" text="Customer ID" styleClass="column"/>
+                        <TableColumn fx:id="subscriptionIdCol" prefWidth="40.0" text="Subscription ID" styleClass="column"/>
+                        <TableColumn fx:id="fNameCol" prefWidth="40.0" text="First name" styleClass="column"/>
+                        <TableColumn fx:id="lNameCol" prefWidth="40.0" text="Last name" styleClass="column"/>
+                        <TableColumn fx:id="phoneNumberCol" prefWidth="40.0" text="Phone number" styleClass="column"/>
+                        <TableColumn fx:id="emailCol" prefWidth="40.0" text="Email" styleClass="column"/>
+                        <TableColumn fx:id="addressCol" prefWidth="40.0" text="Address" styleClass="column"/>
+                        <TableColumn fx:id="placeCol" prefWidth="40.0" text="Town / city" styleClass="column"/>
+                        <TableColumn fx:id="zipCodeCol" prefWidth="40.0" text="Zip / postal code" styleClass="column"/>
+                    </columns>
+                    <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                    </columnResizePolicy>
+                </TableView>
+            </center>
+            <right>
+                <VBox BorderPane.alignment="BOTTOM_CENTER" xmlns:fx="http://javafx.com/fxml" prefHeight="50">
+                    <children>
+                        <Button fx:id="addCustomerButton" prefHeight="20" prefWidth="50" text="Add customer"
+                                styleClass="newOrderButton"/>
+                        <Button fx:id="deleteCustomerButton" prefHeight="20" prefWidth="50" text="Delete customer"
+                                styleClass="newOrderButton"/>
+                    </children>
+                </VBox>
+            </right>
+            <bottom>
+
+            </bottom>
+        </BorderPane>
+    </children>
+    <columnConstraints>
+        <ColumnConstraints />
+    </columnConstraints>
+    <rowConstraints>
+        <RowConstraints />
+    </rowConstraints>
+</GridPane>

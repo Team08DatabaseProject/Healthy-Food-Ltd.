@@ -1,5 +1,6 @@
 package users.sales;
 
+import classpackage.OrderStatus;
 import classpackage.ZipCode;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -68,7 +69,7 @@ public class ControllerSalesOrdersInfo extends ControllerSalesOrders implements 
                     String customerRequests = customerRequestsArea.getText();
                     LocalDate deadline = deadlinePicker.getValue();
                     double price = Double.parseDouble(priceField.getText());
-                    String status = (String)statusBox.getValue();
+                    OrderStatus status = (OrderStatus) statusBox.getValue();
                     LocalDate startSub = startSubscription.getValue();
                     LocalDate endSub = endSubscription.getValue();
 
