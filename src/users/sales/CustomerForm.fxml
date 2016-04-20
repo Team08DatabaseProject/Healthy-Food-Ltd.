@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--> Trym </!-->
+<!--> Textfields for registering new order </!-->
+
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.collections.FXCollections?>
+
+<?import div.StringField?>
+<?import div.IntField?>
+<?import div.ZipCodeField?>
+<GridPane fx:id="addCustomerTable" hgap="10" prefHeight="500.0" prefWidth="1600.0" vgap="10" BorderPane.alignment="CENTER"
+          xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="users.sales.ControllerSalesTextField">
+
+    <padding>
+        <Insets bottom="25" left="30" right="20" top="25" />
+    </padding>
+        <!--> LEGG INN TEXTFIELDS FOR Å VELGE DISHES TIL ORDEN!!!  <!-->
+    <Label text="First name:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+    <StringField styleClass="FormField" fx:id="fNameField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+    <Label styleClass="ErrorMsg" fx:id="fNameFieldErrorMsg" GridPane.columnIndex="1" GridPane.rowIndex="2" visible="false" />
+
+    <Label text="Last name:" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+    <StringField styleClass="FormField" fx:id="lNameField" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+    <Label styleClass="ErrorMsg" fx:id="lNameFieldErrorMsg" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+
+    <Label text="Is this customer a business?" GridPane.columnIndex="0" GridPane.rowIndex="5" />
+    <CheckBox styleClass="FormField" fx:id="businessBox" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+    <Label styleClass="ErrorMsg" fx:id="businessBoxErrorMsg" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+
+    <Label text="Name of business:" GridPane.columnIndex="0" GridPane.rowIndex="7" />
+    <StringField styleClass="FormField" fx:id="businessNameField" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+    <Label styleClass="ErrorMsg" fx:id="businessNameFieldErrorMsg" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+
+    <Label text="Phone number" GridPane.columnIndex="0" GridPane.rowIndex="9" />
+    <IntField styleClass="FormField" fx:id="phoneField" GridPane.columnIndex="1" GridPane.rowIndex="9" />
+    <Label styleClass="ErrorMsg" fx:id="phoneFieldErrorMsg" GridPane.columnIndex="1" GridPane.rowIndex="10" />
+
+    <Label text="Email" GridPane.columnIndex="0" GridPane.rowIndex="11" />
+    <StringField styleClass="FormField" fx:id="emailField" GridPane.columnIndex="1" GridPane.rowIndex="11" />
+    <Label styleClass="ErrorMsg" fx:id="emailFieldErrorMasg" GridPane.columnIndex="1" GridPane.rowIndex="12" />
+
+    <Label text="Address" GridPane.columnIndex="0" GridPane.rowIndex="13" />
+    <StringField styleClass="FormField" fx:id="addressField" GridPane.columnIndex="1" GridPane.rowIndex="13" />
+    <Label styleClass="ErrorMsg" fx:id="addressFieldErrorMsg" GridPane.columnIndex="1" GridPane.rowIndex="14" />
+
+    <Label text="Town / city" GridPane.columnIndex="0" GridPane.rowIndex="15" />
+    <StringField styleClass="FormField" fx:id="placeField" GridPane.columnIndex="1" GridPane.rowIndex="15" />
+    <Label styleClass="ErrorMsg" fx:id="placeFieldErrorMsg" GridPane.columnIndex="1" GridPane.rowIndex="16" />
+
+    <Label text="Zip / postal code" GridPane.columnIndex="0" GridPane.rowIndex="17" />
+    <ZipCodeField styleClass="FormField" fx:id="zipCodeField" GridPane.columnIndex="1" GridPane.rowIndex="17" />
+    <Label styleClass="ErrorMsg" fx:id="zipCodeFieldErrorMsg" GridPane.columnIndex="1" GridPane.rowIndex="18" />
+
+    <!--next collumn><!-->
+
+    <HBox spacing="10" alignment="CENTER" GridPane.columnIndex="0" GridPane.rowIndex="20" GridPane.columnSpan="2">
+        <Button styleClass="SmallButton" fx:id="customerSubmitButton" text="Submit"/>
+    </HBox>
+</GridPane>

@@ -12,8 +12,8 @@
     <children>
         <BorderPane fx:id="rootPaneOrders">
             <center>
-                <TableView BorderPane.alignment="TOP_CENTER" fx:id="ordersTable" editable="true" minHeight="200" prefWidth="1600.0" GridPane.columnIndex="0"
-                           GridPane.hgrow="ALWAYS" GridPane.rowIndex="0" GridPane.vgrow="ALWAYS" GridPane.columnSpan="1">
+                <TableView BorderPane.alignment="TOP_CENTER" fx:id="ordersTable" editable="true" minHeight="200" prefWidth="1600.0"
+                           GridPane.columnIndex="0" GridPane.rowIndex="0" >
                     <columns>
                         <TableColumn prefWidth="20.0" text="Order ID" styleClass="column"/>
                         <!--><TableColumn prefWidth="30.0" text="Customer ID" styleClass="column"/>

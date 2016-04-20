@@ -6,6 +6,7 @@ import classpackage.TestObjects;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
@@ -24,8 +25,9 @@ import java.util.ResourceBundle;
 /**
  * Created by Trym Todalshaug on 04/04/2016.
  */
-public class ControllerSalesOrders implements Initializable{
+public class ControllerSalesOrders extends ControllerSales implements Initializable{
 
+    @FXML
     public Button createOrderButton; //Button for creating an order
     public Button deleteOrderButton; //Button for deleting an order
     public TableView ordersTable;
@@ -111,11 +113,12 @@ public class ControllerSalesOrders implements Initializable{
         TableColumn<Order,Double> price = columns.get(3);
 
 
-        columns.get(0).setCellValueFactory(new PropertyValueFactory<Order,Integer>("orderId")); //orderId
-        columns.get(1).setCellValueFactory(new PropertyValueFactory<Order,LocalDate>("deadline")); //deadline
-        columns.get(2).setCellValueFactory(new PropertyValueFactory<Order,String>("status")); //status
-        columns.get(3).setCellValueFactory(new PropertyValueFactory<Order,Double>("price")); //price
+        orderId.setCellValueFactory(new PropertyValueFactory<Order,Integer>("orderId")); //orderId
+        deadline.setCellValueFactory(new PropertyValueFactory<Order,LocalDate>("deadline")); //deadline
+        status.setCellValueFactory(new PropertyValueFactory<Order,String>("status")); //status
+        price.setCellValueFactory(new PropertyValueFactory<Order,Double>("price")); //price
 
+        ordersTable.getColumns().setAll(orderId, deadline, status, price);
         createOrderButton.setOnAction(createOrderEvent);
         deleteOrderButton.setOnAction(deleteOrderEvent);
         ordersTable.setOnMousePressed(infoEvent);

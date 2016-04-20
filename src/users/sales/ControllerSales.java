@@ -14,6 +14,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 
 import java.net.URL;
+import java.text.NumberFormat;
 import java.util.ResourceBundle;
 
 /**
@@ -33,6 +34,11 @@ public class ControllerSales implements Initializable {
     private ObservableList<Address> allAdresses = FXCollections.observableArrayList();
     private ObservableList<Menu> allMenus = FXCollections.observableArrayList();
 
+    protected static final NumberFormat nf = NumberFormat.getNumberInstance();
+    {
+        nf.setMaximumFractionDigits(2);
+    }
+
     protected static TestObjects testObjects = new TestObjects();
     protected static ObservableList<Order> orders = testObjects.allOrders;
     protected static ObservableList<Dish> dishes = testObjects.dishList;
@@ -41,10 +47,8 @@ public class ControllerSales implements Initializable {
 
     @FXML
     public BorderPane rootPaneSales; //RootPane
-
     public GridPane ordersTable; // Retrieves TableView with fx:id="ordersTable"
     public TableView subsTable; // Retrieves Tableview with fx:id="subsTable"
-
     public Button ordersButton; //Button for showing orders
     public Button subsButton;
 

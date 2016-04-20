@@ -12,7 +12,10 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.util.StringConverter;
+import javafx.util.converter.IntegerStringConverter;
 
 import java.net.URL;
 import java.time.LocalDate;
@@ -45,14 +48,45 @@ public class ControllerSalesTextField extends ControllerSales implements Initial
     public Button createButton;
     public ComboBox<Dish> chooseDishes;
     public Button addDishButton;
+    public TableView chosenDishTable;
+    public TableColumn dishNameCol;
+    public TableColumn quantityCol;
+    public TableColumn priceCol;
+
+    ControllerSalesOrders CSOrders = new ControllerSalesOrders();
 
     ObservableList<String> statusComboBoxValues = FXCollections.observableArrayList(
         "Created", "In preparation", "Ready for delivery", "Under delivery", "Delivered"
     );
+    ObservableList<OrderLine> chosenDishes = FXCollections.observableArrayList();
+
 
     public ComboBox statusBox = new ComboBox(statusComboBoxValues);
 
-    EventHandler<ActionEvent> createOrderEventField = new EventHandler<ActionEvent>() {
+    EventHandler<ActionEvent> addDishToOrderEvent = new EventHandler<ActionEvent>() {
+        @Override
+        public void handle(ActionEvent event) {
+            try{
+                if (selectedDish != null){
+                    boolean add = true;
+                    for (OrderLine ol : chosenDishes) {
+                        if (ol.getDish().getDishName().equals(selectedDish.getDishName())){
+                            add = false;
+                        }
+                    }
+                    if (add){
+                        OrderLine newOL = new OrderLine(selectedDish);
+                        chosenDishes.add(newOL);
+                        chosenDishTable.setItems(chosenDishes);
+                    }
+                }
+            }catch (Exception e){
+                System.out.println("addDishToOrderEvent " + e);
+            }
+        }
+    };
+
+    EventHandler<ActionEvent> createOrderFieldEvent = new EventHandler<ActionEvent>() {
         @Override
         public void handle(ActionEvent e) {
             try {
@@ -85,6 +119,7 @@ public class ControllerSalesTextField extends ControllerSales implements Initial
                 );
                 Dish dishes = new Dish(price, dishName, dishLines);
                 ObservableList<Dish> dishesInThisOrder = FXCollections.observableArrayList();
+
                 ObservableList<Order> order = FXCollections.observableArrayList(
                         new Order(customerRequests, deadline, price, status, dishesInThisOrder)
                 );
@@ -93,7 +128,7 @@ public class ControllerSalesTextField extends ControllerSales implements Initial
                         newAddress, businessName, subscription, order);
 
             } catch(Exception exc) {
-                System.out.println("createOrderEventField: " + exc);
+                System.out.println("createOrderFieldEvent: " + exc);
             }
         }
     };
@@ -122,6 +157,51 @@ public class ControllerSalesTextField extends ControllerSales implements Initial
             }
         });
 
-        createButton.setOnAction(createOrderEventField);
+        chosenDishTable.setEditable(true);
+        dishNameCol.setCellValueFactory(new PropertyValueFactory<OrderLine, Dish>("dish")); //dishName
+        quantityCol.setCellValueFactory(new PropertyValueFactory<OrderLine, Integer>("amount")); //qty
+        priceCol.setCellValueFactory(new PropertyValueFactory<OrderLine, Dish>("dish")); //price
+
+        dishNameCol.setCellFactory(column -> {
+            return new TableCell<OrderLine, Dish>() {
+                @Override
+                protected void updateItem(Dish dish, boolean empty) {
+                    if(dish == null || empty) {
+                        setText(null);
+                    } else {
+                        setText(dish.getDishName());
+                    }
+                }
+            };
+        });
+
+        quantityCol.setCellFactory(TextFieldTableCell.<OrderLine, Integer>forTableColumn(new IntegerStringConverter()));
+        quantityCol.setOnEditCommit(
+                new EventHandler<TableColumn.CellEditEvent<OrderLine, Integer>>() {
+                    @Override
+                    public void handle(TableColumn.CellEditEvent<OrderLine, Integer> event) {
+                        event.getTableView().getItems().get(event.getTablePosition().getRow()).setAmount(event.getNewValue());
+                    }
+                }
+        );
+
+        priceCol.setCellFactory(column -> {
+            return new TableCell<OrderLine, Dish>() {
+                @Override
+                protected void updateItem(Dish dish, boolean empty) {
+                    if(dish == null || empty) {
+                        setText(null);
+                    } else {
+                        setText(nf.format(dish.getPrice()));
+                    }
+                }
+            };
+        });
+
+
+        chosenDishTable.getColumns().setAll(dishNameCol, quantityCol, priceCol);
+
+        createButton.setOnAction(createOrderFieldEvent);
+        addDishButton.setOnAction(addDishToOrderEvent);
     }
 }

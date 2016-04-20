@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!--> Axel </!-->
+<!--> Trym </!-->
 <!--> Textfields for registering new order </!-->
 
 <?import java.lang.*?>
@@ -62,19 +62,29 @@
 
        <TextField fx:id="subscriptionIdField" GridPane.columnIndex="2" GridPane.rowIndex="2" promptText="Subscription ID (leave empty)"/>
 
-       <TextArea fx:id="customerRequestsField" GridPane.columnIndex="2" GridPane.rowIndex="3" GridPane.rowSpan="4" prefWidth="200"
+       <TextArea fx:id="customerRequestsField" GridPane.columnIndex="2" GridPane.rowIndex="3" GridPane.rowSpan="5" prefWidth="200"
                  promptText="Extra requests"/>
 
-        <ComboBox fx:id="chooseDishes" GridPane.columnIndex="0" GridPane.rowIndex="7" promptText="Dishes">
+        <TableView fx:id="chosenDishTable" prefWidth="400" GridPane.columnIndex="3" GridPane.rowIndex="0" GridPane.columnSpan="4"
+                   GridPane.rowSpan="8">
+            <TableColumn fx:id="dishNameCol" text="Dish name" />
+            <TableColumn fx:id="quantityCol" text="Quantity" />
+            <TableColumn fx:id="priceCol" text="Price" />
+            <columnResizePolicy>
+                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+            </columnResizePolicy>
+        </TableView>
+
+        <ComboBox fx:id="chooseDishes" prefWidth="150" GridPane.columnIndex="3" GridPane.rowIndex="9" promptText="Dishes">
             <items>
                 <FXCollections fx:factory="observableArrayList" >
                 </FXCollections>
             </items>
         </ComboBox>
 
-        <Button fx:id="addDishButton" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+        <Button fx:id="addDishButton" GridPane.columnIndex="4" GridPane.rowIndex="9" styleClass="smallButton" text="Add"/>
 
-       <VBox alignment="BOTTOM_LEFT" spacing="10" GridPane.columnIndex="0" GridPane.rowIndex="10">
+       <VBox alignment="BOTTOM_LEFT" spacing="10" GridPane.columnIndex="5" GridPane.rowIndex="9">
            <children>
               <Button fx:id="createButton" styleClass="newOrderButton" text="Create new order" />
            </children>

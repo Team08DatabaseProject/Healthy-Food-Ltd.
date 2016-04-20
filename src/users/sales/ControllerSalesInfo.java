@@ -90,7 +90,7 @@ public class ControllerSalesInfo extends ControllerSalesOrders implements Initia
                     selectedCustomer.getSubscription().setEndSubscription(endSub);
                 }
             } catch(Exception exc) {
-                System.out.println("createOrderEventField: " + exc);
+                System.out.println("createOrderFieldEvent: " + exc);
             }
         }
     };
