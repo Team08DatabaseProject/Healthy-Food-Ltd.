@@ -81,7 +81,7 @@ public class ControllerChefMenus extends ControllerChef implements Initializable
     };
 
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
-        chooseMenuCB.setItems(testMenus);
+        chooseMenuCB.setItems(menuList);
         chooseMenuCB.setConverter(new StringConverter<Menu>() {
             @Override
             public String toString(Menu menu) {

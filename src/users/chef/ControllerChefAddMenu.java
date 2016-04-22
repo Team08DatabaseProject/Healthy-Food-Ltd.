@@ -80,14 +80,14 @@ public class ControllerChefAddMenu extends ControllerChef implements Initializab
             try {
                 boolean add = true;
                 Menu newMenu = new Menu(menuNameString, selectedMealType, chosenMenuLines);
-                for (Menu m : testMenus) {
+                for (Menu m : menuList) {
                     if (m.getName().equals(newMenu.getName())) {
                         add = false;
                     }
                 }
                 if (add) {
                     if (db.addMenu(newMenu)) {
-                        testMenus.add(newMenu);
+                        menuList.add(newMenu);
                         PopupDialog.confirmationDialog("Result", "Menu \"" + newMenu.getName() + "\" added.");
                     } else {
                         PopupDialog.errorDialog("Error", "Menu could not be added.");
@@ -186,7 +186,7 @@ public class ControllerChefAddMenu extends ControllerChef implements Initializab
                 selectedMealType = newValue;
             }
         });
-        chooseDishCB.setItems(testDishes);
+        chooseDishCB.setItems(dishList);
         chooseDishCB.setConverter(new StringConverter<Dish>() {
             @Override
             public String toString(Dish dish) {

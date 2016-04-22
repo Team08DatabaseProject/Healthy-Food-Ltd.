@@ -1063,29 +1063,29 @@ public class SqlQueries extends DBConnector {
             String selectSql = "";
             //ceo and sales
             if (posId == 1) {
-                selectSql = "SELECT * FROM `order`";
                 selectQuery = con.prepareStatement(selectSql);
+                selectSql = "SELECT * FROM `order`";
                 //CHEF
             } else if (posId == 2) {
                 selectSql = "SELECT * FROM `order` WHERE status_id = ? OR ? OR ?";
+                selectQuery = con.prepareStatement(selectSql);
                 selectQuery.setInt(1, CREATED);
                 selectQuery.setInt(2, INPREPARATION);
                 selectQuery.setInt(3, READYFORDELIVERY);
-                selectQuery = con.prepareStatement(selectSql);
                 //DRIVER
             } else if (posId == 3) {
                 selectSql = "SELECT * FROM `order` WHERE status_id = ?;" +
                         "SELECT * FROM `order` WHERE status_id = ? AND delivery_date = DATE(now())";
+                selectQuery = con.prepareStatement(selectSql);
                 selectQuery.setInt(1, READYFORDELIVERY);
                 selectQuery.setInt(2, DELIVERED);
-                selectQuery = con.prepareStatement(selectSql);
             } else if (posId == 4) {
-                selectSql = "SELECT * FROM `order` WHERE status_id = ? OR ? OR ?";
+                selectSql = "SELECT * FROM `order` WHERE status_id = ? OR ? OR ? OR ?";
+                selectQuery = con.prepareStatement(selectSql);
                 selectQuery.setInt(1, CREATED);
                 selectQuery.setInt(2, INPREPARATION);
                 selectQuery.setInt(3, READYFORDELIVERY);
                 selectQuery.setInt(4, DELIVERED);
-                selectQuery = con.prepareStatement(selectSql);
                 //SALES
             }
             res = selectQuery.executeQuery();
@@ -1095,13 +1095,20 @@ public class SqlQueries extends DBConnector {
                 int subscriptionId = res.getInt("subscription_id");
                 String customerRequests = res.getString("customer_requests");
                 LocalDate deadline = res.getDate("delivery_date").toLocalDate();
-                LocalDate actualDeliveryDate = res.getDate("delivered_date").toLocalDate();
                 double price = res.getDouble("price");
                 OrderStatus status = getOrderStatus(res.getInt("status_id"));
-                Address address = getAddress(res.getInt("address"));
-                Order order = new Order(orderId, customerRequests, deadline, actualDeliveryDate, price, status, null, address);
-                setOrderLinesInOrder(order, allDishes);
-                orders.add(order);
+                Address address = getAddress(res.getInt("address_id"));
+
+                if (res.getDate("delivered_date") != null) {
+                    LocalDate actualDeliveryDate = res.getDate("delivered_date").toLocalDate();
+                    Order order = new Order(orderId, customerRequests, deadline, actualDeliveryDate, price, status, null, address);
+                    setOrderLinesInOrder(order, allDishes);
+                    orders.add(order);
+                } else {
+                    Order order = new Order(orderId, customerRequests, deadline, null, price, status, null, address);
+                    setOrderLinesInOrder(order, allDishes);
+                    orders.add(order);
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();

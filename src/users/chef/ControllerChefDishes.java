@@ -81,8 +81,8 @@ public class ControllerChefDishes extends ControllerChef implements Initializabl
                 selectedDish = (Dish) dishTable.getSelectionModel().getSelectedItem();
                 if (selectedDish != null) {
                     if (db.deleteDish(selectedDish)) {
-                        testDishes.remove(selectedDish);
-                        dishTable.setItems(testDishes);
+                        dishList.remove(selectedDish);
+                        dishTable.setItems(dishList);
                         PopupDialog.confirmationDialog("Result", "Dish \"" + selectedDish.getDishName() + "\" removed.");
                     } else {
                         PopupDialog.errorDialog("Error", "Dish could not be removed.");
@@ -138,7 +138,7 @@ public class ControllerChefDishes extends ControllerChef implements Initializabl
         });
 
         dishTable.getColumns().setAll(dishName, dishPrice);
-        dishTable.setItems(testDishes);
+        dishTable.setItems(dishList);
         addDishButton.setOnAction(addDishButtonClick);
         removeDishButton.setOnAction(removeDishButtonClick);
         viewDishInfoButton.setOnAction(viewInfoButtonClick);

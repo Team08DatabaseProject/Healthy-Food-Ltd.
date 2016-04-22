@@ -33,11 +33,11 @@ public class ControllerChef implements Initializable{
     public Button ingredientsButton;
     private GridPane centerDisplay;
     protected static SqlQueries db = new SqlQueries();
-    protected static ObservableList<Supplier> testSuppliers = db.getAllSuppliers();
-    protected static ObservableList<Ingredient> testIngredients = db.getAllIngredients(testSuppliers);
-    protected static ObservableList<Dish> testDishes = db.getAllDishes(testIngredients);
-    protected static ObservableList<Menu> testMenus = db.getAllMenus(testDishes);
-    protected static ObservableList<Order> orderList = db.getOrders(2);
+    protected static ObservableList<Supplier> supplierList = db.getAllSuppliers();
+    protected static ObservableList<Ingredient> ingredientList = db.getAllIngredients(supplierList);
+    protected static ObservableList<Dish> dishList = db.getAllDishes(ingredientList);
+    protected static ObservableList<Menu> menuList = db.getAllMenus(dishList);
+    protected static ObservableList<Order> orderList = db.getOrders(2, dishList);
     protected static ObservableList<OrderStatus> statusTypes = db.getStatusTypes();
 
 
@@ -50,23 +50,7 @@ public class ControllerChef implements Initializable{
     protected static Order selectedOrder;
 
 
-    /*
-    protected static TestObjects testObjects = new TestObjects();
-    protected static ObservableList<Ingredient> testIngredients = testObjects.allIngredients;
-    protected static ObservableList<DishLine> testDishLines = testObjects.allIngredientsDL;
-    protected static ObservableList<MenuLine> testMenuLines = testObjects.allDishes;
-    protected static ObservableList<classpackage.Menu> testMenus = testObjects.allMenus;
-    protected static ObservableList<Supplier> testSuppliers = testObjects.supplierList;
-    protected static ObservableList<Dish> testDishes = testObjects.dishList;
-    protected static Ingredient selectedIngredient;
-    protected static Dish selectedDish;
-    protected static DishLine selectedDishLine;
-    protected static MenuLine selectedMenuLine;
-    protected static Menu selectedMenu;
-    protected static Supplier selectedSupplier;
-*/
-
-
+    // Display orders relevant to chef
     EventHandler<ActionEvent> showOrdersEvent = new EventHandler<ActionEvent>() {
         @Override
         public void handle(ActionEvent event) {
@@ -81,6 +65,7 @@ public class ControllerChef implements Initializable{
         }
     };
 
+    // Display "Menu" menu
     EventHandler<ActionEvent> showMenusEvent = new EventHandler<ActionEvent>() {
         @Override
         public void handle(ActionEvent event) {
@@ -95,6 +80,7 @@ public class ControllerChef implements Initializable{
         }
     };
 
+    // Display Ingredient menu
     EventHandler<ActionEvent> showIngredientsEvent = new EventHandler<ActionEvent>() {
         @Override
         public void handle(ActionEvent event) {
@@ -109,6 +95,7 @@ public class ControllerChef implements Initializable{
         }
     };
 
+    // Display Dish menu
     EventHandler<ActionEvent> showDishesEvent = new EventHandler<ActionEvent>() {
         @Override
         public void handle(ActionEvent event) {
@@ -125,6 +112,8 @@ public class ControllerChef implements Initializable{
 
 
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
+
+        // Connect sidebar buttons to events
         ordersButton.setOnAction(showOrdersEvent);
         menusButton.setOnAction(showMenusEvent);
         ingredientsButton.setOnAction(showIngredientsEvent);

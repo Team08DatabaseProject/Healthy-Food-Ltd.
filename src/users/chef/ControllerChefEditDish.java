@@ -196,7 +196,7 @@ public class ControllerChefEditDish extends ControllerChef implements Initializa
         }
 
 
-        editIngredientCB.setItems(testIngredients);
+        editIngredientCB.setItems(ingredientList);
         editDishNameField.setText(selectedDish.getDishName());
         editDishPriceFactorField.setText(nf.format(getDishPriceFactor()));
         currentNameLabel.setText("Dish name: " + selectedDish.getDishName());

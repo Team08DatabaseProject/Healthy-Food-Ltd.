@@ -58,7 +58,7 @@ public class ControllerChefIngredients extends ControllerChef implements Initial
         @Override
         public void handle(ActionEvent event) {
             try {
-                for (Ingredient ing : testIngredients) {
+                for (Ingredient ing : ingredientList) {
                     if (ing.isChanged()) {
                         ingredientsCopy.add(ing);
                         System.out.println(ing.getIngredientName());
@@ -74,8 +74,8 @@ public class ControllerChefIngredients extends ControllerChef implements Initial
         @Override
         public void handle(ActionEvent event) {
             try {
-                testIngredients = db.getAllIngredients(testSuppliers);
-                ingTable.setItems(testIngredients);
+                ingredientList = db.getAllIngredients(supplierList);
+                ingTable.setItems(ingredientList);
             } catch (Exception exc) {
                 System.out.println(exc);
             }
@@ -107,8 +107,8 @@ public class ControllerChefIngredients extends ControllerChef implements Initial
                 selectedIngredient = (Ingredient) ingTable.getSelectionModel().getSelectedItem();
                 if (selectedIngredient != null) {
                     if (db.deleteIngredient(selectedIngredient)) {
-                        testIngredients.remove(selectedIngredient);
-                        ingTable.setItems(testIngredients);
+                        ingredientList.remove(selectedIngredient);
+                        ingTable.setItems(ingredientList);
                         PopupDialog.confirmationDialog("Result", "Ingredient: \"" + selectedIngredient.getIngredientName() + "\" deleted.");
                     } else {
                         PopupDialog.errorDialog("Error", "Could not remove ingredient.");
@@ -201,7 +201,7 @@ public class ControllerChefIngredients extends ControllerChef implements Initial
         });
 
         ingTable.getColumns().setAll(ingName, ingUnit, ingPrice, ingQuantity, ingSupplier);
-        ingTable.setItems(testIngredients);
+        ingTable.setItems(ingredientList);
         ingTable.setEditable(true);
         applyChangesButton.setOnAction(applyChangesButtonClick);
         addIngButton.setOnAction(addIngButtonClick);

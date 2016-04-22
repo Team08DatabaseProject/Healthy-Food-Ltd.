@@ -11,14 +11,14 @@
 
 <?import com.sun.javafx.scene.control.skin.TableColumnHeader?>
 <?import com.sun.javafx.scene.control.skin.TableHeaderRow?>
-<GridPane fx:id="orderInfoGP" fx:controller="users.chef.ControllerChefOrderInfo" hgap="5" prefHeight="500.0" prefWidth="800.0" vgap="10" BorderPane.alignment="CENTER" xmlns="http://javafx.com/javafx/8"
+<GridPane fx:id="dishInfoGP" fx:controller="users.chef.ControllerChefDishInfo" hgap="5" prefHeight="500.0" prefWidth="800.0" vgap="10" BorderPane.alignment="CENTER" xmlns="http://javafx.com/javafx/8"
           xmlns:fx="http://javafx.com/fxml/1" stylesheets="@/users/chef/ChefStyle.css" gridLinesVisible="false">
     <padding>
         <Insets bottom="25" left="30" right="20" top="25" />
     </padding>
     <children>
         <HBox alignment="TOP_CENTER" spacing="10" GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.columnSpan="2">
-            <Label fx:id="leftHeader" styleClass="BigLabel"/>
+            <Label fx:id="dishInfoHeader" styleClass="BigLabel"/>
         </HBox>
         <VBox alignment="TOP_LEFT" spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="1" GridPane.fillWidth="false" prefWidth="250">
             <children>
