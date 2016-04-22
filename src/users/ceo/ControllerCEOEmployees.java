@@ -21,6 +21,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.net.URL;
+import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -214,7 +215,7 @@ public class ControllerCEOEmployees extends ControllerCEO  implements Initializa
 					if(item == null || empty) {
 						setText(null);
 					} else {
-						setText(String.format("%.2f", item));
+						setText(String.format(Locale.ENGLISH, "%.2f", item));
 						setAlignment(Pos.BASELINE_RIGHT);
 					}
 				}
