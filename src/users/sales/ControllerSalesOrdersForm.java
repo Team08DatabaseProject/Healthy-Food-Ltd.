@@ -10,10 +10,12 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.layout.GridPane;
 import javafx.util.StringConverter;
 import javafx.util.converter.IntegerStringConverter;
 
@@ -25,14 +27,13 @@ import java.util.ResourceBundle;
  * Created by Trym Todalshaug on 07/04/2016.
  */
 
-public class ControllerSalesTextField extends ControllerSales implements Initializable{
+public class ControllerSalesOrdersForm extends ControllerSales implements Initializable{
 
     @FXML
+    public GridPane salesTextField;
     public TextField orderIdField;
     public TextField customerIdField;
     public TextField subscriptionIdField;
-    public TextField startSubscription;
-    public TextField endSubscription;
     public TextField fNameField;
     public TextField lNameField;
     public CheckBox businessBox;
@@ -125,8 +126,7 @@ public class ControllerSalesTextField extends ControllerSales implements Initial
                 );
                 Subscription subscription = new Subscription(startSubscription, endSubscription, order);
                 Customer customer = new Customer(isBusiness, email, firstName, lastName, phoneNumber,
-                        newAddress, businessName, subscription, order);
-
+                                                 newAddress, businessName, subscription, order);
             } catch(Exception exc) {
                 System.out.println("createOrderFieldEvent: " + exc);
             }

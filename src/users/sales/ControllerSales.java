@@ -39,16 +39,21 @@ public class ControllerSales implements Initializable {
         nf.setMaximumFractionDigits(2);
     }
 
+    protected static SqlQueries db = new SqlQueries();
     protected static TestObjects testObjects = new TestObjects();
-    protected static ObservableList<Order> orders = testObjects.allOrders;
-    protected static ObservableList<Dish> dishes = testObjects.dishList;
-    protected static ObservableList<Customer> customers = testObjects.allCustomers;
-    protected static ObservableList<Subscription> subscriptions = testObjects.allSubscriptions;
-    protected static Dish selectedDish;
+    protected static ObservableList<Supplier> suppliers = db.getAllSuppliers();
+    protected static ObservableList<Ingredient> ingredients = db.getAllIngredients(suppliers);
+    protected static ObservableList<Dish> dishes = db.getAllDishes(ingredients);
+    protected static ObservableList<Order> orders = db.getOrders(4, dishes);
+    protected static ObservableList<Customer> customers = db.getAllCustomers(orders);
+    protected static ObservableList<Subscription> subscriptions = db.getAllSubscriptions();
+    protected static ObservableList<OrderStatus> statusTypes = db.getStatusTypes();
 
+    protected static Dish selectedDish;
     protected static Order selectedOrder;
     protected static Customer selectedCustomer;
     protected static Subscription selectedSubscription;
+    protected static OrderStatus selectedStatus;
 
     @FXML
     public BorderPane rootPaneSales; //RootPane
@@ -58,9 +63,6 @@ public class ControllerSales implements Initializable {
     private GridPane ordersTable; // Retrieves TableView with fx:id="ordersTable"
     private GridPane subsTable; // Retrieves Tableview with fx:id="subsTable"
     private GridPane customersTable;
-
-    private SqlQueries query = new SqlQueries();
-    //final ObservableList<Order> subsTest = query.getOrders(4);
 
     EventHandler<ActionEvent> orderEvent = new EventHandler<ActionEvent>() {
         @Override
@@ -104,60 +106,10 @@ public class ControllerSales implements Initializable {
         }
     };
 
-    public ObservableList<Order> getAllOrdersForSales() {
-        return allOrdersForSales;
-    }
-
-    public void setAllOrdersForSales(ObservableList<Order> allOrdersForSales) {
-        this.allOrdersForSales = allOrdersForSales;
-    }
-
-    public ObservableList<Subscription> getAllSubscriptions() {
-        return allSubscriptions;
-    }
-
-    public void setAllSubscriptions(ObservableList<Subscription> allSubscriptions) {
-        this.allSubscriptions = allSubscriptions;
-    }
-
-    public ObservableList<Dish> getAllDishes() {
-        return allDishes;
-    }
-
-    public void setAllDishes(ObservableList<Dish> allDishes) {
-        this.allDishes = allDishes;
-    }
-
-    public ObservableList<Customer> getAllCustomers() {
-        return allCustomers;
-    }
-
-    public void setAllCustomers(ObservableList<Customer> allCustomers) {
-        this.allCustomers = allCustomers;
-    }
-
-    public ObservableList<Address> getAllAdresses() {
-        return allAdresses;
-    }
-
-    public void setAllAdresses(ObservableList<Address> allAdresses) {
-        this.allAdresses = allAdresses;
-    }
-
-    public ObservableList<Menu> getAllMenus() {
-        return allMenus;
-    }
-
-    public void setAllMenus(ObservableList<Menu> allMenus) {
-        this.allMenus = allMenus;
-    }
-
-
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
 
         ordersButton.setOnAction(orderEvent);
         subsButton.setOnAction(subsEvent);
         customersButton.setOnAction(customersEvent);
-
     }
 }

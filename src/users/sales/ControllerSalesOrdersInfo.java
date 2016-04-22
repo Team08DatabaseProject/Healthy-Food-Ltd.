@@ -2,6 +2,8 @@ package users.sales;
 
 import classpackage.OrderStatus;
 import classpackage.ZipCode;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -9,6 +11,8 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.layout.GridPane;
+import javafx.util.StringConverter;
 
 import java.net.URL;
 import java.time.LocalDate;
@@ -20,9 +24,10 @@ import java.util.ResourceBundle;
 public class ControllerSalesOrdersInfo extends ControllerSalesOrders implements Initializable{
 
     @FXML
-    public Label orderIdLabel;
-    public Label customerIdLabel;
-    public Label subscriptionIdLabel;
+    public GridPane ordersInfoGrid;
+    public TextField orderIdField;
+    public TextField customerIdField;
+    public TextField subscriptionIdField;
     public DatePicker startSubscription;
     public DatePicker endSubscription;
     public TextField fNameField;
@@ -37,15 +42,8 @@ public class ControllerSalesOrdersInfo extends ControllerSalesOrders implements 
     public TextArea customerRequestsArea;
     public DatePicker deadlinePicker;
     public TextField priceField;
-
-    ObservableList<String> statusComboBoxValues = FXCollections.observableArrayList(
-            "Created", "In preparation", "Ready for delivery", "Under delivery", "Delivered"
-    );
-
-
-    public ComboBox statusBox = new ComboBox(statusComboBoxValues);
+    public ComboBox statusBox;
     public Button applyButton;
-
 
     EventHandler<ActionEvent> editInfoEvent = new EventHandler<ActionEvent>() {
         @Override
@@ -53,9 +51,6 @@ public class ControllerSalesOrdersInfo extends ControllerSalesOrders implements 
             try {
 
                 if (selectedCustomer != null) {
-                    int orderId = Integer.parseInt(orderIdLabel.getText());
-                    int customerId = Integer.parseInt(customerIdLabel.getText());
-                    int subscriptionId = Integer.parseInt(subscriptionIdLabel.getText());
                     String firstName = fNameField.getText();
                     String lastName = lNameField.getText();
                     boolean isBusiness = businessBox.isArmed();
@@ -73,9 +68,6 @@ public class ControllerSalesOrdersInfo extends ControllerSalesOrders implements 
                     LocalDate startSub = startSubscription.getValue();
                     LocalDate endSub = endSubscription.getValue();
 
-                    selectedOrder.setOrderId(orderId);
-                    selectedCustomer.setCustomerId(customerId);
-                    selectedCustomer.getSubscription().setSubscriptionId(subscriptionId);
                     selectedCustomer.setFirstName(firstName);
                     selectedCustomer.setLastName(lastName);
                     selectedCustomer.setIsBusiness(isBusiness);
@@ -100,15 +92,41 @@ public class ControllerSalesOrdersInfo extends ControllerSalesOrders implements 
 
     public void initialize(URL fxmlFileLocation, ResourceBundle resources){
 
-        orderIdLabel.setText("Order ID: " + String.valueOf(selectedOrder.getOrderId()));
-        customerIdLabel.setText("Customer ID: " + String.valueOf(selectedCustomer.getCustomerId()));
+        statusBox.setItems(statusTypes);
+        statusBox.setConverter(new StringConverter<OrderStatus>() {
+            @Override
+            public String toString(OrderStatus os) {
+                if (os == null){
+                    return null;
+                } else {
+                    return os.getName();
+                }
+            }
+
+            @Override
+            public OrderStatus fromString(String string) {
+                return null;
+            }
+        });
+
+        statusBox.valueProperty().addListener(new ChangeListener<OrderStatus>() {
+            @Override
+            public void changed(ObservableValue<? extends OrderStatus> observable, OrderStatus oldValue, OrderStatus newValue) {
+                selectedStatus = newValue;
+            }
+        });
+
+        orderIdField.setText("Order ID: " + String.valueOf(selectedOrder.getOrderId()));
+        customerIdField.setText("Customer ID: " + String.valueOf(selectedCustomer.getCustomerId()));
         if (selectedCustomer.getSubscription() != null) {
-            subscriptionIdLabel.setText("Subscription ID: " + String.valueOf(selectedCustomer.getSubscription().getSubscriptionId()));
+            subscriptionIdField.setText("Subscription ID: " + String.valueOf(selectedCustomer.getSubscription().getSubscriptionId()));
             startSubscription.setValue(selectedCustomer.getSubscription().getStartSubscription());
             endSubscription.setValue(selectedCustomer.getSubscription().getEndSubscription());
         }
 
-
+        orderIdField.setDisable(true);
+        customerIdField.setDisable(true);
+        subscriptionIdField.setDisable(true);
         fNameField.setText(selectedCustomer.getFirstName());
         lNameField.setText(selectedCustomer.getLastName());
         businessBox.setSelected(selectedCustomer.getIsBusiness());

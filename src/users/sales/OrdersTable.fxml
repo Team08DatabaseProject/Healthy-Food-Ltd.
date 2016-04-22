@@ -7,18 +7,18 @@
 
 <!--> Table in submenu "Orders for Sales" </!-->
 
-<GridPane prefHeight="500" prefWidth="200.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8"
+<GridPane fx:id="ordersTableGrid" prefHeight="500" prefWidth="200.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8"
           fx:controller="users.sales.ControllerSalesOrders" stylesheets="@/users/sales/SalesStyle.css">
     <children>
         <BorderPane fx:id="rootPaneOrders">
             <center>
-                <TableView BorderPane.alignment="TOP_CENTER" fx:id="ordersTable" editable="true" minHeight="200" prefWidth="1600.0"
+                <TableView fx:id="ordersTable" BorderPane.alignment="TOP_CENTER" editable="true" minHeight="200" prefWidth="1600.0"
                            GridPane.columnIndex="0" GridPane.rowIndex="0" >
                     <columns>
                         <TableColumn fx:id="orderIdCol" prefWidth="20.0" text="Order ID" styleClass="column"/>
                         <TableColumn fx:id="deadlineCol" prefWidth="40.0" text="Deadline" styleClass="column"/>
-                        <TableColumn fx:id="priceCol" prefWidth="40.0" text="Price" styleClass="column"/>
                         <TableColumn fx:id="statusCol" prefWidth="40.0" text="Status" styleClass="column"/>
+                        <TableColumn fx:id="priceCol" prefWidth="40.0" text="Price" styleClass="column"/>
                     </columns>
                     <columnResizePolicy>
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
