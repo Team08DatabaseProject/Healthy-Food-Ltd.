@@ -2,9 +2,7 @@ package classpackage;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import sun.plugin2.gluegen.runtime.CPU;
 
-import javax.xml.transform.Result;
 import java.sql.*;
 import java.sql.Date;
 import java.time.LocalDate;
@@ -231,7 +229,7 @@ public class SqlQueries extends DBConnector {
         ArrayList<Integer> orderIds = new ArrayList<Integer>();
         ResultSet res = null;
         try {
-            String selectSql = "SELECT order_id FROM n_order WHERE subscription_id = ?";
+            String selectSql = "SELECT order_id FROM `order` WHERE subscription_id = ?";
             selectQuery = con.prepareStatement(selectSql);
             selectQuery.setInt(1, subscription.getSubscriptionId());
             res = selectQuery.executeQuery();
@@ -252,7 +250,7 @@ public class SqlQueries extends DBConnector {
         ArrayList<Integer> orderIds = new ArrayList<Integer>();
         ResultSet res = null;
         try {
-            String selectSql = "SELECT order_id FROM n_order WHERE customer_id = ?";
+            String selectSql = "SELECT order_id FROM `order` WHERE customer_id = ?";
             selectQuery = con.prepareStatement(selectSql);
             selectQuery.setInt(1, customer.getCustomerId());
             res = selectQuery.executeQuery();
@@ -1058,35 +1056,38 @@ public class SqlQueries extends DBConnector {
 
     /*Order Methods*/
 //    Method for getting orders based on position id
-    public ObservableList<Order> getOrders(int posId) {
+    public ObservableList<Order> getOrders(int posId, ObservableList<Dish> allDishes) {
         ObservableList<Order> orders = FXCollections.observableArrayList();
         ResultSet res = null;
         try {
             String selectSql = "";
             //ceo and sales
             if (posId == 1) {
-                selectSql = "SELECT * FROM n_order";
+                selectSql = "SELECT * FROM `order`";
+                selectQuery = con.prepareStatement(selectSql);
                 //CHEF
             } else if (posId == 2) {
-                selectSql = "SELECT * FROM n_order WHERE status_id = ? OR ? OR ?";
+                selectSql = "SELECT * FROM `order` WHERE status_id = ? OR ? OR ?";
                 selectQuery.setInt(1, CREATED);
                 selectQuery.setInt(2, INPREPARATION);
                 selectQuery.setInt(3, READYFORDELIVERY);
+                selectQuery = con.prepareStatement(selectSql);
                 //DRIVER
             } else if (posId == 3) {
-                selectSql = "SELECT * FROM n_order WHERE status_id = ?;" +
-                        "SELECT * FROM n_order WHERE status_id = ? AND delivery_date = DATE(now())";
+                selectSql = "SELECT * FROM `order` WHERE status_id = ?;" +
+                        "SELECT * FROM `order` WHERE status_id = ? AND delivery_date = DATE(now())";
                 selectQuery.setInt(1, READYFORDELIVERY);
                 selectQuery.setInt(2, DELIVERED);
+                selectQuery = con.prepareStatement(selectSql);
             } else if (posId == 4) {
-                selectSql = "SELECT * FROM n_order WHERE status_id = ? OR ? OR ?";
+                selectSql = "SELECT * FROM `order` WHERE status_id = ? OR ? OR ?";
                 selectQuery.setInt(1, CREATED);
                 selectQuery.setInt(2, INPREPARATION);
                 selectQuery.setInt(3, READYFORDELIVERY);
                 selectQuery.setInt(4, DELIVERED);
+                selectQuery = con.prepareStatement(selectSql);
                 //SALES
             }
-            selectQuery = con.prepareStatement(selectSql);
             res = selectQuery.executeQuery();
             while (res.next()) {
                 int orderId = res.getInt("order_id");
@@ -1099,6 +1100,7 @@ public class SqlQueries extends DBConnector {
                 OrderStatus status = getOrderStatus(res.getInt("status_id"));
                 Address address = getAddress(res.getInt("address"));
                 Order order = new Order(orderId, customerRequests, deadline, actualDeliveryDate, price, status, null, address);
+                setOrderLinesInOrder(order, allDishes);
                 orders.add(order);
             }
         } catch (SQLException e) {
@@ -1123,7 +1125,7 @@ public class SqlQueries extends DBConnector {
                     return false;
                 }
             }
-            String insertSql = "INSERT INTO n_order(customer_id, subscription_id, customer_requests, delivery_date, delivered_date, " +
+            String insertSql = "INSERT INTO `order`(customer_id, subscription_id, customer_requests, delivery_date, delivered_date, " +
                     "price, address_id, status_id) VALUES(?,?,?,?,?,?,?,?)";
             insertQuery = con.prepareStatement(insertSql, Statement.RETURN_GENERATED_KEYS);
             insertQuery.setInt(1, customer.getCustomerId());
@@ -1159,7 +1161,7 @@ public class SqlQueries extends DBConnector {
 
     public boolean updateOrder(Order order, Customer customer) {
         try {
-            String sql = "UPDATE n_order SET ";
+            String sql = "UPDATE `order` SET ";
 
             sql += "customer_requests = ?, delivery_date = ?, " +
                     "delivered_date = ?, price = ?, address = ?, status = ?";
@@ -1209,6 +1211,35 @@ public class SqlQueries extends DBConnector {
         return false;
     }
 
+    public boolean setOrderLinesInOrder(Order order, ObservableList<Dish> allDishes){
+        ResultSet res = null;
+        ObservableList<OrderLine> dishLinesInThisOrder = FXCollections.observableArrayList();
+        try {
+            String selectSql = "SELECT dish_id, quantity FROM order_line WHERE order_id = ?";
+            selectQuery = con.prepareStatement(selectSql);
+            selectQuery.setInt(1, order.getOrderId());
+            res = selectQuery.executeQuery();
+            while (res.next()) {
+                int dishId = res.getInt(1);
+                int quantity = res.getInt(2);
+                for (Dish dish :
+                        allDishes) {
+                    if (dish.getDishId() == dishId) {
+                        dishLinesInThisOrder.add(new OrderLine(dish, quantity));
+                        break;
+                    }
+                }
+            }
+            order.setDishesInThisOrder(dishLinesInThisOrder);
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            closeEverything(res, selectQuery, con);
+        }
+        return false;
+    }
+
 //    Method for getting an Order status
     public OrderStatus getOrderStatus(int id) {
         try {
@@ -1229,7 +1260,7 @@ public class SqlQueries extends DBConnector {
     //    Method for deleting an order
     public boolean deleteOrder(Order order) {
         try {
-            String sqlSetning = "DELETE FROM n_order WHERE order_id = ?";
+            String sqlSetning = "DELETE FROM `order` WHERE order_id = ?";
             PreparedStatement deleteQuery = con.prepareStatement(sqlSetning);
             deleteQuery.setInt(1, order.getOrderId());
             if (deleteQuery.executeUpdate() != 0) {
@@ -1242,6 +1273,8 @@ public class SqlQueries extends DBConnector {
         }
         return false;
     }
+
+
 
 
 
