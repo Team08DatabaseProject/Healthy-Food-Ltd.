@@ -136,6 +136,10 @@ public class Ingredient {
         this.supplier.set(supplier);
     }
 
+    public String getQuantityAndUnit() {
+        return quantityOwned.get() + " " + unit.get();
+    }
+
     @Override
     public String toString() {
         return "Ingredient{" +
