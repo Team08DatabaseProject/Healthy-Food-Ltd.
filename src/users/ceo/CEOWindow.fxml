@@ -13,7 +13,7 @@
 
 <?import javafx.scene.layout.VBox?>
 <?import java.awt.Insets?>
-<BorderPane fx:id="rootPaneDriver" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" stylesheets="@/users/ceo/CEOStyle.css" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="users.ceo.ControllerCEO">
+<BorderPane fx:id="rootPaneDriver" style="-fx-hgap: 6px;" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" stylesheets="@/users/ceo/CEOStyle.css" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="users.ceo.ControllerCEO">
     <top>
         <MenuBar BorderPane.alignment="TOP_LEFT">
             <menus>
@@ -36,10 +36,10 @@
         </MenuBar>
     </top>
     <left>
-        <HBox styleClass="SideMenu">
+        <VBox styleClass="SideMenu">
             <Button fx:id="employeesButton" mnemonicParsing="false" styleClass="SmallButton" text="Employees" textAlignment="CENTER" />
             <Button fx:id="inventoryButton" mnemonicParsing="false" styleClass="SmallButton" text="Inventory" textAlignment="CENTER" />
-        </HBox>
+        </VBox>
     </left>
     <center>
     </center>
