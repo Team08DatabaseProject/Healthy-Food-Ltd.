@@ -46,12 +46,13 @@ public class ControllerChefOrderInfo extends ControllerChef implements Initializ
         @Override
         public void handle(MouseEvent event) {
             if (event.isPrimaryButtonDown() && event.getClickCount() == 2) {
-                selectedDish = (Dish) dishesInOrderTable.getSelectionModel().getSelectedItem();
+                OrderLine ol = (OrderLine) dishesInOrderTable.getSelectionModel().getSelectedItem();
+                selectedDish = ol.getDish();
                 try {
                     final Stage dishInfoStage = new Stage();
                     Parent root = FXMLLoader.load(getClass().getResource("ChefDishInfo.fxml"));
                     dishInfoStage.setTitle(selectedDish.getDishName() + " - Dish information");
-                    dishInfoStage.setScene(new Scene(root, 800, 800));
+                    dishInfoStage.setScene(new Scene(root, 500, 500));
                     dishInfoStage.show();
                 } catch (Exception exc) {
                     System.out.println(exc);
@@ -117,6 +118,7 @@ public class ControllerChefOrderInfo extends ControllerChef implements Initializ
         dishesInOrderTable.setEditable(true);
         dishesInOrderTable.getColumns().setAll(dishNameCol, dishAmountCol, dishPriceCol);
         dishesInOrderTable.setItems(dishesInOrder);
+        dishesInOrderTable.setOnMousePressed(viewDishInfoEvent);
 
     }
 

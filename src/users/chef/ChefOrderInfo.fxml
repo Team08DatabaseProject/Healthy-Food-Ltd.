@@ -20,7 +20,17 @@
         <HBox alignment="TOP_CENTER" spacing="10" GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.columnSpan="2">
             <Label fx:id="leftHeader" styleClass="BigLabel"/>
         </HBox>
-        <VBox alignment="TOP_LEFT" spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="1" GridPane.fillWidth="false" prefWidth="250">
+
+        <VBox alignment="TOP_LEFT" GridPane.columnIndex="0" GridPane.rowIndex="1" prefWidth="400">
+            <TableView fx:id="dishesInOrderTable">
+                <columnResizePolicy><TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/></columnResizePolicy>
+                <TableColumn fx:id="dishNameCol" prefWidth="170" text="Dish name"/>
+                <TableColumn fx:id="dishAmountCol" prefWidth="108" text="Amount"/>
+                <TableColumn fx:id="dishPriceCol" prefWidth="120" text="Price (NOK)"/>
+            </TableView>
+        </VBox>
+
+        <VBox spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="1" GridPane.fillWidth="false" prefWidth="250" translateX="10">
             <children>
                 <Label text="Deadline" prefWidth="100" prefHeight="30" styleClass="MediumLabel"/>
                 <Label fx:id="deadlineLabel" prefWidth="180" translateY="-14"/>
@@ -36,13 +46,6 @@
             </children>
         </VBox>
 
-        <VBox GridPane.columnIndex="0" GridPane.rowIndex="1" prefWidth="400">
-            <TableView fx:id="dishesInOrderTable">
-                <columnResizePolicy><TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/></columnResizePolicy>
-                <TableColumn fx:id="dishNameCol" prefWidth="170" text="Dish name"/>
-                <TableColumn fx:id="dishAmountCol" prefWidth="108" text="Amount"/>
-                <TableColumn fx:id="dishPriceCol" prefWidth="120" text="Price (NOK)"/>
-            </TableView>
-        </VBox>
+
     </children>
 </GridPane>

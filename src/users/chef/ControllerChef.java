@@ -49,7 +49,6 @@ public class ControllerChef implements Initializable{
     protected static Supplier selectedSupplier;
     protected static Order selectedOrder;
 
-
     // Display orders relevant to chef
     EventHandler<ActionEvent> showOrdersEvent = new EventHandler<ActionEvent>() {
         @Override

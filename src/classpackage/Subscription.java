@@ -1,6 +1,7 @@
 package classpackage;
 
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -10,7 +11,7 @@ import java.time.LocalDate;
  * Created by paul thomas on 17.03.2016.
  */
 public class Subscription {
-    private IntegerProperty subscriptionId;
+    private IntegerProperty subscriptionId = new SimpleIntegerProperty();
     //LocalDate.of(2012, Month.DECEMBER, 12); // from values
     private LocalDate startSubscription;
     private LocalDate endSubscription;

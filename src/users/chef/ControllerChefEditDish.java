@@ -181,7 +181,6 @@ public class ControllerChefEditDish extends ControllerChef implements Initializa
         if (ingPriceTotal == 0) {
             return 100.0;
         }
-        System.out.println(selectedDish.getPrice() / ingPriceTotal);
         return Math.round((selectedDish.getPrice() / ingPriceTotal * 100.0));
     }
 
