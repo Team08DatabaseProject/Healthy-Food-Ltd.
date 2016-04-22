@@ -44,6 +44,7 @@ public class ControllerCEOEmployeeForm extends ControllerCEOEmployees implements
 		private ObservableList<EmployeePosition> employeePositions = FXCollections.observableArrayList();
 		private EmployeePosition selectedPosition;
 		private boolean attemptedValidation = false;
+		private boolean salaryAutoChanged = false;
 
 	ChangeListener<String> validatefName = new ChangeListener<String>() {
 		@Override
@@ -98,6 +99,7 @@ public class ControllerCEOEmployeeForm extends ControllerCEOEmployees implements
 		public void changed(ObservableValue<? extends String> observable,
 		                    String oldValue, String newValue) {
 			salaryField.validate(false, attemptedValidation);
+			salaryAutoChanged = false;
 		}
 	};
 
@@ -127,13 +129,16 @@ public class ControllerCEOEmployeeForm extends ControllerCEOEmployees implements
 		@Override
 		public void changed(ObservableValue<? extends EmployeePosition> observable, EmployeePosition oldValue, EmployeePosition newValue) {
 			selectedPosition = newValue;
+			if(salaryField.getText().length() == 0 || salaryAutoChanged) {
+				salaryField.setText(String.format(Locale.ENGLISH, "%.2f", selectedPosition.getDefaultSalary()));
+				salaryAutoChanged = true;
+			}
 		}
 	};
 
 	Map<Integer, Integer> nameRules = new HashMap<Integer, Integer>() {
 		{
 			put(StringField.CAN_BE_EMPTY, 0);
-			put(StringField.MIN_LENGTH, 4);
 			put(StringField.MAX_LENGTH, 64);
 		}
 	};

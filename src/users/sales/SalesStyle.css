@@ -11,6 +11,13 @@ Button {
     -fx-padding: 10px;
 }
 
+.infoButton{
+    -fx-min-width: 100px;
+    -fx-min-height: 50px;
+    -fx-alignment: CENTER;
+    -fx-padding: 10px;
+}
+
 .smallButton{
     -fx-min-width: 80px;
     -fx-min-height: 30px;

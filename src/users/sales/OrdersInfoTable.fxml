@@ -9,8 +9,8 @@
 <?import javafx.scene.layout.*?>
 <?import java.lang.*?>
 
-<GridPane fx:id="infoGrid" prefHeight="200.0" prefWidth="1600.0" BorderPane.alignment="CENTER" xmlns="http://javafx.com/javafx/8"
-          xmlns:fx="http://javafx.com/fxml/1" fx:controller="users.sales.ControllerSalesInfo" stylesheets="SalesStyle.css">
+<GridPane fx:id="ordersInfoGrid" prefHeight="200.0" prefWidth="1600.0" BorderPane.alignment="CENTER" xmlns="http://javafx.com/javafx/8"
+          xmlns:fx="http://javafx.com/fxml/1" fx:controller="users.sales.ControllerSalesOrdersInfo" stylesheets="@/users/sales/SalesStyle.css">
 
     <padding>
         <Insets bottom="25" left="30" right="20" top="25" />
@@ -46,10 +46,6 @@
 
         <TextField fx:id="priceField" GridPane.columnIndex="1" GridPane.rowIndex="6" promptText="Price"/>
 
-        <DatePicker fx:id="startSubscription" GridPane.columnIndex="1" GridPane.rowIndex="7"/>
-
-        <DatePicker fx:id="endSubscription" GridPane.columnIndex="1" GridPane.rowIndex="8"/>
-
         <!--next collumn><!-->
 
         <ComboBox fx:id="statusBox" GridPane.columnIndex="2" GridPane.rowIndex="0" promptText="Status">
@@ -69,14 +65,9 @@
         <TextArea fx:id="customerRequestsArea" GridPane.columnIndex="2" GridPane.rowIndex="1" GridPane.rowSpan="4" prefWidth="200"
                   promptText="Extra requests"/>
 
-        <DatePicker fx:id="startSubscription" GridPane.columnIndex="2" GridPane.rowIndex="6" />
-
-        <DatePicker fx:id="endSubscription" GridPane.columnIndex="2" GridPane.rowIndex="7" />
-
-
         <HBox alignment="BOTTOM_LEFT" spacing="10" GridPane.columnIndex="0" GridPane.rowIndex="10">
             <children>
-                <Button fx:id="applyButton" styleClass="newOrderButton" text="Apply" />
+                <Button fx:id="applyButton" styleClass="infoButton" text="Apply" />
             </children>
         </HBox>
     </children>

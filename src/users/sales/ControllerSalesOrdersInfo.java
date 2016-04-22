@@ -1,5 +1,6 @@
 package users.sales;
 
+import classpackage.OrderStatus;
 import classpackage.ZipCode;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -16,7 +17,7 @@ import java.util.ResourceBundle;
 /**
  * Created by Trym Todalshaug on 18/04/2016.
  */
-public class ControllerSalesInfo extends ControllerSalesOrders implements Initializable{
+public class ControllerSalesOrdersInfo extends ControllerSalesOrders implements Initializable{
 
     @FXML
     public Label orderIdLabel;
@@ -36,6 +37,7 @@ public class ControllerSalesInfo extends ControllerSalesOrders implements Initia
     public TextArea customerRequestsArea;
     public DatePicker deadlinePicker;
     public TextField priceField;
+
     ObservableList<String> statusComboBoxValues = FXCollections.observableArrayList(
             "Created", "In preparation", "Ready for delivery", "Under delivery", "Delivered"
     );
@@ -67,7 +69,7 @@ public class ControllerSalesInfo extends ControllerSalesOrders implements Initia
                     String customerRequests = customerRequestsArea.getText();
                     LocalDate deadline = deadlinePicker.getValue();
                     double price = Double.parseDouble(priceField.getText());
-                    String status = (String)statusBox.getValue();
+                    OrderStatus status = (OrderStatus) statusBox.getValue();
                     LocalDate startSub = startSubscription.getValue();
                     LocalDate endSub = endSubscription.getValue();
 

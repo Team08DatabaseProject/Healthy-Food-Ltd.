@@ -35,6 +35,7 @@
             <children>
                 <Button fx:id="ordersButton" mnemonicParsing="false" text="Orders" textAlignment="CENTER" />
                 <Button fx:id="subsButton" mnemonicParsing="false" text="Subscriptions" textAlignment="CENTER" />
+                <Button fx:id="customersButton" mnemonicParsing="false" text="Customers" textAlignment="CENTER" />
             </children>
         </VBox>
     </left>

@@ -43,14 +43,21 @@ public class ControllerSales implements Initializable {
     protected static ObservableList<Order> orders = testObjects.allOrders;
     protected static ObservableList<Dish> dishes = testObjects.dishList;
     protected static ObservableList<Customer> customers = testObjects.allCustomers;
+    protected static ObservableList<Subscription> subscriptions = testObjects.allSubscriptions;
     protected static Dish selectedDish;
+
+    protected static Order selectedOrder;
+    protected static Customer selectedCustomer;
+    protected static Subscription selectedSubscription;
 
     @FXML
     public BorderPane rootPaneSales; //RootPane
-    public GridPane ordersTable; // Retrieves TableView with fx:id="ordersTable"
-    public TableView subsTable; // Retrieves Tableview with fx:id="subsTable"
     public Button ordersButton; //Button for showing orders
     public Button subsButton;
+    public Button customersButton;
+    private GridPane ordersTable; // Retrieves TableView with fx:id="ordersTable"
+    private GridPane subsTable; // Retrieves Tableview with fx:id="subsTable"
+    private GridPane customersTable;
 
     private SqlQueries query = new SqlQueries();
     //final ObservableList<Order> subsTest = query.getOrders(4);
@@ -83,32 +90,19 @@ public class ControllerSales implements Initializable {
         }
     };
 
-    /*EventHandler<ActionEvent> subsEvent = new EventHandler<ActionEvent>() {
+    EventHandler<ActionEvent> customersEvent = new EventHandler<ActionEvent>() {
         @Override
         public void handle(ActionEvent event) {
-            try {
+            try{
                 FXMLLoader loader = new FXMLLoader();
-                loader.setLocation(getClass().getResource("SubsTable.fxml"));
-                subsTable = loader.load();
-                rootPaneOrders.setCenter(subsTable);
-                ObservableList<TableColumn> columns = subsTable.getColumns();
-                columns.get(0).setCellValueFactory(new PropertyValueFactory<Customer, Subscription>("subscription"));
-                columns.get(1).setCellValueFactory(new PropertyValueFactory<Customer, Integer>("customerId"));
-                columns.get(2).setCellValueFactory(new PropertyValueFactory<Customer, String>("businessName"));
-                columns.get(3).setCellValueFactory(new PropertyValueFactory<Customer, String>("firstName"));
-                columns.get(4).setCellValueFactory(new PropertyValueFactory<Customer, String>("lastName"));
-                columns.get(5).setCellValueFactory(new PropertyValueFactory<Customer, Address>("address"));
-                columns.get(6).setCellValueFactory(new PropertyValueFactory<Customer, String>("email"));
-                columns.get(7).setCellValueFactory(new PropertyValueFactory<Customer, Integer>("phoneNumber"));
-                subsTable.setItems(subsTest);
-
-
-            }catch (Exception e){
-                System.out.println("subsEvent: " + e);
+                loader.setLocation(getClass().getResource("customersTable.fxml"));
+                customersTable = loader.load();
+                rootPaneSales.setCenter(customersTable);
+            }catch (Exception exc){
+                System.out.println("customersEvent " + exc);
             }
         }
-    };*/
-
+    };
 
     public ObservableList<Order> getAllOrdersForSales() {
         return allOrdersForSales;
@@ -163,6 +157,7 @@ public class ControllerSales implements Initializable {
 
         ordersButton.setOnAction(orderEvent);
         subsButton.setOnAction(subsEvent);
+        customersButton.setOnAction(customersEvent);
 
     }
 }

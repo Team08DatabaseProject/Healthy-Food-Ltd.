@@ -14,6 +14,8 @@ public class OrderStatus {
 		this.name.set(name);
 	}
 
+
+
 	public OrderStatus(int statusId) {
 		this.statusId.set(statusId);
 	}

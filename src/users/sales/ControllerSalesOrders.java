@@ -32,14 +32,11 @@ public class ControllerSalesOrders extends ControllerSales implements Initializa
     public Button deleteOrderButton; //Button for deleting an order
     public TableView ordersTable;
     public BorderPane rootPaneOrders;
-
-    protected static TestObjects testObjects = new TestObjects();
-    protected static ObservableList<Order> orders = testObjects.allOrders;
-    protected static ObservableList<Customer> customerList = testObjects.allCustomers;
-
-    public GridPane salesTextField;
-    protected static Order selectedOrder;
-    protected static Customer selectedCustomer;
+    public TableColumn orderIdCol;
+    public TableColumn deadlineCol;
+    public TableColumn priceCol;
+    public TableColumn statusCol;
+    private GridPane salesTextField;
 
     EventHandler<ActionEvent> createOrderEvent = new EventHandler<ActionEvent>() {
         @Override
@@ -79,12 +76,12 @@ public class ControllerSalesOrders extends ControllerSales implements Initializa
         }
     };
 
-    EventHandler<MouseEvent> infoEvent = new EventHandler<MouseEvent>() {
+    EventHandler<MouseEvent> infoOrdersEvent = new EventHandler<MouseEvent>() {
         @Override
         public void handle(MouseEvent event) {
             if (event.isPrimaryButtonDown() && event.getClickCount() == 1) {
                 selectedOrder = (Order)ordersTable.getSelectionModel().getSelectedItem();
-                for (Customer customer : customerList) {
+                for (Customer customer : customers) {
                     for (Order order : customer.getOrders()) {
                         if (order.getPrice() == selectedOrder.getPrice() && order.getAddress() == selectedOrder.getAddress()) {
                             selectedCustomer = customer;
@@ -93,11 +90,11 @@ public class ControllerSalesOrders extends ControllerSales implements Initializa
                 }
                 try {
                     FXMLLoader loader = new FXMLLoader();
-                    loader.setLocation(getClass().getResource("infoTable.fxml"));
-                    GridPane infoGrid = loader.load();
-                    rootPaneOrders.setBottom(infoGrid);
+                    loader.setLocation(getClass().getResource("OrdersInfoTable.fxml"));
+                    GridPane ordersInfoGrid = loader.load();
+                    rootPaneOrders.setBottom(ordersInfoGrid);
                 } catch (Exception e) {
-                    System.out.println("infoEvent " + e);
+                    System.out.println("infoOrdersEvent " + e);
                 }
             }
         }
@@ -107,21 +104,21 @@ public class ControllerSalesOrders extends ControllerSales implements Initializa
 
         ordersTable.setEditable(true);
         ObservableList<TableColumn> columns = ordersTable.getColumns();
-        TableColumn<Order,Integer> orderId = columns.get(0);
-        TableColumn<Order,LocalDate> deadline = columns.get(1);
-        TableColumn<Order,String> status = columns.get(2);
-        TableColumn<Order,Double> price = columns.get(3);
+        TableColumn<Order,Integer> orderIdCol = columns.get(0);
+        TableColumn<Order,LocalDate> deadlineCol = columns.get(1);
+        TableColumn<Order,String> statuscol = columns.get(2);
+        TableColumn<Order,Double> priceCol = columns.get(3);
 
 
-        orderId.setCellValueFactory(new PropertyValueFactory<Order,Integer>("orderId")); //orderId
-        deadline.setCellValueFactory(new PropertyValueFactory<Order,LocalDate>("deadline")); //deadline
-        status.setCellValueFactory(new PropertyValueFactory<Order,String>("status")); //status
-        price.setCellValueFactory(new PropertyValueFactory<Order,Double>("price")); //price
+        orderIdCol.setCellValueFactory(new PropertyValueFactory<Order,Integer>("orderId")); //orderId
+        deadlineCol.setCellValueFactory(new PropertyValueFactory<Order,LocalDate>("deadline")); //deadline
+        statuscol.setCellValueFactory(new PropertyValueFactory<Order,String>("status")); //status
+        priceCol.setCellValueFactory(new PropertyValueFactory<Order,Double>("price")); //price
 
-        ordersTable.getColumns().setAll(orderId, deadline, status, price);
+        ordersTable.getColumns().setAll(orderIdCol, deadlineCol, statuscol, priceCol);
         createOrderButton.setOnAction(createOrderEvent);
         deleteOrderButton.setOnAction(deleteOrderEvent);
-        ordersTable.setOnMousePressed(infoEvent);
+        ordersTable.setOnMousePressed(infoOrdersEvent);
         ordersTable.setItems(orders);
     }
 }

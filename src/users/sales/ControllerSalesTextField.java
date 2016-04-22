@@ -103,7 +103,7 @@ public class ControllerSalesTextField extends ControllerSales implements Initial
                 String customerRequests = customerRequestsField.getText();
                 LocalDate deadline = deadlinePicker.getValue();
                 double price = Double.parseDouble(priceField.getText());
-                String status = (String)statusBox.getValue();
+                OrderStatus status = (OrderStatus) statusBox.getValue();
                 int orderId = Integer.parseInt(orderIdField.getText());
                 int customerId = Integer.parseInt(customerIdField.getText());
                 int subcriptionId = Integer.parseInt(subscriptionIdField.getText());

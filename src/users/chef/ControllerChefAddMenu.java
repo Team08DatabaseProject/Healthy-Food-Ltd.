@@ -6,6 +6,7 @@ package users.chef;
 import classpackage.*;
 import classpackage.Menu;
 import div.Login;
+import div.PopupDialog;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
@@ -85,7 +86,12 @@ public class ControllerChefAddMenu extends ControllerChef implements Initializab
                     }
                 }
                 if (add) {
-                    testMenus.add(newMenu);
+                    if (db.addMenu(newMenu)) {
+                        testMenus.add(newMenu);
+                        PopupDialog.confirmationDialog("Result", "Menu \"" + newMenu.getName() + "\" added.");
+                    } else {
+                        PopupDialog.errorDialog("Error", "Menu could not be added.");
+                    }
                 }
             } catch (Exception e) {
                 System.out.println(e);

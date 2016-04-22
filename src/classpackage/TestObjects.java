@@ -150,13 +150,6 @@ public class TestObjects {
             menu1, menu2, menu3, menu4
     );
 
-
-
-
-
-
-
-
     public static LocalDate deadline1 = LocalDate.of(2016, 5, 1);
     public static LocalDate deadline2 = LocalDate.of(2016, 9, 2);
     public static LocalDate deadline3 = LocalDate.of(2016, 6, 3);
@@ -182,16 +175,22 @@ public class TestObjects {
     public static ObservableList<OrderLine> orderLineList4 = tm.getOrderListFromMenuList(dishList4);
     private static double price4 = tm.getOrderPriceFromMenuList(dishList4);
 
-    public static Order order1 = new Order("request1", deadline1, price1, "Created", orderLineList1);
-    public static Order order2 = new Order("request2", deadline2, price2, "Created", orderLineList2);
-    public static Order order3 = new Order("request3", deadline3, price3, "Created", orderLineList3);
-    public static Order order4 = new Order("request4", deadline4, price4, "Created", orderLineList4);
-    public static Order order5 = new Order("request5", deadline5, price2, "Created", orderLineList2);
+    public static OrderStatus orderStatus1 = new OrderStatus(1);
+    public static OrderStatus orderStatus2 = new OrderStatus(2);
+    public static OrderStatus orderStatus3 = new OrderStatus(3);
 
-    public static Order subOrder1 = new Order("subrequest1", subDeadline1, price1, "Created", orderLineList1);
-    public static Order subOrder2 = new Order("subrequest2", subDeadline2, price1, "Created", orderLineList1);
-    public static Order subOrder3 = new Order("subrequest3", subDeadline3, price1, "Created", orderLineList1);
-    public static Order subOrder4 = new Order("subrequest4", subDeadline4, price1, "Created", orderLineList1);
+    public static Order order1 = new Order(1, "request1", deadline1, null, price1, orderStatus1, orderLineList1, addressList.get(0));
+    public static Order order2 = new Order(2, "request2", deadline2, null, price2, orderStatus1, orderLineList2, addressList.get(1));
+    public static Order order3 = new Order(3, "request3", deadline3, null, price3, orderStatus1, orderLineList3, addressList.get(2));
+    public static Order order4 = new Order(4, "request4", deadline4, null, price4, orderStatus1, orderLineList4, addressList.get(3));
+    public static Order order5 = new Order(5, "request5", deadline5, null, price2, orderStatus1, orderLineList2, addressList.get(4));
+
+    public static ObservableList<Order> orderList = FXCollections.observableArrayList(order1, order2, order3, order4, order5);
+
+    public static Order subOrder1 = new Order("subrequest1", subDeadline1, price1, orderStatus1, orderLineList1);
+    public static Order subOrder2 = new Order("subrequest2", subDeadline2, price1, orderStatus1, orderLineList1);
+    public static Order subOrder3 = new Order("subrequest3", subDeadline3, price1, orderStatus1, orderLineList1);
+    public static Order subOrder4 = new Order("subrequest4", subDeadline4, price1, orderStatus1, orderLineList1);
 
 
     public static ObservableList<Order> allOrders = FXCollections.observableArrayList(
@@ -233,13 +232,26 @@ public class TestObjects {
 
     public static Subscription subscription1 = new Subscription(subStart1, subEnd1, subOrderList1);
 
-    public static Customer customer1 = new Customer(false, "email1", "fName1", "lName1", 12345678, addressList.get(0), null, null, orders1);
-    public static Customer customer2 = new Customer(false, "email2", "fName2", "lName2", 22345678, addressList.get(1), null, null, orders2);
-    public static Customer customer3 = new Customer(true, "email3", "fName3", "lName3", 32345678, addressList.get(2), "Business1", null, orders3);
-    public static Customer customer4 = new Customer(false, "email4", "fName4", "lName4", 42345678, addressList.get(3), null, null, orders4);
-    public static Customer customer5 = new Customer(true, "email5", "fName5", "lName5", 52345678, addressList.get(4), "Business2", null, orders5);
-    public static Customer customer6 = new Customer(false, "email6", "fName6", "lName6", 62345678, addressList.get(5), null, null, orders6);
-    public static Customer customer7 = new Customer(true, "email7", "fName7", "lName7", 72345678, addressList.get(6), "Business3", null, orders7);
+    public static ObservableList<Subscription> allSubscriptions = FXCollections.observableArrayList(
+            new Subscription(deadline1, deadline2, subOrderList1),
+            new Subscription(deadline3, deadline4, subOrderList1),
+            new Subscription(subStart1, subEnd1, subOrderList1)
+    );
+
+    public static Customer customer1 = new Customer(false, "email1", "fName1", "lName1", 12345678,
+            addressList.get(0), null, allSubscriptions.get(0), orders1);
+    public static Customer customer2 = new Customer(false, "email2", "fName2", "lName2", 22345678,
+            addressList.get(1), null, allSubscriptions.get(1), orders2);
+    public static Customer customer3 = new Customer(true, "email3", "fName3", "lName3", 32345678,
+            addressList.get(2), "Business1", allSubscriptions.get(2), orders3);
+    public static Customer customer4 = new Customer(false, "email4", "fName4", "lName4", 42345678,
+            addressList.get(3), null, null, orders4);
+    public static Customer customer5 = new Customer(true, "email5", "fName5", "lName5", 52345678,
+            addressList.get(4), "Business2", null, orders5);
+    public static Customer customer6 = new Customer(false, "email6", "fName6", "lName6", 62345678,
+            addressList.get(5), null, null, orders6);
+    public static Customer customer7 = new Customer(true, "email7", "fName7", "lName7", 72345678,
+            addressList.get(6), "Business3", null, orders7);
 
     public static ObservableList<Customer> allCustomers = FXCollections.observableArrayList(
             customer1, customer2, customer3, customer4, customer5, customer6, customer7

@@ -21,7 +21,7 @@ import java.util.Map;
 /**
  * Created by Trym Todalshaug on 20/04/2016.
  */
-public class ControllerSalesCustomerForm extends ControllerSales implements Initializable{
+public class ControllerSalesCustomerForm extends ControllerSalesCustomer implements Initializable{
 
     @FXML
     public GridPane addCustomerTable;
