@@ -27,6 +27,7 @@ import java.util.*;
 public class SqlQueries extends DBConnector {
 
 
+    // TODO: 22.04.2016 In Delete methods that include fex adress remember to delete the address as well
     // TODO: 19.04.2016 Refine methods to give confirmations on both execute() and executeUpdate()
     // TODO: 04.04.2016 the strings for Gui that deals with Orders should use just so we have this standardized
    /* public final String CREATED = "Created";
@@ -62,15 +63,6 @@ public class SqlQueries extends DBConnector {
     public final int DELIVERED = 5;
 
 
-
-
-
-
-
-
-
-
-
     /*
     Class where all methods that sql is required, shall be written.
      For example every method that requires getting data from database.
@@ -98,7 +90,7 @@ public class SqlQueries extends DBConnector {
             insertQuery.setString(1, newAddress.getAddress());
             insertQuery.setInt(2, newAddress.getZipCode());
             insertQuery.setString(3, newAddress.getPlace());
-            insertQuery.executeUpdate();
+            insertQuery.execute();
             ResultSet res = insertQuery.getGeneratedKeys();
             res.next();
             newAddress.setAddressId(res.getInt(1));
@@ -145,7 +137,7 @@ public class SqlQueries extends DBConnector {
 
     public boolean deleteAddress(Address address) {
         try {
-            String sql = "DELETE FROM address WHERE address_id = ?;";
+            String sql = "DELETE FROM address WHERE address_id = ?";
             PreparedStatement deleteQuery = con.prepareStatement(sql);
             deleteQuery.setInt(1, address.getAddressId());
             if (deleteQuery.executeUpdate() == 1) {
@@ -243,7 +235,6 @@ public class SqlQueries extends DBConnector {
         }
         return orderIds;
     }
-
 
 
     public ArrayList<Integer> getOrderIdsByCustomer(Customer customer) {
@@ -1068,24 +1059,24 @@ public class SqlQueries extends DBConnector {
                 //CHEF
             } else if (posId == 2) {
                 selectSql = "SELECT * FROM `order` WHERE status_id = ? OR ? OR ?";
+                selectQuery = con.prepareStatement(selectSql);
                 selectQuery.setInt(1, CREATED);
                 selectQuery.setInt(2, INPREPARATION);
                 selectQuery.setInt(3, READYFORDELIVERY);
-                selectQuery = con.prepareStatement(selectSql);
                 //DRIVER
             } else if (posId == 3) {
                 selectSql = "SELECT * FROM `order` WHERE status_id = ?;" +
                         "SELECT * FROM `order` WHERE status_id = ? AND delivery_date = DATE(now())";
+                selectQuery = con.prepareStatement(selectSql);
                 selectQuery.setInt(1, READYFORDELIVERY);
                 selectQuery.setInt(2, DELIVERED);
-                selectQuery = con.prepareStatement(selectSql);
             } else if (posId == 4) {
                 selectSql = "SELECT * FROM `order` WHERE status_id = ? OR ? OR ?";
+                selectQuery = con.prepareStatement(selectSql);
                 selectQuery.setInt(1, CREATED);
                 selectQuery.setInt(2, INPREPARATION);
                 selectQuery.setInt(3, READYFORDELIVERY);
                 selectQuery.setInt(4, DELIVERED);
-                selectQuery = con.prepareStatement(selectSql);
                 //SALES
             }
             res = selectQuery.executeQuery();
@@ -1095,10 +1086,14 @@ public class SqlQueries extends DBConnector {
                 int subscriptionId = res.getInt("subscription_id");
                 String customerRequests = res.getString("customer_requests");
                 LocalDate deadline = res.getDate("delivery_date").toLocalDate();
-                LocalDate actualDeliveryDate = res.getDate("delivered_date").toLocalDate();
                 double price = res.getDouble("price");
                 OrderStatus status = getOrderStatus(res.getInt("status_id"));
-                Address address = getAddress(res.getInt("address"));
+                Address address = getAddress(res.getInt("address_id"));
+                LocalDate actualDeliveryDate = null;
+                LocalDate actualDeliveryDateUnstable = res.getDate("delivered_date").toLocalDate();
+                if (actualDeliveryDateUnstable != null) {
+                    actualDeliveryDate = actualDeliveryDateUnstable;
+                }
                 Order order = new Order(orderId, customerRequests, deadline, actualDeliveryDate, price, status, null, address);
                 setOrderLinesInOrder(order, allDishes);
                 orders.add(order);
@@ -1119,8 +1114,8 @@ public class SqlQueries extends DBConnector {
         ResultSet res = null;
         try {
             con.setAutoCommit(false);
-            if(order.getAddress().getAddressId() == 0) {
-                if(!addAddress(order.getAddress())) {
+            if (order.getAddress().getAddressId() == 0) {
+                if (!addAddress(order.getAddress())) {
                     SqlCleanup.rullTilbake(con);
                     return false;
                 }
@@ -1135,12 +1130,12 @@ public class SqlQueries extends DBConnector {
             insertQuery.setDouble(6, order.getPrice());
             insertQuery.setInt(7, order.getAddress().getAddressId());
             insertQuery.setInt(8, order.getStatus().getStatusId());
-            if(subscription != null) {
+            if (subscription != null) {
                 insertQuery.setInt(2, subscription.getSubscriptionId());
             } else {
                 insertQuery.setNull(2, Types.INTEGER);
             }
-            if(insertQuery.executeUpdate() == 1) {
+            if (insertQuery.executeUpdate() == 1) {
                 con.commit();
                 res = insertQuery.getGeneratedKeys();
                 res.next();
@@ -1211,7 +1206,7 @@ public class SqlQueries extends DBConnector {
         return false;
     }
 
-    public boolean setOrderLinesInOrder(Order order, ObservableList<Dish> allDishes){
+    public boolean setOrderLinesInOrder(Order order, ObservableList<Dish> allDishes) {
         ResultSet res = null;
         ObservableList<OrderLine> dishLinesInThisOrder = FXCollections.observableArrayList();
         try {
@@ -1240,7 +1235,7 @@ public class SqlQueries extends DBConnector {
         return false;
     }
 
-//    Method for getting an Order status
+    //    Method for getting an Order status
     public OrderStatus getOrderStatus(int id) {
         try {
             String selectSql = "SELECT status_id, name FROM orderstatus WHERE status_id = ?";
@@ -1263,7 +1258,7 @@ public class SqlQueries extends DBConnector {
             String sqlSetning = "DELETE FROM `order` WHERE order_id = ?";
             PreparedStatement deleteQuery = con.prepareStatement(sqlSetning);
             deleteQuery.setInt(1, order.getOrderId());
-            if (deleteQuery.executeUpdate() != 0) {
+            if (deleteQuery.executeUpdate() == 1) {
                 return true;
             }
         } catch (SQLException e) {
@@ -1313,11 +1308,11 @@ public class SqlQueries extends DBConnector {
             selectQuery = con.prepareStatement(selectSql);
             res = selectQuery.executeQuery();
             while (res.next()) {
-                int supplierId = res.getInt("subscription_id");
+                int subscription_id = res.getInt("subscription_id");
                 LocalDate startDate = res.getDate("start_date").toLocalDate();
                 LocalDate endDate = res.getDate("end_date").toLocalDate();
                 int customerId = res.getInt("customer_id");
-                subscriptions.add(new Subscription(supplierId, startDate, endDate, null, customerId));
+                subscriptions.add(new Subscription(subscription_id, startDate, endDate, null, customerId));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -1359,12 +1354,10 @@ public class SqlQueries extends DBConnector {
     /*Supplier methods:*/
 
     public boolean addSupplier(Supplier supplier) {
-        boolean success = false;
         ResultSet res = null;
         try {
             con.setAutoCommit(false);
             if (!addAddress(supplier.getThisAddress())) {
-                con.setAutoCommit(true);
                 return false;
             }
             String insertSql = "INSERT INTO supplier(address_id, business_name, phone) VALUES(?,?,?)";
@@ -1372,23 +1365,41 @@ public class SqlQueries extends DBConnector {
             insertQuery.setInt(1, supplier.getThisAddress().getAddressId());
             insertQuery.setString(2, supplier.getBusinessName());
             insertQuery.setInt(3, supplier.getPhoneNumber());
-            insertQuery.executeQuery();
+            insertQuery.execute();
 
             res = insertQuery.getGeneratedKeys();
             res.next();
             supplier.setSupplierId(res.getInt(1));
-            success = true;
+            return true;
         } catch (SQLIntegrityConstraintViolationException e) {
             e.printStackTrace();
             System.out.println("Restraint violation in addSupplier");
         } catch (SQLException e) {
+            e.printStackTrace();
             System.out.println("Something went wrong: user registration failed in method addSupplier");
             SqlCleanup.rullTilbake(con);
         } finally {
             closeEverything(res, insertQuery, con);
         }
-        return success;
+        return false;
     }
+
+    //    Method for deleting The supplier in the parameters from db
+    public boolean deleteSupplier(Supplier supplier) {
+        try {
+            String sqlSetning = "DELETE FROM supplier WHERE supplier_id = " + supplier.getSupplierId();
+            PreparedStatement deleteQuery = con.prepareStatement(sqlSetning);
+            if (deleteQuery.executeUpdate() == 1) {
+                return true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            closeEverything(null, insertQuery, con);
+        }
+        return false;
+    }
+
 
     public ObservableList<Supplier> getAllSuppliers() {
         ObservableList<Supplier> suppliers = FXCollections.observableArrayList();
@@ -1420,7 +1431,7 @@ public class SqlQueries extends DBConnector {
             String sql = "UPDATE supplier SET address_id = ?, business_name = ?, " +
                     "phone = ? WHERE supplier_id = ?";
             updateQuery = con.prepareStatement(sql);
-            updateQuery.setInt(1, supplier.getSupplierId());
+            updateQuery.setInt(1, supplier.getThisAddress().getAddressId());
             updateQuery.setString(2, supplier.getBusinessName());
             updateQuery.setInt(3, supplier.getPhoneNumber());
             updateQuery.setInt(4, supplier.getSupplierId());
