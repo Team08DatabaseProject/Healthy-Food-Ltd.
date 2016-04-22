@@ -31,7 +31,7 @@ public class SqlQueries extends DBConnector {
 
     // TODO: 19.04.2016 Refine methods to give confirmations on both execute() and executeUpdate()
     // TODO: 04.04.2016 the strings for Gui that deals with Orders should use just so we have this standardized
-    public final String CREATED = "Created";
+   /* public final String CREATED = "Created";
     public final String INPREPARATION = "In preparation";
     public final String READYFORDELIVERY = "Ready for delivery";
     public final String UNDERDELIVERY = "Under delivery";
@@ -56,6 +56,22 @@ public class SqlQueries extends DBConnector {
     public String getDELIVERED() {
         return DELIVERED;
     }
+*/
+    public final int CREATED = 1;
+    public final int INPREPARATION = 2;
+    public final int READYFORDELIVERY = 3;
+    public final int UNDERDELIVERY = 4;
+    public final int DELIVERED = 5;
+
+
+
+
+
+
+
+
+
+
 
     /*
     Class where all methods that sql is required, shall be written.
@@ -120,7 +136,7 @@ public class SqlQueries extends DBConnector {
             updateQuery.setString(2, address.getAddress());
             updateQuery.setString(3, address.getPlace());
             updateQuery.setInt(4, address.getAddressId());
-            if(updateQuery.executeUpdate() == 1){
+            if (updateQuery.executeUpdate() == 1) {
                 return true;
             }
         } catch (SQLException e) {
@@ -199,7 +215,7 @@ public class SqlQueries extends DBConnector {
             updateQuery.setString(6, customer.getEmail());
             updateQuery.setInt(7, isBusiness);
             updateQuery.setInt(8, customer.getCustomerId());
-            if(updateQuery.executeUpdate() == 1){
+            if (updateQuery.executeUpdate() == 1) {
                 return true;
             }
         } catch (SQLException e) {
@@ -215,7 +231,7 @@ public class SqlQueries extends DBConnector {
         ArrayList<Integer> orderIds = new ArrayList<Integer>();
         ResultSet res = null;
         try {
-            String selectSql = "SELECT order_id FROM subscription_relation_order WHERE subscription_id = ?";
+            String selectSql = "SELECT order_id FROM n_order WHERE subscription_id = ?";
             selectQuery = con.prepareStatement(selectSql);
             selectQuery.setInt(1, subscription.getSubscriptionId());
             res = selectQuery.executeQuery();
@@ -229,6 +245,8 @@ public class SqlQueries extends DBConnector {
         }
         return orderIds;
     }
+
+
 
     public ArrayList<Integer> getOrderIdsByCustomer(Customer customer) {
         ArrayList<Integer> orderIds = new ArrayList<Integer>();
@@ -380,7 +398,7 @@ public class SqlQueries extends DBConnector {
             updateQuery.setDouble(1, dish.getPrice());
             updateQuery.setString(2, dish.getDishName());
             updateQuery.setInt(7, dish.getDishId());
-            if(updateQuery.executeUpdate() == 1){
+            if (updateQuery.executeUpdate() == 1) {
                 return true;
             }
         } catch (SQLException e) {
@@ -685,11 +703,10 @@ public class SqlQueries extends DBConnector {
     }
 
     public boolean updateEmployee(Employee employee) {
-        PreparedStatement updateEmpQuery = null;
         try {
             String updateSql = "UPDATE employee SET first_name = ?, last_name = ?, phone = ?, email = ?," +
-                    " username = ?, pos_id = ?, salary = ?, passhash = ? WHERE employee_id = ?";
-            updateEmpQuery = con.prepareStatement(updateSql);
+                    " username = ?, pos_id = ?, salary = ?, passhash = ? WHERE employee_id = ?;";
+            PreparedStatement updateEmpQuery = con.prepareStatement(updateSql);
             con.setAutoCommit(false);
             if (!updateAddress(employee.getAddress())) {
                 SqlCleanup.rullTilbake(con);
@@ -705,19 +722,22 @@ public class SqlQueries extends DBConnector {
             updateEmpQuery.setDouble(7, employee.getSalary());
             updateEmpQuery.setString(8, employee.getPassHash());
             updateEmpQuery.setInt(9, employee.getEmployeeId());
-            int rowsAffected = updateEmpQuery.executeUpdate();
-            con.commit();
-            if (rowsAffected == 1) {
+            if (updateEmpQuery.executeUpdate() == 1) {
+                con.commit();
                 return true;
+            } else {
+                SqlCleanup.rullTilbake(con);
+                return false;
             }
         } catch (SQLException e) {
             e.printStackTrace();
             SqlCleanup.rullTilbake(con);
         } finally {
-            closeEverything(null, updateEmpQuery, con);
+            SqlCleanup.settAutoCommit(con);
         }
         return false;
     }
+
 
     public boolean deleteEmployee(Employee employee) {
         try {
@@ -800,7 +820,7 @@ public class SqlQueries extends DBConnector {
             updateQuery.setDouble(4, ingredient.getPrice());
             updateQuery.setString(5, ingredient.getIngredientName());
             updateQuery.setInt(6, ingredient.getIngredientId());
-            if(updateQuery.executeUpdate() == 1){
+            if (updateQuery.executeUpdate() == 1) {
                 return true;
             }
         } catch (SQLException e) {
@@ -1026,22 +1046,22 @@ public class SqlQueries extends DBConnector {
                 selectSql = "SELECT * FROM n_order";
                 //CHEF
             } else if (posId == 2) {
-                selectSql = "SELECT * FROM n_order WHERE status = ? OR ? OR ?";
-                selectQuery.setString(1, CREATED);
-                selectQuery.setString(2, INPREPARATION);
-                selectQuery.setString(3, READYFORDELIVERY);
+                selectSql = "SELECT * FROM n_order WHERE status_id = ? OR ? OR ?";
+                selectQuery.setInt(1, CREATED);
+                selectQuery.setInt(2, INPREPARATION);
+                selectQuery.setInt(3, READYFORDELIVERY);
                 //DRIVER
             } else if (posId == 3) {
-                selectSql = "SELECT * FROM n_order WHERE status = ?;" +
-                        "SELECT * FROM n_order WHERE STATUS = ? AND delivery_date = DATE(now())";
-                selectQuery.setString(1, READYFORDELIVERY);
-                selectQuery.setString(2, DELIVERED);
+                selectSql = "SELECT * FROM n_order WHERE status_id = ?;" +
+                        "SELECT * FROM n_order WHERE status_id = ? AND delivery_date = DATE(now())";
+                selectQuery.setInt(1, READYFORDELIVERY);
+                selectQuery.setInt(2, DELIVERED);
             } else if (posId == 4) {
-                selectSql = "SELECT * FROM n_order WHERE status = ? OR ? OR ?";
-                selectQuery.setString(1, CREATED);
-                selectQuery.setString(2, INPREPARATION);
-                selectQuery.setString(3, READYFORDELIVERY);
-                selectQuery.setString(4, DELIVERED);
+                selectSql = "SELECT * FROM n_order WHERE status_id = ? OR ? OR ?";
+                selectQuery.setInt(1, CREATED);
+                selectQuery.setInt(2, INPREPARATION);
+                selectQuery.setInt(3, READYFORDELIVERY);
+                selectQuery.setInt(4, DELIVERED);
                 //SALES
             }
             selectQuery = con.prepareStatement(selectSql);
@@ -1054,7 +1074,7 @@ public class SqlQueries extends DBConnector {
                 LocalDate deadline = res.getDate("delivery_date").toLocalDate();
                 LocalDate actualDeliveryDate = res.getDate("delivered_date").toLocalDate();
                 double price = res.getDouble("price");
-                String status = res.getString("status");
+                OrderStatus status = getOrderStatus(res.getInt("status_id"));
                 Address address = getAddress(res.getInt("address"));
                 Order order = new Order(orderId, customerRequests, deadline, actualDeliveryDate, price, status, null, address);
                 orders.add(order);
@@ -1071,36 +1091,45 @@ public class SqlQueries extends DBConnector {
      customer_id will be set to null if customer is null. the order will be added to subscription_relation order
     if subscription is NOT null*/
 
-    public boolean addOrder(Customer customer, Order order, Subscription subscription) {
+    public boolean addOrder(Subscription subscription, Order order, Customer customer) {
         ResultSet res = null;
         try {
             con.setAutoCommit(false);
-            String insertSql = "INSERT INTO n_order(customer_id, customer_requests, delivery_date, delivered_date, " +
-                    "price, address, status) VALUES(?,?,?,?,?,?,?)";
-            insertQuery = con.prepareStatement(insertSql, Statement.RETURN_GENERATED_KEYS);
-
-
-            insertQuery.setString(2, order.getCustomerRequests());
-            insertQuery.setDate(3, Date.valueOf(order.getDeadline()));
-            insertQuery.setDate(4, Date.valueOf(order.getActualDeliveryDate()));
-            insertQuery.setDouble(5, order.getPrice());
-            insertQuery.setInt(6, order.getAddress().getAddressId());
-            insertQuery.setString(7, order.getStatus());
-            if (!(customer == null)) {
-                insertQuery.setInt(1, customer.getCustomerId());
-            } else {
-                insertQuery.setNull(1, Types.INTEGER);
+            if(order.getAddress().getAddressId() == 0) {
+                if(!addAddress(order.getAddress())) {
+                    SqlCleanup.rullTilbake(con);
+                    return false;
+                }
             }
-            insertQuery.executeQuery();
-            res = insertQuery.getGeneratedKeys();
-            res.next();
-            order.setOrderId(res.getInt(1));
-            addOrderInSubscription(subscription, order);
-            con.commit();
-            return true;
+            String insertSql = "INSERT INTO n_order(customer_id, subscription_id, customer_requests, delivery_date, delivered_date, " +
+                    "price, address_id, status_id) VALUES(?,?,?,?,?,?,?,?)";
+            insertQuery = con.prepareStatement(insertSql, Statement.RETURN_GENERATED_KEYS);
+            insertQuery.setInt(1, customer.getCustomerId());
+            insertQuery.setString(3, order.getCustomerRequests());
+            insertQuery.setDate(4, Date.valueOf(order.getDeadline()));
+            insertQuery.setDate(5, Date.valueOf(order.getActualDeliveryDate()));
+            insertQuery.setDouble(6, order.getPrice());
+            insertQuery.setInt(7, order.getAddress().getAddressId());
+            insertQuery.setInt(8, order.getStatus().getStatusId());
+            if(subscription != null) {
+                insertQuery.setInt(2, subscription.getSubscriptionId());
+            } else {
+                insertQuery.setNull(2, Types.INTEGER);
+            }
+            if(insertQuery.executeUpdate() == 1) {
+                con.commit();
+                res = insertQuery.getGeneratedKeys();
+                res.next();
+                order.setOrderId(res.getInt(1));
+                return true;
+            } else {
+                SqlCleanup.rullTilbake(con);
+                return false;
+            }
         } catch (SQLException e) {
             SqlCleanup.rullTilbake(con);
         } finally {
+            SqlCleanup.settAutoCommit(con);
             closeEverything(res, insertQuery, con);
         }
         return false;
@@ -1158,22 +1187,39 @@ public class SqlQueries extends DBConnector {
         return false;
     }
 
-//    Method for deleting an order
-public boolean deleteOrder(Order order) {
-    try {
-        String sqlSetning = "DELETE FROM n_order WHERE order_id = ?";
-        PreparedStatement deleteQuery = con.prepareStatement(sqlSetning);
-        deleteQuery.setInt(1, order.getOrderId());
-        if (deleteQuery.executeUpdate() != 0){
-            return true;
+//    Method for getting an Order status
+    public OrderStatus getOrderStatus(int id) {
+        try {
+            String selectSql = "SELECT status_id, name FROM orderstatus WHERE address_id = ?";
+            selectQuery = con.prepareStatement(selectSql);
+            selectQuery.setInt(1, id);
+            ResultSet res = selectQuery.executeQuery();
+            if (!res.next()) return null;
+            int statusId = res.getInt(1);
+            String name = res.getString(2);
+            return new OrderStatus(statusId, name);
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-    } catch (SQLException e) {
-        e.printStackTrace();
-    } finally {
-        closeEverything(null, insertQuery, con);
+        return null;
     }
-    return false;
-}
+
+    //    Method for deleting an order
+    public boolean deleteOrder(Order order) {
+        try {
+            String sqlSetning = "DELETE FROM n_order WHERE order_id = ?";
+            PreparedStatement deleteQuery = con.prepareStatement(sqlSetning);
+            deleteQuery.setInt(1, order.getOrderId());
+            if (deleteQuery.executeUpdate() != 0) {
+                return true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            closeEverything(null, insertQuery, con);
+        }
+        return false;
+    }
 
 
 
@@ -1323,7 +1369,7 @@ public boolean deleteOrder(Order order) {
             updateQuery.setString(2, supplier.getBusinessName());
             updateQuery.setInt(3, supplier.getPhoneNumber());
             updateQuery.setInt(4, supplier.getSupplierId());
-            if(updateQuery.executeUpdate() == 1){
+            if (updateQuery.executeUpdate() == 1) {
                 return true;
             }
         } catch (SQLException e) {
