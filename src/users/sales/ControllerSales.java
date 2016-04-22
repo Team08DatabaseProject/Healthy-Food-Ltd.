@@ -40,7 +40,6 @@ public class ControllerSales implements Initializable {
     }
 
     protected static SqlQueries db = new SqlQueries();
-    protected static TestObjects testObjects = new TestObjects();
     protected static ObservableList<Supplier> suppliers = db.getAllSuppliers();
     protected static ObservableList<Ingredient> ingredients = db.getAllIngredients(suppliers);
     protected static ObservableList<Dish> dishes = db.getAllDishes(ingredients);
@@ -69,7 +68,7 @@ public class ControllerSales implements Initializable {
         public void handle(ActionEvent event) {
             try {
                 FXMLLoader loader = new FXMLLoader();
-                loader.setLocation(getClass().getResource("OrdersTable.fxml"));
+                loader.setLocation(getClass().getResource("orders/OrdersTable.fxml"));
                 ordersTable = loader.load();
                 rootPaneSales.setCenter(ordersTable);
             } catch (Exception e) {
@@ -83,7 +82,7 @@ public class ControllerSales implements Initializable {
         public void handle(ActionEvent event) {
             try {
                 FXMLLoader loader = new FXMLLoader();
-                loader.setLocation(getClass().getResource("SubsTable.fxml"));
+                loader.setLocation(getClass().getResource("subscriptions/SubsTable.fxml"));
                 subsTable = loader.load();
                 rootPaneSales.setCenter(subsTable);
             } catch (Exception e) {
@@ -97,7 +96,7 @@ public class ControllerSales implements Initializable {
         public void handle(ActionEvent event) {
             try{
                 FXMLLoader loader = new FXMLLoader();
-                loader.setLocation(getClass().getResource("customersTable.fxml"));
+                loader.setLocation(getClass().getResource("customers/CustomersTable.fxml"));
                 customersTable = loader.load();
                 rootPaneSales.setCenter(customersTable);
             }catch (Exception exc){

@@ -935,11 +935,18 @@ public class SqlQueries extends DBConnector {
                 String name = res.getString("description");
 
 
-                ObservableList<Supplier> tempSupplier = FXCollections.observableArrayList();
-                allSuppliers.filtered(supplier -> supplier.getSupplierId() == supplierId).forEach(supplier1 -> tempSupplier.add(supplier1));
+                Supplier temp = null;
+                for (Supplier supplier :
+                        allSuppliers) {
+                    if (supplier.getSupplierId() == supplierId) {
+                        temp =supplier;
+                        break;
+                    }
+                }
+//                allSuppliers.filtered(supplier -> supplier.getSupplierId() == supplierId).forEach(supplier1 -> tempSupplier.add(supplier1));
 
                 try {
-                    Ingredient tempIngredient = new Ingredient(ingredientId, name, unit, quantityOwned, price, tempSupplier.get(0));
+                    Ingredient tempIngredient = new Ingredient(ingredientId, name, unit, quantityOwned, price, temp);
                     ingredients.add(tempIngredient);
                 } catch (Exception e) {
                     e.printStackTrace();

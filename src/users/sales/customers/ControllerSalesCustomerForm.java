@@ -1,4 +1,4 @@
-package users.sales;
+package users.sales.customers;
 
 import classpackage.*;
 import div.IntField;

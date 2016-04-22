@@ -1,4 +1,4 @@
-package users.sales;
+package users.sales.subscriptions;
 
 import classpackage.*;
 import javafx.collections.FXCollections;
@@ -17,6 +17,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.util.StringConverter;
+import users.sales.ControllerSales;
 
 import java.net.URL;
 import java.time.LocalDate;
@@ -29,18 +30,6 @@ import java.util.ResourceBundle;
 
 public class ControllerSalesSubs extends ControllerSales implements Initializable {
 
-    /*
-    ObservableList to get fetched  from database
-    */
-
-    private ObservableList<Order> allOrdersForSales = FXCollections.observableArrayList();
-    private ObservableList<Subscription> allSubscriptions = FXCollections.observableArrayList();
-    private ObservableList<Dish> allDishes = FXCollections.observableArrayList();
-    private ObservableList<Customer> allCustomers = FXCollections.observableArrayList();
-    private ObservableList<Address> allAdresses = FXCollections.observableArrayList();
-    private ObservableList<Menu> allMenus = FXCollections.observableArrayList();
-
-
     @FXML
     public BorderPane rootPaneSubs; //Root pane for subsTable.fxml
     public TableView subsTable; // Retrieves Tableview with fx:id="subsTable"
@@ -48,7 +37,6 @@ public class ControllerSalesSubs extends ControllerSales implements Initializabl
     public TableColumn subscriptionIdCol;
     public TableColumn fNameCol;
     public TableColumn lNameCol;
-    public BorderPane rootPaneSales; //RootPane for SalesWindow.fxml
 
     private SqlQueries query = new SqlQueries();
     //final ObservableList<Order> subsTest = query.getOrders(4);
@@ -83,55 +71,6 @@ public class ControllerSalesSubs extends ControllerSales implements Initializabl
             }
         }
     };
-
-    public ObservableList<Order> getAllOrdersForSales() {
-        return allOrdersForSales;
-    }
-
-    public void setAllOrdersForSales(ObservableList<Order> allOrdersForSales) {
-        this.allOrdersForSales = allOrdersForSales;
-    }
-
-    public ObservableList<Subscription> getAllSubscriptions() {
-        return allSubscriptions;
-    }
-
-    public void setAllSubscriptions(ObservableList<Subscription> allSubscriptions) {
-        this.allSubscriptions = allSubscriptions;
-    }
-
-    public ObservableList<Dish> getAllDishes() {
-        return allDishes;
-    }
-
-    public void setAllDishes(ObservableList<Dish> allDishes) {
-        this.allDishes = allDishes;
-    }
-
-    public ObservableList<Customer> getAllCustomers() {
-        return allCustomers;
-    }
-
-    public void setAllCustomers(ObservableList<Customer> allCustomers) {
-        this.allCustomers = allCustomers;
-    }
-
-    public ObservableList<Address> getAllAdresses() {
-        return allAdresses;
-    }
-
-    public void setAllAdresses(ObservableList<Address> allAdresses) {
-        this.allAdresses = allAdresses;
-    }
-
-    public ObservableList<Menu> getAllMenus() {
-        return allMenus;
-    }
-
-    public void setAllMenus(ObservableList<Menu> allMenus) {
-        this.allMenus = allMenus;
-    }
-
 
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
 

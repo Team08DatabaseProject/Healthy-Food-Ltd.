@@ -1,4 +1,4 @@
-package users.sales;
+package users.sales.orders;
 
 import classpackage.*;
 import java.lang.String;
@@ -10,7 +10,6 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -18,6 +17,7 @@ import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.GridPane;
 import javafx.util.StringConverter;
 import javafx.util.converter.IntegerStringConverter;
+import users.sales.ControllerSales;
 
 import java.net.URL;
 import java.time.LocalDate;
@@ -121,12 +121,11 @@ public class ControllerSalesOrdersForm extends ControllerSales implements Initia
                 Dish dishes = new Dish(price, dishName, dishLines);
                 ObservableList<Dish> dishesInThisOrder = FXCollections.observableArrayList();
 
-                ObservableList<Order> order = FXCollections.observableArrayList(
-                        new Order(customerRequests, deadline, price, status, dishesInThisOrder)
-                );
-                Subscription subscription = new Subscription(startSubscription, endSubscription, order);
+                orders.add(new Order(customerRequests, deadline, price, status, dishesInThisOrder));
+
+                Subscription subscription = new Subscription(startSubscription, endSubscription, orders);
                 Customer customer = new Customer(isBusiness, email, firstName, lastName, phoneNumber,
-                                                 newAddress, businessName, subscription, order);
+                                                 newAddress, businessName, subscription, orders);
             } catch(Exception exc) {
                 System.out.println("createOrderFieldEvent: " + exc);
             }

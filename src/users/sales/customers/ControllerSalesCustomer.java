@@ -1,4 +1,4 @@
-package users.sales;
+package users.sales.customers;
 
 import classpackage.Customer;
 import classpackage.Subscription;
@@ -19,6 +19,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
+import users.sales.ControllerSales;
 
 import java.net.URL;
 import java.time.LocalDate;

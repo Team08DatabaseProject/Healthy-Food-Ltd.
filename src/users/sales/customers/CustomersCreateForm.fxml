@@ -8,7 +8,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <GridPane fx:id="addCustomerTable" hgap="10" prefHeight="500.0" prefWidth="1600.0" vgap="10" BorderPane.alignment="CENTER"
-          xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="users.sales.ControllerSalesCustomerForm">
+          xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="users.sales.customers.ControllerSalesCustomerForm">
 
     <padding>
         <Insets bottom="25" left="30" right="20" top="25" />

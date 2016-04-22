@@ -10,7 +10,7 @@
 <?import java.lang.*?>
 
 <GridPane fx:id="ordersInfoGrid" prefHeight="200.0" prefWidth="1600.0" BorderPane.alignment="CENTER" xmlns="http://javafx.com/javafx/8"
-          xmlns:fx="http://javafx.com/fxml/1" fx:controller="users.sales.ControllerSalesOrdersInfo" stylesheets="@/users/sales/SalesStyle.css">
+          xmlns:fx="http://javafx.com/fxml/1" fx:controller="users.sales.orders.ControllerSalesOrdersInfo" stylesheets="@/users/sales/SalesStyle.css">
 
     <padding>
         <Insets bottom="25" left="30" right="20" top="25" />
