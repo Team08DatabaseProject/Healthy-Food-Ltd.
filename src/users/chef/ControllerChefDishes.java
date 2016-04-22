@@ -1,6 +1,7 @@
 package users.chef;
 
 import classpackage.*;
+import div.PopupDialog;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -79,8 +80,14 @@ public class ControllerChefDishes extends ControllerChef implements Initializabl
             try {
                 selectedDish = (Dish) dishTable.getSelectionModel().getSelectedItem();
                 if (selectedDish != null) {
-                    testDishes.remove(selectedDish);
-                    dishTable.setItems(testDishes);
+                    if (db.deleteDish(selectedDish)) {
+                        testDishes.remove(selectedDish);
+                        dishTable.setItems(testDishes);
+                        PopupDialog.confirmationDialog("Result", "Dish \"" + selectedDish.getDishName() + "\" removed.");
+                    } else {
+                        PopupDialog.errorDialog("Error", "Dish could not be removed.");
+                    }
+
                 } else {
                     Alert alert = new Alert(Alert.AlertType.WARNING);
                     alert.setTitle("No selection");
@@ -129,7 +136,6 @@ public class ControllerChefDishes extends ControllerChef implements Initializabl
                 }
             };
         });
-
 
         dishTable.getColumns().setAll(dishName, dishPrice);
         dishTable.setItems(testDishes);

@@ -1,6 +1,7 @@
 package users.chef;
 
 import classpackage.*;
+import div.PopupDialog;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -63,9 +64,15 @@ public class ControllerChefAddDish extends ControllerChef implements Initializab
         @Override
         public void handle(ActionEvent event) {
             try {
-                if (!(dishNameString.equals(null) || dishPriceFactorString.equals(null) || chosenDishLines.isEmpty())) {
+                if (!(dishNameString.isEmpty() || dishPriceFactorString.isEmpty() || chosenDishLines.isEmpty())) {
                     Dish newDish = new Dish(dishPrice, dishNameString, chosenDishLines);
-                    testDishes.add(newDish);
+                    if(db.addDish(newDish)) {
+                        PopupDialog.confirmationDialog("Result", "Dish \"" + newDish.getDishName() + "\" added.");
+                        testDishes.add(newDish);
+                    } else {
+                        PopupDialog.errorDialog("Error", "Dish could not be added.");
+                    }
+
                 }
             } catch (Exception exc) {
                 System.out.println(exc);
@@ -133,14 +140,14 @@ public class ControllerChefAddDish extends ControllerChef implements Initializab
         public void handle(ActionEvent event) {
             try {
                 boolean add = true;
-                if (selectedDishLine != null) {
+                if (selectedIngredient != null) {
                     for (DishLine dl : chosenDishLines) {
-                        if (dl.getIngredient().getIngredientName().equals(selectedDishLine.getIngredient().getIngredientName())) {
+                        if (dl.getIngredient().getIngredientName().equals(selectedIngredient.getIngredientName())) {
                             add = false;
                         }
                     }
                     if (add) {
-                        chosenDishLines.add(selectedDishLine);
+                        chosenDishLines.add(new DishLine(selectedIngredient));
                         chosenIngTable.setItems(chosenDishLines);
                     } else {
                         Alert alert = new Alert(Alert.AlertType.WARNING);

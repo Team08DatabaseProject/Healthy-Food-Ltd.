@@ -1,6 +1,7 @@
 package users.chef;
 
 import classpackage.*;
+import div.PopupDialog;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -38,8 +39,6 @@ public class ControllerChefEditDish extends ControllerChef implements Initializa
     public TableColumn currentIngAmount;
     public TableColumn currentIngUnit;
     public TableColumn currentIngPrice;
-    public Button editDishNameButton;
-    public Button editPriceButton;
     public Label currentNameLabel;
     public Label currentPriceLabel;
     public Button editDishCommitButton;
@@ -51,7 +50,8 @@ public class ControllerChefEditDish extends ControllerChef implements Initializa
     private double dishPrice = 0;
 
     // Current DishLines (ingredients) in the dish being edited
-    ObservableList<DishLine> currentDishLines = selectedDish.getAllDishLinesForThisDish();
+    ObservableList<DishLine> oldDishLines = FXCollections.observableArrayList(); //= selectedDish.getAllDishLinesForThisDish();
+    ObservableList<DishLine> currentDishLines = FXCollections.observableArrayList();
 
 
     private final NumberFormat nf = NumberFormat.getNumberInstance();
@@ -121,8 +121,14 @@ public class ControllerChefEditDish extends ControllerChef implements Initializa
                         }
                     }
                     if (remove) {
-                        currentDishLines.remove(selectedDishLine);
-                        currentIngTable.setItems(currentDishLines);
+                        ObservableList<DishLine> removeDishLine = FXCollections.observableArrayList(selectedDishLine);
+                        if (db.deleteIngredientsInDish(selectedDish, removeDishLine)) {
+                            currentDishLines.remove(selectedDishLine);
+                            currentIngTable.setItems(currentDishLines);
+                            PopupDialog.confirmationDialog("Result", "Removed ingredient: \"" + selectedDishLine.getIngredient().getIngredientName()
+                            + "\" from dish: \"" + selectedDish.getDishName() + "\".");
+                        }
+
                     } else {
                         Alert alert = new Alert(Alert.AlertType.WARNING);
                         alert.setTitle("Error");
@@ -181,6 +187,14 @@ public class ControllerChefEditDish extends ControllerChef implements Initializa
 
 
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
+        oldDishLines = selectedDish.getAllDishLinesForThisDish();
+
+        currentDishLines.addAll(oldDishLines);
+
+        for (DishLine dl : currentDishLines) {
+            System.out.println(dl.getIngredient().getIngredientName());
+        }
+
 
         editIngredientCB.setItems(testIngredients);
         editDishNameField.setText(selectedDish.getDishName());

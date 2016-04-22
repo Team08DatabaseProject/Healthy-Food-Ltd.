@@ -48,6 +48,5 @@
             <Label fx:id="currentPriceLabel" prefWidth="200" prefHeight="50" text="Price: "/>
             <Button fx:id="editDishCommitButton" prefWidth="150" prefHeight="50" text="Commit changes"/>
         </VBox>
-
     </children>
 </GridPane>

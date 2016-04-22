@@ -18,6 +18,11 @@ public class OrderLine {
         this.amount.set(amount);
     }
 
+    public OrderLine(Dish dish) {
+        this.dish.set(dish);
+        this.amount.set(1);
+    }
+
     public Dish getDish() {
         return dish.get();
     }

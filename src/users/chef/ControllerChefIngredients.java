@@ -3,9 +3,15 @@ package users.chef;
 import classpackage.DishLine;
 import classpackage.Ingredient;
 import classpackage.Supplier;
+import div.PopupDialog;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.StringProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
@@ -46,12 +52,17 @@ public class ControllerChefIngredients extends ControllerChef implements Initial
     public Button removeIngButton;
     public Button refreshIngTableButton;
 
+    private ObservableList<Ingredient> ingredientsCopy = FXCollections.observableArrayList();
+
     EventHandler<ActionEvent> applyChangesButtonClick = new EventHandler<ActionEvent>() {
         @Override
         public void handle(ActionEvent event) {
             try {
                 for (Ingredient ing : testIngredients) {
-                    System.out.println(ing.getIngredientName());
+                    if (ing.isChanged()) {
+                        ingredientsCopy.add(ing);
+                        System.out.println(ing.getIngredientName());
+                    }
                 }
             } catch (Exception exc) {
                 System.out.println(exc);
@@ -93,22 +104,16 @@ public class ControllerChefIngredients extends ControllerChef implements Initial
         @Override
         public void handle(ActionEvent event) {
             try {
-                /*
-                * Everything here to do with DishLine is due to the fact that
-                * testDishLines is used in other classes, while this class uses
-                * testIngredients, and we need to make sure that they match each other.
-                * Hopefully this will have a nicer solution once database is implemented.
-                 */
                 selectedIngredient = (Ingredient) ingTable.getSelectionModel().getSelectedItem();
-                testIngredients.forEach(ing -> {
-                    if (selectedIngredient.equals(ing)) {
-                        selectedIngredient = ing;
-                    }
-                 });
-
                 if (selectedIngredient != null) {
-                    testIngredients.remove(selectedIngredient);
-                    ingTable.setItems(testIngredients);
+                    if (db.deleteIngredient(selectedIngredient)) {
+                        testIngredients.remove(selectedIngredient);
+                        ingTable.setItems(testIngredients);
+                        PopupDialog.confirmationDialog("Result", "Ingredient: \"" + selectedIngredient.getIngredientName() + "\" deleted.");
+                    } else {
+                        PopupDialog.errorDialog("Error", "Could not remove ingredient.");
+                    }
+
                 } else {
                     Alert alert = new Alert(Alert.AlertType.WARNING);
                     alert.setTitle("No selection");
@@ -141,19 +146,22 @@ public class ControllerChefIngredients extends ControllerChef implements Initial
                 new EventHandler<CellEditEvent<Ingredient, String>>() {
                     @Override
                     public void handle(CellEditEvent<Ingredient, String> event) {
-                        (event.getTableView().getItems().get(event.getTablePosition().
-                                getRow())).setIngredientName(event.getNewValue());
+                        event.getTableView().getItems().get(event.getTablePosition().getRow()).setIngredientName(event.getNewValue());
+                        event.getTableView().getItems().get(event.getTablePosition().getRow()).setChanged();
+
                     }
                 });
 
 
         ingUnit.setCellFactory(TextFieldTableCell.forTableColumn());
+
         ingUnit.setOnEditCommit(
                 new EventHandler<CellEditEvent<Ingredient, String>>() {
                     @Override
                     public void handle(CellEditEvent<Ingredient, String> event) {
-                        (event.getTableView().getItems().get(event.getTablePosition().
-                                getRow())).setUnit(event.getNewValue());
+                        (event.getTableView().getItems().get(event.getTablePosition().getRow())).setUnit(event.getNewValue());
+                        event.getTableView().getItems().get(event.getTablePosition().getRow()).setChanged();
+
                     }
                 });
 
@@ -163,6 +171,7 @@ public class ControllerChefIngredients extends ControllerChef implements Initial
                     @Override
                     public void handle(CellEditEvent<Ingredient, Double> event) {
                         event.getTableView().getItems().get(event.getTablePosition().getRow()).setPrice(event.getNewValue());
+                        event.getTableView().getItems().get(event.getTablePosition().getRow()).setChanged();
                     }
                 }
         );
@@ -173,6 +182,7 @@ public class ControllerChefIngredients extends ControllerChef implements Initial
                     @Override
                     public void handle(CellEditEvent<Ingredient, Double> event) {
                         event.getTableView().getItems().get(event.getTablePosition().getRow()).setQuantityOwned(event.getNewValue());
+                        event.getTableView().getItems().get(event.getTablePosition().getRow()).setChanged();
                     }
                 }
         );

@@ -14,6 +14,7 @@ public class Ingredient {
     private DoubleProperty price = new SimpleDoubleProperty();
     private IntegerProperty supplierId = new SimpleIntegerProperty();
     private ObjectProperty<Supplier> supplier = new SimpleObjectProperty<>();
+    private boolean changed = false;
 
     // From database
     public Ingredient(int ingredientId, String ingredientName, String unit, double quantityOwned, double price, Supplier supplier) {
@@ -32,6 +33,14 @@ public class Ingredient {
         this.quantityOwned.set(quantityOwned);
         this.price.set(price);
         this.supplier.set(supplier);
+    }
+
+    public void setChanged() {
+        changed = true;
+    }
+
+    public boolean isChanged() {
+        return changed;
     }
 
     public int getIngredientId() {

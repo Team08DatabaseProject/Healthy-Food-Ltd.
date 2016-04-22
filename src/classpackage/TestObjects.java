@@ -175,16 +175,22 @@ public class TestObjects {
     public static ObservableList<OrderLine> orderLineList4 = tm.getOrderListFromMenuList(dishList4);
     private static double price4 = tm.getOrderPriceFromMenuList(dishList4);
 
-    public static Order order1 = new Order("request1", deadline1, price1, "Created", orderLineList1);
-    public static Order order2 = new Order("request2", deadline2, price2, "Created", orderLineList2);
-    public static Order order3 = new Order("request3", deadline3, price3, "Created", orderLineList3);
-    public static Order order4 = new Order("request4", deadline4, price4, "Created", orderLineList4);
-    public static Order order5 = new Order("request5", deadline5, price2, "Created", orderLineList2);
+    public static OrderStatus orderStatus1 = new OrderStatus(1);
+    public static OrderStatus orderStatus2 = new OrderStatus(2);
+    public static OrderStatus orderStatus3 = new OrderStatus(3);
 
-    public static Order subOrder1 = new Order("subrequest1", subDeadline1, price1, "Created", orderLineList1);
-    public static Order subOrder2 = new Order("subrequest2", subDeadline2, price1, "Created", orderLineList1);
-    public static Order subOrder3 = new Order("subrequest3", subDeadline3, price1, "Created", orderLineList1);
-    public static Order subOrder4 = new Order("subrequest4", subDeadline4, price1, "Created", orderLineList1);
+    public static Order order1 = new Order(1, "request1", deadline1, null, price1, orderStatus1, orderLineList1, addressList.get(0));
+    public static Order order2 = new Order(2, "request2", deadline2, null, price2, orderStatus1, orderLineList2, addressList.get(1));
+    public static Order order3 = new Order(3, "request3", deadline3, null, price3, orderStatus1, orderLineList3, addressList.get(2));
+    public static Order order4 = new Order(4, "request4", deadline4, null, price4, orderStatus1, orderLineList4, addressList.get(3));
+    public static Order order5 = new Order(5, "request5", deadline5, null, price2, orderStatus1, orderLineList2, addressList.get(4));
+
+    public static ObservableList<Order> orderList = FXCollections.observableArrayList(order1, order2, order3, order4, order5);
+
+    public static Order subOrder1 = new Order("subrequest1", subDeadline1, price1, orderStatus1, orderLineList1);
+    public static Order subOrder2 = new Order("subrequest2", subDeadline2, price1, orderStatus1, orderLineList1);
+    public static Order subOrder3 = new Order("subrequest3", subDeadline3, price1, orderStatus1, orderLineList1);
+    public static Order subOrder4 = new Order("subrequest4", subDeadline4, price1, orderStatus1, orderLineList1);
 
 
     public static ObservableList<Order> allOrders = FXCollections.observableArrayList(
