@@ -15,7 +15,6 @@
                 <TableColumn fx:id="dishQuantityCol" text="Dish quantity" prefWidth="100"/>
                 <TableColumn fx:id="priceCol" text="Price" prefWidth="80"/>
                 <TableColumn fx:id="statusCol" text="Status" prefWidth="180"/>
-                <TableColumn fx:id="infoCol" text="View order info"/>
             </columns>
             <columnResizePolicy><TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/></columnResizePolicy>
         </TableView>

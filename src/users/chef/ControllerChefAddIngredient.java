@@ -57,7 +57,7 @@ public class ControllerChefAddIngredient extends ControllerChef implements Initi
                 double quantity = Double.parseDouble(ingQuantityField.getText());
                 Ingredient newIngredient = new Ingredient(name, unit, quantity, price, selectedSupplier);
                 if(db.addIngredient(newIngredient)) {
-                    testIngredients.add(newIngredient);
+                    ingredientList.add(newIngredient);
                     PopupDialog.confirmationDialog("Result", "Ingredient \"" + newIngredient.getIngredientName() + "\" added.");
                 } else {
                     PopupDialog.errorDialog("Error", "Could not add ingredient.");
@@ -68,11 +68,9 @@ public class ControllerChefAddIngredient extends ControllerChef implements Initi
         }
     };
 
-
-
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
 
-        ingSupplierCB.setItems(testSuppliers);
+        ingSupplierCB.setItems(supplierList);
         ingSupplierCB.setPromptText("Supplier");
 
         ingSupplierCB.setConverter(new StringConverter<Supplier>() {
