@@ -26,6 +26,15 @@ public class Ingredient {
         this.supplier.set(supplier);
     }
 
+    // From database without Supplier object
+    public Ingredient(int ingredientId, String ingredientName, String unit, double quantityOwned, double price) {
+        this.ingredientId.set(ingredientId);
+        this.ingredientName.set(ingredientName);
+        this.unit.set(unit);
+        this.quantityOwned.set(quantityOwned);
+        this.price.set(price);
+    }
+
     // to database
     public Ingredient(String ingredientName, String unit, double quantityOwned, double price, Supplier supplier) {
         this.ingredientName.set(ingredientName);

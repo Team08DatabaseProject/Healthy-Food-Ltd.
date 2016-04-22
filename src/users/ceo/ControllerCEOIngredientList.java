@@ -50,9 +50,8 @@ public class ControllerCEOIngredientList extends ControllerCEOInventory implemen
 
 	public void initialize(URL fxmlFileLocation, ResourceBundle resources) { // Required method for Initializable, runs at program launch
 		ingredients = db.getIngredientsBySupplierId(selectedSupplier.get().getSupplierId());
-
 		nameCol.setCellValueFactory(new PropertyValueFactory<>("ingredientName"));
-		quantityCol.setCellValueFactory(new PropertyValueFactory<>("quanityOwned"));
+		quantityCol.setCellValueFactory(new PropertyValueFactory<>("quantityOwned"));
 		unitCol.setCellValueFactory(new PropertyValueFactory<>("unit"));
 		priceCol.setCellValueFactory(new PropertyValueFactory<>("price"));
 		ingredientsTable.setItems(ingredients);

@@ -1,6 +1,6 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TableColumn?>
-<TableView fx:id="suppliersTable" fx:controller="users.ceo.ControllerCEOIngredientList" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" >
+<TableView fx:id="ingredientsTable" fx:controller="users.ceo.ControllerCEOIngredientList" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" >
 	<columns>
 		<TableColumn fx:id="nameCol" prefWidth="20.0" text="Name" />
 		<TableColumn fx:id="quantityCol" prefWidth="40.0" text="Quantity owned" />

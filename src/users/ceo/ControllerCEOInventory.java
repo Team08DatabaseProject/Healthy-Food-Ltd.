@@ -82,6 +82,7 @@ public class ControllerCEOInventory extends ControllerCEO implements Initializab
 				formStage.setScene(formScene);
 				formStage.show();
 			} catch (Exception exc) {
+				exc.printStackTrace();
 				System.out.println(exc);
 			}
 		}
