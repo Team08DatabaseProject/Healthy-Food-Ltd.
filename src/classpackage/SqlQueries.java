@@ -25,6 +25,7 @@ import java.util.*;
 * Subscription to Customer
 * 
 * */
+    /*asdf*/
 
 public class SqlQueries extends DBConnector {
 
