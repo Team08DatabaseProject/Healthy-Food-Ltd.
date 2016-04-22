@@ -68,7 +68,7 @@ public class ControllerChefAddDish extends ControllerChef implements Initializab
                     Dish newDish = new Dish(dishPrice, dishNameString, chosenDishLines);
                     if(db.addDish(newDish)) {
                         PopupDialog.confirmationDialog("Result", "Dish \"" + newDish.getDishName() + "\" added.");
-                        testDishes.add(newDish);
+                        dishList.add(newDish);
                     } else {
                         PopupDialog.errorDialog("Error", "Dish could not be added.");
                     }
@@ -168,7 +168,7 @@ public class ControllerChefAddDish extends ControllerChef implements Initializab
 
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
 
-        ingredientComboBox.setItems(testIngredients);
+        ingredientComboBox.setItems(ingredientList);
         ingredientComboBox.setConverter(new StringConverter<Ingredient>() {
             @Override
             public String toString(Ingredient ingredient) {

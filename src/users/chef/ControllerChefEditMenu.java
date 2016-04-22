@@ -181,7 +181,7 @@ public class ControllerChefEditMenu extends ControllerChef implements Initializa
             mealTypes.add(selectedMenu.getMealType());
         }
 
-        editDishCB.setItems(testDishes);
+        editDishCB.setItems(dishList);
         editDishCB.setConverter(new StringConverter<Dish>() {
             @Override
             public String toString(Dish dish) {

@@ -1,5 +1,6 @@
 package classpackage;
 
+import javafx.beans.binding.NumberBinding;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleDoubleProperty;
@@ -11,15 +12,18 @@ import javafx.beans.property.SimpleObjectProperty;
 public class DishLine {
     private ObjectProperty<Ingredient> ingredient = new SimpleObjectProperty<>();
     private DoubleProperty amount = new SimpleDoubleProperty();
+    private NumberBinding total;
 
     public DishLine(Ingredient ingredient, double amount) {
         this.ingredient.set(ingredient);
         this.amount.set(amount);
+        total = this.amount.multiply(ingredient.priceProperty());
     }
 
     public DishLine(Ingredient ingredient) {
         this.ingredient.set(ingredient);
         this.amount.set(1);
+        total = this.amount.multiply(ingredient.priceProperty());
     }
 
     public Ingredient getIngredient() {
@@ -44,6 +48,14 @@ public class DishLine {
 
     public void setAmount(double amount) {
         this.amount.set(amount);
+    }
+
+    public double getTotal() {
+        return total.getValue().doubleValue();
+    }
+
+    public String getUnitAndAmount() {
+        return getAmount() + " " + getIngredient().getUnit();
     }
 
     // TODO: 10.04.2016 Probably needs revision do to GUI
