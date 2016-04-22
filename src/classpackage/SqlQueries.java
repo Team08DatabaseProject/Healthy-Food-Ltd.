@@ -25,7 +25,6 @@ import java.util.*;
 * Subscription to Customer
 * 
 * */
-    /*asdf*/
 
 public class SqlQueries extends DBConnector {
 
@@ -875,6 +874,28 @@ public class SqlQueries extends DBConnector {
         return false;
     }
 
+    public ObservableList<Ingredient> getIngredientsBySupplierId(int supplierId) {
+        ObservableList<Ingredient> ingredients = FXCollections.observableArrayList();
+        try {
+            String selectSql = "SELECT ingredient_id, quantity_owned, unit, price, description FROM ingredient WHERE supplier_id = ?;";
+            selectQuery = con.prepareStatement(selectSql);
+            selectQuery.setInt(1, supplierId);
+            ResultSet res = selectQuery.executeQuery();
+            while (res.next()) {
+                int ingredientId = res.getInt(1);
+                double quantity = res.getDouble(2);
+                String unit = res.getString(3);
+                double price = res.getDouble(4);
+                String description = res.getString(5);
+                Ingredient ingredient = new Ingredient(ingredientId, description, unit, quantity, price);
+                ingredients.add(ingredient);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return ingredients;
+    }
+
     //    Method for removing rows aka dishlines from dishline. Dishlines sent it is removed from the table.
     public boolean deleteIngredientsInDish(Dish dish, ObservableList<DishLine> dishLines) {
         PreparedStatement deleteQuery = null;
@@ -1191,7 +1212,7 @@ public class SqlQueries extends DBConnector {
 //    Method for getting an Order status
     public OrderStatus getOrderStatus(int id) {
         try {
-            String selectSql = "SELECT status_id, name FROM orderstatus WHERE address_id = ?";
+            String selectSql = "SELECT status_id, name FROM orderstatus WHERE status_id = ?";
             selectQuery = con.prepareStatement(selectSql);
             selectQuery.setInt(1, id);
             ResultSet res = selectQuery.executeQuery();
@@ -1379,6 +1400,26 @@ public class SqlQueries extends DBConnector {
             closeEverything(null, updateQuery, con);
         }
         return false;
+    }
+
+    //    Method for getting all OrderStatus types
+    public ObservableList<OrderStatus> getStatusTypes() {
+        ObservableList<OrderStatus> statusTypes = FXCollections.observableArrayList();
+        try {
+            String selectSql = "SELECT status_id, name FROM orderstatus;";
+            selectQuery = con.prepareStatement(selectSql);
+            ResultSet res = selectQuery.executeQuery();
+
+            while (res.next()) {
+                int statusId = res.getInt(1);
+                String name = res.getString(2);
+                statusTypes.add(new OrderStatus(statusId, name));
+            }
+            return statusTypes;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 
