@@ -76,14 +76,7 @@ public class SqlQueries extends DBConnector {
 
     }
 
-
-    // method for registering new Ingredient
-    // Method for registering new customer
-    /*MultipleSelectionModel selector = new MultipleSelectionModel() {
-    }*/
-    // TODO: 31.03.2016 is this method finished or should there sqlcleanup be called? As well as a more specific Exception handled?
     public boolean addAddress(Address newAddress) {
-        boolean success = false;
         try {
             String sql = "INSERT INTO address(address, zipcode, place) VALUES(?, ?, ?);";
             insertQuery = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
@@ -94,11 +87,11 @@ public class SqlQueries extends DBConnector {
             ResultSet res = insertQuery.getGeneratedKeys();
             res.next();
             newAddress.setAddressId(res.getInt(1));
-            success = true;
+            return true;
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return success;
+        return false;
     }
 
     public Address getAddress(int addressId) {
@@ -156,7 +149,8 @@ public class SqlQueries extends DBConnector {
         ResultSet res = null;
         try {
             con.setAutoCommit(false);
-            if (addAddress(theCustomer.getAddress())) {
+            if (!addAddress(theCustomer.getAddress())) {
+                System.out.println("Error Here!");
                 return false;
             }
             String sqlSetning = "INSERT INTO customer(address_id, business_name, first_name, last_name, phone, email, isbusiness) VALUES(?,?,?,?,?,?,?)";
@@ -480,6 +474,7 @@ public class SqlQueries extends DBConnector {
                 deleteQuery.execute();
             }
             con.commit();
+            return true;
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -803,7 +798,7 @@ public class SqlQueries extends DBConnector {
             String sql = "UPDATE ingredient SET supplier_id = ?, quantity_owned = ?, unit = ?, " +
                     "price = ?, description = ? WHERE ingredient_id = ?";
             updateQuery = con.prepareStatement(sql);
-            updateQuery.setInt(1, ingredient.getSupplierId());
+            updateQuery.setInt(1, ingredient.getSupplier().getSupplierId());
             updateQuery.setDouble(2, ingredient.getQuantityOwned());
             updateQuery.setString(3, ingredient.getUnit());
             updateQuery.setDouble(4, ingredient.getPrice());
@@ -845,7 +840,7 @@ public class SqlQueries extends DBConnector {
             for (DishLine oneLine :
                     dishLine) {
 
-                String sqlSetning = "INSERT INTO dish_line VALUES(?,?,?)";
+                String sqlSetning = "INSERT INTO dish_line(ingredient_id, dish_id, quantity) VALUES(?,?,?)";
                 insertQuery = con.prepareStatement(sqlSetning);
                 insertQuery.setInt(1, oneLine.getIngredient().getIngredientId());
                 insertQuery.setInt(2, dish.getDishId());
@@ -926,11 +921,18 @@ public class SqlQueries extends DBConnector {
                 String name = res.getString("description");
 
 
-                ObservableList<Supplier> tempSupplier = FXCollections.observableArrayList();
-                allSuppliers.filtered(supplier -> supplier.getSupplierId() == supplierId).forEach(supplier1 -> tempSupplier.add(supplier1));
+                Supplier temp = null;
+                for (Supplier supplier :
+                        allSuppliers) {
+                    if (supplier.getSupplierId() == supplierId) {
+                        temp = supplier;
+                        break;
+                    }
+                }
+//                allSuppliers.filtered(supplier -> supplier.getSupplierId() == supplierId).forEach(supplier1 -> tempSupplier.add(supplier1));
 
                 try {
-                    Ingredient tempIngredient = new Ingredient(ingredientId, name, unit, quantityOwned, price, tempSupplier.get(0));
+                    Ingredient tempIngredient = new Ingredient(ingredientId, name, unit, quantityOwned, price, temp);
                     ingredients.add(tempIngredient);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -1035,7 +1037,6 @@ public class SqlQueries extends DBConnector {
                     }
                 }
             }
-
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -1123,10 +1124,18 @@ public class SqlQueries extends DBConnector {
             String insertSql = "INSERT INTO `order`(customer_id, subscription_id, customer_requests, delivery_date, delivered_date, " +
                     "price, address_id, status_id) VALUES(?,?,?,?,?,?,?,?)";
             insertQuery = con.prepareStatement(insertSql, Statement.RETURN_GENERATED_KEYS);
-            insertQuery.setInt(1, customer.getCustomerId());
+            if (customer == null){
+                insertQuery.setNull(1, Types.INTEGER);
+            }else {
+                insertQuery.setInt(1, customer.getCustomerId());
+            }
             insertQuery.setString(3, order.getCustomerRequests());
             insertQuery.setDate(4, Date.valueOf(order.getDeadline()));
-            insertQuery.setDate(5, Date.valueOf(order.getActualDeliveryDate()));
+            if (order.getActualDeliveryDate() == null) {
+                insertQuery.setNull(5, Types.DATE);
+            } else {
+                insertQuery.setDate(5, Date.valueOf(order.getActualDeliveryDate()));
+            }
             insertQuery.setDouble(6, order.getPrice());
             insertQuery.setInt(7, order.getAddress().getAddressId());
             insertQuery.setInt(8, order.getStatus().getStatusId());
@@ -1278,25 +1287,25 @@ public class SqlQueries extends DBConnector {
     /*Subscription methods:*/
 
     public boolean addSubscription(Subscription subscription) {
-        boolean success = false;
         ResultSet res = null;
         try {
             String insertSql = "INSERT INTO subscription(start_date, end_date) VALUES(?,?)";
             insertQuery = con.prepareStatement(insertSql, Statement.RETURN_GENERATED_KEYS);
             insertQuery.setDate(1, java.sql.Date.valueOf(subscription.getStartSubscription()));
             insertQuery.setDate(2, java.sql.Date.valueOf(subscription.getEndSubscription()));
-            insertQuery.executeQuery();
+            insertQuery.execute();
 
             res = insertQuery.getGeneratedKeys();
             res.next();
             subscription.setSubscriptionId(res.getInt(1));
-            success = true;
+            return true;
         } catch (SQLException e) {
+            e.printStackTrace();
             System.out.println("Something went wrong: user registration failed in method addSubscription");
         } finally {
             closeEverything(res, insertQuery, con);
         }
-        return success;
+        return false;
     }
 
 
@@ -1316,7 +1325,7 @@ public class SqlQueries extends DBConnector {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            System.out.println("method getAllSuppliers failed");
+            System.out.println("method getAllSubscriptions failed");
         } finally {
             closeEverything(res, selectQuery, con);
         }
