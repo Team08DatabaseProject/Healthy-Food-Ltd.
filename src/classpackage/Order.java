@@ -5,6 +5,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
  * Created by paul thomas on 17.03.2016.
@@ -16,6 +17,7 @@ public class Order {
     private StringProperty customerRequests = new SimpleStringProperty(); //Additional info from customer
     private LocalDate actualDeliveryDate; //Is set when order is delivered. Default null
     private LocalDate deadline; //Consists of date and time
+    private LocalDateTime deadlineTime;
     private ObjectProperty<OrderStatus> status = new SimpleObjectProperty<>();
     private ObjectProperty<Address> address = new SimpleObjectProperty<>();
     private ObservableList<OrderLine> dishesInThisOrder = FXCollections.observableArrayList();
@@ -45,6 +47,16 @@ public class Order {
         this.dishesInThisOrder = dishesInThisOrder;
     }
 
+    // To the database with "LocalDateTime deadlineTime" instead of "LocalDate deadline"
+    public Order(String customerRequests, LocalDateTime deadlineTime, double price,
+                 OrderStatus status, ObservableList dishesInThisOrder) {
+        this.customerRequests.set(customerRequests);
+        this.deadlineTime = deadlineTime;
+        this.price.set(price);
+        this.status.set(status);
+        actualDeliveryDate = null;
+        this.dishesInThisOrder = dishesInThisOrder;
+    }
 
 
     public int getOrderId() {

@@ -45,9 +45,9 @@
 
             <DatePicker fx:id="deadlineDatePicker" promptText="Date"/>
             <HBox spacing="10">
-                <ComboBox fx:id="deadlineHour" promptText="Hour" />
+                <ComboBox fx:id="deadlineHrBox" promptText="Hour" />
 
-                <ComboBox fx:id="deadlineMinute" promptText="Minute" />
+                <ComboBox fx:id="deadlineMinBox" promptText="Minute" />
             </HBox>
 
             <ComboBox fx:id="statusBox" promptText="Status">

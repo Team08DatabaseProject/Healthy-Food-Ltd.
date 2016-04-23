@@ -3,7 +3,6 @@ package users.sales.orders;
 import classpackage.*;
 import java.lang.String;
 
-import div.PopupDialog;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -22,7 +21,6 @@ import users.sales.ControllerSales;
 
 import java.net.URL;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ResourceBundle;
 
 /**
@@ -48,8 +46,8 @@ public class ControllerSalesOrdersForm extends ControllerSales implements Initia
     public TextField placeField;
     public TextArea customerRequestsField;
     public Label deadlineLabel;
-    public ComboBox<LocalDateTime> deadlineHour;
-    public ComboBox<LocalDateTime> deadlineMinute;
+    public ComboBox<Integer> deadlineHrBox;
+    public ComboBox<Integer> deadlineMinBox;
     public DatePicker deadlineDatePicker;
     public TextField priceField;
     public Button createButton;
@@ -63,6 +61,13 @@ public class ControllerSalesOrdersForm extends ControllerSales implements Initia
     public Button removeOrderDishButton;
 
     ObservableList<OrderLine> chosenDishes = FXCollections.observableArrayList();
+
+    //ObservableLists for the hour and minute ComboBoxes:
+    //Opening/delivery hours from 7 AM to 10 PM
+    final ObservableList<Integer> deadlineHourList = FXCollections.observableArrayList(
+            7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22);
+    //Minute selection for every 15 minutes of every hour
+    final ObservableList<Integer> deadlineMinuteList = FXCollections.observableArrayList(0, 15, 30, 45);
 
 
     EventHandler<ActionEvent> addDishToOrderEvent = new EventHandler<ActionEvent>() {
@@ -129,8 +134,8 @@ public class ControllerSalesOrdersForm extends ControllerSales implements Initia
                 //ZipCode zipCode = new ZipCode(zipCodeInt, place);
                 String customerRequests = customerRequestsField.getText();
                 LocalDate deadlineDate = deadlineDatePicker.getValue();
-                LocalDateTime deadlineHr = deadlineHour.getValue();
-                LocalDateTime deadlineMin = deadlineMinute.getValue();
+                Integer deadlineHr = deadlineHrBox.getValue();
+                Integer deadlineMin = deadlineMinBox.getValue();
                 double price = Double.parseDouble(priceField.getText());
                 OrderStatus status = statusBox.getValue();
                 int orderId = Integer.parseInt(orderIdField.getText());
@@ -159,6 +164,32 @@ public class ControllerSalesOrdersForm extends ControllerSales implements Initia
         customerIdField.setDisable(true);
         subscriptionIdField.setDisable(true);
         //.
+
+        deadlineHrBox.setItems(deadlineHourList);
+        deadlineHrBox.setCellFactory(column -> {
+            return new ListCell<Integer>() {
+                @Override
+                protected void updateItem(Integer item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (item != null && !empty) {
+                        setText(String.format("%02d", item));
+                    }
+                }
+            };
+        });
+
+        deadlineMinBox.setItems(deadlineMinuteList);
+        deadlineMinBox.setCellFactory(column -> {
+            return new ListCell<Integer>() {
+                @Override
+                protected  void updateItem(Integer item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (item != null && !empty) {
+                        setText(String.format("%02d", item));
+                    }
+                }
+            };
+        });
 
         statusBox.setItems(statusTypes);
         statusBox.setConverter(new StringConverter<OrderStatus>() {
