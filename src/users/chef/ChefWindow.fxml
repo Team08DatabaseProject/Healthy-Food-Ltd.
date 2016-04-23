@@ -16,17 +16,35 @@
 <?import javafx.scene.image.Image?>
 <BorderPane fx:id="rootPaneDriver" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" stylesheets="@/users/chef/ChefStyle.css" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="users.chef.ControllerChef">
     <top>
-        <HBox BorderPane.alignment="TOP_CENTER">
+        <HBox fx:id="topMenuHBox" alignment="CENTER" spacing="20" prefHeight="100">
             <Button fx:id="ordersButton" mnemonicParsing="false" styleClass="TopButton" text="Order list" textAlignment="CENTER">
+                <graphic>
+                    <ImageView>
+                        <Image url="@/labels/Numbered List-48.png"/>
+                    </ImageView>
+                </graphic>
+            </Button>
+            <Button fx:id="menusButton" mnemonicParsing="false" styleClass="TopButton" text="Menus" textAlignment="CENTER">
+                <graphic>
+                    <ImageView>
+                        <Image url="@/labels/Meal-48.png"/>
+                    </ImageView>
+                </graphic>
+            </Button>
+            <Button fx:id="dishesButton" mnemonicParsing="false" styleClass="TopButton" text="Dishes" textAlignment="CENTER">
+                <graphic>
+                    <ImageView>
+                        <Image url="@/labels/Noodles-48.png"/>
+                    </ImageView>
+                </graphic>
+            </Button>
+            <Button fx:id="ingredientsButton" mnemonicParsing="false" styleClass="TopButton" text="Ingredients" textAlignment="CENTER">
                 <graphic>
                     <ImageView>
                         <Image url="@/labels/Mushroom-48.png"/>
                     </ImageView>
                 </graphic>
             </Button>
-            <Button fx:id="menusButton" mnemonicParsing="false" styleClass="TopButton" text="Menus" textAlignment="CENTER" />
-            <Button fx:id="dishesButton" mnemonicParsing="false" styleClass="TopButton" text="Dishes" textAlignment="CENTER" />
-            <Button fx:id="ingredientsButton" mnemonicParsing="false" styleClass="TopButton" text="Ingredients" textAlignment="CENTER" />
         </HBox>
     </top>
     <left>
