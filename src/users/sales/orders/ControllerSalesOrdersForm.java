@@ -3,6 +3,7 @@ package users.sales.orders;
 import classpackage.*;
 import java.lang.String;
 
+import div.PopupDialog;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -21,6 +22,7 @@ import users.sales.ControllerSales;
 
 import java.net.URL;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ResourceBundle;
 
 /**
@@ -30,7 +32,7 @@ import java.util.ResourceBundle;
 public class ControllerSalesOrdersForm extends ControllerSales implements Initializable{
 
     @FXML
-    public GridPane salesTextField;
+    public GridPane ordersFormGrid;
     public TextField orderIdField;
     public TextField customerIdField;
     public TextField subscriptionIdField;
@@ -42,9 +44,13 @@ public class ControllerSalesOrdersForm extends ControllerSales implements Initia
     public TextField phoneField;
     public TextField addressField;
     public TextField zipCodeField;
+    public Label priceFieldLabel;
     public TextField placeField;
     public TextArea customerRequestsField;
-    public DatePicker deadlinePicker;
+    public Label deadlineLabel;
+    public ComboBox<LocalDateTime> deadlineHour;
+    public ComboBox<LocalDateTime> deadlineMinute;
+    public DatePicker deadlineDatePicker;
     public TextField priceField;
     public Button createButton;
     public ComboBox<Dish> chooseDishes;
@@ -53,16 +59,11 @@ public class ControllerSalesOrdersForm extends ControllerSales implements Initia
     public TableColumn dishNameCol;
     public TableColumn quantityCol;
     public TableColumn priceCol;
+    public ComboBox<OrderStatus> statusBox;
+    public Button removeOrderDishButton;
 
-    ControllerSalesOrders CSOrders = new ControllerSalesOrders();
-
-    ObservableList<String> statusComboBoxValues = FXCollections.observableArrayList(
-        "Created", "In preparation", "Ready for delivery", "Under delivery", "Delivered"
-    );
     ObservableList<OrderLine> chosenDishes = FXCollections.observableArrayList();
 
-
-    public ComboBox statusBox = new ComboBox(statusComboBoxValues);
 
     EventHandler<ActionEvent> addDishToOrderEvent = new EventHandler<ActionEvent>() {
         @Override
@@ -79,10 +80,35 @@ public class ControllerSalesOrdersForm extends ControllerSales implements Initia
                         OrderLine newOL = new OrderLine(selectedDish);
                         chosenDishes.add(newOL);
                         chosenDishTable.setItems(chosenDishes);
+                        double totalPrice = 0;
+                        for (OrderLine ol : chosenDishes){
+                            totalPrice += ol.getTotal();
+                        }
+                        priceField.setText(nf.format(totalPrice));
                     }
                 }
             }catch (Exception e){
                 System.out.println("addDishToOrderEvent " + e);
+            }
+        }
+    };
+
+    EventHandler<ActionEvent> removeDishFromOrderEvent = new EventHandler<ActionEvent>() {
+        @Override
+        public void handle(ActionEvent event) {
+            try {
+                selectedOrderLine = (OrderLine) chosenDishTable.getSelectionModel().getSelectedItem();
+                if (selectedOrderLine != null) {
+                    chosenDishes.remove(selectedOrderLine);
+                }else {
+                    Alert alert = new Alert(Alert.AlertType.WARNING);
+                    alert.setTitle("No selection");
+                    alert.setHeaderText("No dish selected");
+                    alert.setContentText("Select a dish to delete it");
+                    alert.showAndWait();
+                }
+            } catch (Exception exc) {
+                System.out.println(exc);
             }
         }
     };
@@ -100,28 +126,22 @@ public class ControllerSalesOrdersForm extends ControllerSales implements Initia
                 String address = addressField.getText();
                 int zipCodeInt = Integer.parseInt(zipCodeField.getText());
                 String place = placeField.getText();
-                ZipCode zipCode = new ZipCode(zipCodeInt, place);
+                //ZipCode zipCode = new ZipCode(zipCodeInt, place);
                 String customerRequests = customerRequestsField.getText();
-                LocalDate deadline = deadlinePicker.getValue();
+                LocalDate deadlineDate = deadlineDatePicker.getValue();
+                LocalDateTime deadlineHr = deadlineHour.getValue();
+                LocalDateTime deadlineMin = deadlineMinute.getValue();
                 double price = Double.parseDouble(priceField.getText());
-                OrderStatus status = (OrderStatus) statusBox.getValue();
+                OrderStatus status = statusBox.getValue();
                 int orderId = Integer.parseInt(orderIdField.getText());
                 int customerId = Integer.parseInt(customerIdField.getText());
                 int subcriptionId = Integer.parseInt(subscriptionIdField.getText());
-                LocalDate startSubscription = deadlinePicker.getValue();
-                LocalDate endSubscription = deadlinePicker.getValue();
-                String dishName = "";
+                LocalDate startSubscription = deadlineDatePicker.getValue();
+                LocalDate endSubscription = deadlineDatePicker.getValue();
                 Address newAddress = new Address(address, zipCodeInt, place);
-                Supplier supplier = new Supplier(12345678, newAddress, "Business as");
-                Ingredient ingredient = new Ingredient("Ravioli", "grams", 2000, 20, supplier);
-                ObservableList<DishLine> dishLines = FXCollections.observableArrayList(
-                        new DishLine(ingredient, 7.0),
-                        new DishLine(ingredient, 2.0)
-                );
-                Dish dishes = new Dish(price, dishName, dishLines);
                 ObservableList<Dish> dishesInThisOrder = FXCollections.observableArrayList();
 
-                orders.add(new Order(customerRequests, deadline, price, status, dishesInThisOrder));
+                orders.add(new Order(customerRequests, deadlineDate, price, status, dishesInThisOrder));
 
                 Subscription subscription = new Subscription(startSubscription, endSubscription, orders);
                 Customer customer = new Customer(isBusiness, email, firstName, lastName, phoneNumber,
@@ -133,6 +153,30 @@ public class ControllerSalesOrdersForm extends ControllerSales implements Initia
     };
 
     public void initialize(URL fxmlFileLocation, ResourceBundle resources){
+
+        //Disables the ability to change these three fields
+        orderIdField.setDisable(true);
+        customerIdField.setDisable(true);
+        subscriptionIdField.setDisable(true);
+        //.
+
+        statusBox.setItems(statusTypes);
+        statusBox.setConverter(new StringConverter<OrderStatus>() {
+            @Override
+            public String toString(OrderStatus os) {
+                if (os == null){
+                    return null;
+                } else {
+                    return os.getName();
+                }
+            }
+
+            @Override
+            public OrderStatus fromString(String string) {
+                return null;
+            }
+        });
+
         chooseDishes.setItems(dishes);
         chooseDishes.setConverter(new StringConverter<Dish>() {
             @Override
@@ -180,10 +224,16 @@ public class ControllerSalesOrdersForm extends ControllerSales implements Initia
                     @Override
                     public void handle(TableColumn.CellEditEvent<OrderLine, Integer> event) {
                         event.getTableView().getItems().get(event.getTablePosition().getRow()).setAmount(event.getNewValue());
+                        double totalPrice = 0;
+                        for (OrderLine ol : chosenDishes){
+                            totalPrice += ol.getTotal();
+                        }
+                        priceField.setText(nf.format(totalPrice));
                     }
                 }
         );
 
+        priceField.setDisable(true);
         priceCol.setCellFactory(column -> {
             return new TableCell<OrderLine, Dish>() {
                 @Override
@@ -202,5 +252,6 @@ public class ControllerSalesOrdersForm extends ControllerSales implements Initia
 
         createButton.setOnAction(createOrderFieldEvent);
         addDishButton.setOnAction(addDishToOrderEvent);
+        removeOrderDishButton.setOnAction(removeDishFromOrderEvent);
     }
 }

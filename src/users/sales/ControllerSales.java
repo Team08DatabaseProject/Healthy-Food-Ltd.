@@ -53,6 +53,7 @@ public class ControllerSales implements Initializable {
     protected static Customer selectedCustomer;
     protected static Subscription selectedSubscription;
     protected static OrderStatus selectedStatus;
+    protected static OrderLine selectedOrderLine;
 
     @FXML
     public BorderPane rootPaneSales; //RootPane

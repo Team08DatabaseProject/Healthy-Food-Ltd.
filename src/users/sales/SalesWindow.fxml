@@ -6,38 +6,39 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
 <BorderPane fx:id="rootPaneSales" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
             prefHeight="600.0" prefWidth="800.0" stylesheets="@/users/sales/SalesStyle.css" xmlns="http://javafx.com/javafx/8"
             xmlns:fx="http://javafx.com/fxml/1" fx:controller="users.sales.ControllerSales">
     <top>
-        <MenuBar BorderPane.alignment="TOP_LEFT">
-            <menus>
-                <Menu mnemonicParsing="false" text="File">
-                    <items>
-                        <MenuItem mnemonicParsing="false" text="Close" />
-                    </items>
-                </Menu>
-                <Menu mnemonicParsing="false" text="Edit">
-                    <items>
-                        <MenuItem mnemonicParsing="false" text="Delete" />
-                    </items>
-                </Menu>
-                <Menu mnemonicParsing="false" text="Help">
-                    <items>
-                        <MenuItem mnemonicParsing="false" text="About" />
-                    </items>
-                </Menu>
-            </menus>
-        </MenuBar>
+        <HBox prefHeight="40" prefWidth="200.0" style="-fx-spacing: 4px; -fx-padding: 4px;" BorderPane.alignment="CENTER">
+            <children>
+                <Button fx:id="ordersButton" mnemonicParsing="false" text="Orders" textAlignment="CENTER" styleClass="menuButtons">
+                    <graphic>
+                        <ImageView>
+                            <Image url="@/labels/salesLabels/Service Bell.png" />
+                        </ImageView>
+                    </graphic>
+                </Button>
+                <Button fx:id="subsButton" mnemonicParsing="false" text="Subscriptions" textAlignment="CENTER" styleClass="menuButtons">
+                    <graphic>
+                        <ImageView>
+                            <Image url="@/labels/Renew Subscription.png" />
+                        </ImageView>
+                    </graphic>
+                </Button>
+                <Button fx:id="customersButton" mnemonicParsing="false" text="Customers" textAlignment="CENTER" styleClass="menuButtons">
+                    <graphic>
+                        <ImageView>
+                            <Image url="@/labels/salesLabels/User Group Woman Woman.png" />
+                        </ImageView>
+                    </graphic>
+                </Button>
+            </children>
+        </HBox>
     </top>
     <left>
-        <VBox prefHeight="200.0" prefWidth="100.0" style="-fx-spacing: 4px; -fx-padding: 4px;" BorderPane.alignment="CENTER">
-            <children>
-                <Button fx:id="ordersButton" mnemonicParsing="false" text="Orders" textAlignment="CENTER" />
-                <Button fx:id="subsButton" mnemonicParsing="false" text="Subscriptions" textAlignment="CENTER" />
-                <Button fx:id="customersButton" mnemonicParsing="false" text="Customers" textAlignment="CENTER" />
-            </children>
-        </VBox>
     </left>
     <center>
         <TableView prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER"

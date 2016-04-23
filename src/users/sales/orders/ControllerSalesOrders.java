@@ -101,7 +101,6 @@ public class ControllerSalesOrders extends ControllerSales implements Initializa
     public void initialize(URL fxmlFileLocation, ResourceBundle resources){
 
         ordersTable.setEditable(true);
-        ObservableList<TableColumn> columns = ordersTable.getColumns();
 
         orderIdCol.setCellValueFactory(new PropertyValueFactory<Order,Integer>("orderId")); //orderId
         deadlineCol.setCellValueFactory(new PropertyValueFactory<Order,LocalDate>("deadline")); //deadline
