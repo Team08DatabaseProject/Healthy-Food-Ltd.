@@ -1,6 +1,5 @@
-package users.sales;
+package users.sales.subscriptions;
 
-import classpackage.OrderStatus;
 import classpackage.ZipCode;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -9,18 +8,18 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import users.sales.ControllerSales;
 
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
 
 /**
- * Created by Trym Todalshaug on 18/04/2016.
+ * Created by Trym Todalshaug on 20/04/2016.
  */
-public class ControllerSalesOrdersInfo extends ControllerSalesOrders implements Initializable{
-
+public class ControllerSalesSubsInfo extends ControllerSales implements Initializable{
     @FXML
-    public Label orderIdLabel;
+
     public Label customerIdLabel;
     public Label subscriptionIdLabel;
     public DatePicker startSubscription;
@@ -34,18 +33,7 @@ public class ControllerSalesOrdersInfo extends ControllerSalesOrders implements 
     public TextField addressField;
     public TextField zipCodeField;
     public TextField placeField;
-    public TextArea customerRequestsArea;
-    public DatePicker deadlinePicker;
-    public TextField priceField;
-
-    ObservableList<String> statusComboBoxValues = FXCollections.observableArrayList(
-            "Created", "In preparation", "Ready for delivery", "Under delivery", "Delivered"
-    );
-
-
-    public ComboBox statusBox = new ComboBox(statusComboBoxValues);
     public Button applyButton;
-
 
     EventHandler<ActionEvent> editInfoEvent = new EventHandler<ActionEvent>() {
         @Override
@@ -53,9 +41,6 @@ public class ControllerSalesOrdersInfo extends ControllerSalesOrders implements 
             try {
 
                 if (selectedCustomer != null) {
-                    int orderId = Integer.parseInt(orderIdLabel.getText());
-                    int customerId = Integer.parseInt(customerIdLabel.getText());
-                    int subscriptionId = Integer.parseInt(subscriptionIdLabel.getText());
                     String firstName = fNameField.getText();
                     String lastName = lNameField.getText();
                     boolean isBusiness = businessBox.isArmed();
@@ -66,16 +51,9 @@ public class ControllerSalesOrdersInfo extends ControllerSalesOrders implements 
                     int zipCodeInt = Integer.parseInt(zipCodeField.getText());
                     String place = placeField.getText();
                     ZipCode zipCode = new ZipCode(zipCodeInt, place);
-                    String customerRequests = customerRequestsArea.getText();
-                    LocalDate deadline = deadlinePicker.getValue();
-                    double price = Double.parseDouble(priceField.getText());
-                    OrderStatus status = (OrderStatus) statusBox.getValue();
                     LocalDate startSub = startSubscription.getValue();
                     LocalDate endSub = endSubscription.getValue();
 
-                    selectedOrder.setOrderId(orderId);
-                    selectedCustomer.setCustomerId(customerId);
-                    selectedCustomer.getSubscription().setSubscriptionId(subscriptionId);
                     selectedCustomer.setFirstName(firstName);
                     selectedCustomer.setLastName(lastName);
                     selectedCustomer.setIsBusiness(isBusiness);
@@ -84,15 +62,11 @@ public class ControllerSalesOrdersInfo extends ControllerSalesOrders implements 
                     selectedCustomer.setPhoneNumber(phoneNumber);
                     selectedCustomer.getAddress().setAddress(address);
                     selectedCustomer.getAddress().setZipCode(zipCodeInt);
-                    selectedOrder.setCustomerRequests(customerRequests);
-                    selectedOrder.setDeadline(deadline);
-                    selectedOrder.setPrice(price);
-                    selectedOrder.setStatus(status);
                     selectedCustomer.getSubscription().setStartSubscription(startSub);
                     selectedCustomer.getSubscription().setEndSubscription(endSub);
                 }
             } catch(Exception exc) {
-                System.out.println("createOrderFieldEvent: " + exc);
+                System.out.println("editInfo(subs)Event: " + exc);
             }
         }
     };
@@ -100,7 +74,6 @@ public class ControllerSalesOrdersInfo extends ControllerSalesOrders implements 
 
     public void initialize(URL fxmlFileLocation, ResourceBundle resources){
 
-        orderIdLabel.setText("Order ID: " + String.valueOf(selectedOrder.getOrderId()));
         customerIdLabel.setText("Customer ID: " + String.valueOf(selectedCustomer.getCustomerId()));
         if (selectedCustomer.getSubscription() != null) {
             subscriptionIdLabel.setText("Subscription ID: " + String.valueOf(selectedCustomer.getSubscription().getSubscriptionId()));
@@ -118,10 +91,6 @@ public class ControllerSalesOrdersInfo extends ControllerSalesOrders implements 
         addressField.setText(selectedCustomer.getAddress().getAddress());
         zipCodeField.setText(String.valueOf(selectedCustomer.getAddress().getZipCode()));
         placeField.setText(selectedCustomer.getAddress().getPlace());
-        customerRequestsArea.setText(selectedOrder.getCustomerRequests());
-        deadlinePicker.setValue(selectedOrder.getDeadline());
-        priceField.setText(String.valueOf(selectedOrder.getPrice()));
-        statusBox.setValue(selectedOrder.getStatus());
         applyButton.setOnAction(editInfoEvent);
 
     }

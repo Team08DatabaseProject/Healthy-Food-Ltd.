@@ -58,11 +58,21 @@ public class ControllerChefIngredients extends ControllerChef implements Initial
         @Override
         public void handle(ActionEvent event) {
             try {
+                String ingListString = "";
                 for (Ingredient ing : ingredientList) {
                     if (ing.isChanged()) {
                         ingredientsCopy.add(ing);
-                        System.out.println(ing.getIngredientName());
+                        ingListString += "\n" + ing.getIngredientName();
+                        ing.setChanged(false);
                     }
+                }
+                if (ingredientsCopy.isEmpty()) {
+                    PopupDialog.errorDialog("Update failure", "Changes were not applied, as no changes were detected in ingredients.");
+                } else if (db.updateIngredient(ingredientsCopy)) {
+                    ingredientsCopy.clear();
+                    PopupDialog.confirmationDialog("Result", "Ingredients:" + ingListString + "\nupdated.");
+                } else {
+                    PopupDialog.errorDialog("Error", "Something went wrong.\nIngredients:" + ingListString + "\nfailed to update.");
                 }
             } catch (Exception exc) {
                 System.out.println(exc);
@@ -147,7 +157,7 @@ public class ControllerChefIngredients extends ControllerChef implements Initial
                     @Override
                     public void handle(CellEditEvent<Ingredient, String> event) {
                         event.getTableView().getItems().get(event.getTablePosition().getRow()).setIngredientName(event.getNewValue());
-                        event.getTableView().getItems().get(event.getTablePosition().getRow()).setChanged();
+                        event.getTableView().getItems().get(event.getTablePosition().getRow()).setChanged(true);
 
                     }
                 });
@@ -160,7 +170,7 @@ public class ControllerChefIngredients extends ControllerChef implements Initial
                     @Override
                     public void handle(CellEditEvent<Ingredient, String> event) {
                         (event.getTableView().getItems().get(event.getTablePosition().getRow())).setUnit(event.getNewValue());
-                        event.getTableView().getItems().get(event.getTablePosition().getRow()).setChanged();
+                        event.getTableView().getItems().get(event.getTablePosition().getRow()).setChanged(true);
 
                     }
                 });
@@ -171,7 +181,7 @@ public class ControllerChefIngredients extends ControllerChef implements Initial
                     @Override
                     public void handle(CellEditEvent<Ingredient, Double> event) {
                         event.getTableView().getItems().get(event.getTablePosition().getRow()).setPrice(event.getNewValue());
-                        event.getTableView().getItems().get(event.getTablePosition().getRow()).setChanged();
+                        event.getTableView().getItems().get(event.getTablePosition().getRow()).setChanged(true);
                     }
                 }
         );
@@ -182,7 +192,7 @@ public class ControllerChefIngredients extends ControllerChef implements Initial
                     @Override
                     public void handle(CellEditEvent<Ingredient, Double> event) {
                         event.getTableView().getItems().get(event.getTablePosition().getRow()).setQuantityOwned(event.getNewValue());
-                        event.getTableView().getItems().get(event.getTablePosition().getRow()).setChanged();
+                        event.getTableView().getItems().get(event.getTablePosition().getRow()).setChanged(true);
                     }
                 }
         );

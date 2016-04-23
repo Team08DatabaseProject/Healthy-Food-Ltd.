@@ -43,7 +43,7 @@ public class ControllerChefDishInfo extends ControllerChef implements Initializa
 
         ingInDishTable.setEditable(true);
         ingNameCol.setCellValueFactory(new PropertyValueFactory<DishLine, Ingredient>("ingredient"));
-        ingAmountCol.setCellValueFactory(new PropertyValueFactory<DishLine, DishLine>("abc"));
+        ingAmountCol.setCellValueFactory(new PropertyValueFactory<DishLine, String>("unitAndAmount"));
         ingPriceCol.setCellValueFactory(new PropertyValueFactory<DishLine, Double>("total"));
 
         ingNameCol.setCellFactory(col -> {
@@ -59,18 +59,18 @@ public class ControllerChefDishInfo extends ControllerChef implements Initializa
             };
         });
 
-        ingAmountCol.setCellFactory(col -> {
-            return new TableCell<DishLine, DishLine>() {
+        /*ingAmountCol.setCellFactory(col -> {
+            return new TableCell<DishLine, String>() {
                 @Override
-                public void updateItem(DishLine dishLine, boolean empty) {
-                    if (dishLine == null || empty) {
+                public void updateItem(String string, boolean empty) {
+                    if (string == null || empty) {
                         setText(null);
                     } else {
-                        setText(dishLine.getUnitAndAmount());
+                        setText(getUnitAndAmount());
                     }
                 }
             };
-        });
+        });*/
 
       /*  ingPriceCol.setCellFactory(col -> {
             return new TableCell<DishLine, Double>() {

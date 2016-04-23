@@ -39,16 +39,21 @@ public class ControllerSales implements Initializable {
         nf.setMaximumFractionDigits(2);
     }
 
-    protected static TestObjects testObjects = new TestObjects();
-    protected static ObservableList<Order> orders = testObjects.allOrders;
-    protected static ObservableList<Dish> dishes = testObjects.dishList;
-    protected static ObservableList<Customer> customers = testObjects.allCustomers;
-    protected static ObservableList<Subscription> subscriptions = testObjects.allSubscriptions;
-    protected static Dish selectedDish;
+    protected static SqlQueries db = new SqlQueries();
+    protected static ObservableList<Supplier> suppliers = db.getAllSuppliers();
+    protected static ObservableList<Ingredient> ingredients = db.getAllIngredients(suppliers);
+    protected static ObservableList<Dish> dishes = db.getAllDishes(ingredients);
+    protected static ObservableList<Order> orders = db.getOrders(4, dishes);
+    protected static ObservableList<Customer> customers = db.getAllCustomers(orders);
+    protected static ObservableList<Subscription> subscriptions = db.getAllSubscriptions();
+    protected static ObservableList<OrderStatus> statusTypes = db.getStatusTypes();
 
+    protected static Dish selectedDish;
     protected static Order selectedOrder;
     protected static Customer selectedCustomer;
     protected static Subscription selectedSubscription;
+    protected static OrderStatus selectedStatus;
+    protected static OrderLine selectedOrderLine;
 
     @FXML
     public BorderPane rootPaneSales; //RootPane
@@ -59,15 +64,12 @@ public class ControllerSales implements Initializable {
     private GridPane subsTable; // Retrieves Tableview with fx:id="subsTable"
     private GridPane customersTable;
 
-    private SqlQueries query = new SqlQueries();
-    //final ObservableList<Order> subsTest = query.getOrders(4);
-
     EventHandler<ActionEvent> orderEvent = new EventHandler<ActionEvent>() {
         @Override
         public void handle(ActionEvent event) {
             try {
                 FXMLLoader loader = new FXMLLoader();
-                loader.setLocation(getClass().getResource("OrdersTable.fxml"));
+                loader.setLocation(getClass().getResource("orders/OrdersTable.fxml"));
                 ordersTable = loader.load();
                 rootPaneSales.setCenter(ordersTable);
             } catch (Exception e) {
@@ -81,7 +83,7 @@ public class ControllerSales implements Initializable {
         public void handle(ActionEvent event) {
             try {
                 FXMLLoader loader = new FXMLLoader();
-                loader.setLocation(getClass().getResource("SubsTable.fxml"));
+                loader.setLocation(getClass().getResource("subscriptions/SubsTable.fxml"));
                 subsTable = loader.load();
                 rootPaneSales.setCenter(subsTable);
             } catch (Exception e) {
@@ -95,7 +97,7 @@ public class ControllerSales implements Initializable {
         public void handle(ActionEvent event) {
             try{
                 FXMLLoader loader = new FXMLLoader();
-                loader.setLocation(getClass().getResource("customersTable.fxml"));
+                loader.setLocation(getClass().getResource("customers/CustomersTable.fxml"));
                 customersTable = loader.load();
                 rootPaneSales.setCenter(customersTable);
             }catch (Exception exc){
@@ -104,60 +106,10 @@ public class ControllerSales implements Initializable {
         }
     };
 
-    public ObservableList<Order> getAllOrdersForSales() {
-        return allOrdersForSales;
-    }
-
-    public void setAllOrdersForSales(ObservableList<Order> allOrdersForSales) {
-        this.allOrdersForSales = allOrdersForSales;
-    }
-
-    public ObservableList<Subscription> getAllSubscriptions() {
-        return allSubscriptions;
-    }
-
-    public void setAllSubscriptions(ObservableList<Subscription> allSubscriptions) {
-        this.allSubscriptions = allSubscriptions;
-    }
-
-    public ObservableList<Dish> getAllDishes() {
-        return allDishes;
-    }
-
-    public void setAllDishes(ObservableList<Dish> allDishes) {
-        this.allDishes = allDishes;
-    }
-
-    public ObservableList<Customer> getAllCustomers() {
-        return allCustomers;
-    }
-
-    public void setAllCustomers(ObservableList<Customer> allCustomers) {
-        this.allCustomers = allCustomers;
-    }
-
-    public ObservableList<Address> getAllAdresses() {
-        return allAdresses;
-    }
-
-    public void setAllAdresses(ObservableList<Address> allAdresses) {
-        this.allAdresses = allAdresses;
-    }
-
-    public ObservableList<Menu> getAllMenus() {
-        return allMenus;
-    }
-
-    public void setAllMenus(ObservableList<Menu> allMenus) {
-        this.allMenus = allMenus;
-    }
-
-
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
 
         ordersButton.setOnAction(orderEvent);
         subsButton.setOnAction(subsEvent);
         customersButton.setOnAction(customersEvent);
-
     }
 }

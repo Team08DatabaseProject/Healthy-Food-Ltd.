@@ -32,7 +32,6 @@ import java.util.ResourceBundle;
 public class ControllerChefMenus extends ControllerChef implements Initializable{
 
     @FXML
-    public GridPane ChefMenus;
     public Button editMenuButton;
     public Button addMenuButton;
     public ComboBox<Menu> chooseMenuCB;

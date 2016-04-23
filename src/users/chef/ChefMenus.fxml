@@ -6,7 +6,7 @@
 
 
 <?import java.lang.String?>
-<GridPane fx:id="ChefMenus" fx:controller="users.chef.ControllerChefMenus" prefHeight="200" prefWidth="200.0" xmlns:fx="http://javafx.com/fxml" hgap="20" vgap="15">
+<GridPane fx:id="subMenuGP" fx:controller="users.chef.ControllerChefMenus" prefHeight="200" prefWidth="200.0" xmlns:fx="http://javafx.com/fxml" hgap="20" vgap="15">
     <children>
         <Button fx:id="addMenuButton" GridPane.columnIndex="1" GridPane.rowIndex="1" text="Add new menu" styleClass="BigButton"/>
         <Button fx:id="editMenuButton" GridPane.columnIndex="2" GridPane.rowIndex="1" text="Edit menu ->" styleClass="BigButton"/>

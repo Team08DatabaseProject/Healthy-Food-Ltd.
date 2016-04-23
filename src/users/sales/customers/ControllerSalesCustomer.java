@@ -1,4 +1,4 @@
-package users.sales;
+package users.sales.customers;
 
 import classpackage.Customer;
 import classpackage.Subscription;
@@ -19,6 +19,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
+import users.sales.ControllerSales;
 
 import java.net.URL;
 import java.time.LocalDate;
@@ -48,7 +49,7 @@ public class ControllerSalesCustomer extends ControllerSales implements Initiali
             try{
                 customerFormUpdate = false;
                 FXMLLoader loader = new FXMLLoader();
-                loader.setLocation(getClass().getResource("CEOEmployeeForm.fxml"));
+                loader.setLocation(getClass().getResource("CustomersCreateForm.fxml"));
                 GridPane addCustomerTable = loader.load();
                 Scene formScene = new Scene(addCustomerTable, 300, 550);
                 Stage formStage = new Stage();
@@ -64,12 +65,12 @@ public class ControllerSalesCustomer extends ControllerSales implements Initiali
     private EventHandler<ActionEvent> refreshCustomers = new EventHandler<ActionEvent>() {
         @Override
         public void handle(ActionEvent e) {
-            customer = getAllCustomers();
-            customersTable.setItems(customer);
+            customers = db.getAllCustomers(orders);
+            customersTable.setItems(customers);
         }
     };
 
-    private EventHandler<MouseEvent> updateCustomerForm = new EventHandler<MouseEvent>() {
+    /*private EventHandler<MouseEvent> updateCustomerForm = new EventHandler<MouseEvent>() {
         @Override
         public void handle(MouseEvent event) {
             if (event.isPrimaryButtonDown() && event.getClickCount() == 2) {
@@ -77,7 +78,7 @@ public class ControllerSalesCustomer extends ControllerSales implements Initiali
                 try {
                     customerFormUpdate = true;
                     FXMLLoader loader = new FXMLLoader();
-                    loader.setLocation(getClass().getResource("CustomerForm.fxml"));
+                    loader.setLocation(getClass().getResource("CustomersCreateForm.fxml"));
                     GridPane addCustomerTable = loader.load();
                     Scene formScene = new Scene(addCustomerTable, 300, 550);
                     Stage formStage = new Stage();
@@ -89,7 +90,7 @@ public class ControllerSalesCustomer extends ControllerSales implements Initiali
                 }
             }
         }
-    };
+    };*/
 
     EventHandler<ActionEvent> deleteCustomerEvent = new EventHandler<ActionEvent>() {
         @Override
@@ -113,11 +114,20 @@ public class ControllerSalesCustomer extends ControllerSales implements Initiali
         }
     };
 
-    EventHandler<ActionEvent> customersInfoEvent = new EventHandler<ActionEvent>() {
+    EventHandler<MouseEvent> customersInfoEvent = new EventHandler<MouseEvent>() {
         @Override
-        public void handle(ActionEvent event) {
+        public void handle(MouseEvent event) {
             try{
-
+                if (event.isPrimaryButtonDown() && event.getClickCount() == 1){
+                    selectedCustomer = (Customer) customersTable.getSelectionModel().getSelectedItem();
+                    for (Customer customer : customers){
+                        if (customer.getCustomerId() == selectedCustomer.getCustomerId()
+                                && customer.getFirstName() == selectedCustomer.getFirstName()
+                                && customer.getLastName() == selectedCustomer.getLastName()){
+                            selectedCustomer = customer;
+                        }
+                    }
+                }
             }catch (Exception e) {
                 System.out.println("customerInfoEvent " + e);
             }

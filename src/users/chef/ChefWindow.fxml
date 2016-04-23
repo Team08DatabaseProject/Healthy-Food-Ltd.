@@ -12,35 +12,42 @@
 <!--> Main window for ceo <!-->
 
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
 <BorderPane fx:id="rootPaneDriver" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" stylesheets="@/users/chef/ChefStyle.css" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="users.chef.ControllerChef">
     <top>
-        <MenuBar BorderPane.alignment="TOP_LEFT">
-            <menus>
-                <Menu mnemonicParsing="false" text="File">
-                    <items>
-                        <MenuItem mnemonicParsing="false" text="Close" />
-                    </items>
-                </Menu>
-                <Menu mnemonicParsing="false" text="Edit">
-                    <items>
-                        <MenuItem mnemonicParsing="false" text="Delete" />
-                    </items>
-                </Menu>
-                <Menu mnemonicParsing="false" text="Help">
-                    <items>
-                        <MenuItem mnemonicParsing="false" text="About" />
-                    </items>
-                </Menu>
-            </menus>
-        </MenuBar>
+        <HBox fx:id="topMenuHBox" alignment="CENTER" spacing="20" prefHeight="100">
+            <Button fx:id="ordersButton" mnemonicParsing="false" styleClass="TopButton" text="Order list" textAlignment="CENTER">
+                <graphic>
+                    <ImageView>
+                        <Image url="@/labels/Numbered List-48.png"/>
+                    </ImageView>
+                </graphic>
+            </Button>
+            <Button fx:id="menusButton" mnemonicParsing="false" styleClass="TopButton" text="Menus" textAlignment="CENTER">
+                <graphic>
+                    <ImageView>
+                        <Image url="@/labels/Meal-48.png"/>
+                    </ImageView>
+                </graphic>
+            </Button>
+            <Button fx:id="dishesButton" mnemonicParsing="false" styleClass="TopButton" text="Dishes" textAlignment="CENTER">
+                <graphic>
+                    <ImageView>
+                        <Image url="@/labels/Noodles-48.png"/>
+                    </ImageView>
+                </graphic>
+            </Button>
+            <Button fx:id="ingredientsButton" mnemonicParsing="false" styleClass="TopButton" text="Ingredients" textAlignment="CENTER">
+                <graphic>
+                    <ImageView>
+                        <Image url="@/labels/Mushroom-48.png"/>
+                    </ImageView>
+                </graphic>
+            </Button>
+        </HBox>
     </top>
     <left>
-        <VBox>
-            <Button fx:id="ordersButton" mnemonicParsing="false" styleClass="SideButton" text="Order list" textAlignment="CENTER" />
-            <Button fx:id="menusButton" mnemonicParsing="false" styleClass="SideButton" text="Menus" textAlignment="CENTER" />
-            <Button fx:id="dishesButton" mnemonicParsing="false" styleClass="SideButton" text="Dishes" textAlignment="CENTER" />
-            <Button fx:id="ingredientsButton" mnemonicParsing="false" styleClass="SideButton" text="Ingredients" textAlignment="CENTER" />
-        </VBox>
     </left>
     <center>
     </center>

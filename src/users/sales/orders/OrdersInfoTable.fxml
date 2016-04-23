@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--> Axel </!-->
+<!--> Textfields for registering new order </!-->
+
+<?import javafx.collections.FXCollections?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import java.lang.*?>
+
+<GridPane fx:id="ordersInfoGrid" prefHeight="200.0" prefWidth="1600.0" BorderPane.alignment="CENTER" xmlns="http://javafx.com/javafx/8"
+          xmlns:fx="http://javafx.com/fxml/1" fx:controller="users.sales.orders.ControllerSalesOrdersInfo" stylesheets="@/users/sales/SalesStyle.css">
+
+    <padding>
+        <Insets bottom="25" left="30" right="20" top="25" />
+    </padding>
+    <children>
+        <Label fx:id="orderIdLabel" GridPane.columnIndex="0" GridPane.rowIndex="0" text="Order id:" />
+        <TextField fx:id="orderIdField" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+
+        <Label fx:id="customerIdLabel" GridPane.columnIndex="0" GridPane.rowIndex="1" text="Customer id:" />
+        <TextField fx:id="customerIdField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+
+        <Label fx:id="subscriptionIdLabel" GridPane.columnIndex="0" GridPane.rowIndex="2" text="Subscription id" />
+        <TextField fx:id="subscriptionIdField" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+
+        <Label fx:id="businessBoxLabel" GridPane.columnIndex="0" GridPane.rowIndex="3" text="Business:" />
+        <CheckBox fx:id="businessBox" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+
+        <Label fx:id="businessNameLabel" GridPane.columnIndex="0" GridPane.rowIndex="4" text="Business name:" />
+        <TextField fx:id="businessNameField" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+
+        <Label fx:id="startSubscriptionLabel" GridPane.columnIndex="0" GridPane.rowIndex="5" text="Subscription started:" />
+        <DatePicker fx:id="startSubscription" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+
+        <Label fx:id="endSubscriptionLabel" GridPane.columnIndex="0" GridPane.rowIndex="6" text="Subscription ended:" />
+        <DatePicker fx:id="endSubscription" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+
+        <!--next collumn><!-->
+
+        <Label fx:id="fNameLabel" GridPane.columnIndex="3" GridPane.rowIndex="0" text=" First name:" />
+        <TextField fx:id="fNameField" GridPane.columnIndex="4" GridPane.rowIndex="0" />
+
+        <Label fx:id="lNameLabel" GridPane.columnIndex="3" GridPane.rowIndex="1" text=" Last name:" />
+        <TextField fx:id="lNameField" GridPane.columnIndex="4" GridPane.rowIndex="1" />
+
+        <Label fx:id="phoneLabel" GridPane.columnIndex="3" GridPane.rowIndex="2" text=" Phone number:" />
+        <TextField fx:id="phoneField" GridPane.columnIndex="4" GridPane.rowIndex="2" />
+
+        <Label fx:id="emailLabel" GridPane.columnIndex="3" GridPane.rowIndex="3" text=" Email:" />
+        <TextField fx:id="emailField" GridPane.columnIndex="4" GridPane.rowIndex="3" />
+
+        <Label fx:id="addressLabel" GridPane.columnIndex="3" GridPane.rowIndex="4" text=" Address:" />
+        <TextField fx:id="addressField" GridPane.columnIndex="4" GridPane.rowIndex="4" />
+
+        <Label fx:id="zipCodeLabel" GridPane.columnIndex="3" GridPane.rowIndex="5" text=" Zip / postal code:" />
+        <TextField fx:id="zipCodeField" GridPane.columnIndex="4" GridPane.rowIndex="5" />
+
+        <Label fx:id="placeLabel" GridPane.columnIndex="3" GridPane.rowIndex="6" text=" City / town:" />
+        <TextField fx:id="placeField" GridPane.columnIndex="4" GridPane.rowIndex="6" />
+
+        <Label fx:id="deadlineLabel" GridPane.columnIndex="3" GridPane.rowIndex="7" text=" Deadline:" />
+        <DatePicker fx:id="deadlinePicker" GridPane.columnIndex="4" GridPane.rowIndex="7" />
+
+        <Label fx:id="priceLabel" GridPane.columnIndex="3" GridPane.rowIndex="8" text=" Price:" />
+        <TextField fx:id="priceField" GridPane.columnIndex="4" GridPane.rowIndex="8" />
+
+        <!--next collumn><!-->
+
+        <Label fx:id="statusBoxLabel" GridPane.columnIndex="6" GridPane.rowIndex="0" text=" Status:" />
+        <ComboBox fx:id="statusBox" GridPane.columnIndex="7" GridPane.rowIndex="0" >
+            <items>
+            </items>
+        </ComboBox>
+
+        <Label fx:id="customerRequestsLabel" GridPane.columnIndex="6" GridPane.rowIndex="1" text=" Customer requests:" />
+        <TextArea fx:id="customerRequestsArea" GridPane.columnIndex="7" GridPane.rowIndex="1" GridPane.rowSpan="4" prefWidth="200"/>
+
+        <HBox alignment="BOTTOM_LEFT" spacing="10" GridPane.columnIndex="0" GridPane.rowIndex="10">
+            <children>
+                <Button fx:id="applyButton" styleClass="infoButton" text="Apply" />
+            </children>
+        </HBox>
+    </children>
+</GridPane>

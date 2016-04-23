@@ -13,6 +13,7 @@ public class DishLine {
     private ObjectProperty<Ingredient> ingredient = new SimpleObjectProperty<>();
     private DoubleProperty amount = new SimpleDoubleProperty();
     private NumberBinding total;
+    private String unitAndAmount;
 
     public DishLine(Ingredient ingredient, double amount) {
         this.ingredient.set(ingredient);
@@ -55,7 +56,8 @@ public class DishLine {
     }
 
     public String getUnitAndAmount() {
-        return getAmount() + " " + getIngredient().getUnit();
+        unitAndAmount = getAmount() + " " + getIngredient().getUnit();
+        return unitAndAmount;
     }
 
     // TODO: 10.04.2016 Probably needs revision do to GUI

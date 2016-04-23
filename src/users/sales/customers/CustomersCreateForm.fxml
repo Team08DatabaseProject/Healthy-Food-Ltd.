@@ -3,18 +3,12 @@
 <!--> Trym </!-->
 <!--> Textfields for registering new order </!-->
 
-<?import java.lang.*?>
-<?import javafx.geometry.*?>
+<?import div.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.collections.FXCollections?>
-
-<?import div.StringField?>
-<?import div.IntField?>
-<?import div.ZipCodeField?>
 <GridPane fx:id="addCustomerTable" hgap="10" prefHeight="500.0" prefWidth="1600.0" vgap="10" BorderPane.alignment="CENTER"
-          xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="users.sales.ControllerSalesCustomerForm">
+          xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="users.sales.customers.ControllerSalesCustomerForm">
 
     <padding>
         <Insets bottom="25" left="30" right="20" top="25" />
@@ -42,7 +36,7 @@
 
     <Label text="Email" GridPane.columnIndex="0" GridPane.rowIndex="11" />
     <StringField styleClass="FormField" fx:id="emailField" GridPane.columnIndex="1" GridPane.rowIndex="11" />
-    <Label styleClass="ErrorMsg" fx:id="emailFieldErrorMasg" GridPane.columnIndex="1" GridPane.rowIndex="12" />
+    <Label styleClass="ErrorMsg" fx:id="emailFieldErrorMsg" GridPane.columnIndex="1" GridPane.rowIndex="12" />
 
     <Label text="Address" GridPane.columnIndex="0" GridPane.rowIndex="13" />
     <StringField styleClass="FormField" fx:id="addressField" GridPane.columnIndex="1" GridPane.rowIndex="13" />

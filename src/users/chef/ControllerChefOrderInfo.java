@@ -73,7 +73,7 @@ public class ControllerChefOrderInfo extends ControllerChef implements Initializ
 
         dishNameCol.setCellValueFactory(new PropertyValueFactory<OrderLine, Dish>("dish"));
         dishAmountCol.setCellValueFactory(new PropertyValueFactory<OrderLine, Integer>("amount"));
-        dishPriceCol.setCellValueFactory(new PropertyValueFactory<OrderLine, Dish>("dish"));
+        dishPriceCol.setCellValueFactory(new PropertyValueFactory<OrderLine, Double>("total"));
 
         dishNameCol.setCellFactory(col -> {
             return new TableCell<OrderLine, Dish>() {
@@ -102,8 +102,8 @@ public class ControllerChefOrderInfo extends ControllerChef implements Initializ
             };
         });
 
-        dishPriceCol.setCellFactory(col -> {
-            return new TableCell<OrderLine, Dish>() {
+       /* dishPriceCol.setCellFactory(col -> {
+            return new TableCell<OrderLine, Double>() {
                 @Override
                 public void updateItem(Dish dish, boolean empty) {
                     if (dish == null || empty) {
@@ -113,7 +113,7 @@ public class ControllerChefOrderInfo extends ControllerChef implements Initializ
                     }
                 }
             };
-        });
+        });*/
 
         dishesInOrderTable.setEditable(true);
         dishesInOrderTable.getColumns().setAll(dishNameCol, dishAmountCol, dishPriceCol);

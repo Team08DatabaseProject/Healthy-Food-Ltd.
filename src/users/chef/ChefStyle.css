@@ -1,7 +1,74 @@
+#subMenuGP {
+    -fx-background-color: #77DD77;
+}
+
+#topMenuHBox {
+    -fx-background-color: #6BC66B;
+    -fx-border-color: #6BC66B;
+}
+
+#bottomSubHBox {
+    -fx-background-color: #6BC66B;
+    -fx-border-color: #6BC66B;
+}
+
+.table-view {
+    -fx-background-color: transparent;
+}
+
+.table-row-cell{
+    -fx-background-color: -fx-table-cell-border-color, #adeaad;
+    -fx-background-insets: 0, 0 0 1 0;
+    -fx-padding: 0.0em; /* 0 */
+}
+
+.table-row-cell:odd{
+    -fx-background-color: -fx-table-cell-border-color, #92e392;
+    -fx-background-insets: 0, 0 0 1 0;
+    -fx-padding: 0.0em; /* 0 */
+}
+
+.table-view .column-header {
+    -fx-background-color: transparent;
+}
+
+.table-view .column-header-background{
+    -fx-background-color: linear-gradient(#5fb05f 0%, #539a53 100%);
+}
+
+.table-view .column-header-background .label{
+    -fx-background-color: transparent;
+    -fx-text-fill: black;
+}
+
 .SideButton {
     -fx-min-width: 100px;
     -fx-min-height: 75px;
     -fx-alignment: CENTER;
+}
+
+.subMenuButton {
+    -fx-background-color: #77DD77;
+    -fx-font-size: 12px;
+    -fx-min-width: 100px;
+    -fx-min-heigh: 30px;
+    -fx-alignment: CENTER;
+}
+
+.TopButton {
+    -fx-background-color: #77DD77;
+    -fx-font-size: 20px;
+    -fx-min-width: 150px;
+    -fx-min-heigh: 30px;
+    -fx-alignment: CENTER;
+}
+
+.TopButton:hover {
+    -fx-background-color: #5fb05f;
+}
+
+.TopButton:focused {
+    -fx-background-color: #539a53;
 }
 
 .SmallButton {

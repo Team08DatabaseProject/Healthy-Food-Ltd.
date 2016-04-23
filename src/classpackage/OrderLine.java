@@ -1,5 +1,6 @@
 package classpackage;
 
+import javafx.beans.binding.NumberBinding;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -12,15 +13,18 @@ import javafx.collections.ObservableList;
 public class OrderLine {
     private ObjectProperty<Dish> dish = new SimpleObjectProperty<>();
     private IntegerProperty amount = new SimpleIntegerProperty();
+    private NumberBinding total;
 
     public OrderLine(Dish dish, int amount) {
         this.dish.set(dish);
         this.amount.set(amount);
+        total = this.amount.multiply(dish.getPrice());
     }
 
     public OrderLine(Dish dish) {
         this.dish.set(dish);
         this.amount.set(1);
+        total = this.amount.multiply(dish.getPrice());
     }
 
     public Dish getDish() {
@@ -45,5 +49,9 @@ public class OrderLine {
 
     public void setAmount(int amount) {
         this.amount.set(amount);
+    }
+
+    public double getTotal() {
+        return total.doubleValue();
     }
 }

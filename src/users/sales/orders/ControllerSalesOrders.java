@@ -1,22 +1,20 @@
-package users.sales;
+package users.sales.orders;
 
 import classpackage.Customer;
 import classpackage.Order;
-import classpackage.TestObjects;
+import classpackage.OrderStatus;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import users.sales.ControllerSales;
 
 import java.net.URL;
 import java.time.LocalDate;
@@ -36,16 +34,16 @@ public class ControllerSalesOrders extends ControllerSales implements Initializa
     public TableColumn deadlineCol;
     public TableColumn priceCol;
     public TableColumn statusCol;
-    private GridPane salesTextField;
+    private GridPane ordersFormGrid;
 
     EventHandler<ActionEvent> createOrderEvent = new EventHandler<ActionEvent>() {
         @Override
         public void handle(ActionEvent event) {
             try {
                 FXMLLoader loader = new FXMLLoader();
-                loader.setLocation(getClass().getResource("SalesTextField.fxml"));
-                salesTextField = loader.load();
-                rootPaneOrders.setCenter(salesTextField);
+                loader.setLocation(getClass().getResource("OrdersCreateForm.fxml"));
+                ordersFormGrid = loader.load();
+                rootPaneOrders.setCenter(ordersFormGrid);
                 rootPaneOrders.setBottom(null);
                 rootPaneOrders.setRight(null);
             } catch (Exception e) {
@@ -76,10 +74,10 @@ public class ControllerSalesOrders extends ControllerSales implements Initializa
         }
     };
 
-    EventHandler<MouseEvent> infoOrdersEvent = new EventHandler<MouseEvent>() {
+    EventHandler<MouseEvent> ordersInfoEvent = new EventHandler<MouseEvent>() {
         @Override
         public void handle(MouseEvent event) {
-            if (event.isPrimaryButtonDown() && event.getClickCount() == 1) {
+            if (event.isPrimaryButtonDown() && event.getClickCount() >= 1) {
                 selectedOrder = (Order)ordersTable.getSelectionModel().getSelectedItem();
                 for (Customer customer : customers) {
                     for (Order order : customer.getOrders()) {
@@ -94,7 +92,7 @@ public class ControllerSalesOrders extends ControllerSales implements Initializa
                     GridPane ordersInfoGrid = loader.load();
                     rootPaneOrders.setBottom(ordersInfoGrid);
                 } catch (Exception e) {
-                    System.out.println("infoOrdersEvent " + e);
+                    System.out.println("ordersInfoEvent " + e);
                 }
             }
         }
@@ -103,22 +101,29 @@ public class ControllerSalesOrders extends ControllerSales implements Initializa
     public void initialize(URL fxmlFileLocation, ResourceBundle resources){
 
         ordersTable.setEditable(true);
-        ObservableList<TableColumn> columns = ordersTable.getColumns();
-        TableColumn<Order,Integer> orderIdCol = columns.get(0);
-        TableColumn<Order,LocalDate> deadlineCol = columns.get(1);
-        TableColumn<Order,String> statuscol = columns.get(2);
-        TableColumn<Order,Double> priceCol = columns.get(3);
-
 
         orderIdCol.setCellValueFactory(new PropertyValueFactory<Order,Integer>("orderId")); //orderId
         deadlineCol.setCellValueFactory(new PropertyValueFactory<Order,LocalDate>("deadline")); //deadline
-        statuscol.setCellValueFactory(new PropertyValueFactory<Order,String>("status")); //status
+        statusCol.setCellValueFactory(new PropertyValueFactory<Order,OrderStatus>("status")); //status
         priceCol.setCellValueFactory(new PropertyValueFactory<Order,Double>("price")); //price
 
-        ordersTable.getColumns().setAll(orderIdCol, deadlineCol, statuscol, priceCol);
+        statusCol.setCellFactory(col -> {
+            return new TableCell<Order, OrderStatus>(){
+                @Override
+                public void updateItem(OrderStatus status, boolean empty){
+                    if (status == null || empty) {
+                        setText(null);
+                    } else {
+                        setText(status.getName());
+                    }
+                }
+            };
+        });
+
+        ordersTable.getColumns().setAll(orderIdCol, deadlineCol, statusCol, priceCol);
         createOrderButton.setOnAction(createOrderEvent);
         deleteOrderButton.setOnAction(deleteOrderEvent);
-        ordersTable.setOnMousePressed(infoOrdersEvent);
+        ordersTable.setOnMousePressed(ordersInfoEvent);
         ordersTable.setItems(orders);
     }
 }

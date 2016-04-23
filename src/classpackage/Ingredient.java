@@ -44,8 +44,8 @@ public class Ingredient {
         this.supplier.set(supplier);
     }
 
-    public void setChanged() {
-        changed = true;
+    public void setChanged(boolean bln) {
+        changed = bln;
     }
 
     public boolean isChanged() {

@@ -4,10 +4,16 @@ Button {
     -fx-alignment: CENTER;
 }
 
+.menuButtons{
+    -fx-min-width: 110px;
+    -fx-min-height: 45px;
+    -fx-alignment: CENTER;
+}
+
 .newOrderButton{
-    -fx-min-width: 100px;
+    -fx-min-width: 130px;
     -fx-min-height: 50px;
-    -fx-alignment: center-right;
+    -fx-alignment: CENTER;
     -fx-padding: 10px;
 }
 
