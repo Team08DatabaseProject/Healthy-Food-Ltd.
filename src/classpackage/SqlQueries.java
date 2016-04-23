@@ -809,7 +809,7 @@ public class SqlQueries extends DBConnector {
     //    Method for updating an Ingredient
     public boolean updateIngredient(Ingredient ingredient) {
         try {
-            String sql = "UPDATE ingredient SET supplier_id = ?, quantity_owned = ?, unit = ?, " +
+            /*String sql = "UPDATE ingredient SET supplier_id = ?, quantity_owned = ?, unit = ?, " +
                     "price = ?, description = ? WHERE ingredient_id = ?";
             updateQuery = con.prepareStatement(sql);
             updateQuery.setInt(1, ingredient.getSupplierId());
@@ -817,10 +817,42 @@ public class SqlQueries extends DBConnector {
             updateQuery.setString(3, ingredient.getUnit());
             updateQuery.setDouble(4, ingredient.getPrice());
             updateQuery.setString(5, ingredient.getIngredientName());
-            updateQuery.setInt(6, ingredient.getIngredientId());
+            updateQuery.setInt(6, ingredient.getIngredientId());*/
+
+            // Dette fikser en feil pga ingen referanse til supplier:
+            String sql = "UPDATE ingredient SET quantity_owned = ?, unit = ?, price = ?, description = ? WHERE ingredient_id = ?";
+            updateQuery = con.prepareStatement(sql);
+            updateQuery.setDouble(1, ingredient.getQuantityOwned());
+            updateQuery.setString(2, ingredient.getUnit());
+            updateQuery.setDouble(3, ingredient.getPrice());
+            updateQuery.setString(4, ingredient.getIngredientName());
+            updateQuery.setInt(5, ingredient.getIngredientId());
             if (updateQuery.executeUpdate() == 1) {
                 return true;
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            closeEverything(null, updateQuery, con);
+        }
+        return false;
+    }
+
+    public boolean updateIngredient(ObservableList<Ingredient> ingredients) {
+        try {
+            con.setAutoCommit(false);
+            for (Ingredient ing : ingredients) {
+                String sql = "UPDATE ingredient SET quantity_owned = ?, unit = ?, price = ?, description = ? WHERE ingredient_id = ?";
+                updateQuery = con.prepareStatement(sql);
+                updateQuery.setDouble(1, ing.getQuantityOwned());
+                updateQuery.setString(2, ing.getUnit());
+                updateQuery.setDouble(3, ing.getPrice());
+                updateQuery.setString(4, ing.getIngredientName());
+                updateQuery.setInt(5, ing.getIngredientId());
+                updateQuery.executeUpdate();
+            }
+            con.commit();
+            return true;
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -1327,11 +1359,11 @@ public class SqlQueries extends DBConnector {
             selectQuery = con.prepareStatement(selectSql);
             res = selectQuery.executeQuery();
             while (res.next()) {
-                int supplierId = res.getInt("subscription_id");
+                int subscription_id = res.getInt("subscription_id");
                 LocalDate startDate = res.getDate("start_date").toLocalDate();
                 LocalDate endDate = res.getDate("end_date").toLocalDate();
                 int customerId = res.getInt("customer_id");
-                subscriptions.add(new Subscription(supplierId, startDate, endDate, null, customerId));
+                subscriptions.add(new Subscription(subscription_id, startDate, endDate, null, customerId));
             }
         } catch (SQLException e) {
             e.printStackTrace();

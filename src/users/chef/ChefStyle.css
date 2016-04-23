@@ -4,6 +4,12 @@
     -fx-alignment: CENTER;
 }
 
+.TopButton {
+    -fx-min-width: 150px;
+    -fx-min-heigh: 30px;
+    -fx-alignment: CENTER;
+}
+
 .SmallButton {
     -fx-min-width: 100px;
     -fx-min-height: 15px;
