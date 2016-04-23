@@ -17,7 +17,8 @@ public class Order {
     private StringProperty customerRequests = new SimpleStringProperty(); //Additional info from customer
     private LocalDate actualDeliveryDate; //Is set when order is delivered. Default null
     private LocalDate deadline; //Consists of date and time
-    private LocalDateTime deadlineTime;
+    private ObjectProperty<LocalDateTime> deadlineTime = new SimpleObjectProperty<>();
+    private ObjectProperty<LocalDateTime> actualDeliveryDateTime = new SimpleObjectProperty<>();
     private ObjectProperty<OrderStatus> status = new SimpleObjectProperty<>();
     private ObjectProperty<Address> address = new SimpleObjectProperty<>();
     private ObservableList<OrderLine> dishesInThisOrder = FXCollections.observableArrayList();
@@ -32,6 +33,19 @@ public class Order {
         this.price.set(price);
         this.status.set(status);
         this.actualDeliveryDate = actualDeliveryDate;
+        this.dishesInThisOrder = dishesInThisOrder;
+        this.address.set(address);
+    }
+    // From the database, revisioned
+    public Order(int orderId, String customerRequests, LocalDateTime deadlineTime,
+                 LocalDateTime actualDeliveryDateTime, double price,
+                 OrderStatus status, ObservableList dishesInThisOrder, Address address) {
+        this.orderId.set(orderId);
+        this.customerRequests.set(customerRequests);
+        this.deadlineTime.set(deadlineTime);
+        this.price.set(price);
+        this.status.set(status);
+        this.actualDeliveryDateTime.set(actualDeliveryDateTime);
         this.dishesInThisOrder = dishesInThisOrder;
         this.address.set(address);
     }
@@ -51,7 +65,7 @@ public class Order {
     public Order(String customerRequests, LocalDateTime deadlineTime, double price,
                  OrderStatus status, ObservableList dishesInThisOrder) {
         this.customerRequests.set(customerRequests);
-        this.deadlineTime = deadlineTime;
+        this.deadlineTime.set(deadlineTime);
         this.price.set(price);
         this.status.set(status);
         actualDeliveryDate = null;
@@ -141,5 +155,29 @@ public class Order {
 
     public void setDishesInThisOrder(ObservableList<OrderLine> dishesInThisOrder) {
         this.dishesInThisOrder = dishesInThisOrder;
+    }
+
+    public LocalDateTime getDeadlineTime() {
+        return deadlineTime.get();
+    }
+
+    public ObjectProperty<LocalDateTime> deadlineTimeProperty() {
+        return deadlineTime;
+    }
+
+    public void setDeadlineTime(LocalDateTime deadlineTime) {
+        this.deadlineTime.set(deadlineTime);
+    }
+
+    public LocalDateTime getActualDeliveryDateTime() {
+        return actualDeliveryDateTime.get();
+    }
+
+    public ObjectProperty<LocalDateTime> actualDeliveryDateTimeProperty() {
+        return actualDeliveryDateTime;
+    }
+
+    public void setActualDeliveryDateTime(LocalDateTime actualDeliveryDateTime) {
+        this.actualDeliveryDateTime.set(actualDeliveryDateTime);
     }
 }

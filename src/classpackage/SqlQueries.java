@@ -6,6 +6,7 @@ import javafx.collections.ObservableList;
 import java.sql.*;
 import java.sql.Date;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 
 /**
@@ -26,7 +27,7 @@ import java.util.*;
 
 public class SqlQueries extends DBConnector {
 
-
+    // TODO: 23.04.2016 Log out, (statistikk), sette alt inne i samme vindu, styling, validate felt
     // TODO: 22.04.2016 In Delete methods that include fex adress remember to delete the address as well
     // TODO: 19.04.2016 Refine methods to give confirmations on both execute() and executeUpdate()
     // TODO: 04.04.2016 the strings for Gui that deals with Orders should use just so we have this standardized
@@ -793,20 +794,21 @@ public class SqlQueries extends DBConnector {
     }
 
     //    Method for updating an Ingredient
-    public boolean updateIngredient(Ingredient ingredient) {
+    public boolean updateIngredient(ObservableList<Ingredient> ingredients) {
         try {
-            String sql = "UPDATE ingredient SET supplier_id = ?, quantity_owned = ?, unit = ?, " +
-                    "price = ?, description = ? WHERE ingredient_id = ?";
-            updateQuery = con.prepareStatement(sql);
-            updateQuery.setInt(1, ingredient.getSupplier().getSupplierId());
-            updateQuery.setDouble(2, ingredient.getQuantityOwned());
-            updateQuery.setString(3, ingredient.getUnit());
-            updateQuery.setDouble(4, ingredient.getPrice());
-            updateQuery.setString(5, ingredient.getIngredientName());
-            updateQuery.setInt(6, ingredient.getIngredientId());
-            if (updateQuery.executeUpdate() == 1) {
-                return true;
+            con.setAutoCommit(false);
+            for (Ingredient ing : ingredients) {
+                String sql = "UPDATE ingredient SET quantity_owned = ?, unit = ?, price = ?, description = ? WHERE ingredient_id = ?";
+                updateQuery = con.prepareStatement(sql);
+                updateQuery.setDouble(1, ing.getQuantityOwned());
+                updateQuery.setString(2, ing.getUnit());
+                updateQuery.setDouble(3, ing.getPrice());
+                updateQuery.setString(4, ing.getIngredientName());
+                updateQuery.setInt(5, ing.getIngredientId());
+                updateQuery.executeUpdate();
             }
+            con.commit();
+            return true;
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -1086,6 +1088,66 @@ public class SqlQueries extends DBConnector {
                 int customerId = res.getInt("customer_id");
                 int subscriptionId = res.getInt("subscription_id");
                 String customerRequests = res.getString("customer_requests");
+                LocalDateTime deadline = res.getTimestamp("delivery_date").toLocalDateTime();
+                double price = res.getDouble("price");
+                OrderStatus status = getOrderStatus(res.getInt("status_id"));
+                Address address = getAddress(res.getInt("address_id"));
+                LocalDateTime actualDeliveryDate = null;
+                LocalDateTime actualDeliveryDateUnstable = res.getTimestamp("delivered_date").toLocalDateTime();
+                if (actualDeliveryDateUnstable != null) {
+                    actualDeliveryDate = actualDeliveryDateUnstable;
+                }
+                Order order = new Order(orderId, customerRequests, deadline, actualDeliveryDate, price, status, null, address);
+                setOrderLinesInOrder(order, allDishes);
+                orders.add(order);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            closeEverything(res, selectQuery, con);
+        }
+        return orders;
+    }
+
+    //    wrong one because of date handling
+    public ObservableList<Order> getOrdersWrong(int posId, ObservableList<Dish> allDishes) {
+        ObservableList<Order> orders = FXCollections.observableArrayList();
+        ResultSet res = null;
+        try {
+            String selectSql = "";
+            //ceo and sales
+            if (posId == 1) {
+                selectSql = "SELECT * FROM `order`";
+                selectQuery = con.prepareStatement(selectSql);
+                //CHEF
+            } else if (posId == 2) {
+                selectSql = "SELECT * FROM `order` WHERE status_id = ? OR ? OR ?";
+                selectQuery = con.prepareStatement(selectSql);
+                selectQuery.setInt(1, CREATED);
+                selectQuery.setInt(2, INPREPARATION);
+                selectQuery.setInt(3, READYFORDELIVERY);
+                //DRIVER
+            } else if (posId == 3) {
+                selectSql = "SELECT * FROM `order` WHERE status_id = ?;" +
+                        "SELECT * FROM `order` WHERE status_id = ? AND delivery_date = DATE(now())";
+                selectQuery = con.prepareStatement(selectSql);
+                selectQuery.setInt(1, READYFORDELIVERY);
+                selectQuery.setInt(2, DELIVERED);
+            } else if (posId == 4) {
+                selectSql = "SELECT * FROM `order` WHERE status_id = ? OR ? OR ?";
+                selectQuery = con.prepareStatement(selectSql);
+                selectQuery.setInt(1, CREATED);
+                selectQuery.setInt(2, INPREPARATION);
+                selectQuery.setInt(3, READYFORDELIVERY);
+                selectQuery.setInt(4, DELIVERED);
+                //SALES
+            }
+            res = selectQuery.executeQuery();
+            while (res.next()) {
+                int orderId = res.getInt("order_id");
+                int customerId = res.getInt("customer_id");
+                int subscriptionId = res.getInt("subscription_id");
+                String customerRequests = res.getString("customer_requests");
                 LocalDate deadline = res.getDate("delivery_date").toLocalDate();
                 double price = res.getDouble("price");
                 OrderStatus status = getOrderStatus(res.getInt("status_id"));
@@ -1124,17 +1186,22 @@ public class SqlQueries extends DBConnector {
             String insertSql = "INSERT INTO `order`(customer_id, subscription_id, customer_requests, delivery_date, delivered_date, " +
                     "price, address_id, status_id) VALUES(?,?,?,?,?,?,?,?)";
             insertQuery = con.prepareStatement(insertSql, Statement.RETURN_GENERATED_KEYS);
-            if (customer == null){
+            if (customer == null) {
                 insertQuery.setNull(1, Types.INTEGER);
-            }else {
+            } else {
                 insertQuery.setInt(1, customer.getCustomerId());
             }
+            if (subscription == null) {
+                insertQuery.setNull(2, Types.INTEGER);
+            } else {
+                insertQuery.setInt(2, subscription.getSubscriptionId());
+            }
             insertQuery.setString(3, order.getCustomerRequests());
-            insertQuery.setDate(4, Date.valueOf(order.getDeadline()));
-            if (order.getActualDeliveryDate() == null) {
+            insertQuery.setTimestamp(4, Timestamp.valueOf(order.getDeadlineTime()));
+            if (order.getActualDeliveryDateTime() == null) {
                 insertQuery.setNull(5, Types.DATE);
             } else {
-                insertQuery.setDate(5, Date.valueOf(order.getActualDeliveryDate()));
+                insertQuery.setTimestamp(5, Timestamp.valueOf(order.getActualDeliveryDateTime()));
             }
             insertQuery.setDouble(6, order.getPrice());
             insertQuery.setInt(7, order.getAddress().getAddressId());
@@ -1163,30 +1230,29 @@ public class SqlQueries extends DBConnector {
         return false;
     }
 
+    //    updates both order and customer, customer can be set to null if update is only on Order
     public boolean updateOrder(Order order, Customer customer) {
         try {
-            String sql = "UPDATE `order` SET ";
-
-            sql += "customer_requests = ?, delivery_date = ?, " +
-                    "delivered_date = ?, price = ?, address = ?, status = ?";
-            if (!(customer == null)) {
-                sql += ", customer_id = ?";
-            }
-            sql += " WHERE order_id = ?";
+            con.setAutoCommit(false);
+            String sql = "UPDATE `order` SET customer_requests = ?, delivery_date = ?, " +
+                    "delivered_date = ?, price = ?, address_id = ?, status_id  = ? WHERE order_id = " + order.getOrderId();
             updateQuery = con.prepareStatement(sql);
-            if (!(customer == null)) {
-                updateQuery.setInt(7, customer.getCustomerId());
-            }
             updateQuery.setString(1, order.getCustomerRequests());
-            updateQuery.setDate(2, Date.valueOf(order.getDeadline()));
-            updateQuery.setDate(3, Date.valueOf(order.getActualDeliveryDate()));
+            updateQuery.setTimestamp(2, Timestamp.valueOf(order.getDeadlineTime()));
+            if (order.getActualDeliveryDate() == null) {
+                updateQuery.setNull(3, Types.DATE);
+            } else {
+                updateQuery.setTimestamp(3, Timestamp.valueOf(order.getActualDeliveryDateTime()));
+            }
             updateQuery.setDouble(4, order.getPrice());
             updateQuery.setInt(5, order.getAddress().getAddressId());
-            int rowsAffected = updateQuery.executeUpdate();
-            if (rowsAffected == 1) {
-                return true;
+            if (updateQuery.executeUpdate() == 1 ) {
+                if (customer != null && updateCustomer(customer)) {
+                    return true;
+                }
             }
         } catch (SQLException e) {
+            SqlCleanup.rullTilbake(con);
             e.printStackTrace();
             System.out.println("method updateOrder failed");
         } catch (Exception e) {
