@@ -1068,7 +1068,6 @@ public class SqlQueries extends DBConnector {
         try {
             String selectSql = "SELECT meal_type_id, meal_type_name FROM meal_type WHERE meal_type_id = " + id;
             selectQuery = con.prepareStatement(selectSql);
-            selectQuery.setInt(1, id);
             res = selectQuery.executeQuery();
             if (!res.next()) return null;
             int mealTypeId = res.getInt(1);
