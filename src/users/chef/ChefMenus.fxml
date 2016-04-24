@@ -6,11 +6,20 @@
 
 
 <?import java.lang.String?>
-<GridPane fx:id="subMenuGP" fx:controller="users.chef.ControllerChefMenus" prefHeight="200" prefWidth="200.0" xmlns:fx="http://javafx.com/fxml" hgap="20" vgap="15">
+<GridPane fx:id="subMenuGP" fx:controller="users.chef.ControllerChefMenus" xmlns:fx="http://javafx.com/fxml"
+          stylesheets="@/users/chef/ChefStyle.css" alignment="CENTER">
     <children>
-        <Button fx:id="addMenuButton" GridPane.columnIndex="1" GridPane.rowIndex="1" text="Add new menu" styleClass="BigButton"/>
-        <Button fx:id="editMenuButton" GridPane.columnIndex="2" GridPane.rowIndex="1" text="Edit menu ->" styleClass="BigButton"/>
-        <ComboBox fx:id="chooseMenuCB" GridPane.columnIndex="3" GridPane.rowIndex="1" promptText="Select menu">
-        </ComboBox>
+        <TableView fx:id="chefMenusTable" GridPane.columnIndex="0" GridPane.rowIndex="0" prefWidth="900" prefHeight="500">
+            <columns>
+                <TableColumn fx:id="menuNameCol" text="Menu name"/>
+                <TableColumn fx:id="dishQuantityCol" text="Dish quantity"/>
+                <TableColumn fx:id="menuPriceCol" text="Price (NOK)"/>
+            </columns>
+            <columnResizePolicy><TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/></columnResizePolicy>
+        </TableView>
+        <HBox GridPane.rowIndex="1" GridPane.columnIndex="0" styleClass="bottomSubHBox">
+            <Button fx:id="addMenuButton" text="Add new menu" styleClass="subMenuButton"/>
+            <Button fx:id="refreshMenusButton" text="Refresh table" styleClass="subMenuButton"/>
+        </HBox>
     </children>
 </GridPane>

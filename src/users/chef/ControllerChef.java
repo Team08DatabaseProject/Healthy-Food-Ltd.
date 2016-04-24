@@ -5,6 +5,7 @@ package users.chef;
  */
 import classpackage.*;
 import classpackage.Menu;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -21,6 +22,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 
 import java.net.URL;
+import java.text.NumberFormat;
 import java.util.ResourceBundle;
 
 public class ControllerChef implements Initializable{
@@ -39,6 +41,7 @@ public class ControllerChef implements Initializable{
     protected static ObservableList<Menu> menuList = db.getAllMenus(dishList);
     protected static ObservableList<Order> orderList = db.getOrders(2, dishList);
     protected static ObservableList<OrderStatus> statusTypes = db.getStatusTypes();
+    protected static ObservableList<MealType> mealTypes = db.getAllMealTypes();
 
 
     protected static Ingredient selectedIngredient;
@@ -48,6 +51,11 @@ public class ControllerChef implements Initializable{
     protected static Menu selectedMenu;
     protected static Supplier selectedSupplier;
     protected static Order selectedOrder;
+
+    protected final NumberFormat nf = NumberFormat.getNumberInstance();
+    {
+        nf.setMaximumFractionDigits(2);
+    }
 
     // Display orders relevant to chef
     EventHandler<ActionEvent> showOrdersEvent = new EventHandler<ActionEvent>() {
@@ -111,8 +119,13 @@ public class ControllerChef implements Initializable{
 
 
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                rootPaneDriver.requestFocus();
+            }
+        });
 
-        // Connect sidebar buttons to events
         ordersButton.setOnAction(showOrdersEvent);
         menusButton.setOnAction(showMenusEvent);
         ingredientsButton.setOnAction(showIngredientsEvent);

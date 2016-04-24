@@ -17,7 +17,6 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
 import java.net.URL;
-import java.text.NumberFormat;
 import java.util.ResourceBundle;
 
 /**
@@ -36,11 +35,6 @@ public class ControllerChefOrderInfo extends ControllerChef implements Initializ
     public TableColumn dishNameCol;
     public TableColumn dishAmountCol;
     public TableColumn dishPriceCol;
-
-    private final NumberFormat nf = NumberFormat.getNumberInstance();
-    {
-        nf.setMaximumFractionDigits(2);
-    }
 
     EventHandler<MouseEvent> viewDishInfoEvent = new EventHandler<MouseEvent>() {
         @Override

@@ -10,8 +10,8 @@
 <?import javafx.collections.FXCollections?>
 
 <?import javafx.scene.chart.BubbleChart?>
-<GridPane fx:id="addMenuGP" fx:controller="users.chef.ControllerChefAddMenu" hgap="5" prefHeight="500.0" prefWidth="800.0" vgap="10" BorderPane.alignment="CENTER" xmlns="http://javafx.com/javafx/8"
-          xmlns:fx="http://javafx.com/fxml/1">
+<GridPane fx:id="subWindowGP" fx:controller="users.chef.ControllerChefAddMenu" xmlns="http://javafx.com/javafx/8"
+          xmlns:fx="http://javafx.com/fxml/1" alignment="CENTER">
     <padding>
         <Insets bottom="25" left="30" right="20" top="25" />
     </padding>

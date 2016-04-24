@@ -73,4 +73,9 @@ public class Dish {
         this.dishLines = dishLines;
     }
 
+    @Override
+    public String toString() {
+        return dishName.get();
+    }
+
 }

@@ -23,6 +23,8 @@ public class Order {
     private ObjectProperty<Address> address = new SimpleObjectProperty<>();
     private ObservableList<OrderLine> dishesInThisOrder = FXCollections.observableArrayList();
 
+    private boolean changed = false;
+
     // From the database
     public Order(int orderId, String customerRequests, LocalDate deadline,
                  LocalDate actualDeliveryDate, double price,
@@ -180,4 +182,14 @@ public class Order {
     public void setActualDeliveryDateTime(LocalDateTime actualDeliveryDateTime) {
         this.actualDeliveryDateTime.set(actualDeliveryDateTime);
     }
+
+    public void setChanged(boolean bln) {
+        changed = bln;
+    }
+
+    public boolean isChanged() {
+        return changed;
+    }
+
+
 }

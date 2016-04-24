@@ -2,6 +2,7 @@ package users.chef;
 
 import classpackage.*;
 import div.PopupDialog;
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -28,7 +29,7 @@ import java.util.ResourceBundle;
  */
 public class ControllerChefAddDish extends ControllerChef implements Initializable {
 
-    public GridPane addDishGP;
+    public GridPane subWindowGP;
     public TextField dishNameField;
     public TextField dishPriceFactorField;
     public ComboBox<Ingredient> ingredientComboBox;
@@ -167,6 +168,13 @@ public class ControllerChefAddDish extends ControllerChef implements Initializab
 
 
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
+
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                subWindowGP.requestFocus();
+            }
+        });
 
         ingredientComboBox.setItems(ingredientList);
         ingredientComboBox.setConverter(new StringConverter<Ingredient>() {

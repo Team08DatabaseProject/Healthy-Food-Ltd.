@@ -24,7 +24,6 @@ import java.net.URL;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.ResourceBundle;
-import classpackage.TestObjects;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.GridPane;
@@ -58,11 +57,11 @@ public class ControllerChefIngredients extends ControllerChef implements Initial
         @Override
         public void handle(ActionEvent event) {
             try {
-                String ingListString = "";
+                String updateString = "";
                 for (Ingredient ing : ingredientList) {
                     if (ing.isChanged()) {
                         ingredientsCopy.add(ing);
-                        ingListString += "\n" + ing.getIngredientName();
+                        updateString += "\n" + ing.getIngredientName();
                         ing.setChanged(false);
                     }
                 }
@@ -70,9 +69,9 @@ public class ControllerChefIngredients extends ControllerChef implements Initial
                     PopupDialog.errorDialog("Update failure", "Changes were not applied, as no changes were detected in ingredients.");
                 } else if (db.updateIngredient(ingredientsCopy)) {
                     ingredientsCopy.clear();
-                    PopupDialog.confirmationDialog("Result", "Ingredients:" + ingListString + "\nupdated.");
+                    PopupDialog.confirmationDialog("Result", "Ingredients:" + updateString + "\nupdated.");
                 } else {
-                    PopupDialog.errorDialog("Error", "Something went wrong.\nIngredients:" + ingListString + "\nfailed to update.");
+                    PopupDialog.errorDialog("Error", "Something went wrong.\nIngredients:" + updateString + "\nfailed to update.");
                 }
             } catch (Exception exc) {
                 System.out.println(exc);
@@ -141,10 +140,6 @@ public class ControllerChefIngredients extends ControllerChef implements Initial
 
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
 
-        final NumberFormat nf = NumberFormat.getNumberInstance();
-        {
-            nf.setMaximumFractionDigits(2);
-        }
         ingName.setCellValueFactory(new PropertyValueFactory<Ingredient, String>("ingredientName"));
         ingUnit.setCellValueFactory(new PropertyValueFactory<Ingredient, String>("unit"));
         ingPrice.setCellValueFactory(new PropertyValueFactory<Ingredient, Double>("price"));

@@ -6,17 +6,41 @@
 
 
 <?import java.lang.String?>
-<GridPane fx:id="dishesGP" fx:controller="users.chef.ControllerChefDishes" gridLinesVisible="false" prefHeight="300" prefWidth="400.0" xmlns:fx="http://javafx.com/fxml" hgap="20" vgap="15">
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<GridPane fx:id="subMenuGP" fx:controller="users.chef.ControllerChefDishes" alignment="CENTER" prefHeight="300" prefWidth="400.0" xmlns:fx="http://javafx.com/fxml">
     <children>
-        <TableView fx:id="dishTable" layoutX="50" layoutY="50" GridPane.columnIndex="0" GridPane.rowIndex="0" prefHeight="300" prefWidth="402">
-            <columnResizePolicy><TableView fx:constant="UNCONSTRAINED_RESIZE_POLICY"/></columnResizePolicy>
+        <VBox GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.rowSpan="2" styleClass="greenVBox" prefWidth="30"/>
+        <VBox GridPane.columnIndex="2" GridPane.rowIndex="0" GridPane.rowSpan="2" styleClass="greenVBox" prefWidth="30"/>
+        <TableView fx:id="dishTable" GridPane.columnIndex="1" GridPane.rowIndex="0" prefHeight="500" prefWidth="900">
+            <columnResizePolicy><TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/></columnResizePolicy>
             <columns>
                 <TableColumn fx:id="dishName" text="Dish" prefWidth="200"/>
                 <TableColumn fx:id="dishPrice" text="Price" prefWidth="200"/>
             </columns>
         </TableView>
-        <Button fx:id="addDishButton" text="Add new&#10;dish" prefWidth="100" prefHeight="50" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
-        <Button fx:id="viewDishInfoButton" text="View/change&#10;info" prefWidth="120" prefHeight="50" GridPane.rowIndex="1" translateX="110"/>
-        <Button fx:id="removeDishButton" text="Remove dish" prefWidth="150" prefHeight="50" GridPane.rowIndex="1" translateX="240"/>
+        <HBox styleClass="bottomSubHBox" GridPane.rowIndex="1" GridPane.columnIndex="1" prefHeight="60" spacing="10" alignment="CENTER">
+            <Button fx:id="addDishButton" text="Add new&#10;dish" styleClass="subMenuButton">
+                <graphic>
+                    <ImageView>
+                        <Image url="@/labels/Plus-24.png"/>
+                    </ImageView>
+                </graphic>
+            </Button>
+            <Button fx:id="viewDishInfoButton" text="View/edit&#10;dish" styleClass="subMenuButton">
+                <graphic>
+                    <ImageView>
+                        <Image url="@/labels/Edit File-24.png"/>
+                    </ImageView>
+                </graphic>
+            </Button>
+            <Button fx:id="removeDishButton" text="Remove&#10;dish" styleClass="subMenuButton">
+                <graphic>
+                    <ImageView>
+                        <Image url="@/labels/Delete-24.png"/>
+                    </ImageView>
+                </graphic>
+            </Button>
+        </HBox>
     </children>
 </GridPane>

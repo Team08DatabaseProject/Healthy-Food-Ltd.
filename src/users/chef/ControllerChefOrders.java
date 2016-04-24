@@ -3,8 +3,12 @@ package users.chef;
 import classpackage.Order;
 import classpackage.OrderLine;
 import classpackage.OrderStatus;
+import div.PopupDialog;
+import javafx.application.Platform;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -32,7 +36,7 @@ import java.util.ResourceBundle;
 public class ControllerChefOrders extends ControllerChef implements Initializable {
 
     @FXML
-    public GridPane chefOrdersGP;
+    public GridPane subMenuGP;
     public TableView chefOrdersTable;
     public TableColumn orderIdCol;
     public TableColumn deadlineCol;
@@ -64,8 +68,41 @@ public class ControllerChefOrders extends ControllerChef implements Initializabl
         }
     };
 
+    EventHandler<ActionEvent> applyChangesEvent = new EventHandler<ActionEvent>() {
+        @Override
+        public void handle(ActionEvent event) {
+            try {
+                ObservableList<Order> orderUpdateList = FXCollections.observableArrayList();
+                String updateString = "";
+                for (Order order : orderList) {
+                    if (order.isChanged()) {
+                        orderUpdateList.add(order);
+                        updateString += "\n" + order.getOrderId();
+                        order.setChanged(false);
+                    }
+                }
+                if (orderUpdateList.isEmpty()) {
+                    PopupDialog.errorDialog("Update failure", "Changes were not applied, as no changes were detected in orders.");
+                } else if (1==1) {  // TODO: 4/24/16 update with SqlQueries method
+                    PopupDialog.confirmationDialog("Result", "Order(s):" + updateString + "\nupdated.");
+                } else {
+                    PopupDialog.errorDialog("Error", "Something went wrong.\nOrder:" + updateString + "\nfailed to update.");
+                }
+            } catch (Exception exc) {
+                System.out.println(exc);
+            }
+        }
+    };
+
 
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
+
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                subMenuGP.requestFocus();
+            }
+        });
 
         chefOrdersTable.setEditable(true);
         orderIdCol.setCellValueFactory(new PropertyValueFactory<Order, Integer>("orderId"));
@@ -85,6 +122,15 @@ public class ControllerChefOrders extends ControllerChef implements Initializabl
             }
         }, statusTypes));
 
+        statusCol.setOnEditCommit(
+                new EventHandler<TableColumn.CellEditEvent<Order, OrderStatus>>() {
+                    @Override
+                    public void handle(TableColumn.CellEditEvent<Order, OrderStatus> event) {
+                        event.getTableView().getItems().get(event.getTablePosition().getRow()).setChanged(true);
+                    }
+                }
+        );
+
         dishQuantityCol.setCellFactory(col -> {
             return new TableCell<Order, ObservableList<OrderLine>>() {
                 @Override
@@ -98,10 +144,10 @@ public class ControllerChefOrders extends ControllerChef implements Initializabl
             };
         });
 
-
         chefOrdersTable.getColumns().setAll(orderIdCol, deadlineCol, dishQuantityCol, priceCol, statusCol);
         chefOrdersTable.setItems(orderList);
         chefOrdersTable.setOnMousePressed(viewOrderInfoEvent);
+        applyChangesButton.setOnAction(applyChangesEvent);
 
     }
 }

@@ -2,6 +2,7 @@ package users.chef;
 
 import classpackage.*;
 import div.PopupDialog;
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -18,7 +19,6 @@ import javafx.util.StringConverter;
 import javafx.util.converter.DoubleStringConverter;
 
 import java.net.URL;
-import java.text.NumberFormat;
 import java.util.ResourceBundle;
 import java.util.function.UnaryOperator;
 
@@ -27,7 +27,7 @@ import java.util.function.UnaryOperator;
  */
 public class ControllerChefEditDish extends ControllerChef implements Initializable {
 
-    public GridPane editDishGP;
+    public GridPane subWindowGP;
     public TextField editDishNameField;
     public TextField editDishPriceFactorField;
     public ComboBox<Ingredient> editIngredientCB;
@@ -52,12 +52,6 @@ public class ControllerChefEditDish extends ControllerChef implements Initializa
     // Current DishLines (ingredients) in the dish being edited
     ObservableList<DishLine> oldDishLines = FXCollections.observableArrayList(); //= selectedDish.getAllDishLinesForThisDish();
     ObservableList<DishLine> currentDishLines = FXCollections.observableArrayList();
-
-
-    private final NumberFormat nf = NumberFormat.getNumberInstance();
-    {
-        nf.setMaximumFractionDigits(2);
-    }
 
     EventHandler<ActionEvent> commitChanges = new EventHandler<ActionEvent>() {
         @Override
@@ -186,8 +180,14 @@ public class ControllerChefEditDish extends ControllerChef implements Initializa
 
 
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
-        oldDishLines = selectedDish.getAllDishLinesForThisDish();
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                subWindowGP.requestFocus();
+            }
+        });
 
+        oldDishLines = selectedDish.getAllDishLinesForThisDish();
         currentDishLines.addAll(oldDishLines);
 
         for (DishLine dl : currentDishLines) {

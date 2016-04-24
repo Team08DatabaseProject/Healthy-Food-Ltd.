@@ -9,39 +9,49 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.collections.FXCollections?>
 
-<?import javafx.scene.chart.BubbleChart?>
-<GridPane fx:id="editMenuGP" fx:controller="users.chef.ControllerChefEditMenu" hgap="5" prefHeight="500.0" prefWidth="800.0" vgap="10" BorderPane.alignment="CENTER" xmlns="http://javafx.com/javafx/8"
-          xmlns:fx="http://javafx.com/fxml/1" stylesheets="@/users/chef/ChefStyle.css" gridLinesVisible="true">
+<GridPane fx:id="subWindowGP" fx:controller="users.chef.ControllerChefEditMenu" xmlns="http://javafx.com/javafx/8"
+          xmlns:fx="http://javafx.com/fxml/1" stylesheets="@/users/chef/ChefStyle.css" alignment="CENTER">
     <padding>
         <Insets bottom="25" left="30" right="20" top="25" />
     </padding>
     <children>
-        <VBox alignment="TOP_LEFT" spacing="10" GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.fillWidth="false" prefWidth="180">
+        <VBox GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.fillWidth="false" prefWidth="350">
             <children>
-                <TextField fx:id="editMenuNameField" promptText="Menu name" styleClass="QuestrialMedium"/>
-                <ComboBox fx:id="editMealTypeCB" promptText="Meal type"/>
-                <Button fx:id="editApplyButton" prefWidth="180" prefHeight="30" text="Apply changes" styleClass="QuestrialMedium"/>
+                <GridPane>
+
+                    <Label text="Name" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                    <TextField fx:id="editMenuNameField" promptText="Menu name" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+                    <Label text="Meal type" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                    <ComboBox fx:id="editMealTypeCB" promptText="Meal type" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+                </GridPane>
             </children>
         </VBox>
 
-        <TableView fx:id="currentDishTable" GridPane.columnIndex="1" GridPane.rowIndex="0" prefWidth="400">
+        <TableView fx:id="currentDishTable" GridPane.columnIndex="1" GridPane.rowIndex="0" prefWidth="400" styleClass="subWindowTableView">
             <columnResizePolicy><TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/></columnResizePolicy>
-            <TableColumn fx:id="currentDishNameCol" prefWidth="170" text="Dish name"/>
-            <TableColumn fx:id="currentDishAmountCol" prefWidth="108" text="Amount"/>
-            <TableColumn fx:id="currentDishPriceCol" prefWidth="120" text="Price (NOK)"/>
+            <columns>
+                <TableColumn fx:id="currentDishNameCol" text="Dish name"/>
+                <TableColumn fx:id="currentDishAmountCol" text="Amount"/>
+                <TableColumn fx:id="currentDishPriceCol" text="Price (NOK)"/>
+            </columns>
         </TableView>
 
         <HBox alignment="BASELINE_LEFT" spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="1">
             <children>
-                <ComboBox fx:id="editDishCB" promptText="Choose dish">
+
+                <VBox>
+                    <Button fx:id="editAddToMenuButton" text="Add dish to menu" styleClass="subWindowButton"/>
+                    <ComboBox fx:id="editDishCB" promptText="Choose dish">
                     <items>
                         <FXCollections fx:factory="observableArrayList"/>
                     </items>
-                </ComboBox>
-                <VBox spacing="5">
-                    <Button fx:id="editAddToMenuButton" prefWidth="170" prefHeight="30" text="Add dish to menu"/>
-                    <Button fx:id="editRemoveFromMenuButton" prefWidth="170" prefHeight="30" text="Remove dish from menu"/>
+                    </ComboBox>
                 </VBox>
+
+                <Button fx:id="editRemoveFromMenuButton" text="Remove dish from menu" styleClass="subWindowButton"/>
+
             </children>
         </HBox>
 

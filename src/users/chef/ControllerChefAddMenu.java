@@ -7,6 +7,7 @@ import classpackage.*;
 import classpackage.Menu;
 import div.Login;
 import div.PopupDialog;
+import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
@@ -43,9 +44,9 @@ import java.util.ResourceBundle;
 public class ControllerChefAddMenu extends ControllerChef implements Initializable{
 
     @FXML
-    public GridPane addMenuGP;
+    public GridPane subWindowGP;
     public TextField menuNameField;
-    public ComboBox<String> mealTypeCB;
+    public ComboBox<MealType> mealTypeCB;
     public ComboBox<Dish> chooseDishCB;
     public Button addToMenuButton;
     public Button removeFromMenuButton;
@@ -59,32 +60,31 @@ public class ControllerChefAddMenu extends ControllerChef implements Initializab
     public Button addMenuButton;
     public Button applyButton;
 
-    private String selectedMealType;
+    private MealType selectedMealType;
     private String menuNameString;
     private double menuPrice = 0;
     private String menuPriceString;
 
     private ObservableList<MenuLine> chosenMenuLines = FXCollections.observableArrayList();
-    private ObservableList<String> mealTypes = FXCollections.observableArrayList(
-            "Non-vegetarian", "Vegetarian", "Vegan"
-    );
 
-    private final NumberFormat nf = NumberFormat.getNumberInstance();
-    {
-        nf.setMaximumFractionDigits(2);
-    }
 
-    EventHandler<ActionEvent> addMenu = new EventHandler<ActionEvent>() {
+
+    EventHandler<ActionEvent> commitNewMenuEvent = new EventHandler<ActionEvent>() {
         @Override
         public void handle(ActionEvent event) {
             try {
+                menuNameString = menuNameField.getText();
                 boolean add = true;
                 Menu newMenu = new Menu(menuNameString, selectedMealType, chosenMenuLines);
+                menuPrice = newMenu.getTotalPrice();
+                menuPriceString = nf.format(menuPrice);
                 for (Menu m : menuList) {
                     if (m.getName().equals(newMenu.getName())) {
                         add = false;
                     }
                 }
+                menuNameLabel.setText("Menu name: " + menuNameString);
+                menuPriceLabel.setText("Menu price: " + menuPriceString + " NOK");
                 if (add) {
                     if (db.addMenu(newMenu)) {
                         menuList.add(newMenu);
@@ -179,27 +179,44 @@ public class ControllerChefAddMenu extends ControllerChef implements Initializab
 
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
 
-        mealTypeCB.setItems(mealTypes);
-        mealTypeCB.valueProperty().addListener(new ChangeListener<String>() {
+        Platform.runLater(new Runnable() {
             @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+            public void run() {
+                subWindowGP.requestFocus();
+            }
+        });
+
+        mealTypeCB.setItems(mealTypes);
+        mealTypeCB.setCellFactory(column -> {
+            return new ListCell<MealType>() {
+                @Override
+                public void updateItem(MealType mealType, boolean empty) {
+                    super.updateItem(mealType, empty);
+                    if (!(mealType == null || empty)) {
+                        setText(mealType.toString());
+                    }
+                }
+            };
+        });
+        mealTypeCB.valueProperty().addListener(new ChangeListener<MealType>() {
+            @Override
+            public void changed(ObservableValue<? extends MealType> observable, MealType oldValue, MealType newValue) {
                 selectedMealType = newValue;
             }
         });
+
+
         chooseDishCB.setItems(dishList);
-        chooseDishCB.setConverter(new StringConverter<Dish>() {
-            @Override
-            public String toString(Dish dish) {
-                if (dish == null) {
-                    return null;
-                } else {
-                    return dish.getDishName();
+        chooseDishCB.setCellFactory(column -> {
+            return new ListCell<Dish>() {
+                @Override
+                public void updateItem(Dish dish, boolean empty) {
+                    super.updateItem(dish, empty);
+                    if (!(dish == null || empty)) {
+                        setText(dish.toString());
+                    }
                 }
-            }
-            @Override
-            public Dish fromString(String string) {
-                return null;
-            }
+            };
         });
 
         chooseDishCB.valueProperty().addListener(new ChangeListener<Dish>() {
@@ -258,15 +275,13 @@ public class ControllerChefAddMenu extends ControllerChef implements Initializab
                     @Override
                     public void handle(CellEditEvent<MenuLine, Double> event) {
                         event.getTableView().getItems().get(event.getTablePosition().getRow()).setPriceFactor(event.getNewValue());
-
                     }
-                }
-        );
+                });
 
         chosenDishTable.getColumns().setAll(chosenDishName, chosenDishAmount, chosenDishPrice, chosenDishPriceFactor);
 
         addToMenuButton.setOnAction(addToMenuButtonClick);
-        addMenuButton.setOnAction(addMenu);
+        addMenuButton.setOnAction(commitNewMenuEvent);
         removeFromMenuButton.setOnAction(removeFromMenuButtonClick);
         applyButton.setOnAction(applyChanges);
 

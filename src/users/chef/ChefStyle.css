@@ -1,5 +1,56 @@
 #subMenuGP {
-    -fx-background-color: #77DD77;
+    -fx-background-color: #bbeebb;
+}
+
+#subWindowGP {
+    -fx-background-color: #e392e3;
+}
+
+.subWindowButton {
+    -fx-background-color: #e8a6e8;
+    -fx-font-size: 12px;
+    -fx-min-width: 100px;
+    -fx-min-height: 30px;
+    -fx-alignment: CENTER;
+}
+
+.subWindowButton:hover {
+    -fx-background-color: #d969d9;
+}
+
+.table-view.subWindowTableView {
+    -fx-background-color: #e392e3;
+}
+
+.subWindowTableView .table-row-cell {
+    -fx-background-color: -fx-table-cell-border-color, #edbbed;
+    -fx-background-insets: 0, 0 0 1 0;
+    -fx-padding: 0.0em; /* 0 */
+}
+
+.subWindowTableView .table-row-cell:odd {
+    -fx-background-color: -fx-table-cell-border-color, #f3cff3;
+    -fx-background-insets: 0, 0 0 1 0;
+    -fx-padding: 0.0em; /* 0 */
+}
+
+.table-view.subWindowTableView .column-header {
+    -fx-background-color: transparent;
+}
+
+.table-view.subWindowTableView .column-header-background {
+    -fx-background-color: linear-gradient(#d355d3 0%, #d355d3 100%);
+}
+
+.table-view.subWindowTableView .column-header-background .label{
+    -fx-background-color: transparent;
+    -fx-text-fill: black;
+}
+
+
+.greenVBox {
+    -fx-background-color: #6BC66B;
+    -fx-border-color: #6BC66B;
 }
 
 #topMenuHBox {
@@ -8,22 +59,51 @@
 }
 
 #bottomSubHBox {
-    -fx-background-color: #6BC66B;
-    -fx-border-color: #6BC66B;
+    -fx-background-color: #6bc66b;
+    -fx-border-color: #6bc66b;
+    -fx-spacing: 10px;
+    -fx-alignment: center;
+}
+
+.bottomSubHBox {
+    -fx-background-color: #6bc66b;
+    -fx-border-color: #6bc66b;
+    -fx-spacing: 10px;
+    -fx-alignment: center;
 }
 
 .table-view {
-    -fx-background-color: transparent;
+    -fx-background-color: #6bc66b;
+}
+
+.table-view:focused {
+    -fx-background-color: transparent,-fx-box-border,-fx-control-inner-background;
+    -fx-background-insets: -1.4, 0, 1;
+    -fx-background-radius: 1.4, 0, 0;
+    /*....*/
+    -fx-padding: 1; /* 0.083333em; */
 }
 
 .table-row-cell{
-    -fx-background-color: -fx-table-cell-border-color, #adeaad;
+    -fx-background-color: -fx-table-cell-border-color, #d4eebb;
     -fx-background-insets: 0, 0 0 1 0;
     -fx-padding: 0.0em; /* 0 */
 }
 
 .table-row-cell:odd{
-    -fx-background-color: -fx-table-cell-border-color, #92e392;
+    -fx-background-color: -fx-table-cell-border-color, #c3e79f;
+    -fx-background-insets: 0, 0 0 1 0;
+    -fx-padding: 0.0em; /* 0 */
+}
+
+.table-row-cell:focused {
+    -fx-background-color: -fx-table-cell-border-color, transparent;
+    -fx-background-insets: 0, 0 0 1 0;
+    -fx-padding: 0.0em; /* 0 */
+}
+
+.table-row-cell:odd:focused {
+    -fx-background-color: -fx-table-cell-border-color, transparent;
     -fx-background-insets: 0, 0 0 1 0;
     -fx-padding: 0.0em; /* 0 */
 }
@@ -33,7 +113,7 @@
 }
 
 .table-view .column-header-background{
-    -fx-background-color: linear-gradient(#5fb05f 0%, #539a53 100%);
+    -fx-background-color: linear-gradient(#6bc66b 0%, #6bc66b 100%);
 }
 
 .table-view .column-header-background .label{
@@ -51,15 +131,21 @@
     -fx-background-color: #77DD77;
     -fx-font-size: 12px;
     -fx-min-width: 100px;
-    -fx-min-heigh: 30px;
+    -fx-min-height: 30px;
+    -fx-pref-width: 130px;
+    -fx-pref-height: 50px;
     -fx-alignment: CENTER;
+}
+
+.subMenuButton:hover {
+    -fx-background-color: #5fb05f;
 }
 
 .TopButton {
     -fx-background-color: #77DD77;
     -fx-font-size: 20px;
     -fx-min-width: 150px;
-    -fx-min-heigh: 30px;
+    -fx-min-height: 30px;
     -fx-alignment: CENTER;
 }
 
@@ -102,8 +188,22 @@
     -fx-font-size: 10pt;
 }
 
+.BiggerLabel {
+    -fx-font-size: 35px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333333;
+    -fx-effect: dropshadow( gaussian , rgba(255,255,255,0.5) , 0,0,0,1 );
+}
+
 .BigLabel {
     -fx-font-size: 25px;
+    -fx-font-weight: bolder;
+    -fx-text-fill: #333333;
+    -fx-effect: dropshadow( gaussian , rgba(255,255,255,0.5) , 0,0,0,1 );
+}
+
+.mediumBigLabel {
+    -fx-font-size: 20px;
     -fx-font-weight: bold;
     -fx-text-fill: #333333;
     -fx-effect: dropshadow( gaussian , rgba(255,255,255,0.5) , 0,0,0,1 );

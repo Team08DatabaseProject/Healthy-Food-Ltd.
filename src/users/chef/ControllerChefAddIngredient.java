@@ -1,36 +1,21 @@
 package users.chef;
 
 import div.PopupDialog;
-import classpackage.DishLine;
 import classpackage.Ingredient;
 import classpackage.Supplier;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.StringProperty;
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.event.EventHandler;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.Pos;
 import javafx.scene.control.*;
-
 import java.net.URL;
-import java.text.NumberFormat;
-import java.text.ParseException;
 import java.util.ResourceBundle;
-import classpackage.TestObjects;
-import javafx.scene.control.cell.ComboBoxListCell;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.GridPane;
-import javafx.util.Callback;
 import javafx.util.StringConverter;
-import javafx.scene.control.TableColumn.CellEditEvent;
-import javafx.beans.property.ReadOnlyProperty;
-import javafx.util.converter.DoubleStringConverter;
-import classpackage.TestObjects;
+
 
 /**
  * Created by axelkvistad on 4/15/16.
@@ -38,7 +23,8 @@ import classpackage.TestObjects;
 
 public class ControllerChefAddIngredient extends ControllerChef implements Initializable {
 
-    public GridPane addIngredientGP;
+    @FXML
+    public GridPane subWindowGP;
     public TextField ingNameField;
     public TextField ingUnitField;
     public TextField ingPriceField;
@@ -69,6 +55,13 @@ public class ControllerChefAddIngredient extends ControllerChef implements Initi
     };
 
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
+
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                subWindowGP.requestFocus();
+            }
+        });
 
         ingSupplierCB.setItems(supplierList);
         ingSupplierCB.setPromptText("Supplier");

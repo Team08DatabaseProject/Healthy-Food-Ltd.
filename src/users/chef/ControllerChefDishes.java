@@ -27,7 +27,7 @@ import java.util.ResourceBundle;
  */
 public class ControllerChefDishes extends ControllerChef implements Initializable {
 
-    public GridPane dishesGP;
+    public GridPane subMenuGP;
     public TableView dishTable;
     public TableColumn dishName;
     public TableColumn dishPrice;
@@ -107,6 +107,13 @@ public class ControllerChefDishes extends ControllerChef implements Initializabl
         {
             nf.setMaximumFractionDigits(2);
         }
+
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                subMenuGP.requestFocus();
+            }
+        });
 
         dishName.setCellValueFactory(new PropertyValueFactory<Dish, String>("dishName"));
         dishPrice.setCellValueFactory(new PropertyValueFactory<Dish, Double>("price"));

@@ -9,7 +9,10 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.collections.FXCollections?>
 
-<GridPane fx:id="addIngredientGP" fx:controller="users.chef.ControllerChefAddIngredient" hgap="10" prefHeight="500.0" prefWidth="600.0" vgap="10" BorderPane.alignment="CENTER" xmlns="http://javafx.com/javafx/8"
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<GridPane fx:id="subWindowGP" fx:controller="users.chef.ControllerChefAddIngredient" hgap="10" prefHeight="500.0" prefWidth="600.0" vgap="10" BorderPane.alignment="CENTER" xmlns="http://javafx.com/javafx/8"
+          stylesheets="@/users/chef/ChefStyle.css"
           xmlns:fx="http://javafx.com/fxml/1">
     <padding>
         <Insets bottom="25" left="30" right="20" top="25" />
@@ -32,7 +35,13 @@
         </ComboBox>
         <VBox alignment="BOTTOM_LEFT" spacing="10" GridPane.columnIndex="0" GridPane.rowIndex="4">
             <children>
-                <Button fx:id="ingApplyButton" styleClass="newOrderButton" text="Apply" />
+                <Button fx:id="ingApplyButton" styleClass="subWindowButton" text="Apply">
+                    <graphic>
+                        <ImageView>
+                            <Image url="@/labels/Plus-24.png"/>
+                        </ImageView>
+                    </graphic>
+                </Button>
             </children>
         </VBox>
     </children>
