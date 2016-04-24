@@ -198,6 +198,7 @@ public class ControllerChefAddMenu extends ControllerChef implements Initializab
                 }
             };
         });
+
         mealTypeCB.valueProperty().addListener(new ChangeListener<MealType>() {
             @Override
             public void changed(ObservableValue<? extends MealType> observable, MealType oldValue, MealType newValue) {
@@ -253,8 +254,7 @@ public class ControllerChefAddMenu extends ControllerChef implements Initializab
                     public void handle(CellEditEvent<MenuLine, Integer> event) {
                         event.getTableView().getItems().get(event.getTablePosition().getRow()).setAmount(event.getNewValue());
                     }
-                }
-        );
+                });
 
         chosenDishPrice.setCellFactory(column -> {
             return new TableCell<MenuLine, Dish>() {

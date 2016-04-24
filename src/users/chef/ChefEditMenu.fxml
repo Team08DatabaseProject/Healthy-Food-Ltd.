@@ -55,7 +55,7 @@
             </children>
         </HBox>
 
-        <VBox spacing="5" GridPane.columnIndex="0" GridPane.rowIndex="2" styleClass="QuestrialBig" GridPane.columnSpan="2">
+        <VBox spacing="5" GridPane.columnIndex="0" GridPane.rowIndex="2" GridPane.columnSpan="2">
             <Label fx:id="editMenuNameLabel" prefWidth="400" prefHeight="30" wrapText="true" text="Menu name: "/>
             <Label fx:id="editMenuPriceLabel" prefWidth="400" prefHeight="30" text="Menu price: "/>
             <Label fx:id="editMealTypeLabel" prefWidth="400" prefHeight="30" text="Meal type: "/>

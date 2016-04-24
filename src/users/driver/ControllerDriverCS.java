@@ -5,7 +5,7 @@ package users.driver;
  * ControllerDriverChangeStatus.java
  */
 import classpackage.Order;
-import classpackage.SqlQueries;
+//import classpackage.SqlQueries;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -21,7 +21,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 // // TODO: 3/27/16 make class work similar to ControllerDriver.java. Also make method for changing status communicate with database
-
+/*
 public class ControllerDriverCS implements Initializable {
 
     private SqlQueries query = new SqlQueries();
@@ -59,4 +59,4 @@ public class ControllerDriverCS implements Initializable {
         tables.setItems(changeStatusData);
         deliveredButton.setOnAction(markAsDelivered);
     }
-}
+}*/

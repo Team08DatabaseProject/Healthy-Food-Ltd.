@@ -1104,15 +1104,15 @@ public class SqlQueries extends DBConnector {
 
     public boolean addMenuLine(Menu menu, ObservableList<MenuLine> menuLines) {
         try {
-            String insertSql = "INSERT INTO menu_line(dish_id, menu_id, quantity, price_factor) VALUES(?,?,?)";
+            String insertSql = "INSERT INTO menu_line(dish_id, menu_id, quantity, price_factor) VALUES(?,?,?,?)";
             insertQuery = con.prepareStatement(insertSql);
             for (MenuLine menuLine :
                     menuLines) {
                 insertQuery.setInt(1, menuLine.getDish().getDishId());
                 insertQuery.setInt(2, menu.getMenuId());
-                insertQuery.setDouble(3, menuLine.getPriceFactor());
+                insertQuery.setDouble(3, menuLine.getAmount());
+                insertQuery.setDouble(4, menuLine.getPriceFactor());
                 insertQuery.execute();
-
             }
             return true;
         } catch (SQLException e) {
@@ -1220,13 +1220,13 @@ public class SqlQueries extends DBConnector {
                 selectQuery.setInt(3, READYFORDELIVERY);
                 //DRIVER
             } else if (posId == 3) {
-                selectSql = "SELECT * FROM `order` WHERE status_id = ?;" +
-                        "SELECT * FROM `order` WHERE status_id = ? AND delivery_date = DATE(now())";
+                selectSql = "SELECT * FROM `order` WHERE status_id = ? OR status_id = ?";
+                // + "SELECT * FROM `order` WHERE status_id = ? AND delivery_date = DATE(now())";
                 selectQuery = con.prepareStatement(selectSql);
                 selectQuery.setInt(1, READYFORDELIVERY);
                 selectQuery.setInt(2, DELIVERED);
             } else if (posId == 4) {
-                selectSql = "SELECT * FROM `order` WHERE status_id = ? OR ? OR ?";
+                selectSql = "SELECT * FROM `order` WHERE status_id = ? OR status_id = ? OR status_id = ? OR status_id = ?";
                 selectQuery = con.prepareStatement(selectSql);
                 selectQuery.setInt(1, CREATED);
                 selectQuery.setInt(2, INPREPARATION);
@@ -1247,7 +1247,7 @@ public class SqlQueries extends DBConnector {
                 Order order;
                 if (res.getTimestamp("delivered_date") != null) {
                     LocalDateTime actualDeliveryDate = res.getTimestamp("delivered_date").toLocalDateTime();
-                    ;
+
                     order = new Order(orderId, customerRequests, deadline, actualDeliveryDate, price, status, null, address);
                 } else {
                     order = new Order(orderId, customerRequests, deadline, null, price, status, null, address);
@@ -1730,6 +1730,43 @@ public class SqlQueries extends DBConnector {
         if (!(con == null)) {
             SqlCleanup.settAutoCommit(con);
         }
+    }
+
+    // purchase methods
+    public boolean addPOrder(POrder pOrder) {
+        boolean success = false;
+        try {
+            con.setAutoCommit(false);
+            String insertSql = "INSERT INTO porder(supplier_id, placed_date, received) VALUES(?, NOW(), 0);";
+            insertQuery = con.prepareStatement(insertSql, Statement.RETURN_GENERATED_KEYS);
+            insertQuery.setInt(1, pOrder.getSupplierId());
+            if(insertQuery.executeUpdate() == 1) {
+                ResultSet res = insertQuery.getGeneratedKeys();
+                res.next();
+                pOrder.setpOrderId(res.getInt(1));
+                insertSql = "INSERT INTO porder_line(porder_id, ingredient_id, quantity) VALUES(?, ?, ?);";
+                insertQuery = con.prepareStatement(insertSql);
+                insertQuery.setInt(1, pOrder.getpOrderId());
+                for(POrderLine pOrderLine : pOrder.getpOrderLines()) {
+                    insertQuery.setInt(2, pOrderLine.getIngredient().getIngredientId());
+                    insertQuery.setDouble(3, pOrderLine.getQuantity());
+                    if(insertQuery.executeUpdate() != 1) {
+                        SqlCleanup.rullTilbake(con);
+                        return success;
+                    }
+                }
+                success = true;
+            } else {
+                SqlCleanup.rullTilbake(con);
+                return success;
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Something went wrong: addPOrder failed. " + e);
+        } finally {
+            closeEverything(null, insertQuery, con);
+        }
+        return success;
     }
 
 

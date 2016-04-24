@@ -46,8 +46,8 @@ public class ControllerSalesCustomerForm extends ControllerSalesCustomer impleme
 
     private boolean attemptedValidation = false;
 
-    protected static TestObjects testObjects = new TestObjects();
-    protected static ObservableList<Customer> customerList = testObjects.allCustomers;
+    /*protected static TestObjects testObjects = new TestObjects();
+    protected static ObservableList<Customer> customerList = testObjects.allCustomers;*/
 
     ChangeListener<String> validatefName = new ChangeListener<String>() {
         @Override

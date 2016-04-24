@@ -4,8 +4,8 @@ package users.chef;
  * Created by Axel Kvistad on 13.04.2016
  */
 import classpackage.MenuLine;
-import classpackage.TestObjects;
 import div.Login;
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -19,6 +19,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -32,15 +33,14 @@ import java.util.ResourceBundle;
 public class ControllerChefMenus extends ControllerChef implements Initializable{
 
     @FXML
-    public Button editMenuButton;
+    public GridPane subMenuGP;
+    public TableView chefMenusTable;
+    public TableColumn menuNameCol;
+    public TableColumn dishQuantityCol;
+    public TableColumn menuPriceCol;
     public Button addMenuButton;
-    public ComboBox<Menu> chooseMenuCB;
-/*
-    public void addMenu(Menu newMenu) {
-        menus.add(newMenu);
-        chooseMenuCB.setItems(menus);
-    }
-*/
+    public Button refreshMenusButton;
+
     EventHandler<ActionEvent> addMenuButtonClick = new EventHandler<ActionEvent>() {
         @Override
         public void handle(ActionEvent event) {
@@ -56,23 +56,41 @@ public class ControllerChefMenus extends ControllerChef implements Initializable
         }
     };
 
-    EventHandler<ActionEvent> editMenuButtonClick = new EventHandler<ActionEvent>() {
+    EventHandler<MouseEvent> editMenuEvent = new EventHandler<MouseEvent>() {
+        @Override
+        public void handle(MouseEvent event) {
+            if (event.isPrimaryButtonDown() && event.getClickCount() == 2) {
+                try {
+                    selectedMenu = (Menu) chefMenusTable.getSelectionModel().getSelectedItem();
+                    if (selectedMenu != null) {
+                        FXMLLoader loader = new FXMLLoader();
+                        loader.setLocation(getClass().getResource("ChefEditMenu.fxml"));
+                        GridPane editMenuGP = loader.load();
+                        Scene formScene = new Scene(editMenuGP);
+                        Stage formStage = new Stage();
+                        formStage.setTitle("Edit menu: " + selectedMenu.getName());
+                        formStage.setScene(formScene);
+                        formStage.show();
+                    } else {
+                        Alert alert = new Alert(Alert.AlertType.WARNING);
+                        alert.setTitle("Error");
+                        alert.setHeaderText("No menu selected");
+                        alert.setContentText("Select a menu to edit it.");
+                        alert.showAndWait();
+                    }
+                } catch (Exception exc) {
+                    System.out.println(exc);
+                }
+            }
+        }
+    };
+
+    EventHandler<ActionEvent> refreshMenusEvent = new EventHandler<ActionEvent>() {
         @Override
         public void handle(ActionEvent event) {
             try {
-                if (selectedMenu != null) {
-                    final Stage editMenuStage = new Stage();
-                    Parent root = FXMLLoader.load(getClass().getResource("ChefEditMenu.fxml"));
-                    editMenuStage.setTitle("Edit menu: " + selectedMenu.getName());
-                    editMenuStage.setScene(new Scene(root, 800, 800));
-                    editMenuStage.show();
-                } else {
-                    Alert alert = new Alert(Alert.AlertType.WARNING);
-                    alert.setTitle("Error");
-                    alert.setHeaderText("No menu selected");
-                    alert.setContentText("Select a menu to edit it.");
-                    alert.showAndWait();
-                }
+                menuList = db.getAllMenus(dishList);
+                chefMenusTable.setItems(menuList);
             } catch (Exception exc) {
                 System.out.println(exc);
             }
@@ -80,33 +98,62 @@ public class ControllerChefMenus extends ControllerChef implements Initializable
     };
 
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
-        chooseMenuCB.setItems(menuList);
-        chooseMenuCB.setConverter(new StringConverter<Menu>() {
-            @Override
-            public String toString(Menu menu) {
-                return menu.getName();
-            }
 
+        Platform.runLater(new Runnable() {
             @Override
-            public Menu fromString(String string) {
-                return null;
+            public void run() {
+                subMenuGP.requestFocus();
             }
         });
 
-        chooseMenuCB.valueProperty().addListener(new ChangeListener<Menu>() {
-            @Override
-            public void changed(ObservableValue<? extends Menu> observable, Menu oldValue, Menu newValue) {
-                selectedMenu = newValue;
-                System.out.println(selectedMenu.getName());
-            }
+        menuNameCol.setCellValueFactory(new PropertyValueFactory<Menu, String>("name"));
+        dishQuantityCol.setCellValueFactory(new PropertyValueFactory<Menu, ObservableList<MenuLine>>("menuLines"));
+        menuPriceCol.setCellValueFactory(new PropertyValueFactory<Menu, Double>("totalPrice"));
+
+        menuNameCol.setCellFactory(column -> {
+            return new TableCell<Menu, String>() {
+                @Override
+                public void updateItem(String string, boolean empty) {
+                    if (string == null || empty) {
+                        setText(null);
+                    } else {
+                        setText(string);
+                    }
+                }
+            };
         });
-        chooseMenuCB.valueProperty().addListener(new ChangeListener<Menu>() {
-            @Override
-            public void changed(ObservableValue<? extends Menu> observable, Menu oldValue, Menu newValue) {
-                selectedMenu = newValue;
-            }
+
+        dishQuantityCol.setCellFactory(column -> {
+            return new TableCell<Menu, ObservableList<MenuLine>>() {
+                @Override
+                public void updateItem(ObservableList<MenuLine> menuLines, boolean empty) {
+                    if (menuLines == null || empty) {
+                        setText(null);
+                    } else {
+                        setText(String.valueOf(menuLines.size()));
+                    }
+                }
+            };
         });
+
+        menuPriceCol.setCellFactory(column -> {
+            return new TableCell<Menu, Double>() {
+                @Override
+                public void updateItem(Double totalPrice, boolean empty) {
+                    if (totalPrice == null || empty) {
+                        setText(null);
+                    } else {
+                        setText(nf.format(totalPrice));
+                    }
+                }
+            };
+        });
+
+        chefMenusTable.getColumns().setAll(menuNameCol, dishQuantityCol, menuPriceCol);
+        chefMenusTable.setItems(menuList);
+        chefMenusTable.setOnMousePressed(editMenuEvent);
+
         addMenuButton.setOnAction(addMenuButtonClick);
-        editMenuButton.setOnAction(editMenuButtonClick);
+        refreshMenusButton.setOnAction(refreshMenusEvent);
     }
 }

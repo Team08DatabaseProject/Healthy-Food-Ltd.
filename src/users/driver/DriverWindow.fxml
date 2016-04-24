@@ -6,51 +6,57 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <BorderPane fx:id="rootPaneDriver" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-            prefHeight="600.0" prefWidth="800.0" stylesheets="@/users/driver/DriverStyle.css" xmlns="http://javafx.com/javafx/8"
+            prefHeight="600.0" prefWidth="800.0" stylesheets="@/users/chef/ChefStyle.css" xmlns="http://javafx.com/javafx/8"
             xmlns:fx="http://javafx.com/fxml/1" fx:controller="users.driver.ControllerDriver">
     <top>
-        <MenuBar BorderPane.alignment="TOP_LEFT">
-            <menus>
-                <Menu mnemonicParsing="false" text="File">
-                    <items>
-                        <MenuItem mnemonicParsing="false" text="Close" />
-                    </items>
-                </Menu>
-                <Menu mnemonicParsing="false" text="Edit">
-                    <items>
-                        <MenuItem mnemonicParsing="false" text="Delete" />
-                    </items>
-                </Menu>
-                <Menu mnemonicParsing="false" text="Help">
-                    <items>
-                        <MenuItem mnemonicParsing="false" text="About" />
-                    </items>
-                </Menu>
-            </menus>
-        </MenuBar>
     </top>
-    <left>
-        <VBox prefHeight="200.0" prefWidth="100.0" style="-fx-spacing: 4px; -fx-padding: 4px;" BorderPane.alignment="CENTER">
-            <children>
-                <Button fx:id="readyOrderButton" mnemonicParsing="false" text="Ready &#10;for delivery" textAlignment="CENTER" />
-                <Button fx:id="changeStatusButton" mnemonicParsing="false" text="Change &#10;status" textAlignment="CENTER" />
-            </children>
-        </VBox>
-    </left>
     <center>
-        <TableView fx:id="tables" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" xmlns:fx="http://javafx.com/fxml">
-            <columns>
-                <TableColumn prefWidth="40.0" text="Order no." />
-                <TableColumn prefWidth="40.0" text="Address" />
-                <TableColumn prefWidth="40.0" text="Deadline" />
-            </columns>
-            <columnResizePolicy>
-                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-            </columnResizePolicy>
-        </TableView>
+        <GridPane fx:id="subMenuGP" hgap="50" alignment="CENTER">
+            <Label text="Healthy Catering System - Driver" styleClass="BiggerLabel" alignment="TOP_CENTER" GridPane.rowIndex="0" GridPane.columnIndex="0" GridPane.columnSpan="2" translateX="340" translateY="-70"/>
+            <VBox GridPane.rowIndex="1" GridPane.columnIndex="0" alignment="CENTER">
+                <Label text="Orders ready for delivery" styleClass="mediumBigLabel"/>
+                <TableView fx:id="ordersReadyTable" prefWidth="600.0" prefHeight="400.0">
+                    <columns>
+                        <TableColumn fx:id="statusColLeft" text="Status"/>
+                        <TableColumn fx:id="deadlineColLeft" text="Deadline"/>
+                        <TableColumn fx:id="dateDeliveredColLeft" text="Date delivered"/>
+                        <TableColumn fx:id="addressColLeft" text="Address"/>
+                    </columns>
+                    <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                    </columnResizePolicy>
+                </TableView>
+            </VBox>
+            <HBox GridPane.columnIndex="0" GridPane.rowIndex="2" styleClass="bottomSubHBox" alignment="CENTER" spacing="10" prefHeight="50">
+                <Button fx:id="addToRouteButton" text="Add to delivery route" styleClass="subMenuButton"/>
+                <Button fx:id="setToDeliveredButton" text="Set status: &#34;Delivered&#34;" styleClass="subMenuButton"/>
+                <Button fx:id="setToReadyButton" text="Set status: &#34;Ready for Delivery&#34;" styleClass="subMenuButton"/>
+            </HBox>
+
+            <VBox GridPane.rowIndex="1" GridPane.columnIndex="1" alignment="CENTER">
+                <Label text="Selected orders for next delivery" styleClass="mediumBigLabel"/>
+                <TableView fx:id="routeOrdersTable" prefWidth="600.0" prefHeight="400.0">
+                    <placeholder><Label text="Selct an order from the left table to add it here"/></placeholder>
+                    <columns>
+                        <TableColumn fx:id="statusColRight" text="Status2"/>
+                        <TableColumn fx:id="deadlineColRight" text="Deadline2"/>
+                        <TableColumn fx:id="dateDeliveredColRight" text="Date delivered2"/>
+                        <TableColumn fx:id="addressColRight" text="Address2"/>
+                    </columns>
+                    <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                    </columnResizePolicy>
+                </TableView>
+            </VBox>
+
+            <HBox GridPane.columnIndex="1" GridPane.rowIndex="2" styleClass="bottomSubHBox" alignment="CENTER" spacing="10" prefHeight="50">
+                <Button fx:id="removeFromListButton" text="Remove selected from list" styleClass="subMenuButton"/>
+                <Button fx:id="removeAllButton" text="Remove all from list" styleClass="subMenuButton"/>
+                <Button fx:id="generateRouteButton" text="Generate delivery route" styleClass="subMenuButton"/>
+                <Button fx:id="deliveryInProcessButton" text="Start delivery" styleClass="subMenuButton"/>
+            </HBox>
+        </GridPane>
     </center>
     <bottom>
-        <HBox fx:id="bottomHBox" prefHeight="80.0" prefWidth="100.0" alignment="CENTER" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
-        </HBox>
     </bottom>
 </BorderPane>

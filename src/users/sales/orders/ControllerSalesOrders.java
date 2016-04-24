@@ -3,6 +3,7 @@ package users.sales.orders;
 import classpackage.Customer;
 import classpackage.Order;
 import classpackage.OrderStatus;
+import div.PopupDialog;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -18,6 +19,7 @@ import users.sales.ControllerSales;
 
 import java.net.URL;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ResourceBundle;
 
 /**
@@ -36,10 +38,14 @@ public class ControllerSalesOrders extends ControllerSales implements Initializa
     public TableColumn statusCol;
     private GridPane ordersFormGrid;
 
+
+
+
     EventHandler<ActionEvent> createOrderEvent = new EventHandler<ActionEvent>() {
         @Override
         public void handle(ActionEvent event) {
             try {
+                selectedCustomer = PopupDialog.createOrderDialog("Customer type", "New or existing customer?", customers);
                 FXMLLoader loader = new FXMLLoader();
                 loader.setLocation(getClass().getResource("OrdersCreateForm.fxml"));
                 ordersFormGrid = loader.load();
@@ -98,12 +104,17 @@ public class ControllerSalesOrders extends ControllerSales implements Initializa
         }
     };
 
+    public String ldtToString(LocalDateTime ldt) {
+        return "Date: " + ldt.getYear() + "/" + ldt.getMonthValue() + "/" + ldt.getDayOfMonth() + "\nTime: "
+                + String.format("%02d", ldt.getHour()) + ":" + String.format("%02d", ldt.getMinute());
+    }
+
     public void initialize(URL fxmlFileLocation, ResourceBundle resources){
 
         ordersTable.setEditable(true);
 
         orderIdCol.setCellValueFactory(new PropertyValueFactory<Order,Integer>("orderId")); //orderId
-        deadlineCol.setCellValueFactory(new PropertyValueFactory<Order,LocalDate>("deadline")); //deadline
+        deadlineCol.setCellValueFactory(new PropertyValueFactory<Order,LocalDateTime>("deadlineTime")); //deadline
         statusCol.setCellValueFactory(new PropertyValueFactory<Order,OrderStatus>("status")); //status
         priceCol.setCellValueFactory(new PropertyValueFactory<Order,Double>("price")); //price
 
@@ -115,6 +126,19 @@ public class ControllerSalesOrders extends ControllerSales implements Initializa
                         setText(null);
                     } else {
                         setText(status.getName());
+                    }
+                }
+            };
+        });
+
+        deadlineCol.setCellFactory(column -> {
+            return new TableCell<Order, LocalDateTime>() {
+                @Override
+                public void updateItem(LocalDateTime ldt, boolean empty) {
+                    if (ldt == null || empty) {
+                        setText(null);
+                    } else {
+                        setText(ldtToString(ldt));
                     }
                 }
             };

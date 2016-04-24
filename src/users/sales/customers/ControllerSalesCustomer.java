@@ -74,7 +74,7 @@ public class ControllerSalesCustomer extends ControllerSales implements Initiali
         @Override
         public void handle(MouseEvent event) {
             if (event.isPrimaryButtonDown() && event.getClickCount() == 2) {
-                selectedCustomer = customersTable.getSelectionModel().getSelectedItem(); // TODO: 20/04/2016 Fix this
+                selectedCustomer = (Customer) customersTable.getSelectionModel().getSelectedItem();
                 try {
                     customerFormUpdate = true;
                     FXMLLoader loader = new FXMLLoader();

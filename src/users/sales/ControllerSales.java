@@ -1,6 +1,8 @@
 package users.sales;
 
 import classpackage.*;
+import div.DoubleField;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -8,13 +10,15 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableView;
+import javafx.geometry.Insets;
+import javafx.scene.Node;
+import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 
 import java.net.URL;
 import java.text.NumberFormat;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 /**
@@ -23,16 +27,6 @@ import java.util.ResourceBundle;
  */
 
 public class ControllerSales implements Initializable {
-
-    /*
-    ObservableList to get fetched  from database
-    */
-    private ObservableList<Order> allOrdersForSales = FXCollections.observableArrayList();
-    private ObservableList<Subscription> allSubscriptions = FXCollections.observableArrayList();
-    private ObservableList<Dish> allDishes = FXCollections.observableArrayList();
-    private ObservableList<Customer> allCustomers = FXCollections.observableArrayList();
-    private ObservableList<Address> allAdresses = FXCollections.observableArrayList();
-    private ObservableList<Menu> allMenus = FXCollections.observableArrayList();
 
     protected static final NumberFormat nf = NumberFormat.getNumberInstance();
     {
@@ -63,6 +57,8 @@ public class ControllerSales implements Initializable {
     private GridPane ordersTable; // Retrieves TableView with fx:id="ordersTable"
     private GridPane subsTable; // Retrieves Tableview with fx:id="subsTable"
     private GridPane customersTable;
+
+
 
     EventHandler<ActionEvent> orderEvent = new EventHandler<ActionEvent>() {
         @Override

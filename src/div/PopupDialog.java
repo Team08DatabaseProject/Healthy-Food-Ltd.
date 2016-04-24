@@ -1,10 +1,10 @@
 package div;
 
-import classpackage.Employee;
-import classpackage.POrder;
-import classpackage.POrderLine;
-import classpackage.Supplier;
+import classpackage.*;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.*;
@@ -104,6 +104,8 @@ public class PopupDialog {
 		}
 	}
 
+
+
 	public static Double doubleDialog(String title, String content) {
 		Dialog<Double> dialog = new Dialog<>();
 		dialog.setTitle(title);
@@ -131,6 +133,63 @@ public class PopupDialog {
 			return null;
 		});
 		Optional<Double> result = dialog.showAndWait();
+		if(result.isPresent()) {
+			return result.get();
+		}
+		return null;
+	}
+
+
+	public static Customer createOrderDialog(String title, String content, ObservableList<Customer> customerList) {
+		Dialog<Customer> dialog = new Dialog<>();
+		dialog.setTitle(title);
+		dialog.setHeaderText(null);
+		ComboBox<Customer> customerCB = new ComboBox<>();
+		ButtonType existingCustomerButtonType = new ButtonType("Existing customer", ButtonBar.ButtonData.LEFT);
+		ButtonType newCustomerButtonType = new ButtonType("New customer", ButtonBar.ButtonData.RIGHT);
+		dialog.getDialogPane().getButtonTypes().addAll(existingCustomerButtonType, newCustomerButtonType);
+
+		GridPane grid = new GridPane();
+		grid.setHgap(10);
+		grid.setVgap(10);
+		grid.setPadding(new Insets(20, 10, 10, 10));
+		grid.add(new Label(content), 0, 0);
+		grid.add(customerCB, 1, 0);
+		Node existingButton = dialog.getDialogPane().lookupButton(existingCustomerButtonType);
+		Node newButton = dialog.getDialogPane().lookupButton(newCustomerButtonType);
+		existingButton.setDisable(true);
+
+		customerCB.setItems(customerList);
+		customerCB.setCellFactory(column -> {
+			return new ListCell<Customer>() {
+				@Override
+				public void updateItem(Customer customer, boolean empty) {
+					super.updateItem(customer, empty);
+					if (!(customer == null || empty)) {
+						setText(customer.toString());
+					}
+				}
+			};
+		});
+		customerCB.valueProperty().addListener(new ChangeListener<Customer>() {
+			@Override
+			public void changed(ObservableValue<? extends Customer> observable, Customer oldValue, Customer newValue) {
+					existingButton.setDisable(newValue == null);
+				}
+			});
+
+
+		dialog.getDialogPane().setContent(grid);
+		Platform.runLater(() -> customerCB.requestFocus());
+		dialog.setResultConverter(dialogButton -> {
+			if (dialogButton == existingCustomerButtonType) {
+				return customerCB.getValue();
+			} else if (dialogButton == newCustomerButtonType) {
+				return null;
+			}
+			return null;
+		});
+		Optional<Customer> result = dialog.showAndWait();
 		if(result.isPresent()) {
 			return result.get();
 		}

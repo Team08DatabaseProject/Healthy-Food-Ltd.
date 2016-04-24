@@ -3,6 +3,7 @@ package users.sales.orders;
 import classpackage.*;
 import java.lang.String;
 
+import div.PopupDialog;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -21,6 +22,8 @@ import users.sales.ControllerSales;
 
 import java.net.URL;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ResourceBundle;
 
 /**
@@ -131,26 +134,52 @@ public class ControllerSalesOrdersForm extends ControllerSales implements Initia
                 String address = addressField.getText();
                 int zipCodeInt = Integer.parseInt(zipCodeField.getText());
                 String place = placeField.getText();
-                //ZipCode zipCode = new ZipCode(zipCodeInt, place);
                 String customerRequests = customerRequestsField.getText();
+
+                // deadline:
                 LocalDate deadlineDate = deadlineDatePicker.getValue();
                 Integer deadlineHr = deadlineHrBox.getValue();
                 Integer deadlineMin = deadlineMinBox.getValue();
-                double price = Double.parseDouble(priceField.getText());
-                OrderStatus status = statusBox.getValue();
-                int orderId = Integer.parseInt(orderIdField.getText());
-                int customerId = Integer.parseInt(customerIdField.getText());
-                int subcriptionId = Integer.parseInt(subscriptionIdField.getText());
+                LocalTime deadlineTime = LocalTime.of(deadlineHr, deadlineMin);
+                LocalDateTime deadlineLDT = LocalDateTime.of(deadlineDate, deadlineTime);
+
+                // startsub:
                 LocalDate startSubscription = deadlineDatePicker.getValue();
                 LocalDate endSubscription = deadlineDatePicker.getValue();
+
+                double price = Double.parseDouble(priceField.getText());
+                OrderStatus status = statusBox.getValue();
+               // int orderId = Integer.parseInt(orderIdField.getText());
+                int customerId = Integer.parseInt(customerIdField.getText());
+                int subcriptionId = Integer.parseInt(subscriptionIdField.getText());
+
                 Address newAddress = new Address(address, zipCodeInt, place);
                 ObservableList<Dish> dishesInThisOrder = FXCollections.observableArrayList();
 
-                orders.add(new Order(customerRequests, deadlineDate, price, status, dishesInThisOrder));
+                Order newOrder = new Order(customerRequests, deadlineLDT, price, status, dishesInThisOrder);
+                orders.add(newOrder);
 
                 Subscription subscription = new Subscription(startSubscription, endSubscription, orders);
-                Customer customer = new Customer(isBusiness, email, firstName, lastName, phoneNumber,
-                                                 newAddress, businessName, subscription, orders);
+                if (selectedCustomer != null) {
+                    ObservableList<Order> newOrderList = selectedCustomer.getOrders();
+                    newOrderList.add(newOrder);
+                    selectedCustomer.setOrders(newOrderList);
+                    if (db.updateCustomer(selectedCustomer)) {
+                        PopupDialog.confirmationDialog("Result", "Order succesfully registered to customer.");
+                    } else {
+                        PopupDialog.errorDialog("Error", "Order failed to register.");
+                    }
+                } else {
+                    ObservableList<Order> newOrderList = FXCollections.observableArrayList(newOrder);
+                    Customer newCustomer = new Customer(isBusiness, email, firstName, lastName, phoneNumber,
+                            newAddress, businessName, subscription, newOrderList);
+                    if(db.addCustomer(newCustomer)) {
+                        PopupDialog.confirmationDialog("Result", "New customer successfully added and order registered.");
+                    } else {
+                        PopupDialog.errorDialog("Error", "New customer and order failed to register.");
+                    }
+                }
+
             } catch(Exception exc) {
                 System.out.println("createOrderFieldEvent: " + exc);
             }
@@ -164,6 +193,34 @@ public class ControllerSalesOrdersForm extends ControllerSales implements Initia
         customerIdField.setDisable(true);
         subscriptionIdField.setDisable(true);
         //.
+
+        if (selectedCustomer != null) {
+            orderIdField.setDisable(true);
+            customerIdField.setDisable(true);
+            subscriptionIdField.setDisable(true);
+            fNameField.setDisable(true);
+            lNameField.setDisable(true);
+            businessBox.setDisable(true);
+            businessNameField.setDisable(true);
+            emailField.setDisable(true);
+            phoneField.setDisable(true);
+            addressField.setDisable(true);
+            zipCodeField.setDisable(true);
+            customerIdField.setText(String.valueOf(selectedCustomer.getCustomerId()));
+            if (selectedCustomer.getSubscription() != null) {
+                subscriptionIdField.setText(String.valueOf(selectedCustomer.getSubscription().getSubscriptionId()));
+            }
+            fNameField.setText(selectedCustomer.getFirstName());
+            lNameField.setText(selectedCustomer.getLastName());
+            businessBox.setSelected(selectedCustomer.getIsBusiness());
+            if (selectedCustomer.getIsBusiness()) {
+                businessNameField.setText(selectedCustomer.getBusinessName());
+            }
+            emailField.setText(selectedCustomer.getEmail());
+            phoneField.setText(String.valueOf(selectedCustomer.getPhoneNumber()));
+            addressField.setText(selectedCustomer.getAddress().getAddress());
+            zipCodeField.setText(String.valueOf(selectedCustomer.getAddress().getZipCode()));
+        }
 
         deadlineHrBox.setItems(deadlineHourList);
         deadlineHrBox.setCellFactory(column -> {

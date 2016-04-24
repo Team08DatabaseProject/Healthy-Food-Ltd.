@@ -171,6 +171,13 @@ public class Order {
         this.deadlineTime.set(deadlineTime);
     }
 
+    public String deadlineTimeToString() {
+        LocalDateTime ldt = deadlineTime.get();
+        return "Date " + ldt.getYear() + "/" + ldt.getMonthValue() + "/" + ldt.getDayOfMonth() + "\nTime: "
+                + String.format("%02d", ldt.getHour()) + ":" + String.format("%02d", ldt.getMinute());
+    }
+
+
     public LocalDateTime getActualDeliveryDateTime() {
         return actualDeliveryDateTime.get();
     }
@@ -181,6 +188,12 @@ public class Order {
 
     public void setActualDeliveryDateTime(LocalDateTime actualDeliveryDateTime) {
         this.actualDeliveryDateTime.set(actualDeliveryDateTime);
+    }
+
+    public String actualDeliveryDateTimeToString() {
+        LocalDateTime ldt = actualDeliveryDateTime.get();
+        return "Date " + ldt.getYear() + "/" + ldt.getMonthValue() + "/" + ldt.getDayOfMonth() + "\nTime: "
+                + String.format("%02d", ldt.getHour()) + ":" + String.format("%02d", ldt.getMinute());
     }
 
     public void setChanged(boolean bln) {

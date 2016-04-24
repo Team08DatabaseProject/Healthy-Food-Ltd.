@@ -42,18 +42,17 @@ public class ControllerChefEditMenu extends ControllerChef implements Initializa
     public Label editMenuNameLabel;
     public Label editMenuPriceLabel;
     public Label editMealTypeLabel;
-    public Button editApplyButton;
     public Button commitEditButton;
 
-    private MealType selectedMealType;
-    private String menuNameString = selectedMenu.getName();
-    private double menuPrice = selectedMenu.getTotalPrice();
-    private String menuPriceString = nf.format(menuPrice);
+    private MealType selectedMealType = selectedMenu.getMealType();
+    ObservableList<MenuLine> menuLines = selectedMenu.getMenuLines();
+    ObservableList<MenuLine> menuLinesOriginal = FXCollections.observableArrayList();
+
+    ObservableList<MenuLine> addList = FXCollections.observableArrayList();
+    ObservableList<MenuLine> removeList = FXCollections.observableArrayList();
+    ObservableList<MenuLine> updateList = FXCollections.observableArrayList();
 
 
-
-    private ObservableList<MenuLine> oldMenuLines = FXCollections.observableArrayList();
-    private ObservableList<MenuLine> newMenuLines = FXCollections.observableArrayList();
 
     EventHandler<ActionEvent> editAddToMenuButtonClick = new EventHandler<ActionEvent>() {
         @Override
@@ -61,14 +60,16 @@ public class ControllerChefEditMenu extends ControllerChef implements Initializa
             try {
                 boolean add = true;
                 if (selectedDish != null) {
-                    for (MenuLine ml : newMenuLines) {
+                    for (MenuLine ml : menuLines) {
                         if (ml.getDish().getDishName().equals(selectedDish.getDishName())) {
                             add = false;
                         }
                     } if (add) {
                         MenuLine newML= new MenuLine(selectedDish);
-                        newMenuLines.add(newML);
-                        currentDishTable.setItems(newMenuLines);
+                        newML.setNewlyCreated(true);
+                        addList.add(newML);
+                        menuLines.add(newML);
+                        currentDishTable.setItems(menuLines);
                     } else {
                         Alert alert = new Alert(Alert.AlertType.WARNING);
                         alert.setTitle("Error");
@@ -88,11 +89,23 @@ public class ControllerChefEditMenu extends ControllerChef implements Initializa
     EventHandler<ActionEvent> removeDish = new EventHandler<ActionEvent>() {
         @Override
         public void handle(ActionEvent event) {
+            selectedMenuLine = (MenuLine) currentDishTable.getSelectionModel().getSelectedItem();
             try {
-                selectedMenuLine = (MenuLine) currentDishTable.getSelectionModel().getSelectedItem();
                 if (selectedMenuLine != null) {
-                    newMenuLines.remove(selectedMenuLine);
-                    currentDishTable.setItems(newMenuLines);
+                    if (!(selectedMenuLine.isNewlyCreated() && selectedMenuLine.isChanged())) {
+                        removeList.add(selectedMenuLine);
+                    } else if (selectedMenuLine.isNewlyCreated() && selectedMenuLine.isChanged()) {
+                        addList.remove(selectedMenuLine);
+                        updateList.remove(selectedMenuLine);
+                    } else if (selectedMenuLine.isNewlyCreated()) {
+                        addList.remove(selectedMenuLine);
+                    } else {
+                        updateList.remove(selectedMenuLine);
+                    }
+
+                    menuLines.remove(selectedMenuLine);
+                    currentDishTable.setItems(menuLines);
+                    currentDishTable.getSelectionModel().clearSelection();
                 } else {
                     PopupDialog.informationDialog("Information", "To remove a dish from the menu, first select it from the table by clicking it.\n" +
                             "After selecting a dish to remove, click the \"Remove dish from menu\" button.");
@@ -107,21 +120,27 @@ public class ControllerChefEditMenu extends ControllerChef implements Initializa
         @Override
         public void handle(ActionEvent event) {
             try {
-                menuNameString = editMenuNameField.getText();
-                menuPrice = selectedMenu.getTotalPrice();
-                menuPriceString = nf.format(menuPrice);
-                editMenuNameLabel.setText("Menu name: " + menuNameString);
-                editMenuPriceLabel.setText("Menu price: " + menuPriceString + " NOK");
 
-                selectedMenu.setName(menuNameString);
-                selectedMenu.setMealType(selectedMealType);
-                selectedMenu.setMenuLines(newMenuLines);
+                if (!addList.isEmpty()) {
+                    db.addMenuLine(selectedMenu, addList);
+                }
+                if (!updateList.isEmpty()) {
+                    db.updateMenuLine(selectedMenu, updateList);
+                }
+                if (!removeList.isEmpty()) {
+                    db.deleteMenuLines(selectedMenu, removeList);
+                }
+
+                if (db.updateMenu(selectedMenu)) {
+                    PopupDialog.confirmationDialog("Result", "Menu \"" + selectedMenu.getName() + "\" successfully updated.");
+                } else {
+                    PopupDialog.errorDialog("Error", "Menu \"" + selectedMenu.getName() + "\" failed to update.");
+                }
             } catch (Exception exc) {
                 System.out.println(exc);
             }
         }
     };
-
 
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
 
@@ -132,21 +151,22 @@ public class ControllerChefEditMenu extends ControllerChef implements Initializa
             }
         });
 
-        oldMenuLines = selectedMenu.getMenuLines();
-        newMenuLines.addAll(oldMenuLines);
+        menuLinesOriginal.addAll(menuLines);
 
+        String menuName = selectedMenu.getName();
+        String menuPriceString = nf.format(selectedMenu.getTotalPrice());
 
-        editMenuNameField.setText(selectedMenu.getName());
-        editMenuNameLabel.setText("Menu name: " + selectedMenu.getName());
-        editMenuPriceLabel.setText("Menu price: " + nf.format(menuPrice) + " NOK");
-        editMealTypeLabel.setText("Meal type: " + selectedMenu.getMealType());
-
+        editMenuNameField.setText(menuName);
+        editMenuNameLabel.setText("Menu name: " + menuName);
+        editMenuPriceLabel.setText("Menu price: " + menuPriceString + " NOK");
+        editMealTypeLabel.setText("Meal type: " + selectedMealType);
 
         editMealTypeCB.setItems(mealTypes);
         editMealTypeCB.setCellFactory(column -> {
             return new ListCell<MealType>() {
                 @Override
                 public void updateItem(MealType mealType, boolean empty) {
+                    super.updateItem(mealType, empty);
                     if (!(mealType == null || empty)) {
                         setText(mealType.toString());
                     }
@@ -166,6 +186,7 @@ public class ControllerChefEditMenu extends ControllerChef implements Initializa
             return new ListCell<Dish>() {
                 @Override
                 public void updateItem(Dish dish, boolean empty) {
+                    super.updateItem(dish, empty);
                     if (!(dish == null || empty)) {
                         setText(dish.toString());
                     }
@@ -202,6 +223,10 @@ public class ControllerChefEditMenu extends ControllerChef implements Initializa
                     @Override
                     public void handle(TableColumn.CellEditEvent<MenuLine, Integer> event) {
                         event.getTableView().getItems().get(event.getTablePosition().getRow()).setAmount(event.getNewValue());
+                        if (!event.getTableView().getItems().get(event.getTablePosition().getRow()).isChanged()) {
+                            updateList.add(event.getTableView().getItems().get(event.getTablePosition().getRow()));
+                            event.getTableView().getItems().get(event.getTablePosition().getRow()).setChanged(true);
+                        }
                     }
                 });
 
@@ -220,11 +245,10 @@ public class ControllerChefEditMenu extends ControllerChef implements Initializa
 
         currentDishTable.getColumns().setAll(currentDishNameCol, currentDishAmountCol, currentDishPriceCol);
         currentDishTable.setEditable(true);
-        currentDishTable.setItems(oldMenuLines);
+        currentDishTable.setItems(menuLines);
         editAddToMenuButton.setOnAction(editAddToMenuButtonClick);
         commitEditButton.setOnAction(commitEdit);
         editRemoveFromMenuButton.setOnAction(removeDish);
 
     }
-
 }

@@ -4,135 +4,357 @@ package users.driver;
  * Controller for the users.driver
  */
 
-import classpackage.SqlQueries;
+//import classpackage.SqlQueries;
+import classpackage.*;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Worker;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.TouchPoint;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 
 import java.net.URL;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.Date;
 import java.util.ResourceBundle;
 
-import classpackage.Order;
+import javafx.scene.layout.Pane;
+import javafx.scene.web.WebEngine;
+import javafx.scene.web.WebView;
+import javafx.stage.Stage;
 
 public class ControllerDriver implements Initializable {
 
-    private SqlQueries query = new SqlQueries();
+    protected static SqlQueries db = new SqlQueries();
 
-    @FXML public TableView tables; // Retrieves TableView with fx:id="tables2"
-    public Button readyOrderButton;
-    public Button changeStatusButton;
-    public Button deliveredButton;
-    public Button notDeliveredButton;
+    @FXML
     public BorderPane rootPaneDriver;
-    public GridPane changeStatusTable;
+    public TableView ordersReadyTable;
+    public TableColumn statusColLeft;
+    public TableColumn deadlineColLeft;
+    public TableColumn dateDeliveredColLeft;
+    public TableColumn addressColLeft;
 
-    /*
-    // Test data for orders which are ready for delivery
-    final ObservableList<DriverOrderDelivery> readyOrderData = FXCollections.observableArrayList(
-            new DriverOrderDelivery(1, "Testveien 1", "13:00"),
-            new DriverOrderDelivery(2, "Testveien 2", "14:00"),
-            new DriverOrderDelivery(3, "Testveien 3", "15:00"),
-            new DriverOrderDelivery(4, "Testveien 4", "16:00")
-    );
+    public Button addToRouteButton;
+    public Button setToDeliveredButton;
+    public Button setToReadyButton;
 
-     // Same test data, only for the part of the menu where the users.driver can change the status of the order
-    final ObservableList<DriverOrderStatus> changeStatusData = FXCollections.observableArrayList(
-            new DriverOrderStatus(1, "Testveien 1", "13:00", "Not delivered"),
-            new DriverOrderStatus(2, "Testveien 2", "14:00", "Not delivered"),
-            new DriverOrderStatus(3, "Testveien 3", "15:00", "Not delivered"),
-            new DriverOrderStatus(4, "Testveien 4", "16:00", "Not delivered")
-    );
-*/
+    public TableView routeOrdersTable;
+    public TableColumn statusColRight;
+    public TableColumn deadlineColRight;
+    public TableColumn dateDeliveredColRight;
+    public TableColumn addressColRight;
 
-    //final ObservableList<Order> orderTest = query.getOrders(1); // Fucked up, fix
+    public Button removeFromListButton;
+    public Button removeAllButton;
+    public Button generateRouteButton;
+    public Button deliveryInProcessButton;
+
+    Address firstAddress = new Address("Osloveien 54", 7018, "Trondheim");
+    Address secondAddress = new Address("Weidemanns vei 5A", 7014, "Trondheim");
+    Address thirdAddress = new Address("Klæbuveien 134A", 7031, "Trondheim");
+
+    protected static ObservableList<OrderStatus> statusTypes = db.getStatusTypes();
+    protected static ObservableList<Supplier> supplierList = db.getAllSuppliers();
+    protected static ObservableList<Ingredient> ingredientList = db.getAllIngredients(supplierList);
+    protected static ObservableList<Dish> dishList = db.getAllDishes(ingredientList);
+    protected static ObservableList<Order> orderList = db.getOrders(3, dishList);
 
 
 
+  //  protected static ObservableList<Order> orderList = testObjects.orderList;
+    protected static ObservableList<Order> routeOrderList = FXCollections.observableArrayList();
 
-
-
-    // Shows a list of orders ready for delivery and a button for generating the route (non-functional as of now)
-    /*
-    EventHandler<ActionEvent> readyOrderEvent  = new EventHandler<ActionEvent>() {
-        @Override
-        public void handle(ActionEvent e) {
-            try {
-                FXMLLoader loader = new FXMLLoader();
-                loader.setLocation(getClass().getResource("ReadyOrderTable.fxml"));
-                TableView readyOrderTable = loader.load();
-                rootPaneDriver.setCenter(readyOrderTable);
-                ObservableList<TableColumn> columns = readyOrderTable.getColumns();
-                columns.get(0).setCellValueFactory(new PropertyValueFactory<Order,Integer>("orderId"));
-                columns.get(1).setCellValueFactory(new PropertyValueFactory<Order,String>("address"));
-                columns.get(2).setCellValueFactory(new PropertyValueFactory<Order,Date>("deadline"));
-                //readyOrderTable.setItems(orderTest);
-
-                FXMLLoader bottomLoader = new FXMLLoader();
-                bottomLoader.setLocation(getClass().getResource("ReadyOrderBottom.fxml"));
-                HBox readyOrderBottom = bottomLoader.load();
-                rootPaneDriver.setBottom(readyOrderBottom);
-
-            } catch(Exception exc) {
-                System.out.println("readyOrderEvent: " + exc);
-            }
+    /* "https://www.google.com/maps/dir/" + firstAddress.getAddress() + ",+" + firstAddress.getZipCode() + "+" + firstAddress.getPlace() + ",+Norway/";*/
+    public static String generateUrl(ObservableList<Order> ordersToGenerateRoute){
+        String url = "https://www.google.com/maps/dir/";
+        Collections.sort(ordersToGenerateRoute, (o1, o2) -> o1.getDeadline().compareTo(o2.getDeadline()));
+        for (Order order :
+                ordersToGenerateRoute) {
+            Address address = order.getAddress();
+            url += address.getAddress() + ",+" + address.getZipCode() + "+" + address.getPlace() + ",+Norway/";
         }
-    };
-    */
+        return url;
+    }
 
-    // Shows list of orders with the option to change their status from "Not delivered" to "Delivered".
-    EventHandler<ActionEvent> changeStatusEvent  = new EventHandler<ActionEvent>() {
+    public static void addMap(String url, Pane pane, Stage stage){
+        final WebView browser = new WebView();
+        final WebEngine webEngine = browser.getEngine();
+
+        ScrollPane scrollPane = new ScrollPane();
+        scrollPane.setContent(browser);
+
+        webEngine.getLoadWorker().stateProperty()
+                .addListener(new ChangeListener<Worker.State>() {
+                    @Override
+                    public void changed(ObservableValue ov, Worker.State oldState, Worker.State newState) {
+
+                        if (newState == Worker.State.SUCCEEDED) {
+                           // stage.setTitle(webEngine.getLocation());
+                        }
+
+                    }
+                });
+        webEngine.load(url);
+        pane.getChildren().add(scrollPane);
+        stage.show();
+    }
+
+    EventHandler<ActionEvent> deliveryInProcessEvent = new EventHandler<ActionEvent>() {
         @Override
-        public void handle(ActionEvent e) {
+        public void handle(ActionEvent event) {
             try {
-                FXMLLoader loader = new FXMLLoader();
-                loader.setLocation(getClass().getResource("ChangeOrderStatusTable.fxml"));
-                changeStatusTable = loader.load();
-                rootPaneDriver.setCenter(changeStatusTable);
-
-            } catch(Exception exc) {
-                System.out.println("changeStatusEvent: " + exc);
-            }
-        }
-    };
-
-    // WORK IN PROGRESS: changes the status of selected orders from "Not delivered" to "Delivered".
-    // Once this is figured out I'll make another one for doing the reverse.
-    /*
-    EventHandler<ActionEvent> markAsDelivered = new EventHandler<ActionEvent>() {
-        @Override
-        public void handle(ActionEvent e) {
-            try {
-                changeStatusTable.getSelectionModel().setCellSelectionEnabled(true);
-                DriverOrderStatus orderStatus = (DriverOrderStatus) changeStatusTable.getSelectionModel().getSelectedItem();
-                orderStatus.setStatus("Delivered");
+                if (!routeOrderList.isEmpty()) {
+                    for (Order order : routeOrderList) {
+                        order.setStatus(statusTypes.get(3));
+                    }
+                }
             } catch (Exception exc) {
                 System.out.println(exc);
             }
         }
     };
-    */
 
-    public void initialize(URL fxmlFileLocation, ResourceBundle resources) { // Required method for Initializable, runs at program launch
+    EventHandler<ActionEvent> addToDeliveryRouteEvent = new EventHandler<ActionEvent>() {
+        @Override
+        public void handle(ActionEvent event) {
+            Order item = (Order) ordersReadyTable.getSelectionModel().getSelectedItem();
+            if (item != null) {
+                boolean exists = false;
+                for (Order order :
+                        routeOrderList) {
+                    if (order == item) {
+                        exists = true;
+                    }
+                }
+                if (!exists) {
+                    routeOrderList.add(item);
+                }
+            }
+        }
+    };
 
-        //data.add(new TableTest("Fifty-three", "7")); // adds new line to table by adding another TableTest object to the data array
+    EventHandler<ActionEvent> removeFromListEvent = new EventHandler<ActionEvent>() {
+        @Override
+        public void handle(ActionEvent event) {
+            Order item = (Order) routeOrdersTable.getSelectionModel().getSelectedItem();
+            if (item != null) {
+                routeOrdersTable.getSelectionModel().clearSelection();
+                routeOrderList.remove(item);
+            }
+        }
+    };
 
-        //deliveredButton.setOnAction(markAsDelivered); <-- this line makes the program crash, should be initialized AFTER user clicks "Change order status"-button.
-        // also tried to put it inside changeStatusEvent() but this unsurprisingly leads to NullPointerException
-        //readyOrderButton.setOnAction(readyOrderEvent);
-        changeStatusButton.setOnAction(changeStatusEvent);
+    EventHandler<ActionEvent> removeAllEvent = new EventHandler<ActionEvent>() {
+        @Override
+        public void handle(ActionEvent event) {
+            try {
+                if (!routeOrderList.isEmpty()) {
+                    routeOrderList.clear();
+                    routeOrdersTable.setItems(routeOrderList);
+                }
+            } catch (Exception exc) {
+                System.out.println(exc);
+            }
+        }
+    };
 
+    EventHandler<ActionEvent> markAsDelivered = new EventHandler<ActionEvent>() {
+        @Override
+        public void handle(ActionEvent event) {
+            try {
+                Order order = (Order) ordersReadyTable.getSelectionModel().getSelectedItem();
+                if (order != null) {
+                    LocalDateTime deliveryDate = LocalDateTime.now();
+                    order.setActualDeliveryDateTime(deliveryDate);
+                }
+            } catch (Exception exc) {
+                System.out.println(exc);
+            }
+        }
+    };
+
+    EventHandler<ActionEvent> generateRouteEvent = new EventHandler<ActionEvent>() {
+        @Override
+        public void handle(ActionEvent event) {
+            Pane paneForMap = new Pane();
+            String url = generateUrl(routeOrderList);
+            Scene mapScene = new Scene(paneForMap);
+            Stage mapStage = new Stage();
+            mapStage.setScene(mapScene);
+            mapStage.setTitle("Delivery route");
+            mapStage.setHeight(600);
+            mapStage.setWidth(900);
+           // Stage stage = (Stage) rootPaneDriver.getScene().getWindow();
+            addMap(url, paneForMap, mapStage);
+        }
+    };
+
+    public String ldtToString(LocalDateTime ldt) {
+        return "Date: " + ldt.getYear() + "/" + ldt.getMonthValue() + "/" + ldt.getDayOfMonth() + "\nTime: "
+                + String.format("%02d", ldt.getHour()) + ":" + String.format("%02d", ldt.getMinute());
     }
 
 
+    public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
+
+        deadlineColLeft.setCellValueFactory(new PropertyValueFactory<Order, LocalDateTime>("deadlineTime"));
+        dateDeliveredColLeft.setCellValueFactory(new PropertyValueFactory<Order, LocalDateTime>("actualDeliveryDateTime"));
+        statusColLeft.setCellValueFactory(new PropertyValueFactory<Order, OrderStatus>("status"));
+        addressColLeft.setCellValueFactory(new PropertyValueFactory<Order, Address>("address"));
+
+
+        deadlineColLeft.setCellFactory(column -> {
+            return new TableCell<Order, LocalDateTime>() {
+                @Override
+                protected void updateItem(LocalDateTime ldt, boolean empty) {
+                    if (ldt == null || empty) {
+                        setText(null);
+                    } else {
+                        setText(ldtToString(ldt));
+                    }
+                }
+            };
+        });
+
+        dateDeliveredColLeft.setCellFactory(column -> {
+            return new TableCell<Order, LocalDateTime>() {
+                @Override
+                protected void updateItem(LocalDateTime ldt, boolean empty) {
+                    if (ldt == null && !empty) {
+                        setText("Not yet delivered");
+                    } else if (empty) {
+                        setText(null);
+                    } else {
+                        setText(ldtToString(ldt));
+                    }
+                }
+            };
+        });
+
+
+        statusColLeft.setCellFactory(column -> {
+            return new TableCell<Order, OrderStatus>() {
+                @Override
+                protected void updateItem(OrderStatus status, boolean empty) {
+                    if (status == null || empty) {
+                        setText(null);
+                    } else {
+                        setText(status.getName());
+                    }
+                }
+            };
+        });
+
+        addressColLeft.setCellFactory(column -> {
+            return new TableCell<Order, Address>() {
+                @Override
+                protected void updateItem(Address item, boolean empty) {
+                    if (item == null || empty) {
+                        setText(null);
+                    } else {
+                        setText(item.getAddress() + "\n" + item.getZipCode() + " " + item.getPlace());
+                    }
+                }
+            };
+        });
+
+
+
+
+        deadlineColRight.setCellValueFactory(new PropertyValueFactory<Order, LocalDateTime>("deadlineTime"));
+
+        dateDeliveredColRight.setCellValueFactory(
+                new PropertyValueFactory<Order, LocalDateTime>("actualDeliveryDateTime")
+        );
+
+        statusColRight.setCellValueFactory(
+                new PropertyValueFactory<Order, OrderStatus>("status")
+        );
+
+        addressColRight.setCellValueFactory(new PropertyValueFactory<Order, Address>("address"));
+
+        deadlineColRight.setCellFactory(column -> {
+            return new TableCell<Order, LocalDateTime>() {
+                @Override
+                protected void updateItem(LocalDateTime ldt, boolean empty) {
+                    if (ldt == null || empty) {
+                        setText(null);
+                    } else {
+                        setText(ldtToString(ldt));
+                    }
+                }
+            };
+        });
+
+        dateDeliveredColRight.setCellFactory(column -> {
+            return new TableCell<Order, LocalDateTime>() {
+                @Override
+                protected void updateItem(LocalDateTime ldt, boolean empty) {
+                    if (ldt == null && !empty) {
+                        setText("Not yet delivered");
+                    } else if (empty) {
+                        setText(null);
+                    } else {
+                        setText(ldtToString(ldt));
+                    }
+                }
+            };
+        });
+
+        statusColRight.setCellFactory(column -> {
+            return new TableCell<Order, OrderStatus>() {
+                @Override
+                protected void updateItem(OrderStatus status, boolean empty) {
+                    if (status == null || empty) {
+                        setText(null);
+                    } else {
+                        setText(status.getName());
+                    }
+                }
+            };
+        });
+
+        addressColRight.setCellFactory(column -> {
+            return new TableCell<Order, Address>() {
+                @Override
+                protected void updateItem(Address item, boolean empty) {
+                    if (item == null || empty) {
+                        setText(null);
+                    } else {
+                        setText(item.getAddress() + "\n" + item.getZipCode() + " " + item.getPlace());
+                    }
+                }
+            };
+        });
+
+        ordersReadyTable.getColumns().addAll(deadlineColLeft, dateDeliveredColLeft, statusColLeft, addressColLeft);
+        ordersReadyTable.setEditable(true);
+        ordersReadyTable.setItems(orderList);
+
+        routeOrdersTable.getColumns().addAll(deadlineColRight, dateDeliveredColRight, statusColRight, addressColRight);
+        routeOrdersTable.setEditable(true);
+        routeOrdersTable.setItems(routeOrderList);
+
+        addToRouteButton.setOnAction(addToDeliveryRouteEvent);
+        removeFromListButton.setOnAction(removeFromListEvent);
+        generateRouteButton.setOnAction(generateRouteEvent);
+        deliveryInProcessButton.setOnAction(deliveryInProcessEvent);
+        removeAllButton.setOnAction(removeAllEvent);
+        setToDeliveredButton.setOnAction(markAsDelivered);
+
+    }
 }

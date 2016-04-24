@@ -177,10 +177,13 @@ public class Customer {
 
     @Override
     public String toString() {
+        return firstName.get() + " " + lastName.get();
+    }
+    /*public String toString() {
         return "Customer{" +
                 "businessName='" + businessName + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 '}' + "\tAddress: " + address.toString();
-    }
+    }*/
 }
