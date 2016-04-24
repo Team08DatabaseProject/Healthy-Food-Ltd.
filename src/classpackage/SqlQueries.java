@@ -1101,6 +1101,28 @@ public class SqlQueries extends DBConnector {
 
     /*MenuLine methods*/
 
+
+    public boolean addMenuLine(Menu menu, ObservableList<MenuLine> menuLines) {
+        try {
+            String insertSql = "INSERT INTO menu_line(dish_id, menu_id, quantity, price_factor) VALUES(?,?,?)";
+            insertQuery = con.prepareStatement(insertSql);
+            for (MenuLine menuLine :
+                    menuLines) {
+                insertQuery.setInt(1, menuLine.getDish().getDishId());
+                insertQuery.setInt(2, menu.getMenuId());
+                insertQuery.setDouble(3, menuLine.getPriceFactor());
+                insertQuery.execute();
+
+            }
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            closeEverything(null, insertQuery, con);
+        }
+        return false;
+    }
+
     public ObservableList<MenuLine> getMenuLinesByMenu(Menu menu, ObservableList<Dish> allDishes) {
         ObservableList<MenuLine> menuLines = FXCollections.observableArrayList();
         ResultSet res = null;
@@ -1144,6 +1166,7 @@ public class SqlQueries extends DBConnector {
             con.commit();
             return true;
         } catch (SQLException e) {
+            SqlCleanup.rullTilbake(con);
             e.printStackTrace();
         } finally {
             closeEverything(null, insertQuery, con);
