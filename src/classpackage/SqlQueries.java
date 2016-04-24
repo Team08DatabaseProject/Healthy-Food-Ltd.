@@ -987,7 +987,7 @@ public class SqlQueries extends DBConnector {
                     " WHERE menu_id = " + menu.getMenuId();
             updateQuery = con.prepareStatement(sql);
             updateQuery.setInt(1, menu.getMealType().getMealTypeId());
-            updateQuery.setString(1, menu.getName());
+            updateQuery.setString(2, menu.getName());
 
             if (updateQuery.executeUpdate() == 1) return true;
         } catch (SQLException e) {
@@ -1128,6 +1128,53 @@ public class SqlQueries extends DBConnector {
         }
         return menuLines;
     }
+
+    //    Deleting menuLines
+    public boolean deleteMenuLines(Menu menu, ObservableList<MenuLine> menuLines) {
+//        con.setTransactionIsolation();
+        try {
+            con.setAutoCommit(false);
+            String sqlSetning = "DELETE FROM menu_line WHERE menu_id = " + menu.getMenuId() + " AND dish_id = ?";
+            PreparedStatement deleteQuery = con.prepareStatement(sqlSetning);
+            for (MenuLine menuline :
+                    menuLines) {
+                deleteQuery.setInt(1, menuline.getDish().getDishId());
+                deleteQuery.executeUpdate();
+            }
+            con.commit();
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            closeEverything(null, insertQuery, con);
+        }
+        return false;
+    }
+
+    //    Method for updating MenuLines in a Menu
+    public boolean updateMenuLine(Menu menu, ObservableList<MenuLine> menuLines) {
+        try {
+            con.setAutoCommit(false);
+            String sql = "UPDATE menu_line SET quantity = ? WHERE menu_id = " + menu.getMenuId() + " AND dish_id =?";
+            updateQuery = con.prepareStatement(sql);
+            for (MenuLine menuLine :
+                    menuLines) {
+                updateQuery.setInt(1, menuLine.getAmount());
+                updateQuery.setInt(2, menuLine.getDish().getDishId());
+                updateQuery.executeUpdate();
+            }
+            con.commit();
+            return true;
+        } catch (SQLException e) {
+            SqlCleanup.rullTilbake(con);
+            e.printStackTrace();
+        } finally {
+            closeEverything(null, updateQuery, con);
+        }
+
+        return false;
+    }
+
 
 
     /*Order Methods*/
