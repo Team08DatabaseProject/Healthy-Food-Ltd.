@@ -31,7 +31,11 @@ public class SqlQueries extends DBConnector {
     // TODO: 22.04.2016 In Delete methods that include fex adress remember to delete the address as well
     // TODO: 19.04.2016 Refine methods to give confirmations on both execute() and executeUpdate()
     // TODO: 04.04.2016 the strings for Gui that deals with Orders should use just so we have this standardized
-   /* public final String CREATED = "Created";
+
+    // TODO: 4/24/16 Add getMealTypes() method -- Axel
+    // TODO: 4/24/16 Add updateMenu() method -- Axel
+
+    /* public final String CREATED = "Created";
     public final String INPREPARATION = "In preparation";
     public final String READYFORDELIVERY = "Ready for delivery";
     public final String UNDERDELIVERY = "Under delivery";
@@ -1001,9 +1005,9 @@ public class SqlQueries extends DBConnector {
             res = selectQuery.executeQuery();
             while (res.next()) {
                 int menuId = res.getInt("menu_id");
-                String descriptin = res.getString("description");
+                String description = res.getString("description");
                 String typeMeal = res.getString("type_meal");
-                Menu existingMenu = new Menu(menuId, descriptin, typeMeal, null);
+                Menu existingMenu = new Menu(menuId, description, typeMeal, null);
                 existingMenu.setMenuLines(getMenuLinesByMenu(existingMenu, allDishes));
                 menus.add(existingMenu);
             }
@@ -1035,7 +1039,7 @@ public class SqlQueries extends DBConnector {
                         allDishes) {
                     if (dish.getDishId() == dishId) {
                         menuLines.add(new MenuLine(dish, amount, priceFactor));
-                        break;
+                        // break;
                     }
                 }
             }
@@ -1092,12 +1096,16 @@ public class SqlQueries extends DBConnector {
                 double price = res.getDouble("price");
                 OrderStatus status = getOrderStatus(res.getInt("status_id"));
                 Address address = getAddress(res.getInt("address_id"));
-                LocalDateTime actualDeliveryDate = null;
-                LocalDateTime actualDeliveryDateUnstable = res.getTimestamp("delivered_date").toLocalDateTime();
-                if (actualDeliveryDateUnstable != null) {
-                    actualDeliveryDate = actualDeliveryDateUnstable;
+               // LocalDateTime actualDeliveryDate;
+                //LocalDateTime actualDeliveryDateUnstable = res.getTimestamp("delivered_date").toLocalDateTime();
+                Order order;
+                if (res.getTimestamp("delivered_date") != null) {
+                    LocalDateTime actualDeliveryDate = res.getTimestamp("delivered_date").toLocalDateTime();;
+                    order = new Order(orderId, customerRequests, deadline, actualDeliveryDate, price, status, null, address);
+                } else {
+                    order = new Order(orderId, customerRequests, deadline, null, price, status, null, address);
                 }
-                Order order = new Order(orderId, customerRequests, deadline, actualDeliveryDate, price, status, null, address);
+               // order = new Order(orderId, customerRequests, deadline, actualDeliveryDate, price, status, null, address);
                 setOrderLinesInOrder(order, allDishes);
                 orders.add(order);
             }
@@ -1296,7 +1304,7 @@ public class SqlQueries extends DBConnector {
                         allDishes) {
                     if (dish.getDishId() == dishId) {
                         dishLinesInThisOrder.add(new OrderLine(dish, quantity));
-                        break;
+                        // break;
                     }
                 }
             }
