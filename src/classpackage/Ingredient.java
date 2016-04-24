@@ -152,4 +152,15 @@ public class Ingredient {
                 ", supplier=" + supplier +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if(o instanceof Ingredient) {
+            return (ingredientId.get() == ((Ingredient) o).getIngredientId());
+        } else if(o instanceof POrderLine) {
+            System.out.println(((POrderLine) o).getIngredient().getIngredientId() + " " + ingredientId.get());
+            return (ingredientId.get() == ((POrderLine) o).getIngredient().getIngredientId());
+        }
+        return false;
+    }
 }

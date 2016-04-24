@@ -1,9 +1,19 @@
 package div;
 
 import classpackage.Employee;
-import javafx.scene.control.Alert;
+import classpackage.POrder;
+import classpackage.POrderLine;
+import classpackage.Supplier;
+import javafx.application.Platform;
+import javafx.geometry.Insets;
+import javafx.scene.Node;
+import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.GridPane;
+import javafx.util.Pair;
 
 import java.util.Optional;
 
@@ -46,7 +56,7 @@ public class PopupDialog {
 						"An administrator has created an account for you in the Healthy Catering Ltd. System\nYour login details are as follows:\n\n" +
 						"Username: " + employee.getUsername() + "\nPassword: " + password;
 		Alert alert = new Alert(AlertType.INFORMATION);
-		alert.setTitle("Email sent");
+		alert.setTitle("E-mail sent");
 		alert.setHeaderText(null);
 		alert.setContentText(content);
 		alert.showAndWait();
@@ -57,9 +67,73 @@ public class PopupDialog {
 						"An administrator has changed your password in the Healthy Catering Ltd. System\nYour new password is as follows:\n\n" +
 						"Password: " + password;
 		Alert alert = new Alert(AlertType.INFORMATION);
-		alert.setTitle("Email sent");
+		alert.setTitle("E-mail sent");
 		alert.setHeaderText(null);
 		alert.setContentText(content);
 		alert.showAndWait();
+	}
+
+	public static void newPOrderEmail(POrder pOrder, Supplier supplier) {
+		String content = "Dear " + supplier.getBusinessName() + "\n\n" +
+						"We wish to place an order for the following ingredients:\n\nName:\t\tPrice:\tQuantity:\tTotal:\n";
+		double grandTotal = 0.0;
+		for(POrderLine pOrderLine: pOrder.getpOrderLines()) {
+			double lineTotal = pOrderLine.getIngredient().getPrice() + pOrderLine.getQuantity();
+			grandTotal += lineTotal;
+			content += pOrderLine.getIngredient().getIngredientName() + "\t\t" + pOrderLine.getIngredient().getPrice() + "\t" +
+			pOrderLine.getQuantity() + "\t" + lineTotal + "\n";
+		}
+		content += "\nGrand total: " + grandTotal + "\n\nPurchase order ID: " + pOrder.getpOrderId() + "\n\nRegards\nHealthy Catering Ltd.";
+		Alert alert = new Alert(AlertType.INFORMATION);
+		alert.setTitle("Phone call made or e-mail sent");
+		alert.setHeaderText(null);
+		alert.setContentText(content);
+		alert.showAndWait();
+	}
+
+	public static String StringDialog(String title, String content) {
+		TextInputDialog dialog = new TextInputDialog();
+		dialog.setTitle(title);
+		dialog.setHeaderText(null);
+		dialog.setContentText(content);
+		Optional<String> result = dialog.showAndWait();
+		if(result.isPresent()) {
+			return result.get();
+		} else {
+			return null;
+		}
+	}
+
+	public static Double doubleDialog(String title, String content) {
+		Dialog<Double> dialog = new Dialog<>();
+		dialog.setTitle(title);
+		dialog.setHeaderText(null);
+		ButtonType okButtonType = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
+		dialog.getDialogPane().getButtonTypes().addAll(okButtonType, ButtonType.CANCEL);
+		GridPane grid = new GridPane();
+		grid.setHgap(10);
+		grid.setVgap(10);
+		grid.setPadding(new Insets(20, 150, 10, 10));
+		DoubleField doubleField = new DoubleField();
+		grid.add(new Label(content), 0, 0);
+		grid.add(doubleField, 1, 0);
+		Node okButton = dialog.getDialogPane().lookupButton(okButtonType);
+		okButton.setDisable(true);
+		doubleField.textProperty().addListener((observable, oldValue, newValue) -> {
+			okButton.setDisable(newValue.trim().isEmpty());
+		});
+		dialog.getDialogPane().setContent(grid);
+		Platform.runLater(() -> doubleField.requestFocus());
+		dialog.setResultConverter(dialogButton -> {
+			if (dialogButton == okButtonType) {
+				return doubleField.getDouble();
+			}
+			return null;
+		});
+		Optional<Double> result = dialog.showAndWait();
+		if(result.isPresent()) {
+			return result.get();
+		}
+		return null;
 	}
 }

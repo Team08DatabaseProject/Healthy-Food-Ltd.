@@ -20,6 +20,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.DatePicker?>
 <TabPane xmlns:fx="http://javafx.com/fxml/1" fx:controller="users.ceo.ControllerCEOInventory" tabClosingPolicy="UNAVAILABLE">
     <tabs>
         <Tab fx:id="pOrdersTab" text="Purchase orders">
@@ -46,39 +47,50 @@
         <Tab fx:id="newPOrderTab" text="New purchase order">
             <VBox>
                 <GridPane style="-fx-padding: 10px;">
-                    <Label text="Supplier: " GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                    <Label text="Supplier:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
                     <TextField fx:id="supplierNameField" editable="false" prefWidth="200" GridPane.columnIndex="1" GridPane.rowIndex="0" />
                     <Button fx:id="chooseSupplierButton" text="Choose" GridPane.columnIndex="2" GridPane.rowIndex="0" />
-                    <Label text="Phone number: " GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                    <Label text="Phone number:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
                     <TextField fx:id="phoneNoField" editable="false" prefWidth="200" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                    <Label text="Address: " GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                    <Label text="Address:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
                     <TextArea fx:id="supplierAddressField" editable="false" prefWidth="200" prefRowCount="2" GridPane.columnIndex="1" GridPane.rowIndex="2"  />
-                    <TableView fx:id="pOrderLinesTable" GridPane.columnIndex="0" GridPane.rowIndex="3" GridPane.columnSpan="3" GridPane.vgrow="ALWAYS">
-                        <columns>
-                            <TableColumn fx:id="ingredientCol" prefWidth="20.0" text="Ingredient" />
-                            <TableColumn fx:id="quantityCol" prefWidth="40.0" text="Quantity" />
-                            <TableColumn fx:id="priceCol" prefWidth="40.0" text="Price" />
-                            <TableColumn fx:id="totalCol" prefWidth="40.0" text="Total" />
-                        </columns>
-                        <columnResizePolicy>
-                            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                        </columnResizePolicy>
-                        <GridPane.margin>
-                            <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
-                        </GridPane.margin>
-                    </TableView>
+                    <Button fx:id="resetNewPOrderButton" text="Reset purchase order" GridPane.columnIndex="3" GridPane.rowIndex="0" />
                 </GridPane>
-                <GridPane>
-                     <Label text="Grand total: " GridPane.columnIndex="0" GridPane.rowIndex="0" />
-                    <TextField fx:id="grandTotalField" editable="false" prefWidth="100" maxWidth="100" GridPane.columnIndex="1" GridPane.rowIndex="0" style="-fx-alignment: center-right;" />
+                 <TableView fx:id="pOrderLinesTable" GridPane.columnIndex="0" GridPane.rowIndex="3" GridPane.columnSpan="3" GridPane.hgrow="SOMETIMES" GridPane.vgrow="ALWAYS">
+                    <placeholder>
+                        <Label text="" />
+                    </placeholder>
+                    <columns>
+                        <TableColumn fx:id="ingredientCheckedCol" text="Checked" />
+                        <TableColumn fx:id="ingredientCol" prefWidth="60.0" text="Ingredient" />
+                        <TableColumn fx:id="priceCol" prefWidth="40.0" text="Price" />
+                        <TableColumn fx:id="quantityCol" prefWidth="40.0" text="Quantity" />
+                        <TableColumn fx:id="totalCol" prefWidth="40.0" text="Total" />
+                    </columns>
+                    <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                    </columnResizePolicy>
+                    <GridPane.margin>
+                        <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
+                    </GridPane.margin>
+                </TableView>
+                <HBox alignment="CENTER_RIGHT">
+                    <Label text="Grand total: " GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                    <TextField fx:id="grandTotalField" editable="false" text="0.00" GridPane.columnIndex="1" GridPane.rowIndex="0" style="-fx-alignment: center-right;" />
+                </HBox>
+                 <GridPane>
                     <HBox GridPane.columnIndex="0" GridPane.rowIndex="1" GridPane.columnSpan="2">
                         <Button fx:id="addLineButton" text="Add" />
-                        <Button fx:id="pOrderSaveButton" text="Save" />
+                        <Button fx:id="removeLinesButton" text="Remove" />
+                        <Button fx:id="savePOrderButton" text="Save" />
                     </HBox>
                     <columnConstraints>
                         <ColumnConstraints prefWidth="100" />
                         <ColumnConstraints prefWidth="200" halignment="RIGHT"/>
                     </columnConstraints>
+                     <GridPane.margin>
+                         <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
+                     </GridPane.margin>
                 </GridPane>
             </VBox>
         </Tab>
