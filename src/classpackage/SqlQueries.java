@@ -35,8 +35,6 @@ public class SqlQueries extends DBConnector {
     // TODO: 19.04.2016 Refine methods to give confirmations on both execute() and executeUpdate()
     // TODO: 04.04.2016 the strings for Gui that deals with Orders should use just so we have this standardized
 
-    // TODO: 4/24/16 Add getMealTypes() method -- Axel
-    // TODO: 4/24/16 Add updateMenu() method -- Axel
 
     /* public final String CREATED = "Created";
     public final String INPREPARATION = "In preparation";
@@ -967,7 +965,7 @@ public class SqlQueries extends DBConnector {
             insertQuery = con.prepareStatement(insertSql, Statement.RETURN_GENERATED_KEYS);
             insertQuery.setString(1, menu.getName());
             insertQuery.setInt(2, menu.getMealType().getMealTypeId());
-            insertQuery.executeUpdate();
+            insertQuery.execute();
 
             res = insertQuery.getGeneratedKeys();
             res.next();
@@ -979,6 +977,26 @@ public class SqlQueries extends DBConnector {
             SqlCleanup.lukkSetning(insertQuery);
             SqlCleanup.settAutoCommit(con);
         }
+        return false;
+    }
+
+    //    Method for updating a Menu
+    public boolean updateMenu(Menu menu) {
+        try {
+            String sql = "UPDATE menu SET meal_type_id = ?, description = ?" +
+                    " WHERE menu_id = " + menu.getMenuId();
+            updateQuery = con.prepareStatement(sql);
+            updateQuery.setInt(1, menu.getMealType().getMealTypeId());
+            updateQuery.setString(1, menu.getName());
+
+            if (updateQuery.executeUpdate() == 1) return true;
+        } catch (SQLException e) {
+            SqlCleanup.rullTilbake(con);
+            e.printStackTrace();
+        } finally {
+            closeEverything(null, updateQuery, con);
+        }
+
         return false;
     }
 
@@ -1024,20 +1042,62 @@ public class SqlQueries extends DBConnector {
     }
 
     /*MealType methods*/
+
+    public boolean addMealType(MealType mealType) {
+        ResultSet res = null;
+        try {
+            String insertSql = "INSERT INTO meal_type(meal_type_name) VALUES(?)";
+            insertQuery = con.prepareStatement(insertSql, Statement.RETURN_GENERATED_KEYS);
+            insertQuery.setString(1, mealType.getName());
+            insertQuery.executeUpdate();
+
+            res = insertQuery.getGeneratedKeys();
+            res.next();
+            mealType.setMealTypeId(res.getInt(1));
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            closeEverything(res, insertQuery, con);
+        }
+        return false;
+    }
+
     public MealType getMealType(int id) {
+        ResultSet res = null;
         try {
             String selectSql = "SELECT meal_type_id, meal_type_name FROM meal_type WHERE meal_type_id = " + id;
             selectQuery = con.prepareStatement(selectSql);
             selectQuery.setInt(1, id);
-            ResultSet res = selectQuery.executeQuery();
+            res = selectQuery.executeQuery();
             if (!res.next()) return null;
             int mealTypeId = res.getInt(1);
             String name = res.getString(2);
             return new MealType(mealTypeId, name);
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            closeEverything(res, selectQuery, con);
         }
         return null;
+    }
+
+    public ObservableList<MealType> getAllMealTypes() {
+        ResultSet res = null;
+        ObservableList<MealType> mealTypes = FXCollections.observableArrayList();
+        try {
+            String selectsql = "SELECT * FROM meal_type";
+            selectQuery = con.prepareStatement(selectsql);
+            res = selectQuery.executeQuery();
+            while (res.next()) {
+                mealTypes.add(new MealType(res.getInt("meal_type_id"), res.getString("meal_type_name")));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            closeEverything(res, selectQuery, con);
+        }
+        return mealTypes;
     }
 
     /*MenuLine methods*/
@@ -1117,7 +1177,8 @@ public class SqlQueries extends DBConnector {
                 Address address = getAddress(res.getInt("address_id"));
                 Order order;
                 if (res.getTimestamp("delivered_date") != null) {
-                    LocalDateTime actualDeliveryDate = res.getTimestamp("delivered_date").toLocalDateTime();;
+                    LocalDateTime actualDeliveryDate = res.getTimestamp("delivered_date").toLocalDateTime();
+                    ;
                     order = new Order(orderId, customerRequests, deadline, actualDeliveryDate, price, status, null, address);
                 } else {
                     order = new Order(orderId, customerRequests, deadline, null, price, status, null, address);
@@ -1272,11 +1333,10 @@ public class SqlQueries extends DBConnector {
             updateQuery.setInt(5, order.getAddress().getAddressId());
             updateQuery.setInt(6, order.getStatus().getStatusId());
 
-            if (updateQuery.executeUpdate() == 1 ) {
+            if (updateQuery.executeUpdate() == 1) {
                 if (customer != null && updateCustomer(customer)) {
                     return true;
-                }
-                else {
+                } else {
                     return true;
                 }
             }
