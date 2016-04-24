@@ -1,5 +1,8 @@
 package classpackage;
 
+import javafx.beans.binding.NumberBinding;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -21,6 +24,7 @@ public class Menu {
     private StringProperty name = new SimpleStringProperty();
     private ObjectProperty<MealType> mealType = new SimpleObjectProperty<>();
     private ObservableList<MenuLine> menuLines = FXCollections.observableArrayList();
+    private DoubleProperty totalPrice = new SimpleDoubleProperty();
 
     // from database
     public Menu(int menuId, String name, MealType mealType, ObservableList menuLines) {
@@ -28,6 +32,7 @@ public class Menu {
         this.name.set(name);
         this.mealType.set(mealType);
         this.menuLines = menuLines;
+        this.setTotalPrice();
     }
 
     // to database
@@ -35,6 +40,7 @@ public class Menu {
         this.name.set(name);
         this.mealType.set(mealType);
         this.menuLines = menuLines;
+        this.setTotalPrice();
     }
 
     public int getMenuId() {
@@ -76,5 +82,26 @@ public class Menu {
 
     public void setMenuLines(ObservableList<MenuLine> menuLines) {
         this.menuLines = menuLines;
+        this.setTotalPrice();
     }
+
+    private void setTotalPrice() {
+        double price = 0;
+        if (menuLines != null && !menuLines.isEmpty()) {
+            for (MenuLine mL : menuLines) {
+                price += mL.getTotalPrice();
+            }
+        }
+        totalPrice.set(price);
+    }
+
+    public double getTotalPrice() {
+        return totalPrice.doubleValue();
+    }
+
+    public DoubleProperty totalPriceProperty() {
+        return totalPrice;
+    }
+
+
 }
