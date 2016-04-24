@@ -11,7 +11,7 @@ import java.util.Arrays;
 /**
  * Created by paul thomas on 16.03.2016.
  */
-class EncryptionService {
+public class EncryptionService {
 
 
     /*
@@ -57,27 +57,4 @@ class EncryptionService {
         random.nextBytes(salt);
         return salt;
     }
-/*
-    public static void main(String[] args) throws Exception {
-        try {
-            PasswordEncryptionService myPasswordEncryptionService = new PasswordEncryptionService();
-            byte[] myArray = {24, 55, 78, 56, 34, 23, 6, 4, 6,};
-            byte[] password = myPasswordEncryptionService.getEncryptedPassword("DataPassword", myArray);
-            String password1 = "";
-            for (int i = 0; i < password.length; i++) {
-                password1 += password[i];
-            }
-            System.out.println(password1);
-            boolean first = myPasswordEncryptionService.authenticate("sdfsdf", password, myArray);
-            if (first) {
-                System.out.println("should fail");
-            }
-            boolean second = myPasswordEncryptionService.authenticate("MyNewPassword94", password, myArray);
-            if (second) {
-                System.out.println("should work");
-            }
-        } catch (Exception e) {
-            System.out.println("oh no!");
-        }
-    } */
 }

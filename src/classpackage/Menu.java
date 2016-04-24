@@ -1,5 +1,7 @@
 package classpackage;
 
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
@@ -17,11 +19,11 @@ import java.util.Map;
 public class Menu {
     private int menuId;
     private StringProperty name = new SimpleStringProperty();
-    private StringProperty mealType = new SimpleStringProperty();
+    private ObjectProperty<MealType> mealType = new SimpleObjectProperty<>();
     private ObservableList<MenuLine> menuLines = FXCollections.observableArrayList();
 
     // from database
-    public Menu(int menuId, String name, String mealType, ObservableList menuLines) {
+    public Menu(int menuId, String name, MealType mealType, ObservableList menuLines) {
         this.menuId = menuId;
         this.name.set(name);
         this.mealType.set(mealType);
@@ -29,7 +31,7 @@ public class Menu {
     }
 
     // to database
-    public Menu(String name, String mealType, ObservableList menuLines) {
+    public Menu(String name, MealType mealType, ObservableList menuLines) {
         this.name.set(name);
         this.mealType.set(mealType);
         this.menuLines = menuLines;
@@ -55,17 +57,18 @@ public class Menu {
         this.name.set(name);
     }
 
-    public String getMealType() {
+    public MealType getMealType() {
         return mealType.get();
     }
 
-    public StringProperty mealTypeProperty() {
+    public ObjectProperty<MealType> mealTypeProperty() {
         return mealType;
     }
 
-    public void setMealType(String mealType) {
+    public void setMealType(MealType mealType) {
         this.mealType.set(mealType);
     }
+
 
     public ObservableList<MenuLine> getMenuLines() {
         return menuLines;

@@ -27,6 +27,9 @@ import java.util.*;
 
 public class SqlQueries extends DBConnector {
 
+    // TODO: 24.04.2016 Understand why equals behaves as it does for ObjectProperty
+    // TODO: 24.04.2016 Avklare med Grethe hvor grundig testene MAA vaere
+    // TODO: 23.04.2016 PasswordEncryption
     // TODO: 23.04.2016 Log out, (statistikk), sette alt inne i samme vindu, styling, validate felt
     // TODO: 22.04.2016 In Delete methods that include fex adress remember to delete the address as well
     // TODO: 19.04.2016 Refine methods to give confirmations on both execute() and executeUpdate()
@@ -385,7 +388,7 @@ public class SqlQueries extends DBConnector {
             updateQuery = con.prepareStatement(sql);
             updateQuery.setDouble(1, dish.getPrice());
             updateQuery.setString(2, dish.getDishName());
-            updateQuery.setInt(7, dish.getDishId());
+            updateQuery.setInt(3, dish.getDishId());
             if (updateQuery.executeUpdate() == 1) {
                 return true;
             }
@@ -960,10 +963,10 @@ public class SqlQueries extends DBConnector {
         ResultSet res = null;
         try {
 
-            String insertSql = "INSERT INTO menu(description, type_meal) VALUES(?,?)";
+            String insertSql = "INSERT INTO menu(description, meal_type_id) VALUES(?,?)";
             insertQuery = con.prepareStatement(insertSql, Statement.RETURN_GENERATED_KEYS);
             insertQuery.setString(1, menu.getName());
-            insertQuery.setString(2, menu.getMealType());
+            insertQuery.setInt(2, menu.getMealType().getMealTypeId());
             insertQuery.executeUpdate();
 
             res = insertQuery.getGeneratedKeys();
@@ -1006,8 +1009,8 @@ public class SqlQueries extends DBConnector {
             while (res.next()) {
                 int menuId = res.getInt("menu_id");
                 String description = res.getString("description");
-                String typeMeal = res.getString("type_meal");
-                Menu existingMenu = new Menu(menuId, description, typeMeal, null);
+                int meal_type_id = res.getInt("meal_type_id");
+                Menu existingMenu = new Menu(menuId, description, getMealType(meal_type_id), null);
                 existingMenu.setMenuLines(getMenuLinesByMenu(existingMenu, allDishes));
                 menus.add(existingMenu);
             }
@@ -1020,6 +1023,22 @@ public class SqlQueries extends DBConnector {
         return menus;
     }
 
+    /*MealType methods*/
+    public MealType getMealType(int id) {
+        try {
+            String selectSql = "SELECT meal_type_id, meal_type_name FROM meal_type WHERE meal_type_id = " + id;
+            selectQuery = con.prepareStatement(selectSql);
+            selectQuery.setInt(1, id);
+            ResultSet res = selectQuery.executeQuery();
+            if (!res.next()) return null;
+            int mealTypeId = res.getInt(1);
+            String name = res.getString(2);
+            return new MealType(mealTypeId, name);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
     /*MenuLine methods*/
 
@@ -1096,8 +1115,6 @@ public class SqlQueries extends DBConnector {
                 double price = res.getDouble("price");
                 OrderStatus status = getOrderStatus(res.getInt("status_id"));
                 Address address = getAddress(res.getInt("address_id"));
-               // LocalDateTime actualDeliveryDate;
-                //LocalDateTime actualDeliveryDateUnstable = res.getTimestamp("delivered_date").toLocalDateTime();
                 Order order;
                 if (res.getTimestamp("delivered_date") != null) {
                     LocalDateTime actualDeliveryDate = res.getTimestamp("delivered_date").toLocalDateTime();;
@@ -1105,7 +1122,6 @@ public class SqlQueries extends DBConnector {
                 } else {
                     order = new Order(orderId, customerRequests, deadline, null, price, status, null, address);
                 }
-               // order = new Order(orderId, customerRequests, deadline, actualDeliveryDate, price, status, null, address);
                 setOrderLinesInOrder(order, allDishes);
                 orders.add(order);
             }
@@ -1254,8 +1270,13 @@ public class SqlQueries extends DBConnector {
             }
             updateQuery.setDouble(4, order.getPrice());
             updateQuery.setInt(5, order.getAddress().getAddressId());
+            updateQuery.setInt(6, order.getStatus().getStatusId());
+
             if (updateQuery.executeUpdate() == 1 ) {
                 if (customer != null && updateCustomer(customer)) {
+                    return true;
+                }
+                else {
                     return true;
                 }
             }

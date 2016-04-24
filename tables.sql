@@ -276,7 +276,7 @@ CREATE TABLE `n_data` (
 -- Tabellstruktur for tabell `n_order`
 --
 
-DROP TABLE IF EXISTS `n_order`;
+DROP TABLE IF EXISTS `order`;
 CREATE TABLE `n_order` (
   `order_id` int(11) NOT NULL AUTO_INCREMENT,
   `customer_id` int(11) NOT NULL,
@@ -295,7 +295,7 @@ CREATE TABLE `n_order` (
 -- Dataark for tabell `n_order`
 --
 
-INSERT INTO `n_order` (`order_id`, `customer_id`, `subscription_id`, `customer_requests`, `delivery_date`, `delivered_date`, `price`, `address`) VALUES
+INSERT INTO `order` (`order_id`, `customer_id`, `subscription_id`, `customer_requests`, `delivery_date`, `delivered_date`, `price`, `address`) VALUES
   (1, 1, 1, 'hold the pickle, hold the lettuce, special orders do upset us', '2016-04-23 00:00:00', NULL, 2000, 'johann sollis gate 3');
 
 -- --------------------------------------------------------
@@ -408,7 +408,7 @@ ADD CONSTRAINT `menu_relation_dish_ibfk_2` FOREIGN KEY (`menu_id`) REFERENCES `m
 --
 -- Begrensninger for tabell `n_order`
 --
-ALTER TABLE `n_order`
+ALTER TABLE `order`
 ADD CONSTRAINT `n_order_ibfk_1` FOREIGN KEY (`subscription_id`) REFERENCES `subscription` (`subscription_id`),
 ADD CONSTRAINT `n_order_ibfk_3` FOREIGN KEY (`customer_id`) REFERENCES `customer` (`c_id`);
 
