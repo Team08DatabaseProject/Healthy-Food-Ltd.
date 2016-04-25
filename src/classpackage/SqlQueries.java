@@ -27,6 +27,9 @@ import java.util.*;
 
 public class SqlQueries extends DBConnector {
 
+    // TODO: 24.04.2016 JavaDoc
+    // TODO: 24.04.2016 Fix getOrders based on driverPositionId
+    // TODO: 24.04.2016 Make it possible to set the delivery address of an order to the location of the company
     // TODO: 24.04.2016 Understand why equals behaves as it does for ObjectProperty
     // TODO: 24.04.2016 Avklare med Grethe hvor grundig testene MAA vaere
     // TODO: 23.04.2016 PasswordEncryption
@@ -82,6 +85,11 @@ public class SqlQueries extends DBConnector {
 
     }
 
+    /**
+     *
+     * @param newAddress
+     * @return
+     */
     public boolean addAddress(Address newAddress) {
         try {
             String sql = "INSERT INTO address(address, zipcode, place) VALUES(?, ?, ?);";
@@ -1330,7 +1338,6 @@ public class SqlQueries extends DBConnector {
     public boolean addOrder(Subscription subscription, Order order, Customer customer) {
         ResultSet res = null;
         try {
-            con.setAutoCommit(false);
             if (order.getAddress().getAddressId() == 0) {
                 if (!addAddress(order.getAddress())) {
                     SqlCleanup.rullTilbake(con);
@@ -1379,7 +1386,7 @@ public class SqlQueries extends DBConnector {
             SqlCleanup.rullTilbake(con);
         } finally {
             SqlCleanup.settAutoCommit(con);
-            closeEverything(res, insertQuery, con);
+            closeEverything(res, insertQuery, null);
         }
         return false;
     }
@@ -1422,22 +1429,6 @@ public class SqlQueries extends DBConnector {
         return false;
     }
 
-    //    Method for adding a order in the junction table between order and subscription
-    public boolean addOrderInSubscription(Subscription subscription, Order order) {
-        try {
-            String insertSql = "INSERT INTO subscription_relation_order(order_id, subscription_id) VALUES(?,?)";
-            insertQuery = con.prepareStatement(insertSql);
-            insertQuery.setInt(1, order.getOrderId());
-            insertQuery.setInt(2, subscription.getSubscriptionId());
-            insertQuery.executeQuery();
-            return true;
-        } catch (SQLException e) {
-            System.out.println("Something went wrong: user registration failed in method addSubscription");
-        } finally {
-            closeEverything(null, insertQuery, con);
-        }
-        return false;
-    }
 
     public boolean setOrderLinesInOrder(Order order, ObservableList<Dish> allDishes) {
         ResultSet res = null;
@@ -1510,22 +1501,30 @@ public class SqlQueries extends DBConnector {
 
     /*Subscription methods:*/
 
-    public boolean addSubscription(Subscription subscription) {
+    public boolean addSubscription(Subscription subscription, Customer customer, ObservableList<Order> orders) {
         ResultSet res = null;
         try {
-            String insertSql = "INSERT INTO subscription(start_date, end_date) VALUES(?,?)";
+            con.setAutoCommit(false);
+            String insertSql = "INSERT INTO subscription(start_date, end_date, customer_id) VALUES(?,?,?)";
             insertQuery = con.prepareStatement(insertSql, Statement.RETURN_GENERATED_KEYS);
             insertQuery.setDate(1, java.sql.Date.valueOf(subscription.getStartSubscription()));
             insertQuery.setDate(2, java.sql.Date.valueOf(subscription.getEndSubscription()));
+            insertQuery.setInt(3, customer.getCustomerId());
             insertQuery.execute();
 
             res = insertQuery.getGeneratedKeys();
             res.next();
             subscription.setSubscriptionId(res.getInt(1));
+            if (orders != null){
+                for (Order order :
+                        orders) {
+                    addOrder(subscription, order, customer);
+                }
+            }
             return true;
         } catch (SQLException e) {
+            SqlCleanup.rullTilbake(con);
             e.printStackTrace();
-            System.out.println("Something went wrong: user registration failed in method addSubscription");
         } finally {
             closeEverything(res, insertQuery, con);
         }
