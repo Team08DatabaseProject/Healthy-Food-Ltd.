@@ -302,7 +302,7 @@ public class SqlQueries extends DBConnector {
                             }
                         }
                     }
-                    ordersOnThisSubscription.forEach(order -> allOrdersUnderCustomer.add(order));
+                    ordersOnThisSubscription.forEach(allOrdersUnderCustomer::add);
                     subscription.setOrdersOnThisSubscription(ordersOnThisSubscription);
                 }
 
@@ -312,15 +312,14 @@ public class SqlQueries extends DBConnector {
                         orderIdsByCustomer) {
                     for (Order order :
                             allOrders) {
-                        if (orderId == order.getOrderId()) {
+                        if (orderId == order.getOrderId() && !existingCustomer.getSubscription().getOrdersOnThisSubscription().contains(order)) {
                             allOrdersUnderCustomer.add(order);
                         }
                     }
 
                     existingCustomer.setOrders(allOrdersUnderCustomer);
-                    customers.add(existingCustomer);
-
                 }
+                customers.add(existingCustomer);
             }
 
 
