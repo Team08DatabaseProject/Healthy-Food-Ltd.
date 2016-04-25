@@ -12,23 +12,23 @@
             prefHeight="600.0" prefWidth="800.0" stylesheets="@/users/sales/SalesStyle.css" xmlns="http://javafx.com/javafx/8"
             xmlns:fx="http://javafx.com/fxml/1" fx:controller="users.sales.ControllerSales">
     <top>
-        <HBox prefHeight="40" prefWidth="200.0" style="-fx-spacing: 4px; -fx-padding: 4px;" BorderPane.alignment="CENTER">
+        <HBox fx:id="topMenuHBox" alignment="CENTER" spacing="20" prefHeight="100">
             <children>
-                <Button fx:id="ordersButton" mnemonicParsing="false" text="Orders" textAlignment="CENTER" styleClass="menuButtons">
+                <Button fx:id="ordersButton" mnemonicParsing="false" text="Orders" textAlignment="CENTER" styleClass="TopButton">
                     <graphic>
                         <ImageView>
                             <Image url="@/labels/salesLabels/Service Bell.png" />
                         </ImageView>
                     </graphic>
                 </Button>
-                <Button fx:id="subsButton" mnemonicParsing="false" text="Subscriptions" textAlignment="CENTER" styleClass="menuButtons">
+                <Button fx:id="subsButton" mnemonicParsing="false" text="Subscriptions" textAlignment="CENTER" styleClass="TopButton">
                     <graphic>
                         <ImageView>
                             <Image url="@/labels/Renew Subscription.png" />
                         </ImageView>
                     </graphic>
                 </Button>
-                <Button fx:id="customersButton" mnemonicParsing="false" text="Customers" textAlignment="CENTER" styleClass="menuButtons">
+                <Button fx:id="customersButton" mnemonicParsing="false" text="Customers" textAlignment="CENTER" styleClass="TopButton">
                     <graphic>
                         <ImageView>
                             <Image url="@/labels/salesLabels/User Group Woman Woman.png" />
@@ -41,18 +41,7 @@
     <left>
     </left>
     <center>
-        <TableView prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER"
-                   xmlns:fx="http://javafx.com/fxml" VBox.vgrow="ALWAYS">
-            <columns>
-            </columns>
-            <columnResizePolicy>
-                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-            </columnResizePolicy>
-        </TableView>
     </center>
     <bottom>
-        <HBox fx:id="bottomHBox" prefHeight="40.0" prefWidth="100.0" alignment="CENTER"
-              xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
-        </HBox>
     </bottom>
 </BorderPane>
