@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--> Trym </!-->
+<!--> Textfields for registering new order </!-->
+
+<?import javafx.collections.FXCollections?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import java.lang.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+
+<GridPane fx:id="subWindowGP" alignment="CENTER" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+          fx:controller="users.sales.customers.ControllerSalesSubOrder" stylesheets="@/users/chef/ChefStyle.css">
+    <padding>
+        <Insets bottom="25" left="30" right="20" top="25" />
+    </padding>
+    <children>
+        <VBox GridPane.rowIndex="0" GridPane.columnIndex="0" spacing="10">
+            <TextField fx:id="addressField" promptText="Delivery address"/>
+
+            <TextField fx:id="zipCodeField" promptText="ZIP Code"/>
+
+            <TextField fx:id="placeField" promptText="City"/>
+
+            <Label fx:id="dayOfWeekLabel" text="Day of week / time of day: " prefHeight="25"/>
+
+            <ComboBox fx:id="dayOfWeekCB" promptText="Day"/>
+            <HBox spacing="10">
+                <ComboBox fx:id="deadlineHrCB" promptText="Hour"/>
+                <ComboBox fx:id="deadlineMinCB" promptText="Minute" />
+            </HBox>
+            <Button fx:id="addDayAndTimeButton" text="Add day and time"/>
+        </VBox>
+
+        <VBox GridPane.rowIndex="0" GridPane.columnIndex="1" spacing="10">
+            <TextArea fx:id="customerRequestsField" GridPane.rowSpan="5" prefWidth="200"
+                      promptText="Customer requests"/>
+
+            <Label fx:id="priceFieldLabel" text="   Price:" />
+
+            <TextField fx:id="priceField" />
+        </VBox>
+
+
+        <TableView fx:id="chosenDishTable" GridPane.rowIndex="0" GridPane.columnIndex="2">
+            <columns>
+                <TableColumn fx:id="dishNameCol" text="Dish name" />
+                <TableColumn fx:id="quantityCol" text="Quantity" />
+                <TableColumn fx:id="priceCol" text="Price" />
+            </columns>
+            <columnResizePolicy>
+                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+            </columnResizePolicy>
+        </TableView>
+
+        <VBox fx:id="dayAndTimeVBox" GridPane.rowIndex="1" GridPane.columnIndex="0">
+            <Label fx:id="day1" visible="false"/>
+            <Label fx:id="day2" visible="false"/>
+            <Label fx:id="day3" visible="false"/>
+            <Label fx:id="day4" visible="false"/>
+            <Label fx:id="day5" visible="false"/>
+            <Label fx:id="day6" visible="false"/>
+            <Label fx:id="day7" visible="false"/>
+        </VBox>
+
+
+        <HBox GridPane.rowIndex="1" GridPane.columnIndex="2" spacing="10" alignment="CENTER">
+            <ComboBox fx:id="chooseDishCB" prefWidth="150" promptText="Dishes">
+                <items>
+                    <FXCollections fx:factory="observableArrayList" >
+                    </FXCollections>
+                </items>
+            </ComboBox>
+
+            <Button fx:id="addDishButton" styleClass="subWindowButton" text="Add" >
+                <graphic>
+                    <ImageView>
+                        <Image url="@/labels/salesLabels/Plus.png"/>
+                    </ImageView>
+                </graphic>
+            </Button>
+
+            <Button fx:id="removeDishButton" styleClass="subWindowButton" text="Remove" >
+                <graphic>
+                    <ImageView>
+                        <Image url="@/labels/salesLabels/Cancel.png"/>
+                    </ImageView>
+                </graphic>
+            </Button>
+        </HBox>
+
+        <VBox alignment="CENTER_LEFT" spacing="10" GridPane.rowIndex="2" GridPane.columnIndex="0">
+            <children>
+                <Button fx:id="addToSubscriptionButton" styleClass="subWindowButton" text="Add order to subscription"/>
+            </children>
+        </VBox>
+    </children>
+</GridPane>

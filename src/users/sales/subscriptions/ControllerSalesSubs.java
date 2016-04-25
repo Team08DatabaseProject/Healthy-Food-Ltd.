@@ -38,8 +38,6 @@ public class ControllerSalesSubs extends ControllerSales implements Initializabl
     public TableColumn fNameCol;
     public TableColumn lNameCol;
 
-    private SqlQueries query = new SqlQueries();
-    //final ObservableList<Order> subsTest = query.getOrders(4);
 
     EventHandler<MouseEvent> infoSubsEvent = new EventHandler<MouseEvent>() {
         @Override

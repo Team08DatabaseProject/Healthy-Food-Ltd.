@@ -103,11 +103,6 @@ public class ControllerChefDishes extends ControllerChef implements Initializabl
 
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
 
-        final NumberFormat nf = NumberFormat.getNumberInstance();
-        {
-            nf.setMaximumFractionDigits(2);
-        }
-
         Platform.runLater(new Runnable() {
             @Override
             public void run() {

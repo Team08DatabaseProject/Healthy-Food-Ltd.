@@ -30,18 +30,14 @@
                     </columnResizePolicy>
                 </TableView>
             </center>
-            <right>
-                <VBox BorderPane.alignment="BOTTOM_CENTER" xmlns:fx="http://javafx.com/fxml" prefHeight="50">
-                    <children>
-                        <Button fx:id="addCustomerButton" prefHeight="20" prefWidth="50" text="Add customer"
-                                styleClass="newOrderButton"/>
-                        <Button fx:id="deleteCustomerButton" prefHeight="20" prefWidth="50" text="Delete customer"
-                                styleClass="newOrderButton"/>
-                    </children>
-                </VBox>
-            </right>
             <bottom>
-
+                <HBox BorderPane.alignment="CENTER" alignment="CENTER" prefHeight="60">
+                    <children>
+                        <Button fx:id="addCustomerButton" text="Add customer" styleClass="subMenuButton"/>
+                        <Button fx:id="deleteCustomerButton" text="Delete customer" styleClass="subMenuButton"/>
+                        <Button fx:id="refreshTableButton" text="Refresh table" styleClass="subMenuButton"/>
+                    </children>
+                </HBox>
             </bottom>
         </BorderPane>
     </children>

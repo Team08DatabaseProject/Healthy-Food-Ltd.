@@ -83,12 +83,16 @@ public class ControllerSalesOrders extends ControllerSales implements Initializa
     EventHandler<MouseEvent> ordersInfoEvent = new EventHandler<MouseEvent>() {
         @Override
         public void handle(MouseEvent event) {
+
             if (event.isPrimaryButtonDown() && event.getClickCount() >= 1) {
                 selectedOrder = (Order)ordersTable.getSelectionModel().getSelectedItem();
+                boolean found = false;
                 for (Customer customer : customers) {
                     for (Order order : customer.getOrders()) {
-                        if (order.getPrice() == selectedOrder.getPrice() && order.getAddress() == selectedOrder.getAddress()) {
+                        if (order.getOrderId() == selectedOrder.getOrderId() && !found) {
                             selectedCustomer = customer;
+                            found = true;
+
                         }
                     }
                 }
@@ -104,15 +108,9 @@ public class ControllerSalesOrders extends ControllerSales implements Initializa
         }
     };
 
-    public String ldtToString(LocalDateTime ldt) {
-        return "Date: " + ldt.getYear() + "/" + ldt.getMonthValue() + "/" + ldt.getDayOfMonth() + "\nTime: "
-                + String.format("%02d", ldt.getHour()) + ":" + String.format("%02d", ldt.getMinute());
-    }
-
     public void initialize(URL fxmlFileLocation, ResourceBundle resources){
 
         ordersTable.setEditable(true);
-
         orderIdCol.setCellValueFactory(new PropertyValueFactory<Order,Integer>("orderId")); //orderId
         deadlineCol.setCellValueFactory(new PropertyValueFactory<Order,LocalDateTime>("deadlineTime")); //deadline
         statusCol.setCellValueFactory(new PropertyValueFactory<Order,OrderStatus>("status")); //status
@@ -138,7 +136,7 @@ public class ControllerSalesOrders extends ControllerSales implements Initializa
                     if (ldt == null || empty) {
                         setText(null);
                     } else {
-                        setText(ldtToString(ldt));
+                        setText(ldt.format(formatter));
                     }
                 }
             };

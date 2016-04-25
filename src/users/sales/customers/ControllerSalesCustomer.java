@@ -1,5 +1,6 @@
 package users.sales.customers;
 
+import classpackage.Address;
 import classpackage.Customer;
 import classpackage.Subscription;
 import div.PopupDialog;
@@ -11,10 +12,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
@@ -36,10 +34,17 @@ public class ControllerSalesCustomer extends ControllerSales implements Initiali
     public TableColumn subscriptionIdCol;
     public TableColumn fNameCol;
     public TableColumn lNameCol;
+    public TableColumn phoneNumberCol;
+    public TableColumn emailCol;
+    public TableColumn addressCol;
+    public TableColumn placeCol;
+    public TableColumn zipCodeCol;
     public Button addCustomerButton;
     public Button deleteCustomerButton;
+    public Button refreshTableButton;
 
-    protected static ObservableList<Customer> customer;
+
+    //protected static ObservableList<Customer> customer;
 
     protected static boolean customerFormUpdate = false;
 
@@ -70,28 +75,6 @@ public class ControllerSalesCustomer extends ControllerSales implements Initiali
         }
     };
 
-    /*private EventHandler<MouseEvent> updateCustomerForm = new EventHandler<MouseEvent>() {
-        @Override
-        public void handle(MouseEvent event) {
-            if (event.isPrimaryButtonDown() && event.getClickCount() == 2) {
-                selectedCustomer = (Customer) customersTable.getSelectionModel().getSelectedItem();
-                try {
-                    customerFormUpdate = true;
-                    FXMLLoader loader = new FXMLLoader();
-                    loader.setLocation(getClass().getResource("CustomersCreateForm.fxml"));
-                    GridPane addCustomerTable = loader.load();
-                    Scene formScene = new Scene(addCustomerTable, 300, 550);
-                    Stage formStage = new Stage();
-                    formStage.setTitle("Update Customer");
-                    formStage.setScene(formScene);
-                    formStage.show();
-                } catch (Exception exc) {
-                    System.out.println(exc);
-                }
-            }
-        }
-    };*/
-
     EventHandler<ActionEvent> deleteCustomerEvent = new EventHandler<ActionEvent>() {
         @Override
         public void handle(ActionEvent event) {
@@ -114,22 +97,42 @@ public class ControllerSalesCustomer extends ControllerSales implements Initiali
         }
     };
 
-    EventHandler<MouseEvent> customersInfoEvent = new EventHandler<MouseEvent>() {
+    EventHandler<ActionEvent> refreshTableEvent = new EventHandler<ActionEvent>() {
+        @Override
+        public void handle(ActionEvent event) {
+            try {
+                suppliers = db.getAllSuppliers();
+                ingredients = db.getAllIngredients(suppliers);
+                dishes = db.getAllDishes(ingredients);
+                orders = db.getOrders(4, dishes);
+                customers = db.getAllCustomers(orders);
+                customersTable.setItems(customers);
+            } catch (Exception exc) {
+                System.out.println(exc);
+            }
+        }
+    };
+
+    //Axel:
+    EventHandler<MouseEvent> editCustomerInfoEvent = new EventHandler<MouseEvent>() {
         @Override
         public void handle(MouseEvent event) {
-            try{
-                if (event.isPrimaryButtonDown() && event.getClickCount() == 1){
+            try {
+                if (event.isPrimaryButtonDown() && event.getClickCount() == 2) {
                     selectedCustomer = (Customer) customersTable.getSelectionModel().getSelectedItem();
-                    for (Customer customer : customers){
-                        if (customer.getCustomerId() == selectedCustomer.getCustomerId()
-                                && customer.getFirstName() == selectedCustomer.getFirstName()
-                                && customer.getLastName() == selectedCustomer.getLastName()){
-                            selectedCustomer = customer;
-                        }
+                    if (selectedCustomer != null) {
+                        FXMLLoader loader = new FXMLLoader();
+                        loader.setLocation(getClass().getResource("EditCustomerInfo.fxml"));
+                        GridPane customerInfoGP = loader.load();
+                        Scene formScene = new Scene(customerInfoGP);
+                        Stage formStage = new Stage();
+                        formStage.setTitle("Edit customer");
+                        formStage.setScene(formScene);
+                        formStage.show();
                     }
                 }
-            }catch (Exception e) {
-                System.out.println("customerInfoEvent " + e);
+            } catch (Exception exc) {
+                System.out.println(exc);
             }
         }
     };
@@ -137,21 +140,79 @@ public class ControllerSalesCustomer extends ControllerSales implements Initiali
     public void initialize(URL fxmlFileLocation, ResourceBundle resources){
 
         customersTable.setEditable(true);
-        ObservableList<TableColumn> columns = customersTable.getColumns();
-        TableColumn<Customer,Integer> customerIdCol = columns.get(0);
-        TableColumn<Customer, Subscription> subscriptionIdCol = columns.get(1);
-        TableColumn<Customer,String> fNameCol = columns.get(2);
-        TableColumn<Customer,String> lNameCol = columns.get(3);
-
 
         customerIdCol.setCellValueFactory(new PropertyValueFactory<Customer,Integer>("customerId")); //customerId
         subscriptionIdCol.setCellValueFactory(new PropertyValueFactory<Customer,Subscription>("subscription")); //subscriptionId
         fNameCol.setCellValueFactory(new PropertyValueFactory<Customer,String>("firstName")); //firstName
         lNameCol.setCellValueFactory(new PropertyValueFactory<Customer,String>("lastName")); //lastName
+        phoneNumberCol.setCellValueFactory(new PropertyValueFactory<Customer, Integer>("phoneNr"));
+        emailCol.setCellValueFactory(new PropertyValueFactory<Customer, String>("email"));
+        addressCol.setCellValueFactory(new PropertyValueFactory<Customer, Address>("address"));
+        placeCol.setCellValueFactory(new PropertyValueFactory<Customer, Address>("address"));
+        zipCodeCol.setCellValueFactory(new PropertyValueFactory<Customer, Address>("address"));
 
-        customersTable.getColumns().setAll(customerIdCol, subscriptionIdCol, fNameCol, lNameCol);
-        customersTable.setOnMousePressed(customersInfoEvent);
+        addressCol.setCellFactory(column -> {
+            return new TableCell<Customer, Address>() {
+                @Override
+                public void updateItem(Address address, boolean empty) {
+                    if (address == null || empty) {
+                        setText(null);
+                    } else {
+                        setText(address.getAddress());
+                    }
+                }
+            };
+        });
+
+        placeCol.setCellFactory(column -> {
+            return new TableCell<Customer, Address>() {
+                @Override
+                public void updateItem(Address address, boolean empty) {
+                    if (address == null || empty) {
+                        setText(null);
+                    } else {
+                        setText(address.getPlace());
+                    }
+                }
+            };
+        });
+
+        zipCodeCol.setCellFactory(column -> {
+            return new TableCell<Customer, Address>() {
+                @Override
+                public void updateItem(Address address, boolean empty) {
+                    if (address == null || empty) {
+                        setText(null);
+                    } else {
+                        setText(String.valueOf(address.getZipCode()));
+                    }
+                }
+            };
+        });
+
+
+        subscriptionIdCol.setCellFactory(column -> {
+            return new TableCell<Customer, Subscription>() {
+                @Override
+                public void updateItem(Subscription subscription, boolean empty) {
+                    if (empty) {
+                        setText(null);
+                    } else if (subscription == null) {
+                        setText("No subscription");
+                    } else  {
+                        setText(String.valueOf(subscription.getSubscriptionId()));
+                    }
+                }
+            };
+        });
+
+        customersTable.getColumns().setAll(customerIdCol, subscriptionIdCol, fNameCol, lNameCol, phoneNumberCol, emailCol,
+                addressCol, placeCol, zipCodeCol);
+        customersTable.setItems(customers);
         addCustomerButton.setOnAction(createCustomerEvent);
         deleteCustomerButton.setOnAction(deleteCustomerEvent);
+        refreshTableButton.setOnAction(refreshTableEvent);
+
+        customersTable.setOnMousePressed(editCustomerInfoEvent);
     }
 }

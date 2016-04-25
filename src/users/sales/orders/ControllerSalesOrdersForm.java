@@ -63,6 +63,7 @@ public class ControllerSalesOrdersForm extends ControllerSales implements Initia
     public ComboBox<OrderStatus> statusBox;
     public Button removeOrderDishButton;
 
+
     ObservableList<OrderLine> chosenDishes = FXCollections.observableArrayList();
 
     //ObservableLists for the hour and minute ComboBoxes:
@@ -156,7 +157,7 @@ public class ControllerSalesOrdersForm extends ControllerSales implements Initia
                 Address newAddress = new Address(address, zipCodeInt, place);
                 ObservableList<Dish> dishesInThisOrder = FXCollections.observableArrayList();
 
-                Order newOrder = new Order(customerRequests, deadlineLDT, price, status, dishesInThisOrder);
+                Order newOrder = new Order(customerRequests, deadlineLDT, price, status, dishesInThisOrder, newAddress);
                 orders.add(newOrder);
 
                 Subscription subscription = new Subscription(startSubscription, endSubscription, orders);

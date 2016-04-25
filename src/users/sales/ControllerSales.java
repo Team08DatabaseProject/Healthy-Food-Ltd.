@@ -18,6 +18,7 @@ import javafx.scene.layout.GridPane;
 
 import java.net.URL;
 import java.text.NumberFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -48,15 +49,14 @@ public class ControllerSales implements Initializable {
     protected static Subscription selectedSubscription;
     protected static OrderStatus selectedStatus;
     protected static OrderLine selectedOrderLine;
+    protected static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMMM yyyy \n HH:mm");
 
     @FXML
     public BorderPane rootPaneSales; //RootPane
     public Button ordersButton; //Button for showing orders
     public Button subsButton;
     public Button customersButton;
-    private GridPane ordersTable; // Retrieves TableView with fx:id="ordersTable"
-    private GridPane subsTable; // Retrieves Tableview with fx:id="subsTable"
-    private GridPane customersTable;
+
 
 
 
@@ -66,7 +66,7 @@ public class ControllerSales implements Initializable {
             try {
                 FXMLLoader loader = new FXMLLoader();
                 loader.setLocation(getClass().getResource("orders/OrdersTable.fxml"));
-                ordersTable = loader.load();
+                GridPane ordersTable = loader.load();
                 rootPaneSales.setCenter(ordersTable);
             } catch (Exception e) {
                 System.out.println(e);
@@ -80,7 +80,7 @@ public class ControllerSales implements Initializable {
             try {
                 FXMLLoader loader = new FXMLLoader();
                 loader.setLocation(getClass().getResource("subscriptions/SubsTable.fxml"));
-                subsTable = loader.load();
+                GridPane subsTable = loader.load();
                 rootPaneSales.setCenter(subsTable);
             } catch (Exception e) {
                 System.out.println(e);
@@ -94,7 +94,7 @@ public class ControllerSales implements Initializable {
             try{
                 FXMLLoader loader = new FXMLLoader();
                 loader.setLocation(getClass().getResource("customers/CustomersTable.fxml"));
-                customersTable = loader.load();
+                GridPane customersTable = loader.load();
                 rootPaneSales.setCenter(customersTable);
             }catch (Exception exc){
                 System.out.println("customersEvent " + exc);
