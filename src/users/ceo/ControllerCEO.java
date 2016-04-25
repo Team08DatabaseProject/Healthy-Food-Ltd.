@@ -62,6 +62,7 @@ public class ControllerCEO implements Initializable {
                     currentView = INVENTORY;
                 } catch(Exception exc) {
                     System.out.println(exc);
+                    exc.printStackTrace();
                 }
             }
         }

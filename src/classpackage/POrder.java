@@ -6,6 +6,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 /**
  * Created by HUMBUG on 23.04.2016.
@@ -13,18 +14,21 @@ import java.time.LocalDate;
 public class POrder {
 
 	private IntegerProperty pOrderId = new SimpleIntegerProperty();
-	private IntegerProperty supplierId = new SimpleIntegerProperty();
-	private ObjectProperty<LocalDate> placedDate;
+	private ObjectProperty<Supplier> supplier = new SimpleObjectProperty<>();
+	private ObjectProperty<LocalDate> placedDate = new SimpleObjectProperty<>();
 	private ObservableList<POrderLine> pOrderLines = FXCollections.observableArrayList();
+	private BooleanProperty received = new SimpleBooleanProperty();
 	private DoubleBinding grandTotalBinding;
 	private DoubleProperty grandTotal = new SimpleDoubleProperty();
 
 	// Constructor for getting order from database.
-	public POrder(int pOrderId, int supplierId, LocalDate placedDate, ObservableList<POrderLine> pOrderLines) {
+	// Bollock
+	public POrder(int pOrderId, Supplier supplier, LocalDate placedDate, ObservableList<POrderLine> pOrderLines, boolean received) {
 		this.pOrderId .set(pOrderId);
-		this.supplierId.set(supplierId);
+		this.supplier.set(supplier);
 		this.placedDate.set(placedDate);
 		this.pOrderLines = pOrderLines;
+		this.received.set(received);
 		for(POrderLine pOrderLine : this.pOrderLines) {
 			if(grandTotalBinding == null) {
 				grandTotalBinding = pOrderLine.totalProperty().add(0);
@@ -36,9 +40,10 @@ public class POrder {
 	}
 
 	// Constructor for creating a new order from GUI.
-	public POrder(int supplierId, ObservableList<POrderLine> pOrderLines) {
-		this.supplierId.set(supplierId);
+	public POrder(Supplier supplier, ObservableList<POrderLine> pOrderLines) {
+		this.supplier.set(supplier);
 		this.pOrderLines = pOrderLines;
+		this.received.set(false);
 		for(POrderLine pOrderLine : this.pOrderLines) {
 			if(grandTotalBinding == null) {
 				grandTotalBinding = pOrderLine.totalProperty().add(0);
@@ -61,16 +66,16 @@ public class POrder {
 		this.pOrderId.set(pOrderId);
 	}
 
-	public int getSupplierId() {
-		return supplierId.get();
+	public Supplier getSupplier() {
+		return supplier.get();
 	}
 
-	public IntegerProperty supplierIdProperty() {
-		return supplierId;
+	public ObjectProperty<Supplier> supplierProperty() {
+		return supplier;
 	}
 
-	public void setSupplierId(int supplierId) {
-		this.supplierId.set(supplierId);
+	public void setSupplier(Supplier supplier) {
+		this.supplier.set(supplier);
 	}
 
 	public ObservableList<POrderLine> getpOrderLines() {
@@ -85,12 +90,34 @@ public class POrder {
 		return placedDate.get();
 	}
 
+	public String getFormattedPlacedDate() {
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMMM yyyy");
+		return placedDate.get().format(formatter);
+	}
+
 	public void setPlacedDate(LocalDate placedDate) {
 		this.placedDate.set(placedDate);
 	}
 
+
 	public ObjectProperty<LocalDate> placedDateProperty() {
 		return placedDate;
+	}
+
+	public boolean isReceived() {
+		return received.get();
+	}
+
+	public BooleanProperty receivedProperty() {
+		return received;
+	}
+
+	public void setReceived(boolean received) {
+		this.received.set(received);
+	}
+
+	public int getNumberOfLines() {
+		return pOrderLines.size();
 	}
 
 	public double getGrandTotal() {

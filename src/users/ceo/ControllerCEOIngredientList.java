@@ -2,24 +2,18 @@ package users.ceo;
 
 import classpackage.*;
 import div.DoubleField;
-import div.PopupDialog;
-import javafx.beans.binding.NumberBinding;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
 import java.net.URL;
@@ -79,7 +73,7 @@ public class ControllerCEOIngredientList extends ControllerCEOInventory implemen
 			}
 			double quantity = quantityField.getDouble();
 			POrderLine pOrderLine = new POrderLine(selectedIngredient, quantity);
-			pOrderLines.add(pOrderLine);
+			newPOrderLines.add(pOrderLine);
 			Stage stage = (Stage) ingredientsTable.getScene().getWindow();
 			stage.close();
 		}
@@ -88,7 +82,7 @@ public class ControllerCEOIngredientList extends ControllerCEOInventory implemen
 	public void initialize(URL fxmlFileLocation, ResourceBundle resources) { // Required method for Initializable, runs at program launch
 		ObservableList<Ingredient> ingredientsTemp = db.getIngredientsBySupplierId(selectedSupplier.get().getSupplierId());
 		for(int i = 0; i < ingredientsTemp.size(); i++) {
-			if(!pOrderLines.contains(ingredientsTemp.get(i))) {
+			if(!newPOrderLines.contains(ingredientsTemp.get(i))) {
 				ingredients.add(ingredientsTemp.get(i));
 			}
 		}

@@ -2,25 +2,17 @@ package users.ceo;
 
 import classpackage.*;
 import div.PopupDialog;
-import javafx.beans.binding.Binding;
-import javafx.beans.binding.Bindings;
-import javafx.beans.binding.DoubleBinding;
-import javafx.beans.binding.NumberBinding;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.*;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -28,12 +20,12 @@ import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 
 import java.net.URL;
 import java.time.LocalDate;
-import java.util.Locale;
+import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 
 /**
@@ -42,10 +34,17 @@ import java.util.ResourceBundle;
 public class ControllerCEOInventory extends ControllerCEO implements Initializable {
 
 	@FXML
-	public TableView ordersTable;
-	public ComboBox ordersStatus;
+	public TableView<POrder> pOrdersTable;
+	public TableView pOrderLinesTable;
+	public ComboBox pOrdersStatus;
 
-	public TableView<POrderLine> pOrderLinesTable;
+	public Label pOrderTitle;
+	public Label grandTotalLabel;
+	public Text pOrderSummary;
+	public Text pOrderSupplierSummary;
+	public TextField grandTotalField;
+
+	public TableView<POrderLine> newPOrderLinesTable;
 	public Button chooseSupplierButton;
 	public Button resetNewPOrderButton;
 	public Button addLineButton;
@@ -55,18 +54,35 @@ public class ControllerCEOInventory extends ControllerCEO implements Initializab
 	public TextField phoneNoField;
 	public TextArea supplierAddressField;
 
-	public TableColumn<POrderLine, Boolean> ingredientCheckedCol;
+	//Purchase orders columns
+	public TableColumn<POrder, Integer> IDCol;
+	public TableColumn<POrder, Supplier> supplierCol;
+	public TableColumn<POrder, Integer> linesCol;
+	public TableColumn<POrder, LocalDate> placedCol;
+	public TableColumn<POrder, Boolean> receivedCol;
+
+	//Purchase order summary columns
 	public TableColumn<POrderLine, Ingredient> ingredientCol;
 	public TableColumn<POrderLine, Double> quantityCol;
 	public TableColumn<POrderLine, Ingredient> priceCol;
 	public TableColumn<POrderLine, Double> totalCol;
-	public TextField grandTotalField;
+
+	// New purchase order columns
+	public TableColumn<POrderLine, Boolean> ingredientCheckedCol;
+	public TableColumn<POrderLine, Ingredient> newIngredientCol;
+	public TableColumn<POrderLine, Double> newQuantityCol;
+	public TableColumn<POrderLine, Ingredient> newPriceCol;
+	public TableColumn<POrderLine, Double> newTotalCol;
+	public TextField newGrandTotalField;
+
+	protected static ObservableList<POrder> pOrders = FXCollections.observableArrayList();
 
 	protected static ObjectProperty<Supplier> selectedSupplier = new SimpleObjectProperty<>();
-	protected static ObservableList<POrderLine> pOrderLines = FXCollections.observableArrayList();
+	protected static ObservableList<POrderLine> newPOrderLines = FXCollections.observableArrayList();
 	private double grandTotal = 0.0;
 
-	private ObservableList<Employee> orders;
+	protected StringProperty selectedPOrderStatus = new SimpleStringProperty();
+
 	private ObservableList<Supplier> suppliers;
 
 	private EventHandler<ActionEvent> chooseSupplier = new EventHandler<ActionEvent>() {
@@ -110,7 +126,7 @@ public class ControllerCEOInventory extends ControllerCEO implements Initializab
 		@Override
 		public void handle(MouseEvent event) {
 			if (event.isPrimaryButtonDown() && event.getClickCount() == 2) {
-				POrderLine selectedPOrderLine = pOrderLinesTable.getSelectionModel().getSelectedItem();
+				POrderLine selectedPOrderLine = newPOrderLinesTable.getSelectionModel().getSelectedItem();
 				double newQuantity = PopupDialog.doubleDialog("Update quantity", "New quantity");
 				selectedPOrderLine.setQuantity(newQuantity);
 				updateGrandTotalField();
@@ -125,17 +141,16 @@ public class ControllerCEOInventory extends ControllerCEO implements Initializab
 			if(PopupDialog.confirmationDialog("Question", "Are you sure you want to delete the selected lines?")) {
 				boolean ok = true;
 				ObservableList<POrderLine> checkedLines = FXCollections.observableArrayList();
-				for(POrderLine line : pOrderLinesTable.getItems()) { // Can't delete from pOrderLinesTable list while iterating over it. Performs deletions in separate loop
+				for(POrderLine line : newPOrderLinesTable.getItems()) { // Can't delete from newPOrderLinesTable list while iterating over it. Performs deletions in separate loop
 					if(line.isChecked()) {
 						checkedLines.add(line);
 					}
 				}
-				pOrderLinesTable.getItems().removeAll(checkedLines);
-				if(pOrderLines.size() == 0) {
+				newPOrderLinesTable.getItems().removeAll(checkedLines);
+				if(newPOrderLines.size() == 0) {
 					removeLinesButton.setDisable(true);
 					savePOrderButton.setDisable(true);
 				}
-				PopupDialog.informationDialog("Result", "Selected lines deleted successfully.");
 			}
 		}
 	};
@@ -144,9 +159,10 @@ public class ControllerCEOInventory extends ControllerCEO implements Initializab
 		@Override
 		public void handle(ActionEvent e) {
 			if(PopupDialog.confirmationDialog("Question", "Are you sure you want to send and save this purchase order?")) {
-				POrder pOrder = new POrder(selectedSupplier.get().getSupplierId(), pOrderLines);
+				POrder pOrder = new POrder(selectedSupplier.get(), newPOrderLines);
 				if(db.addPOrder(pOrder)) {
 					PopupDialog.newPOrderEmail(pOrder, selectedSupplier.get());
+					resetNewPOrder();
 				} else {
 					PopupDialog.errorDialog("Error", "The purchase order could not be added.");
 				}
@@ -188,17 +204,62 @@ public class ControllerCEOInventory extends ControllerCEO implements Initializab
 		}
 	};
 
+	ChangeListener<String> pOrderStatusChanged = new ChangeListener<String>() {
+		@Override
+		public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+			selectedPOrderStatus.set(newValue);
+			if(selectedPOrderStatus.get().equals("Received")) {
+				pOrders = db.getPOrders(true);
+			} else {
+				pOrders = db.getPOrders(false);
+			}
+			pOrdersTable.setItems(pOrders);
+		}
+	};
+
+	private EventHandler<MouseEvent> pOrderChangedEvent = new EventHandler<MouseEvent>() {
+		@Override
+		public void handle(MouseEvent event) {
+			if (event.isPrimaryButtonDown()) {
+				pOrderChanged();
+			}
+		}
+	};
+
+	private void pOrderChanged() {
+		if(pOrdersTable.getSelectionModel().getSelectedItem() != null) {
+			POrder selectedPOrder = pOrdersTable.getSelectionModel().getSelectedItem();
+			String pOrderHeader = "Order ID: " + selectedPOrder.getpOrderId() + "\nDate placed: " + selectedPOrder.getFormattedPlacedDate();
+			Supplier supplier = selectedPOrder.getSupplier();
+			String supplierSummary = "Supplier: \n" + supplier.getBusinessName() + "\n" + supplier.getPhoneNumber() + "\n" + supplier.getThisAddress().getAddress() +
+							"\n" + supplier.getThisAddress().getZipCode() + " " + supplier.getThisAddress().getPlace();
+			pOrderLinesTable.setItems(selectedPOrder.getpOrderLines());
+			pOrderSummary.setText(pOrderHeader);
+			pOrderSupplierSummary.setText(supplierSummary);
+			grandTotalField.setText(Double.toString(selectedPOrder.getGrandTotal()));
+			grandTotalLabel.setVisible(true);
+			grandTotalField.setVisible(true);
+			pOrderLinesTable.setVisible(true);
+			pOrderTitle.setVisible(true);
+		} else {
+			grandTotalLabel.setVisible(false);
+			grandTotalField.setVisible(false);
+			pOrderLinesTable.setVisible(false);
+			pOrderTitle.setVisible(false);
+		}
+	}
+
 	private void updateGrandTotalField() {
-		if(pOrderLines.size() > 0) {
+		if(newPOrderLines.size() > 0) {
 			removeLinesButton.setDisable(false);
 			savePOrderButton.setDisable(false);
 			grandTotal = 0.0;
-			for(int i = 0; i < pOrderLines.size(); i++) {
-				grandTotal += pOrderLines.get(i).getTotal();
+			for(int i = 0; i < newPOrderLines.size(); i++) {
+				grandTotal += newPOrderLines.get(i).getTotal();
 			}
-			grandTotalField.setText(String.format(Locale.ENGLISH, "%.2f", grandTotal));
+			newGrandTotalField.setText(String.format("%.2f", grandTotal));
 		} else {
-			grandTotalField.setText("0.00");
+			newGrandTotalField.setText("0.00");
 			removeLinesButton.setDisable(true);
 			savePOrderButton.setDisable(true);
 		}
@@ -206,32 +267,90 @@ public class ControllerCEOInventory extends ControllerCEO implements Initializab
 
 	private void resetNewPOrder() {
 		selectedSupplier = new SimpleObjectProperty<>();
-		pOrderLines.clear();
+		newPOrderLines.clear();
 		addLineButton.setDisable(true);
 		removeLinesButton.setDisable(true);
 		savePOrderButton.setDisable(true);
-		grandTotalField.setText("0.00");
+		newGrandTotalField.setText("0.00");
 		chooseSupplierButton.setDisable(false);
 		updateSupplierFields();
 	}
 
 	public void initialize(URL fxmlFileLocation, ResourceBundle resources) { // Required method for Initializable, runs at program launch
-		resetNewPOrder();
-		suppliers = db.getAllSuppliers();
-		pOrderLines.clear();
-		chooseSupplierButton.setOnAction(chooseSupplier);
-		addLineButton.setOnAction(addLine);
-		removeLinesButton.setOnAction(removeLines);
-		savePOrderButton.setOnAction(savePOrder);
-		resetNewPOrderButton.setOnAction(resetNewPOrderHandler);
-		selectedSupplier.addListener(new ChangeListener(){
-			@Override public void changed(ObservableValue o, Object oldValue, Object newValue){
-				updateSupplierFields();
-			}
+		//Purchase orders
+		pOrders = db.getPOrders(false);
+		pOrdersStatus.getSelectionModel().selectFirst();
+		pOrdersStatus.getSelectionModel().selectedItemProperty().addListener(pOrderStatusChanged);
+		IDCol.setCellValueFactory(new PropertyValueFactory<>("pOrderId"));
+		supplierCol.setCellValueFactory(new PropertyValueFactory<>("supplier"));
+		supplierCol.setCellFactory(column -> {
+			return new TableCell<POrder, Supplier>() {
+				@Override
+				protected void updateItem(Supplier item, boolean empty) {
+					if(item == null || empty) {
+						setText(null);
+					} else {
+						setText(item.getBusinessName());
+					}
+				}
+			};
 		});
-		ingredientCheckedCol.setCellValueFactory(new PropertyValueFactory<>("checked"));
-		ingredientCheckedCol.setCellFactory(CheckBoxTableCell.forTableColumn(ingredientCheckedCol));
-		ingredientCheckedCol.setEditable(true);
+		linesCol.setCellValueFactory(new PropertyValueFactory<>("numberOfLines"));
+		placedCol.setCellValueFactory(new PropertyValueFactory<>("placedDate"));
+		placedCol.setCellFactory(column -> {
+			return new TableCell<POrder, LocalDate>() {
+				@Override
+				protected void updateItem(LocalDate item, boolean empty) {
+					if(item == null || empty) {
+						setText(null);
+					} else {
+						DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMMM yyyy");
+						setText(item.format(formatter));
+					}
+				}
+			};
+		});
+		receivedCol.setCellValueFactory(new PropertyValueFactory<>("received"));
+		receivedCol.setCellFactory(column -> {
+			return new TableCell<POrder, Boolean>() {
+				@Override
+				protected void updateItem(Boolean item, boolean empty) {
+					super.updateItem(item, empty);
+					if(item == null || empty) {
+						setText(null);
+						setGraphic(null);
+					} else {
+						if(!item) {
+							Button button = new Button("Received");
+							TableCell<POrder, Boolean> cell = this;
+							button.setOnAction(new EventHandler<ActionEvent>() {
+								@Override
+								public void handle(ActionEvent event) {
+									POrder pOrder = (POrder) cell.getTableRow().getItem();
+									pOrder.setReceived(true);
+									db.updatePOrder(pOrder);
+									ObservableList<Ingredient> ingredients = FXCollections.observableArrayList();
+									for(POrderLine pOrderLine : pOrder.getpOrderLines()) {
+										Ingredient ingredient = pOrderLine.getIngredient();
+										ingredient.setQuantityOwned(ingredient.getQuantityOwned() + pOrderLine.getQuantity());
+										ingredients.add(ingredient);
+									}
+									db.updateIngredient(ingredients);
+									cell.getTableView().getItems().remove(cell.getTableRow().getIndex());
+									setGraphic(null);
+									pOrderChanged();
+								}
+							});
+							setGraphic(button);
+						} else {
+							setGraphic(null);
+						}
+					}
+				}
+			};
+		});
+		pOrdersTable.setItems(pOrders);
+		pOrdersTable.setOnMousePressed(pOrderChangedEvent);
 		ingredientCol.setCellValueFactory(new PropertyValueFactory<>("ingredient"));
 		ingredientCol.setCellFactory(column -> {
 			return new TableCell<POrderLine, Ingredient>() {
@@ -254,7 +373,7 @@ public class ControllerCEOInventory extends ControllerCEO implements Initializab
 					if(item == null || empty) {
 						setText(null);
 					} else {
-						setText(String.format(Locale.ENGLISH, "%.2f", item.getPrice()));
+						setText(String.format("%.2f", item.getPrice()));
 						setAlignment(Pos.BASELINE_RIGHT);
 					}
 				}
@@ -268,18 +387,78 @@ public class ControllerCEOInventory extends ControllerCEO implements Initializab
 					if(item == null || empty) {
 						setText(null);
 					} else {
-						setText(String.format(Locale.ENGLISH, "%.2f", item));
+						setText(String.format("%.2f", item));
 						setAlignment(Pos.BASELINE_RIGHT);
 					}
 				}
 			};
 		});
-		pOrderLinesTable.setEditable(true);
-		pOrderLinesTable.setItems(pOrderLines);
-		pOrderLinesTable.setOnMousePressed(updateLine);
-		pOrderLinesTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-		grandTotalField.setAlignment(Pos.BASELINE_RIGHT);
-		pOrderLines.addListener(updateGrandTotal);
-		grandTotalField.prefWidthProperty().bind(totalCol.widthProperty());
+		newPOrderLinesTable.setEditable(true);
+		newPOrderLinesTable.setItems(newPOrderLines);
+		//New purchase order
+		resetNewPOrder();
+		suppliers = db.getAllSuppliers();
+		newPOrderLines.clear();
+		chooseSupplierButton.setOnAction(chooseSupplier);
+		addLineButton.setOnAction(addLine);
+		removeLinesButton.setOnAction(removeLines);
+		savePOrderButton.setOnAction(savePOrder);
+		resetNewPOrderButton.setOnAction(resetNewPOrderHandler);
+		selectedSupplier.addListener(new ChangeListener(){
+			@Override public void changed(ObservableValue o, Object oldValue, Object newValue){
+				updateSupplierFields();
+			}
+		});
+		ingredientCheckedCol.setCellValueFactory(new PropertyValueFactory<>("checked"));
+		ingredientCheckedCol.setCellFactory(CheckBoxTableCell.forTableColumn(ingredientCheckedCol));
+		ingredientCheckedCol.setEditable(true);
+		newIngredientCol.setCellValueFactory(new PropertyValueFactory<>("ingredient"));
+		newIngredientCol.setCellFactory(column -> {
+			return new TableCell<POrderLine, Ingredient>() {
+				@Override
+				protected void updateItem(Ingredient item, boolean empty) {
+					if(item == null || empty) {
+						setText(null);
+					} else {
+						setText(item.getIngredientName());
+					}
+				}
+			};
+		});
+		newQuantityCol.setCellValueFactory(new PropertyValueFactory<>("quantity"));
+		newPriceCol.setCellValueFactory(new PropertyValueFactory<>("ingredient"));
+		newPriceCol.setCellFactory(column -> {
+			return new TableCell<POrderLine, Ingredient>() {
+				@Override
+				protected void updateItem(Ingredient item, boolean empty) {
+					if(item == null || empty) {
+						setText(null);
+					} else {
+						setText(String.format("%.2f", item.getPrice()));
+						setAlignment(Pos.BASELINE_RIGHT);
+					}
+				}
+			};
+		});
+		newTotalCol.setCellValueFactory(new PropertyValueFactory<>("total"));
+		newTotalCol.setCellFactory(column -> {
+			return new TableCell<POrderLine, Double>() {
+				@Override
+				protected void updateItem(Double item, boolean empty) {
+					if(item == null || empty) {
+						setText(null);
+					} else {
+						setText(String.format("%.2f", item));
+						setAlignment(Pos.BASELINE_RIGHT);
+					}
+				}
+			};
+		});
+		newPOrderLinesTable.setEditable(true);
+		newPOrderLinesTable.setItems(newPOrderLines);
+		newPOrderLinesTable.setOnMousePressed(updateLine);
+		newGrandTotalField.setAlignment(Pos.BASELINE_RIGHT);
+		newPOrderLines.addListener(updateGrandTotal);
+		newGrandTotalField.prefWidthProperty().bind(newTotalCol.widthProperty());
 	}
 }

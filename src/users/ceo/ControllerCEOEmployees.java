@@ -215,7 +215,7 @@ public class ControllerCEOEmployees extends ControllerCEO  implements Initializa
 					if(item == null || empty) {
 						setText(null);
 					} else {
-						setText(String.format(Locale.ENGLISH, "%.2f", item));
+						setText(String.format("%.2f", item));
 						setAlignment(Pos.BASELINE_RIGHT);
 					}
 				}

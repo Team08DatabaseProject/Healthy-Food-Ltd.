@@ -131,7 +131,7 @@ public class ControllerCEOEmployeeForm extends ControllerCEOEmployees implements
 		public void changed(ObservableValue<? extends EmployeePosition> observable, EmployeePosition oldValue, EmployeePosition newValue) {
 			selectedPosition = newValue;
 			if(salaryField.getText().length() == 0 || salaryAutoChanged) {
-				salaryField.setText(String.format(Locale.ENGLISH, "%.2f", selectedPosition.getDefaultSalary()));
+				salaryField.setText(String.format("%.2f", selectedPosition.getDefaultSalary()));
 				salaryAutoChanged = true;
 			}
 		}
