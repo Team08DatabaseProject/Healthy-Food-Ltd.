@@ -1,6 +1,8 @@
 package div;//import classpackage.EncryptionService;
 
 
+import java.util.Locale;
+
 /**
  * Created by roger on 10.03.2016.
  */
@@ -34,6 +36,7 @@ public class Main extends Login {
      */
 
     public static void main(String[] args) {
+        Locale.setDefault(Locale.ENGLISH);
         launch(args);
     }
 }
