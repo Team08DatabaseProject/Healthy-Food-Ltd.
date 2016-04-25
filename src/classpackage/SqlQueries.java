@@ -805,6 +805,24 @@ public class SqlQueries extends DBConnector {
         return false;
     }
 
+    public Ingredient getIngredient(int ingredientId) {
+        try {
+            String selectSql = "SELECT quantity_owned, unit, price, description FROM ingredient WHERE ingredient_id = ?";
+            selectQuery = con.prepareStatement(selectSql);
+            selectQuery.setInt(1, ingredientId);
+            ResultSet res = selectQuery.executeQuery();
+            if (!res.next()) return null;
+            double quantityOwned = res.getDouble(1);
+            String unit = res.getString(2);
+            double price = res.getDouble(3);
+            String description = res.getString(4);
+            return new Ingredient(ingredientId, description, unit, quantityOwned, price);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     //    Method for updating an Ingredient
     public boolean updateIngredient(ObservableList<Ingredient> ingredients) {
         try {
@@ -1746,14 +1764,68 @@ public class SqlQueries extends DBConnector {
     }
 
     // purchase methods
+    
+    /*rogers recent methods 25.04.16*/
+    public ObservableList<POrder> getPOrders(Boolean status) {
+        ObservableList<POrder> pOrders = FXCollections.observableArrayList();
+        try {
+            String filter = "";
+            if(status != null) {
+                filter += "WHERE received = ";
+                filter += (status) ? "1" : "0";
+            }
+            String selectPOrders = "SELECT porder_id, supplier_id, placed_date, received FROM porder " + filter + " ORDER BY placed_date;";
+            String selectPOrderLines = "SELECT ingredient_id, quantity FROM porder_line WHERE porder_id = ?;";
+            PreparedStatement selectPOrdersStatement = con.prepareStatement(selectPOrders);
+            PreparedStatement selectPOrderLinesStatement = con.prepareStatement(selectPOrderLines);
+            ResultSet res = selectPOrdersStatement.executeQuery();
+            while (res.next()) {
+                int pOrderId = res.getInt(1);
+                Supplier supplier = getSupplier(res.getInt(2));
+                selectPOrderLinesStatement.setInt(1, pOrderId);
+                ResultSet res2 = selectPOrderLinesStatement.executeQuery();
+                ObservableList<POrderLine> pOrderLines = FXCollections.observableArrayList();
+                while (res2.next()) {
+                    pOrderLines.add(new POrderLine(pOrderId, getIngredient(res2.getInt(1)), res2.getDouble(2)));
+                }
+                LocalDate placedDate = res.getDate(3).toLocalDate();
+                boolean received = res.getBoolean(4);
+                POrder pOrder = new POrder(pOrderId, supplier, placedDate, pOrderLines, received);
+                pOrders.add(pOrder);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return pOrders;
+    }
+
+    public boolean updatePOrder(POrder pOrder) {
+        try {
+            String updateSql = "UPDATE porder SET received = ? WHERE porder_id = ?;";
+            PreparedStatement updateQuery = con.prepareStatement(updateSql);
+            updateQuery.setBoolean(1, pOrder.isReceived());
+            updateQuery.setInt(2, pOrder.getpOrderId());
+            if (updateQuery.executeUpdate() == 1) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            closeEverything(null, updateQuery, con);
+        }
+        return false;
+    }
+
     public boolean addPOrder(POrder pOrder) {
         boolean success = false;
         try {
             con.setAutoCommit(false);
             String insertSql = "INSERT INTO porder(supplier_id, placed_date, received) VALUES(?, NOW(), 0);";
             insertQuery = con.prepareStatement(insertSql, Statement.RETURN_GENERATED_KEYS);
-            insertQuery.setInt(1, pOrder.getSupplierId());
-            if (insertQuery.executeUpdate() == 1) {
+            insertQuery.setInt(1, pOrder.getSupplier().getSupplierId());
+            if(insertQuery.executeUpdate() == 1) {
                 ResultSet res = insertQuery.getGeneratedKeys();
                 res.next();
                 pOrder.setpOrderId(res.getInt(1));
@@ -1780,6 +1852,25 @@ public class SqlQueries extends DBConnector {
             closeEverything(null, insertQuery, con);
         }
         return success;
+    }
+
+    public Supplier getSupplier(int supplierId) {
+        try {
+            String selectSql = "SELECT business_name, phone, address_id FROM supplier WHERE supplier_id = ?;";
+            selectQuery = con.prepareStatement(selectSql);
+            selectQuery.setInt(1, supplierId);
+            ResultSet res = selectQuery.executeQuery();
+            if (!res.next()) return null;
+            String businessName = res.getString(1);
+            int phone = res.getInt(2);
+            Address address = getAddress(res.getInt(3));
+            return new Supplier(supplierId, phone, address, businessName);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            closeEverything(null, selectQuery, con);
+        }
+        return null;
     }
 
 
