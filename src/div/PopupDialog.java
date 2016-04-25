@@ -104,8 +104,6 @@ public class PopupDialog {
 		}
 	}
 
-
-
 	public static Double doubleDialog(String title, String content) {
 		Dialog<Double> dialog = new Dialog<>();
 		dialog.setTitle(title);

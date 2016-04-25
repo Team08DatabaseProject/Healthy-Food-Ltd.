@@ -341,11 +341,9 @@ public class ControllerDriver implements Initializable {
             };
         });
 
-        ordersReadyTable.getColumns().addAll(deadlineColLeft, dateDeliveredColLeft, statusColLeft, addressColLeft);
         ordersReadyTable.setEditable(true);
         ordersReadyTable.setItems(orderList);
-
-        routeOrdersTable.getColumns().addAll(deadlineColRight, dateDeliveredColRight, statusColRight, addressColRight);
+        
         routeOrdersTable.setEditable(true);
         routeOrdersTable.setItems(routeOrderList);
 

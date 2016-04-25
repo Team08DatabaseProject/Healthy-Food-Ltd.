@@ -35,7 +35,8 @@
                     </FXCollections>
                 </items>
                 </ComboBox>
-                <TableView fx:id="pOrdersTable" maxWidth="550" GridPane.columnIndex="0" GridPane.hgrow="SOMETIMES" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS">
+                <Button fx:id="refreshPOrdersButton" text="Refresh" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                <TableView fx:id="pOrdersTable" prefWidth="550" GridPane.columnIndex="0" GridPane.rowIndex="1" GridPane.columnSpan="2" GridPane.vgrow="ALWAYS">
                     <placeholder>
                         <Label text="" />
                     </placeholder>
@@ -53,8 +54,8 @@
                         <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
                     </GridPane.margin>
                 </TableView>
-                <GridPane alignment="TOP_LEFT" style="-fx-grid-lines-visible: true; -fx-alignment: top-left" maxHeight="500" GridPane.columnIndex="1" GridPane.rowIndex="0" GridPane.rowSpan="2">
-                    <Label fx:id="pOrderTitle" alignment="TOP_LEFT" prefHeight="20" text="Purchase order summary:" visible="false" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="0" />
+                <GridPane alignment="TOP_LEFT" style="-fx-alignment: top-left" maxHeight="500" GridPane.columnIndex="2" GridPane.rowIndex="0" GridPane.rowSpan="2">
+                    <Label fx:id="pOrderTitle" style="-fx-font-size: 16pt;" alignment="TOP_LEFT" prefHeight="150" text="Purchase order summary:" visible="false" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="0" />
                     <Text fx:id="pOrderSummary" GridPane.columnIndex="0" GridPane.rowIndex="1" />
                     <Text fx:id="pOrderSupplierSummary" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                     <TableView fx:id="pOrderLinesTable" maxHeight="600" prefHeight="600" style="-fx-alignment: center" visible="false" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.hgrow="SOMETIMES" GridPane.rowIndex="2" GridPane.vgrow="ALWAYS">

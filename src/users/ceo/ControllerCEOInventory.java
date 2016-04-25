@@ -43,6 +43,7 @@ public class ControllerCEOInventory extends ControllerCEO implements Initializab
 	public Text pOrderSummary;
 	public Text pOrderSupplierSummary;
 	public TextField grandTotalField;
+	public Button refreshPOrdersButton;
 
 	public TableView<POrderLine> newPOrderLinesTable;
 	public Button chooseSupplierButton;
@@ -179,6 +180,13 @@ public class ControllerCEOInventory extends ControllerCEO implements Initializab
 		}
 	};
 
+	private EventHandler<ActionEvent> refreshPOrders = new EventHandler<ActionEvent>() {
+		@Override
+		public void handle(ActionEvent e) {
+			pOrdersStatusChanged();
+		}
+	};
+
 	private void updateSupplierFields() {
 		if(selectedSupplier.get() != null) {
 			Supplier supplier = selectedSupplier.get();
@@ -204,18 +212,22 @@ public class ControllerCEOInventory extends ControllerCEO implements Initializab
 		}
 	};
 
-	ChangeListener<String> pOrderStatusChanged = new ChangeListener<String>() {
+	ChangeListener<String> pOrdersStatusChangedEvent = new ChangeListener<String>() {
 		@Override
 		public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-			selectedPOrderStatus.set(newValue);
-			if(selectedPOrderStatus.get().equals("Received")) {
-				pOrders = db.getPOrders(true);
-			} else {
-				pOrders = db.getPOrders(false);
-			}
-			pOrdersTable.setItems(pOrders);
+			pOrdersStatusChanged();
 		}
 	};
+
+	private void pOrdersStatusChanged() {
+		selectedPOrderStatus.set(pOrdersStatus.getSelectionModel().getSelectedItem().toString());
+		if(selectedPOrderStatus.get().equals("Received")) {
+			pOrders = db.getPOrders(true);
+		} else {
+			pOrders = db.getPOrders(false);
+		}
+		pOrdersTable.setItems(pOrders);
+	}
 
 	private EventHandler<MouseEvent> pOrderChangedEvent = new EventHandler<MouseEvent>() {
 		@Override
@@ -237,11 +249,15 @@ public class ControllerCEOInventory extends ControllerCEO implements Initializab
 			pOrderSummary.setText(pOrderHeader);
 			pOrderSupplierSummary.setText(supplierSummary);
 			grandTotalField.setText(Double.toString(selectedPOrder.getGrandTotal()));
+			pOrderSummary.setVisible(true);
+			pOrderSupplierSummary.setVisible(true);
 			grandTotalLabel.setVisible(true);
 			grandTotalField.setVisible(true);
 			pOrderLinesTable.setVisible(true);
 			pOrderTitle.setVisible(true);
 		} else {
+			pOrderSummary.setVisible(false);
+			pOrderSupplierSummary.setVisible(false);
 			grandTotalLabel.setVisible(false);
 			grandTotalField.setVisible(false);
 			pOrderLinesTable.setVisible(false);
@@ -280,7 +296,8 @@ public class ControllerCEOInventory extends ControllerCEO implements Initializab
 		//Purchase orders
 		pOrders = db.getPOrders(false);
 		pOrdersStatus.getSelectionModel().selectFirst();
-		pOrdersStatus.getSelectionModel().selectedItemProperty().addListener(pOrderStatusChanged);
+		pOrdersStatus.getSelectionModel().selectedItemProperty().addListener(pOrdersStatusChangedEvent);
+		refreshPOrdersButton.setOnAction(refreshPOrders);
 		IDCol.setCellValueFactory(new PropertyValueFactory<>("pOrderId"));
 		supplierCol.setCellValueFactory(new PropertyValueFactory<>("supplier"));
 		supplierCol.setCellFactory(column -> {
