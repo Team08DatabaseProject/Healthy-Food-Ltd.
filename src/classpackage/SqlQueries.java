@@ -1413,7 +1413,6 @@ public class SqlQueries extends DBConnector {
     }
 
     public boolean addOrders(Subscription subscription, ObservableList<Order> orders, Customer customer) {
-        ResultSet res = null;
         try {
             con.setAutoCommit(false);
             for (Order order :
@@ -1424,7 +1423,7 @@ public class SqlQueries extends DBConnector {
         } catch (SQLException e) {
             SqlCleanup.rullTilbake(con);
         } finally {
-            closeEverything(res, insertQuery, con);
+            closeEverything(null, insertQuery, con);
         }
         return false;
     }
@@ -1467,6 +1466,28 @@ public class SqlQueries extends DBConnector {
         return false;
     }
 
+    public boolean addOrderLines(Order order, ObservableList<OrderLine> orderLines) {
+        try {
+            con.setAutoCommit(false);
+            String sqlSetning = "INSERT INTO order_line (dish_id, order_id) VALUES (?, " + order.getOrderId() + ")";
+            insertQuery = con.prepareStatement(sqlSetning);
+            for (OrderLine orderline :
+                    orderLines) {
+
+                insertQuery.setInt(1, orderline.getDish().getDishId());
+                insertQuery.execute();
+            }
+            con.commit();
+            return true;
+        } catch (SQLException e) {
+            SqlCleanup.rullTilbake(con);
+            e.printStackTrace();
+        } finally {
+            closeEverything(null, insertQuery, con);
+        }
+        return false;
+    }
+
     public boolean setOrderLinesInOrder(Order order, ObservableList<Dish> allDishes) {
         ResultSet res = null;
         ObservableList<OrderLine> dishLinesInThisOrder = FXCollections.observableArrayList();
@@ -1502,8 +1523,8 @@ public class SqlQueries extends DBConnector {
             con.setAutoCommit(false);
             String sqlSetning = "DELETE FROM order_line WHERE order_id = " + order.getOrderId() + " AND dish_id =?";
             PreparedStatement deleteQuery = con.prepareStatement(sqlSetning);
-            for (OrderLine orderline:
-                 orderLines) {
+            for (OrderLine orderline :
+                    orderLines) {
                 deleteQuery.setInt(1, order.getOrderId());
                 deleteQuery.executeUpdate();
             }
@@ -1791,7 +1812,7 @@ public class SqlQueries extends DBConnector {
         }
     }
 
-    // purchase methods
+// purchase methods
 
     /*rogers recent methods 25.04.16*/
     public ObservableList<POrder> getPOrders(Boolean status) {
