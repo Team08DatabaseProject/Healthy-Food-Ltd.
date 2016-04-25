@@ -1469,12 +1469,13 @@ public class SqlQueries extends DBConnector {
     public boolean addOrderLines(Order order, ObservableList<OrderLine> orderLines) {
         try {
             con.setAutoCommit(false);
-            String sqlSetning = "INSERT INTO order_line (dish_id, order_id) VALUES (?, " + order.getOrderId() + ")";
+            String sqlSetning = "INSERT INTO order_line (dish_id, quantity, order_id) VALUES (?,?, " + order.getOrderId() + ")";
             insertQuery = con.prepareStatement(sqlSetning);
             for (OrderLine orderline :
                     orderLines) {
 
                 insertQuery.setInt(1, orderline.getDish().getDishId());
+                insertQuery.setInt(2, orderline.getAmount());
                 insertQuery.execute();
             }
             con.commit();
