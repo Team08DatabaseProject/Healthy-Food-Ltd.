@@ -86,7 +86,6 @@ public class SqlQueries extends DBConnector {
     }
 
     /**
-     *
      * @param newAddress
      * @return
      */
@@ -1207,7 +1206,6 @@ public class SqlQueries extends DBConnector {
     }
 
 
-
     /*Order Methods*/
 //    Method for getting orders based on position id
     public ObservableList<Order> getOrders(int posId, ObservableList<Dish> allDishes) {
@@ -1385,8 +1383,24 @@ public class SqlQueries extends DBConnector {
         } catch (SQLException e) {
             SqlCleanup.rullTilbake(con);
         } finally {
-            SqlCleanup.settAutoCommit(con);
             closeEverything(res, insertQuery, null);
+        }
+        return false;
+    }
+
+    public boolean addOrders(Subscription subscription, ObservableList<Order> orders, Customer customer) {
+        ResultSet res = null;
+        try {
+            con.setAutoCommit(false);
+            for (Order order :
+                    orders) {
+                addOrder(subscription, order, customer);
+            }
+            return true;
+        } catch (SQLException e) {
+            SqlCleanup.rullTilbake(con);
+        } finally {
+            closeEverything(res, insertQuery, con);
         }
         return false;
     }
@@ -1515,7 +1529,7 @@ public class SqlQueries extends DBConnector {
             res = insertQuery.getGeneratedKeys();
             res.next();
             subscription.setSubscriptionId(res.getInt(1));
-            if (orders != null){
+            if (orders != null) {
                 for (Order order :
                         orders) {
                     addOrder(subscription, order, customer);
@@ -1739,17 +1753,17 @@ public class SqlQueries extends DBConnector {
             String insertSql = "INSERT INTO porder(supplier_id, placed_date, received) VALUES(?, NOW(), 0);";
             insertQuery = con.prepareStatement(insertSql, Statement.RETURN_GENERATED_KEYS);
             insertQuery.setInt(1, pOrder.getSupplierId());
-            if(insertQuery.executeUpdate() == 1) {
+            if (insertQuery.executeUpdate() == 1) {
                 ResultSet res = insertQuery.getGeneratedKeys();
                 res.next();
                 pOrder.setpOrderId(res.getInt(1));
                 insertSql = "INSERT INTO porder_line(porder_id, ingredient_id, quantity) VALUES(?, ?, ?);";
                 insertQuery = con.prepareStatement(insertSql);
                 insertQuery.setInt(1, pOrder.getpOrderId());
-                for(POrderLine pOrderLine : pOrder.getpOrderLines()) {
+                for (POrderLine pOrderLine : pOrder.getpOrderLines()) {
                     insertQuery.setInt(2, pOrderLine.getIngredient().getIngredientId());
                     insertQuery.setDouble(3, pOrderLine.getQuantity());
-                    if(insertQuery.executeUpdate() != 1) {
+                    if (insertQuery.executeUpdate() != 1) {
                         SqlCleanup.rullTilbake(con);
                         return success;
                     }
