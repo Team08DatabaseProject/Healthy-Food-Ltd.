@@ -22,8 +22,8 @@ public class Order {
     private ObjectProperty<OrderStatus> status = new SimpleObjectProperty<>();
     private ObjectProperty<Address> address = new SimpleObjectProperty<>();
     private ObservableList<OrderLine> dishesInThisOrder = FXCollections.observableArrayList();
-
     private boolean changed = false;
+    private boolean partOfSubscription = false;
 
     // From the database
     public Order(int orderId, String customerRequests, LocalDate deadline,
@@ -65,14 +65,16 @@ public class Order {
 
     // To the database with "LocalDateTime deadlineTime" instead of "LocalDate deadline"
     public Order(String customerRequests, LocalDateTime deadlineTime, double price,
-                 OrderStatus status, ObservableList dishesInThisOrder) {
+                 OrderStatus status, ObservableList dishesInThisOrder, Address address) {
         this.customerRequests.set(customerRequests);
         this.deadlineTime.set(deadlineTime);
         this.price.set(price);
         this.status.set(status);
         actualDeliveryDate = null;
         this.dishesInThisOrder = dishesInThisOrder;
+        this.address.set(address);
     }
+
 
 
     public int getOrderId() {
@@ -196,12 +198,20 @@ public class Order {
                 + String.format("%02d", ldt.getHour()) + ":" + String.format("%02d", ldt.getMinute());
     }
 
+    public boolean isChanged() {
+        return changed;
+    }
+
     public void setChanged(boolean bln) {
         changed = bln;
     }
 
-    public boolean isChanged() {
-        return changed;
+    public boolean isPartOfSubscription() {
+        return partOfSubscription;
+    }
+
+    public void setPartOfSubscription(boolean bln) {
+        partOfSubscription = bln;
     }
 
 
