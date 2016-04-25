@@ -27,6 +27,7 @@ import java.util.*;
 
 public class SqlQueries extends DBConnector {
 
+    // TODO: 25.04.2016 fix getEmployees to work faster
     // TODO: 24.04.2016 JavaDoc
     // TODO: 24.04.2016 Fix getOrders based on driverPositionId
     // TODO: 24.04.2016 Make it possible to set the delivery address of an order to the location of the company
@@ -284,6 +285,14 @@ public class SqlQueries extends DBConnector {
                 existingCustomer.setAddress(getAddress(res.getInt("address_id")));
 
                 ObservableList<Order> allOrdersUnderCustomer = FXCollections.observableArrayList();
+
+
+/*
+//                List<User> olderUsers = users.stream().filter(u -> u.age > 30).collect(Collectors.toList());
+                List<Subscription> ex = allSubscriptions.stream().filter(subscription1 -> subscription1.getCustomerId() == c)
+                existingCustomer.setSubscription();
+
+*/
 
                 for (Subscription subscription : allSubscriptions
                         ) {
@@ -1260,8 +1269,6 @@ public class SqlQueries extends DBConnector {
             res = selectQuery.executeQuery();
             while (res.next()) {
                 int orderId = res.getInt("order_id");
-                int customerId = res.getInt("customer_id");
-                int subscriptionId = res.getInt("subscription_id");
                 String customerRequests = res.getString("customer_requests");
                 LocalDateTime deadline = res.getTimestamp("delivery_date").toLocalDateTime();
                 double price = res.getDouble("price");
@@ -1422,8 +1429,9 @@ public class SqlQueries extends DBConnector {
         return false;
     }
 
-    //    updates both order and customer, customer can be set to null if update is only on Order
-    public boolean updateOrder(Order order, Customer customer) {
+    //    updates both order and
+
+    public boolean updateOrder(Order order) {
         try {
             con.setAutoCommit(false);
             String sql = "UPDATE `order` SET customer_requests = ?, delivery_date = ?, " +
@@ -1441,12 +1449,11 @@ public class SqlQueries extends DBConnector {
             updateQuery.setInt(6, order.getStatus().getStatusId());
 
             if (updateQuery.executeUpdate() == 1) {
-                if (customer != null && updateCustomer(customer)) {
-                    return true;
-                } else {
-                    return true;
-                }
+                return true;
+            } else {
+                return true;
             }
+
         } catch (SQLException e) {
             SqlCleanup.rullTilbake(con);
             e.printStackTrace();
@@ -1459,7 +1466,6 @@ public class SqlQueries extends DBConnector {
         }
         return false;
     }
-
 
     public boolean setOrderLinesInOrder(Order order, ObservableList<Dish> allDishes) {
         ResultSet res = null;
@@ -1489,6 +1495,29 @@ public class SqlQueries extends DBConnector {
         }
         return false;
     }
+
+    //    Method for deleting an orderlines in an order
+    public boolean deleteOrderLine(Order order, ObservableList<OrderLine> orderLines) {
+        try {
+            con.setAutoCommit(false);
+            String sqlSetning = "DELETE FROM order_line WHERE order_id = " + order.getOrderId() + " AND dish_id =?";
+            PreparedStatement deleteQuery = con.prepareStatement(sqlSetning);
+            for (OrderLine orderline:
+                 orderLines) {
+                deleteQuery.setInt(1, order.getOrderId());
+                deleteQuery.executeUpdate();
+            }
+            con.commit();
+            return true;
+        } catch (SQLException e) {
+            SqlCleanup.rullTilbake(con);
+            e.printStackTrace();
+        } finally {
+            closeEverything(null, insertQuery, con);
+        }
+        return false;
+    }
+
 
     //    Method for getting an Order status
     public OrderStatus getOrderStatus(int id) {
@@ -1763,13 +1792,13 @@ public class SqlQueries extends DBConnector {
     }
 
     // purchase methods
-    
+
     /*rogers recent methods 25.04.16*/
     public ObservableList<POrder> getPOrders(Boolean status) {
         ObservableList<POrder> pOrders = FXCollections.observableArrayList();
         try {
             String filter = "";
-            if(status != null) {
+            if (status != null) {
                 filter += "WHERE received = ";
                 filter += (status) ? "1" : "0";
             }
@@ -1824,7 +1853,7 @@ public class SqlQueries extends DBConnector {
             String insertSql = "INSERT INTO porder(supplier_id, placed_date, received) VALUES(?, NOW(), 0);";
             insertQuery = con.prepareStatement(insertSql, Statement.RETURN_GENERATED_KEYS);
             insertQuery.setInt(1, pOrder.getSupplier().getSupplierId());
-            if(insertQuery.executeUpdate() == 1) {
+            if (insertQuery.executeUpdate() == 1) {
                 ResultSet res = insertQuery.getGeneratedKeys();
                 res.next();
                 pOrder.setpOrderId(res.getInt(1));
