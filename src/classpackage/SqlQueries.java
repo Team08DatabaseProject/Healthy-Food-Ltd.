@@ -1395,7 +1395,6 @@ public class SqlQueries extends DBConnector {
                 insertQuery.setNull(2, Types.INTEGER);
             }
             if (insertQuery.executeUpdate() == 1) {
-                con.commit();
                 res = insertQuery.getGeneratedKeys();
                 res.next();
                 order.setOrderId(res.getInt(1));
@@ -1406,6 +1405,7 @@ public class SqlQueries extends DBConnector {
             }
         } catch (SQLException e) {
             SqlCleanup.rullTilbake(con);
+            e.printStackTrace();
         } finally {
             closeEverything(res, insertQuery, null);
         }
