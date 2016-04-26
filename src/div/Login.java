@@ -1,4 +1,5 @@
-package div; /**
+package div;
+/**
  * Created by axelkvistad on 3/17/16.
  * Stole the template from a website
  */
@@ -26,7 +27,10 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 /**
+ * Login.java is the class for handling the login of the system. A GUI will be loaded depending on
+ * the type of user loging in.
  *
+ * Reference to the origin of the class:
  * http://zoranpavlovic.blogspot.com/
  */
 public class Login extends Application {
@@ -39,11 +43,16 @@ public class Login extends Application {
     private static final int SALES = 4;
     private static final int NUTRITION = 5;
 
-
     public static void main(String[] args) {
         launch(args);
     }
 
+    /**
+     * Method for loading the login screen, containing textfields for username and password.
+     * @param primaryStage
+     * @throws Exception
+     *
+     */
     @Override
     public void start(Stage primaryStage) throws Exception {
 
