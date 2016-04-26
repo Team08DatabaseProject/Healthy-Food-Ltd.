@@ -15,7 +15,7 @@ public class Address {
     private StringProperty place = new SimpleStringProperty();
 
     /**
-     * Creates a new Address object
+     * Creates a new Address object from the database
      *
      * @param addressId Address Id
      * @param address The address
@@ -30,7 +30,7 @@ public class Address {
     }
 
     /**
-     * Creates a new Address object
+     * Creates a new Address object to the database
      *
      * @param String address
      * @param  int zipCode

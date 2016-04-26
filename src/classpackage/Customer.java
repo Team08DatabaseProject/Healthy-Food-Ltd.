@@ -10,8 +10,8 @@ import javafx.collections.ObservableList;
 public class Customer {
 
     private IntegerProperty customerId = new SimpleIntegerProperty();
+
     private BooleanProperty isBusiness = new SimpleBooleanProperty();
-    // desides if its a business client or not, set as a tinyInt (0 = false, 1 = true) has to be converted in fetching from database
     private StringProperty email = new SimpleStringProperty();
     private StringProperty firstName = new SimpleStringProperty();
     private StringProperty lastName = new SimpleStringProperty();
@@ -21,7 +21,17 @@ public class Customer {
     private ObjectProperty<Subscription> subscription = new SimpleObjectProperty<>();
     private ObservableList<Order> orders = FXCollections.observableArrayList();
 
-    // From database
+    /**
+     * Creates a Customer object from the database
+     *
+     * @param customerId the unique identifier of the customer
+     * @param isBusiness bool on if its a business client or not
+     * @param email the email of the customer
+     * @param firstName first name of the customer
+     * @param lastName last name of the customer
+     * @param phoneNumber cutomer's phone number
+     * @param businessName business name if any
+     */
     public Customer(int customerId, boolean isBusiness, String email, String firstName, String lastName,
                     int phoneNumber, String businessName) {
         this.customerId.set(customerId);
@@ -33,7 +43,19 @@ public class Customer {
         this.businessName.set(businessName);
     }
 
-    // To database
+    /**
+     * Creates a Customer object
+     *
+     * @param isBusiness bool on if its a business client or not
+     * @param email the email of the customer
+     * @param firstName first name of the customer
+     * @param lastName last name of the customer
+     * @param phoneNumber cutomer's phone number
+     * @param address address to deliver
+     * @param businessName business name if any
+     * @param subscription the subscription of the customer if any
+     * @param orders the orders
+     */
     public Customer(boolean isBusiness, String email, String firstName, String lastName, int phoneNumber,
                     Address address, String businessName, Subscription subscription, ObservableList orders) {
         this.isBusiness.set(isBusiness);
@@ -47,7 +69,17 @@ public class Customer {
         this.orders = orders;
     }
 
-    // constructor for Customers without subs
+    /**
+     * Creates a Customer object where the customer has no subscription
+     *
+     * @param isBusiness bool on if its a business client or not
+     * @param email the email of the customer
+     * @param firstName first name of the customer
+     * @param lastName last name of the customer
+     * @param phoneNumber cutomer's phone number
+     * @param address address to deliver
+     * @param businessName business name if any
+     */
     public Customer(boolean isBusiness, String email, String firstName, String lastName, int phoneNumber,
                     Address address, String businessName){
         this.isBusiness.set(isBusiness);
@@ -84,14 +116,29 @@ public class Customer {
         this.customerId.set(customerId);
     }
 
+    /**
+     * Return if its a business or not
+     *
+     * @return true if its a business
+     */
     public boolean getIsBusiness() {
         return isBusiness.get();
     }
 
+    /**
+     * Return if its a business or not in style for JavaFX (BooleanProperty)
+     *
+     * @return true if its a business
+     */
     public BooleanProperty isBusinessProperty() {
         return isBusiness;
     }
 
+    /**
+     * Sets if its a business or not
+     *
+     * @param isBusiness sets if its a business or not
+     */
     public void setIsBusiness(boolean isBusiness) {
         this.isBusiness.set(isBusiness);
     }
@@ -180,6 +227,9 @@ public class Customer {
         this.subscription.set(subscription);
     }
 
+    /**
+     * String representation of the object (returns the first name and last name of the customer)
+     */
     @Override
     public String toString() {
         return firstName.get() + " " + lastName.get();
