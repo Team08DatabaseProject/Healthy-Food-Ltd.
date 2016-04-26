@@ -1,6 +1,8 @@
 package views.sales;
 
 import classpackage.*;
+import classpackage.Menu;
+import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -29,6 +31,7 @@ import java.util.ResourceBundle;
 public class SalesController extends MainController implements Initializable{
 
     @FXML
+    public GridPane subMenuGP;
     public Button createOrderButton; //Button for creating an order
     public Button deleteOrderButton; //Button for deleting an order
     public TableView ordersTable;
@@ -43,6 +46,7 @@ public class SalesController extends MainController implements Initializable{
     protected static Customer selectedCustomer;
     protected static OrderStatus selectedStatus;
     protected static OrderLine selectedOrderLine;
+    protected static Menu selectedMenu;
 
     protected static ObservableList<Supplier> suppliers = db.getAllSuppliers();
     protected static ObservableList<Ingredient> ingredients = db.getAllIngredients(suppliers);
@@ -50,6 +54,7 @@ public class SalesController extends MainController implements Initializable{
     protected static ObservableList<Order> orders = db.getOrders(4, dishes);
     protected static ObservableList<Customer> customers = db.getAllCustomers(orders);
     protected static ObservableList<OrderStatus> statusTypes = db.getStatusTypes();
+    protected static ObservableList<Menu> menus = db.getAllMenus(dishes);
 
     protected static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMMM yyyy \n HH:mm");
 
@@ -128,6 +133,13 @@ public class SalesController extends MainController implements Initializable{
     };
 
     public void initialize(URL fxmlFileLocation, ResourceBundle resources){
+
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                subMenuGP.requestFocus();
+            }
+        });
 
         ordersTable.setEditable(true);
         orderIdCol.setCellValueFactory(new PropertyValueFactory<Order,Integer>("orderId")); //orderId

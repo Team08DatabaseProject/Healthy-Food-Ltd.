@@ -2,6 +2,7 @@ package views.employees;
 
 import classpackage.Address;
 import classpackage.*;
+import javafx.application.Platform;
 import main.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -30,6 +31,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class EmployeesController extends MainController implements Initializable {
 
 	@FXML
+	public GridPane subMenuGP;
 	public TableView<Employee> employeesTable;
 	public Button addEmployeeFormButton;
 	public Button refreshEmployeesButton;
@@ -166,6 +168,13 @@ public class EmployeesController extends MainController implements Initializable
 	}
 
 	public void initialize(URL fxmlFileLocation, ResourceBundle resources) { // Required method for Initializable, runs at program launch
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				subMenuGP.requestFocus();
+			}
+		});
+
 		addEmployeeFormButton.setOnAction(addEmployeeForm);
 		refreshEmployeesButton.setOnAction(refreshEmployees);
 		newPasswordButton.setOnAction(newPassword);

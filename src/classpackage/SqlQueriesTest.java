@@ -1,3 +1,4 @@
+/*
 package classpackage;
 
 import javafx.collections.FXCollections;
@@ -13,9 +14,11 @@ import java.time.LocalDateTime;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+*/
 /**
  * Created by paul thomas on 20.04.2016.
- */
+ *//*
+
 public class SqlQueriesTest {
 
     SqlQueries myQuery = new SqlQueries();
@@ -36,7 +39,8 @@ public class SqlQueriesTest {
 
 
 
-    /*Testing with JUnit
+    */
+/*Testing with JUnit
     *
     *
     * addAddress
@@ -51,7 +55,8 @@ public class SqlQueriesTest {
     *
     *
     *
-    * */
+    * *//*
+
 
     @org.junit.Before
     public void setUp() throws Exception {
@@ -227,7 +232,9 @@ public class SqlQueriesTest {
             assertTrue(myQuery.addSubscription(subscription, testCustomers.get(0), null));
         }
 
-             /*adding orders on a Customer*/
+             */
+/*adding orders on a Customer*//*
+
 
 //        Adds order, updates the order
         for (Order order :
@@ -291,6 +298,7 @@ public class SqlQueriesTest {
     }
 
     //    Testing Employee methods
+*/
 /*    @Ignore
     public void employees() throws Exception {
         ObservableList<EmployeePosition> employeePositions = myQuery.getEmployeePositions();
@@ -300,7 +308,8 @@ public class SqlQueriesTest {
             assertTrue(testEmployee.getEmployeeId() == testEmployees.get(i).getEmployeeId());
             assertTrue(myQuery.deleteEmployee(testEmployees.get(i)));
         }
-    }*/
+    }*//*
+
 
     //    Testing specifically getters from database
     @Ignore
@@ -316,7 +325,9 @@ public class SqlQueriesTest {
 
         ObservableList<Supplier> suppliersFromDb = myQuery.getAllSuppliers();
 
-        /*Checks against the database if the objects exist and the name change was registered*/
+        */
+/*Checks against the database if the objects exist and the name change was registered*//*
+
         assertTrue(myQuery.updateIngredient(allIngredients));
         ObservableList<Ingredient> ingredientsFromDb = myQuery.getAllIngredients(suppliersFromDb);
         boolean ingredientsExistsInDb = false;
@@ -344,11 +355,14 @@ public class SqlQueriesTest {
         }
 
 
-/*//        Adding Subscriptions
+*/
+/*//*
+/        Adding Subscriptions
         for (Subscription subscription :
                 testSubscriptions) {
             assertTrue(myQuery.addSubscription(subscription, testCustomers.get(0), null));
-        }*/
+        }*//*
+
 
 //        adding customers and updating them
 
@@ -488,3 +502,4 @@ public class SqlQueriesTest {
     }
 
 }
+*/

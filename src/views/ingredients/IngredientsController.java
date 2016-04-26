@@ -2,6 +2,8 @@ package views.ingredients;
 
 import classpackage.Ingredient;
 import classpackage.Supplier;
+import javafx.application.Platform;
+import javafx.fxml.FXML;
 import main.MainController;
 import main.PopupDialog;
 import javafx.collections.FXCollections;
@@ -28,6 +30,8 @@ import javafx.util.converter.DoubleStringConverter;
  */
 public class IngredientsController extends MainController implements Initializable {
 
+    @FXML
+    public GridPane subMenuGP;
     public TableView ingTable;
     public TableColumn ingName;
     public TableColumn ingUnit;
@@ -133,6 +137,13 @@ public class IngredientsController extends MainController implements Initializab
 
 
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
+
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                subMenuGP.requestFocus();
+            }
+        });
 
         ingName.setCellValueFactory(new PropertyValueFactory<Ingredient, String>("ingredientName"));
         ingUnit.setCellValueFactory(new PropertyValueFactory<Ingredient, String>("unit"));

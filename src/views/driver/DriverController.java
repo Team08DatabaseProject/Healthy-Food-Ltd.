@@ -5,6 +5,8 @@ package views.driver;
  */
 
 import classpackage.*;
+import javafx.application.Platform;
+import javafx.scene.layout.GridPane;
 import main.PopupDialog;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -35,7 +37,7 @@ import main.MainController;
 public class DriverController extends MainController implements Initializable {
 
     @FXML
-    public BorderPane rootPaneDriver;
+    public GridPane subMenuGP;
     public TableView ordersReadyTable;
     public TableColumn statusColLeft;
     public TableColumn deadlineColLeft;
@@ -205,6 +207,13 @@ public class DriverController extends MainController implements Initializable {
 
 
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
+
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                subMenuGP.requestFocus();
+            }
+        });
 
         deadlineColLeft.setCellValueFactory(new PropertyValueFactory<Order, LocalDateTime>("deadlineTime"));
         dateDeliveredColLeft.setCellValueFactory(new PropertyValueFactory<Order, LocalDateTime>("actualDeliveryDateTime"));

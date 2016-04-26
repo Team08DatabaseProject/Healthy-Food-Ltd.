@@ -64,17 +64,12 @@ public class SubscriptionController extends CustomersController implements Initi
     };
 
 
-    public String ldtToString(LocalDateTime ldt) {
-        return "Date: " + ldt.getYear() + "/" + String.format("%02d", ldt.getMonthValue()) + "/" + String.format("%02d", ldt.getDayOfMonth()) + "\nTime: "
-                + String.format("%02d", ldt.getHour()) + ":" + String.format("%02d", ldt.getMinute());
-    }
-
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
 
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                subWindowGP.requestFocus();
+                rootPane.requestFocus();
             }
         });
 
