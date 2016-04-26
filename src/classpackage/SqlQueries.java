@@ -7,7 +7,9 @@ import java.sql.*;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Created by paul thomas on 17.03.2016.
@@ -27,6 +29,8 @@ import java.util.*;
 
 public class SqlQueries extends DBConnector {
 
+    // TODO: 26.04.2016 timetable report
+    // TODO: 25.04.2016 presentation
     // TODO: 25.04.2016 fix getEmployees to work faster
     // TODO: 24.04.2016 JavaDoc
     // TODO: 24.04.2016 Fix getOrders based on driverPositionId
@@ -249,7 +253,7 @@ public class SqlQueries extends DBConnector {
         ArrayList<Integer> orderIds = new ArrayList<Integer>();
         ResultSet res = null;
         try {
-            String selectSql = "SELECT order_id FROM `order` WHERE customer_id = ?";
+            String selectSql = "SELECT order_id FROM `order` WHERE customer_id = ? AND subscription_id = NULL ";
             selectQuery = con.prepareStatement(selectSql);
             selectQuery.setInt(1, customer.getCustomerId());
             res = selectQuery.executeQuery();
@@ -267,7 +271,10 @@ public class SqlQueries extends DBConnector {
     /*    Method for getting all customers with
     its orders, subscriptions (with orders)
 */
+
+
     public ObservableList<Customer> getAllCustomers(ObservableList<Order> allOrders) {
+
         ObservableList<Subscription> allSubscriptions = getAllSubscriptions();
         ObservableList<Customer> customers = FXCollections.observableArrayList();
         ResultSet res = null;
@@ -287,44 +294,27 @@ public class SqlQueries extends DBConnector {
                 ObservableList<Order> allOrdersUnderCustomer = FXCollections.observableArrayList();
 
 
-/*
-//                List<User> olderUsers = users.stream().filter(u -> u.age > 30).collect(Collectors.toList());
-                List<Subscription> ex = allSubscriptions.stream().filter(subscription1 -> subscription1.getCustomerId() == c)
-                existingCustomer.setSubscription();
+/*//                List<User> olderUsers = users.stream().filter(u -> u.age > 30).collect(Collectors.toList());
+                Subscription ex = allSubscriptions.stream().filter(subscription1 -> subscription1.getCustomerId() == existingCustomer.getCustomerId())
+                existingCustomer.setSubscription();*/
 
-*/
-
-                for (Subscription subscription : allSubscriptions
-                        ) {
-
-                    if (subscription.getCustomerId() == existingCustomer.getCustomerId()) {
-                        existingCustomer.setSubscription(subscription);
-                    }
+                allSubscriptions.stream().filter(subscription -> subscription.getCustomerId() == existingCustomer.getCustomerId()).forEach(subscription -> {
+                    existingCustomer.setSubscription(subscription);
                     ObservableList<Order> ordersOnThisSubscription = FXCollections.observableArrayList();
                     ArrayList<Integer> orderIdsForThisSubscription = getOrderIdsBySubscription(subscription);
                     for (Integer orderId :
                             orderIdsForThisSubscription) {
-                        for (Order order :
-                                allOrders) {
-                            if (order.getOrderId() == orderId) {
-                                ordersOnThisSubscription.add(order);
-                            }
-                        }
+                        ordersOnThisSubscription.addAll(allOrders.stream().filter(order -> order.getOrderId() == orderId).collect(Collectors.toList()));
                     }
                     ordersOnThisSubscription.forEach(allOrdersUnderCustomer::add);
                     subscription.setOrdersOnThisSubscription(ordersOnThisSubscription);
-                }
+                });
 
                 ArrayList<Integer> orderIdsByCustomer = getOrderIdsByCustomer(existingCustomer);
 
                 for (Integer orderId :
                         orderIdsByCustomer) {
-                    for (Order order :
-                            allOrders) {
-                        if (orderId == order.getOrderId() && !existingCustomer.getSubscription().getOrdersOnThisSubscription().contains(order)) {
-                            allOrdersUnderCustomer.add(order);
-                        }
-                    }
+                    allOrdersUnderCustomer.addAll(allOrders.stream().filter(order -> orderId == order.getOrderId()).collect(Collectors.toList()));
 
                     existingCustomer.setOrders(allOrdersUnderCustomer);
                 }
@@ -1168,13 +1158,7 @@ public class SqlQueries extends DBConnector {
                 int dishId = res.getInt("dish_id");
                 int amount = res.getInt("quantity");
                 double priceFactor = res.getDouble("price_factor");
-                for (Dish dish :
-                        allDishes) {
-                    if (dish.getDishId() == dishId) {
-                        menuLines.add(new MenuLine(dish, amount, priceFactor));
-                        // break;
-                    }
-                }
+                menuLines.addAll(allDishes.stream().filter(dish -> dish.getDishId() == dishId).map(dish -> new MenuLine(dish, amount, priceFactor)).collect(Collectors.toList()));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -1438,7 +1422,7 @@ public class SqlQueries extends DBConnector {
             updateQuery = con.prepareStatement(sql);
             updateQuery.setString(1, order.getCustomerRequests());
             updateQuery.setTimestamp(2, Timestamp.valueOf(order.getDeadlineTime()));
-            if (order.getActualDeliveryDate() == null) {
+            if (order.getActualDeliveryDateTime() == null) {
                 updateQuery.setNull(3, Types.DATE);
             } else {
                 updateQuery.setTimestamp(3, Timestamp.valueOf(order.getActualDeliveryDateTime()));
@@ -1456,10 +1440,8 @@ public class SqlQueries extends DBConnector {
         } catch (SQLException e) {
             SqlCleanup.rullTilbake(con);
             e.printStackTrace();
-            System.out.println("method updateOrder failed");
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.println("Exception in updateOrder, not Sql Exception");
         } finally {
             closeEverything(null, updateQuery, con);
         }
