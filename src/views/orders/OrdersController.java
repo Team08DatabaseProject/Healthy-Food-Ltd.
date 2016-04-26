@@ -120,13 +120,6 @@ public class OrdersController extends MainController implements Initializable {
 
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
 
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                subMenuGP.requestFocus();
-            }
-        });
-
         chefOrdersTable.setEditable(true);
         orderIdCol.setCellValueFactory(new PropertyValueFactory<Order, Integer>("orderId"));
         deadlineCol.setCellValueFactory(new PropertyValueFactory<Order, LocalDateTime>("deadlineTime"));

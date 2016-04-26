@@ -156,13 +156,6 @@ public class CustomersController extends MainController implements Initializable
 
     public void initialize(URL fxmlFileLocation, ResourceBundle resources){
 
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                subMenuGP.requestFocus();
-            }
-        });
-
         customersTable.setEditable(true);
 
         customerIdCol.setCellValueFactory(new PropertyValueFactory<Customer,Integer>("customerId")); //customerId

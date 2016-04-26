@@ -109,13 +109,6 @@ public class MenusController extends MainController implements Initializable{
 
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
 
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                subMenuGP.requestFocus();
-            }
-        });
-
         menuNameCol.setCellValueFactory(new PropertyValueFactory<Menu, String>("name"));
         dishQuantityCol.setCellValueFactory(new PropertyValueFactory<Menu, ObservableList<MenuLine>>("menuLines"));
         menuPriceCol.setCellValueFactory(new PropertyValueFactory<Menu, Double>("totalPrice"));

@@ -1323,7 +1323,6 @@ public class SqlQueries extends DBConnector {
         } finally {
             closeEverything(null, updateQuery, con);
         }
-
         return false;
     }
 
@@ -1393,70 +1392,6 @@ public class SqlQueries extends DBConnector {
         }
         return orders;
     }
-
-    //    wrong one because of date handling
-    public ObservableList<Order> getOrdersWrong(int posId, ObservableList<Dish> allDishes) {
-        ObservableList<Order> orders = FXCollections.observableArrayList();
-        ResultSet res = null;
-        try {
-            String selectSql = "";
-            //ceo and sales
-            if (posId == 1) {
-                selectSql = "SELECT * FROM `order`";
-                selectQuery = con.prepareStatement(selectSql);
-                //CHEF
-            } else if (posId == 2) {
-                selectSql = "SELECT * FROM `order` WHERE status_id = ? OR ? OR ?";
-                selectQuery = con.prepareStatement(selectSql);
-                selectQuery.setInt(1, CREATED);
-                selectQuery.setInt(2, INPREPARATION);
-                selectQuery.setInt(3, READYFORDELIVERY);
-                //DRIVER
-            } else if (posId == 3) {
-                selectSql = "SELECT * FROM `order` WHERE status_id = ?;" +
-                        "SELECT * FROM `order` WHERE status_id = ? AND delivery_date = DATE(now())";
-                selectQuery = con.prepareStatement(selectSql);
-                selectQuery.setInt(1, READYFORDELIVERY);
-                selectQuery.setInt(2, DELIVERED);
-            } else if (posId == 4) {
-                selectSql = "SELECT * FROM `order` WHERE status_id = ? OR ? OR ?";
-                selectQuery = con.prepareStatement(selectSql);
-                selectQuery.setInt(1, CREATED);
-                selectQuery.setInt(2, INPREPARATION);
-                selectQuery.setInt(3, READYFORDELIVERY);
-                selectQuery.setInt(4, DELIVERED);
-                //SALES
-            }
-            res = selectQuery.executeQuery();
-            while (res.next()) {
-                int orderId = res.getInt("order_id");
-                int customerId = res.getInt("customer_id");
-                int subscriptionId = res.getInt("subscription_id");
-                String customerRequests = res.getString("customer_requests");
-                LocalDate deadline = res.getDate("delivery_date").toLocalDate();
-                double price = res.getDouble("price");
-                OrderStatus status = getOrderStatus(res.getInt("status_id"));
-                Address address = getAddress(res.getInt("address_id"));
-                LocalDate actualDeliveryDate = null;
-                LocalDate actualDeliveryDateUnstable = res.getDate("delivered_date").toLocalDate();
-                if (actualDeliveryDateUnstable != null) {
-                    actualDeliveryDate = actualDeliveryDateUnstable;
-                }
-                Order order = new Order(orderId, customerRequests, deadline, actualDeliveryDate, price, status, null, address);
-                setOrderLinesInOrder(order, allDishes);
-                orders.add(order);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            closeEverything(res, selectQuery, con);
-        }
-        return orders;
-    }
-
-/*Method for adding order, takes in either a customer or a subscription to put the order under,
-     customer_id will be set to null if customer is null. the order will be added to subscription_relation order
-    if subscription is NOT null*/
 
     /**
      * Adds an Order to the db

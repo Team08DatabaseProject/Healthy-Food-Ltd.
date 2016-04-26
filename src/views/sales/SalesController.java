@@ -121,7 +121,6 @@ public class SalesController extends MainController implements Initializable{
                         if (order.getOrderId() == selectedOrder.getOrderId() && !found) {
                             selectedCustomer = customer;
                             found = true;
-
                         }
                     }
                 }
@@ -150,13 +149,6 @@ public class SalesController extends MainController implements Initializable{
     };
 
     public void initialize(URL fxmlFileLocation, ResourceBundle resources){
-
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                subMenuGP.requestFocus();
-            }
-        });
 
         ordersTable.setEditable(true);
         orderIdCol.setCellValueFactory(new PropertyValueFactory<Order,Integer>("orderId")); //orderId

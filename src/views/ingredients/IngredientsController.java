@@ -138,13 +138,6 @@ public class IngredientsController extends MainController implements Initializab
 
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
 
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                subMenuGP.requestFocus();
-            }
-        });
-
         ingName.setCellValueFactory(new PropertyValueFactory<Ingredient, String>("ingredientName"));
         ingUnit.setCellValueFactory(new PropertyValueFactory<Ingredient, String>("unit"));
         ingPrice.setCellValueFactory(new PropertyValueFactory<Ingredient, Double>("price"));

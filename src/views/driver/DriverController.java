@@ -208,13 +208,6 @@ public class DriverController extends MainController implements Initializable {
 
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
 
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                subMenuGP.requestFocus();
-            }
-        });
-
         deadlineColLeft.setCellValueFactory(new PropertyValueFactory<Order, LocalDateTime>("deadlineTime"));
         dateDeliveredColLeft.setCellValueFactory(new PropertyValueFactory<Order, LocalDateTime>("actualDeliveryDateTime"));
         statusColLeft.setCellValueFactory(new PropertyValueFactory<Order, OrderStatus>("status"));

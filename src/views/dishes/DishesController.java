@@ -116,12 +116,6 @@ public class DishesController extends MainController implements Initializable {
 
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
 
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                subMenuGP.requestFocus();
-            }
-        });
 
         dishName.setCellValueFactory(new PropertyValueFactory<Dish, String>("dishName"));
         dishPrice.setCellValueFactory(new PropertyValueFactory<Dish, Double>("price"));

@@ -69,6 +69,7 @@ public class SalesFormController extends SalesController implements Initializabl
     public Button removeMenuButton;
 
     private double totalPrice = 0;
+    private Address deliveryAddress;
 
     ObservableList<OrderLine> oldOrderLines = FXCollections.observableArrayList();
     ObservableList<OrderLine> chosenOrderLines = FXCollections.observableArrayList();
@@ -91,6 +92,9 @@ public class SalesFormController extends SalesController implements Initializabl
                     addressField.setText(selectedCustomer.getAddress().getAddress());
                     zipCodeField.setText(String.valueOf(selectedCustomer.getAddress().getZipCode()));
                     placeField.setText(selectedCustomer.getAddress().getPlace());
+                    deliveryAddress = new Address(selectedCustomer.getAddress().getAddressId(), selectedCustomer.getAddress().getAddress(),
+                            selectedCustomer.getAddress().getZipCode(), selectedCustomer.getAddress().getPlace());
+
                 } else {
                     PopupDialog.errorDialog("Error", "No customer-registered address could be found.\nPlease enter delivery location manually.");
                 }
@@ -242,8 +246,10 @@ public class SalesFormController extends SalesController implements Initializabl
                 LocalDateTime deadlineLDT = LocalDateTime.of(deadlineDate, deadlineTime);
                 double price = totalPrice;
                 OrderStatus status = statusBox.getValue();
-                Address newAddress = new Address(address, zipCodeInt, place);
-                Order newOrder = new Order(customerRequests, deadlineLDT, price, status, chosenOrderLines, newAddress);
+                if (deliveryAddress.getAddressId() == 0) {
+                    deliveryAddress = new Address(address, zipCodeInt, place);
+                }
+                Order newOrder = new Order(customerRequests, deadlineLDT, price, status, chosenOrderLines, deliveryAddress);
                 String firstName = fNameField.getText();
                 String lastName = lNameField.getText();
                 String email = emailField.getText();
@@ -311,14 +317,11 @@ public class SalesFormController extends SalesController implements Initializabl
                         }
                         if(db.addOrder(null, newOrder, selectedCustomer)) {
                             selectedCustomer.getOrders().add(newOrder);
-                            if (db.updateCustomer(selectedCustomer)) {
-                                PopupDialog.confirmationDialog("Result", "Order successfully registered to customer.");
-                            } else {
-                                PopupDialog.errorDialog("Error", "Failed to update customer.");
-                            }
+                            PopupDialog.confirmationDialog("Result", "Order successfully registered to customer.");
                         } else {
-                            PopupDialog.errorDialog("Error", "Failed to register order.");
+                            PopupDialog.errorDialog("Error", "Failed to update order.");
                         }
+
                 }
             } catch(Exception exc) {
                 System.out.println("createOrderFieldEvent: " + exc);
