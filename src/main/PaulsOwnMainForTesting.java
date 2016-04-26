@@ -1,3 +1,4 @@
+/*
 package main;
 
 import classpackage.*;
@@ -16,9 +17,11 @@ import java.util.Collections;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+*/
 /**
  * Created by paul thomas on 01.04.2016.
- */
+ *//*
+
 class PaulsOwnMainForTesting {
 
 
@@ -30,7 +33,8 @@ class PaulsOwnMainForTesting {
 
 
 
-   /* public static ObservableList<Address> addressList = FXCollections.observableArrayList(
+   */
+/* public static ObservableList<Address> addressList = FXCollections.observableArrayList(
             new Address("Dessertgata 10", 7000, "Trondheim"),
             new Address("Kjøttveien 4", 7010, "Trondheim"),
             new Address("Karbogata 28", 7020, "Trondheim"),
@@ -223,21 +227,26 @@ class PaulsOwnMainForTesting {
     );
 
 
-    public static Subscription subscription1 = new Subscription(subStart1, subEnd1, subOrderList1);*/
+    public static Subscription subscription1 = new Subscription(subStart1, subEnd1, subOrderList1);*//*
+
 
     public static void main(String[] args) {
         SqlQueries myQuery = new SqlQueries();
 
+*/
 /*
         Address newAddress = new Address("johannesgate 4", 2034);
-        myQuery.addAddress(newAddress);*/
+        myQuery.addAddress(newAddress);*//*
+
       //  Customer firstCustomer = new Customer(false, "customerEmail", "john", "langaas", 92929292, newAddress, "");
         //myQuery.addCustomer(firstCustomer);
+*/
 /*
         Supplier newSupplier = new Supplier(32, null);
         Ingredient newIngredient = new Ingredient("Name", "kg", 2.5, 32, newSupplier);
         int sdf = newIngredient.getSupplier().getSupplierId();
-        System.out.print(sdf);*/
+        System.out.print(sdf);*//*
+
 
 
 
@@ -247,9 +256,11 @@ class PaulsOwnMainForTesting {
         Dish dish1 = new Dish(1, 23, "dish", null);
         Dish dish2 = new Dish(1, 23, "dish", null);
 
-        /*Method getAllSuppliers works
+        */
+/*Method getAllSuppliers works
         Method getAllIngredients works
-        Method getDishLinesByDish works*/
+        Method getDishLinesByDish works*//*
+
         Address firstAddres = new Address(1, "asdf", 32, "sd");
         Address secondAddress = new Address(1, "asdf", 32, "sd");
         Supplier firstSupplier = new Supplier(1,1,firstAddres, "sdf");
@@ -277,26 +288,31 @@ class PaulsOwnMainForTesting {
 
         Order myOrder = new Order(1, "TestOrder", LocalDateTime.now(), null, 23, new OrderStatus(2, "ds"), null, new Address(2,"sdf", 233, "ds"));
 
+*/
 /*
         ObservableList<Dish> myDishes = myQuery.getAllDishes(myQuery.getAllIngredients(myQuery.getAllSuppliers()));
 
         OrderLine myOrderLine = new OrderLine(myDishes.get(30), 2);
         ObservableList<OrderLine> ol = FXCollections.observableArrayList();
         ol.add(myOrderLine);
-        myQuery.addOrderLines(myOrder, ol);*/
+        myQuery.addOrderLines(myOrder, ol);*//*
+
 
         LocalTime first = LocalTime.now();
         System.out.println(first.toString());
 
         ObservableList<Order> orders = myQuery.getOrders(3, (myQuery.getAllDishes(myQuery.getAllIngredients(myQuery.getAllSuppliers()))));
         orders.forEach(order -> System.out.println(order.getDeadlineTime()));
-        /*LocalTime first1 = LocalTime.now();
+        */
+/*LocalTime first1 = LocalTime.now();
         System.out.println(first1.toString());
         customers.forEach(customer -> System.out.println(customer.toString() + "\n" + customer.getOrders().size()));
-        */
+        *//*
 
 
-       /* ObservableList<Supplier> allSuppliers = myQuery.getAllSuppliers();
+
+       */
+/* ObservableList<Supplier> allSuppliers = myQuery.getAllSuppliers();
         allSuppliers.forEach(supplier -> System.out.println(supplier));
         ObservableList<Ingredient> allIngredients = myQuery.getAllIngredients(allSuppliers);
 
@@ -319,11 +335,14 @@ class PaulsOwnMainForTesting {
                 addresses) {
             System.out.println("Deletion went:\t" + myQuery.deleteAddress(address));
         }
-*/
-        /*Address myAddress = new Address(75, "d", 3233, "sdg");
+*//*
+
+        */
+/*Address myAddress = new Address(75, "d", 3233, "sdg");
         boolean wentOk = myQuery.deleteAddress(myAddress);
 
-        System.out.println("test:\t" + wentOk);*/
+        System.out.println("test:\t" + wentOk);*//*
+
 //        ObservableList<Dish> allDishes
 
 //        Dish myDish = new Dish(1, "myDish", null);
@@ -331,7 +350,8 @@ class PaulsOwnMainForTesting {
 //        myDishlines.forEach(dishLine -> System.out.println("Anything:\t" + dishLine));
 
 
-        /*@Test
+        */
+/*@Test
         public void testIt() throws Exception {
 
 
@@ -361,7 +381,7 @@ class PaulsOwnMainForTesting {
             } finally {
                 connection.rollback();
                 connection.close();
-            }*/
+            }*//*
 
 
 
@@ -377,7 +397,10 @@ class PaulsOwnMainForTesting {
 
 
 
-        /*First-hand tests*/
+
+        */
+/*First-hand tests*//*
+
 
 
 
@@ -387,3 +410,4 @@ class PaulsOwnMainForTesting {
     }
 }
 
+*/

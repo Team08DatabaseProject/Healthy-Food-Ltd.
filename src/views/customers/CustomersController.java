@@ -1,6 +1,7 @@
 package views.customers;
 
 import classpackage.*;
+import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -26,6 +27,7 @@ import java.util.ResourceBundle;
 public class CustomersController extends MainController implements Initializable {
 
     @FXML
+    public GridPane subMenuGP;
     public TableView customersTable;
     public TableColumn customerIdCol;
     public TableColumn subscriptionIdCol;
@@ -153,6 +155,13 @@ public class CustomersController extends MainController implements Initializable
     };
 
     public void initialize(URL fxmlFileLocation, ResourceBundle resources){
+
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                subMenuGP.requestFocus();
+            }
+        });
 
         customersTable.setEditable(true);
 

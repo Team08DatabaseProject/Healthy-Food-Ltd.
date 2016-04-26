@@ -31,6 +31,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class EmployeesController extends MainController implements Initializable {
 
 	@FXML
+	public GridPane subMenuGP;
 	public TableView<Employee> employeesTable;
 	public Button addEmployeeFormButton;
 	public Button refreshEmployeesButton;
@@ -170,7 +171,7 @@ public class EmployeesController extends MainController implements Initializable
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
-				rootPane.requestFocus();
+				subMenuGP.requestFocus();
 			}
 		});
 

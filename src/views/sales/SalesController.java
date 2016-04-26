@@ -31,6 +31,7 @@ import java.util.ResourceBundle;
 public class SalesController extends MainController implements Initializable{
 
     @FXML
+    public GridPane subMenuGP;
     public Button createOrderButton; //Button for creating an order
     public Button deleteOrderButton; //Button for deleting an order
     public TableView ordersTable;
@@ -136,7 +137,7 @@ public class SalesController extends MainController implements Initializable{
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                rootPane.requestFocus();
+                subMenuGP.requestFocus();
             }
         });
 

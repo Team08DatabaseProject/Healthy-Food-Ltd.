@@ -119,7 +119,7 @@ public class DishesController extends MainController implements Initializable {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                rootPane.requestFocus();
+                subMenuGP.requestFocus();
             }
         });
 
