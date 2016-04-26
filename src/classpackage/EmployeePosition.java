@@ -9,7 +9,7 @@ public class EmployeePosition {
 	private double defaultSalary;
 
 	/**
-	 * Creates the EmployeePosition object
+	 * Creates the EmployeePosition object from the database
 	 *
 	 * @param id the unique identifier for the EmployeePosition onject
 	 * @param description the description of the position
@@ -22,7 +22,7 @@ public class EmployeePosition {
 	}
 
 	/**
-	 * Creates the EmployeePosition object
+	 * Creates the EmployeePosition object to the database
 	 *
 	 * @param description the description of the position
 	 * @param defaultSalary the default salary, though it can be altered

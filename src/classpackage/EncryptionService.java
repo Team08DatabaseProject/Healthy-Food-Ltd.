@@ -20,7 +20,14 @@ public class EncryptionService {
     *
     * */
 
-
+    /**
+     * Authentication method for the users. Returns true if the user entered a matching password with the encrypted password and salt
+     *
+     * @param String attemptedPassword the attempted password
+     * @param  byte[] encryptedPassword the encrypted password
+     * @param  byte[] salt the salt of the encrypted password
+     * @return
+     */
     public boolean authenticate(String attemptedPassword, byte[] encryptedPassword, byte[] salt)
             throws NoSuchAlgorithmException, InvalidKeySpecException {
         // Encrypt the clear-text password using the same salt that was used to
@@ -31,6 +38,12 @@ public class EncryptionService {
         return Arrays.equals(encryptedPassword, encryptedAttemptedPassword);
     }
 
+    /**
+     * Returns the encrypted password from a string password and a salt
+     *
+     * @param password password to be encrypted
+     * @param salt of the encryption
+     */
     public byte[] getEncryptedPassword(String password, byte[] salt)
             throws NoSuchAlgorithmException, InvalidKeySpecException {
         // PBKDF2 with SHA-1 as the hashing algorithm. Note that the NIST
@@ -49,6 +62,9 @@ public class EncryptionService {
         return f.generateSecret(spec).getEncoded();
     }
 
+    /**
+     * Generates an 8 byte array which is used as salt for the encryption
+     */
     public byte[] generateSalt() throws NoSuchAlgorithmException {
         // VERY important to use SecureRandom instead of just Random
         SecureRandom random = SecureRandom.getInstance("SHA1PRNG");

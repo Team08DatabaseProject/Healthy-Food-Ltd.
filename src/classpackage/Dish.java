@@ -17,7 +17,7 @@ public class Dish {
     private ObservableList<DishLine> dishLines = FXCollections.observableArrayList();
 
     /**
-     * Creates the Dish object
+     * Creates the Dish object from the database
      *
      * @param dishId the unique identifier for the dish object
      * @param price the price for the dish
@@ -32,7 +32,7 @@ public class Dish {
     }
 
     /**
-     * Creates the Dish object
+     * Creates the Dish object to the database
      *
      * @param price the price for the dish
      * @param dishName the name of the dish
