@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--> Axel </!-->
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<!--> Table in submenu "Orders for Sales" </!-->
+
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<GridPane fx:id="ordersTableGrid" prefHeight="500" prefWidth="200.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8"
+          fx:controller="views.sales.SalesController" stylesheets="@/main/Main.css">
+    <children>
+        <BorderPane fx:id="rootPaneOrders">
+            <center>
+                <TableView fx:id="ordersTable" BorderPane.alignment="TOP_CENTER" editable="true" minHeight="200" prefWidth="1400.0"
+                           GridPane.columnIndex="0" GridPane.rowIndex="0" >
+                    <columns>
+                        <TableColumn fx:id="orderIdCol" prefWidth="20.0" text="Order ID" styleClass="column"/>
+                        <TableColumn fx:id="deadlineCol" prefWidth="40.0" text="Deadline" styleClass="column"/>
+                        <TableColumn fx:id="statusCol" prefWidth="40.0" text="Status" styleClass="column"/>
+                        <TableColumn fx:id="priceCol" prefWidth="40.0" text="Price" styleClass="column"/>
+                    </columns>
+                    <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                    </columnResizePolicy>
+                </TableView>
+            </center>
+            <right>
+                <VBox BorderPane.alignment="BOTTOM_CENTER" xmlns:fx="http://javafx.com/fxml" prefHeight="50" spacing="10">
+                    <children>
+                        <Button fx:id="createOrderButton" prefHeight="20" prefWidth="50" text="Create order"
+                                styleClass="newOrderButton">
+                            <graphic>
+                                <ImageView>
+                                    <Image url="@/icons/sales/Add Shopping Cart.png" />
+                                </ImageView>
+                            </graphic>
+                        </Button>
+                        <Button fx:id="deleteOrderButton" prefHeight="20" prefWidth="50" text="Delete order"
+                                styleClass="newOrderButton" >
+                            <graphic>
+                                <ImageView>
+                                    <Image url="@/icons/sales/Delete.png"/>
+                                </ImageView>
+                            </graphic>
+                        </Button>
+                    </children>
+                </VBox>
+            </right>
+            <bottom>
+
+            </bottom>
+        </BorderPane>
+    </children>
+   <columnConstraints>
+      <ColumnConstraints />
+   </columnConstraints>
+   <rowConstraints>
+      <RowConstraints />
+   </rowConstraints>
+</GridPane>

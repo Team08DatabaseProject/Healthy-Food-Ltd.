@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--> Axel </!-->
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.collections.FXCollections?>
+
+
+<?import java.lang.String?>
+<GridPane fx:id="subMenuGP" fx:controller="views.menus.MenusController" xmlns:fx="http://javafx.com/fxml"
+          stylesheets="@/main/Main.css" alignment="CENTER">
+    <children>
+        <TableView fx:id="chefMenusTable" GridPane.columnIndex="0" GridPane.rowIndex="0" prefWidth="900" prefHeight="500">
+            <columns>
+                <TableColumn fx:id="menuNameCol" text="Menu name"/>
+                <TableColumn fx:id="dishQuantityCol" text="Dish quantity"/>
+                <TableColumn fx:id="menuPriceCol" text="Price (NOK)"/>
+            </columns>
+            <columnResizePolicy><TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/></columnResizePolicy>
+        </TableView>
+        <HBox GridPane.rowIndex="1" GridPane.columnIndex="0" styleClass="bottomSubHBox">
+            <Button fx:id="addMenuButton" text="Add new menu" styleClass="subMenuButton"/>
+            <Button fx:id="refreshMenusButton" text="Refresh table" styleClass="subMenuButton"/>
+        </HBox>
+    </children>
+</GridPane>

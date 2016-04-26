@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--> Axel </!-->
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.collections.FXCollections?>
+
+
+<?import java.lang.String?>
+<GridPane fx:id="subMenuGP" fx:controller="views.orders.OrdersController" prefHeight="300"
+          prefWidth="400.0" xmlns:fx="http://javafx.com/fxml" stylesheets="@/main/Main.css" alignment="CENTER">
+    <children>
+        <TableView fx:id="chefOrdersTable" GridPane.columnIndex="0" GridPane.rowIndex="0" prefWidth="900" prefHeight="500">
+            <columns>
+                <TableColumn fx:id="orderIdCol" text="Order ID" prefWidth="80"/>
+                <TableColumn fx:id="deadlineCol" text="Deadline" prefWidth="100"/>
+                <TableColumn fx:id="dishQuantityCol" text="Dish quantity" prefWidth="100"/>
+                <TableColumn fx:id="priceCol" text="Price" prefWidth="80"/>
+                <TableColumn fx:id="statusCol" text="Status" prefWidth="180"/>
+            </columns>
+            <columnResizePolicy><TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/></columnResizePolicy>
+        </TableView>
+        <HBox styleClass="bottomSubHBox" GridPane.columnIndex="0" GridPane.rowIndex="1">
+            <Button fx:id="applyChangesButton" text="Apply changes" styleClass="subMenuButton"/>
+            <Button fx:id="refreshOrdersButton" text="Refresh table" styleClass="subMenuButton"/>
+        </HBox>
+    </children>
+</GridPane>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--> Axel </!-->
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+
+<!--> Textfields for registering new employee </!-->
+
+<?import fields.*?>
+<GridPane fx:id="addEmployeeTable" hgap="10" vgap="10" prefHeight="500.0" prefWidth="400.0" BorderPane.alignment="CENTER"
+          xmlns:fx="http://javafx.com/fxml" fx:controller="views.employees.EmployeeFormController" stylesheets="@/main/Main.css">
+    <padding>
+        <Insets top="10" right="5" bottom="5" left="5"/>
+    </padding>
+    <Label text="First name:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+    <StringField styleClass="FormField" fx:id="fNameField" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+    <Label styleClass="ErrorMsg" fx:id="fNameFieldErrorMsg" GridPane.columnIndex="1" GridPane.rowIndex="2" visible="false" />
+
+    <Label text="Last name:" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+    <StringField styleClass="FormField" fx:id="lNameField" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+    <Label styleClass="ErrorMsg" fx:id="lNameFieldErrorMsg" GridPane.columnIndex="1" GridPane.rowIndex="4" visible="false" />
+
+    <Label text="Phone:" GridPane.columnIndex="0" GridPane.rowIndex="5"/>
+    <IntField styleClass="FormField" fx:id="phoneField" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+    <Label styleClass="ErrorMsg" fx:id="phoneFieldErrorMsg" GridPane.columnIndex="1" GridPane.rowIndex="6" visible="false" />
+
+    <Label text="Email:" GridPane.columnIndex="0" GridPane.rowIndex="7"/>
+    <StringField styleClass="FormField" fx:id="emailField" GridPane.columnIndex="1" GridPane.rowIndex="7"/>
+    <Label styleClass="ErrorMsg" fx:id="emailFieldErrorMsg" GridPane.columnIndex="1" GridPane.rowIndex="8" visible="false" />
+
+    <Label text="Address:" GridPane.columnIndex="0" GridPane.rowIndex="9"/>
+    <StringField styleClass="FormField" fx:id="addressField" GridPane.columnIndex="1" GridPane.rowIndex="9"/>
+    <Label styleClass="ErrorMsg" fx:id="addressFieldErrorMsg" GridPane.columnIndex="1" GridPane.rowIndex="10" visible="false" />
+
+    <Label text="Zip code:" GridPane.columnIndex="0" GridPane.rowIndex="11"/>
+    <ZipCodeField styleClass="FormField" fx:id="zipCodeField" GridPane.columnIndex="1" GridPane.rowIndex="11"/>
+    <Label styleClass="ErrorMsg" fx:id="zipCodeFieldErrorMsg" GridPane.columnIndex="1" GridPane.rowIndex="12" visible="false" />
+
+    <Label text="Place:" GridPane.columnIndex="0" GridPane.rowIndex="13"/>
+    <StringField styleClass="FormField" fx:id="placeField" GridPane.columnIndex="1" GridPane.rowIndex="13"/>
+    <Label styleClass="ErrorMsg" fx:id="placeFieldErrorMsg" GridPane.columnIndex="1" GridPane.rowIndex="14" visible="false" />
+
+    <Label text="Position:" GridPane.columnIndex="0" GridPane.rowIndex="15"/>
+    <ComboBox styleClass="FormField" fx:id="positionBox" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="15"/>
+    <Label styleClass="ErrorMsg" GridPane.columnIndex="1" GridPane.rowIndex="16" />
+
+    <Label text="Salary:" GridPane.columnIndex="0" GridPane.rowIndex="17"/>
+    <DoubleField styleClass="FormField" fx:id="salaryField" GridPane.columnIndex="1" GridPane.rowIndex="17"/>
+    <Label styleClass="ErrorMsg" fx:id="salaryFieldErrorMsg" GridPane.columnIndex="1" GridPane.rowIndex="18" visible="false" />
+
+    <Label text="Username:" GridPane.columnIndex="0" GridPane.rowIndex="19"/>
+    <StringField styleClass="FormField" fx:id="usernameField" GridPane.columnIndex="1" GridPane.rowIndex="19"/>
+    <Label styleClass="ErrorMsg" fx:id="usernameFieldErrorMsg" GridPane.columnIndex="1" GridPane.rowIndex="20" visible="false" />
+
+    <HBox spacing="10" alignment="CENTER" GridPane.columnIndex="0" GridPane.rowIndex="21" GridPane.columnSpan="2">
+        <Button styleClass="SmallButton" fx:id="employeeSubmitButton" text=""/>
+    </HBox>
+</GridPane>
