@@ -13,60 +13,23 @@ import java.util.stream.Collectors;
 
 /**
  * Created by paul thomas on 17.03.2016.
+ * <br>
+ * SQLQueries is the class containing all the methods connecting to the database and doing operations towards it.
+ * <br>
+ * This cla
  */
 
-/*
-* Sales:
-* Address to customer, order
-* Dish to OrderLine
-* OrderLine to Order
-* Customer to Order
-* Order to subscription
-* Subscription to Customer
-* 
-* */
-
-
-
-
-    /*/**
- * Returns an Image object that can then be painted on the screen.
- * The url argument must specify an absolute {@link URL}. The name
- * argument is a specifier that is relative to the url argument.
- * <p>
- * This method always returns immediately, whether or not the
- * image exists. When this applet attempts to draw the image on
- * the screen, the data will be loaded. The graphics primitives
- * that draw the image will incrementally paint on the screen.
- *
- * @param  url  an absolute URL giving the base location of the image
- * @param  name the location of the image, relative to the url argument
- * @return      the image at the specified URL
- * @see         Image
- *
-public Image getImage(URL url, String name) {
-        try {
-        return getImage(new URL(url, name));
-        } catch (MalformedURLException e) {
-        return null;
-        }
-        }*/
 
 public class SqlQueries extends DBConnector {
 
+    // TODO: 26.04.2016 User manual for changing database
     // TODO: 26.04.2016 timetable report
     // TODO: 25.04.2016 presentation
     // TODO: 25.04.2016 fix getEmployees to work faster
     // TODO: 24.04.2016 JavaDoc
-    // TODO: 24.04.2016 Fix getOrders based on driverPositionId
-    // TODO: 24.04.2016 Make it possible to set the delivery address of an order to the location of the company
-    // TODO: 24.04.2016 Understand why equals behaves as it does for ObjectProperty
-    // TODO: 24.04.2016 Avklare med Grethe hvor grundig testene MAA vaere
-    // TODO: 23.04.2016 PasswordEncryption
     // TODO: 23.04.2016 Log out, (statistikk), sette alt inne i samme vindu, styling, validate felt
     // TODO: 22.04.2016 In Delete methods that include fex adress remember to delete the address as well
     // TODO: 19.04.2016 Refine methods to give confirmations on both execute() and executeUpdate()
-    // TODO: 04.04.2016 the strings for Gui that deals with Orders should use just so we have this standardized
 
 
     public final int CREATED = 1;
@@ -91,7 +54,8 @@ public class SqlQueries extends DBConnector {
 
     /**
      * Adds a new address to the database and sets addressId to primary key.
-     * @param newAddress 
+     *
+     * @param newAddress the <code>Address</code> to be added
      * @return false if any <code>SQL Exceptions </code>occurs
      */
     public boolean addAddress(Address newAddress) {
@@ -177,11 +141,10 @@ public class SqlQueries extends DBConnector {
 
 
     /**
-     * Adds a customer to the database while also adding the corresponding address of the object.
-     * Returns false if address is null or any <code>SQLException</code> occurs.
+     * Adds a customer to the database while also adding the corresponding address of the object.*
      *
      * @param theCustomer
-     * @return boolean
+     * @return false if address is null or an SQLException occurs.
      */
     public boolean addCustomer(Customer theCustomer) {
         ResultSet res = null;
@@ -220,7 +183,12 @@ public class SqlQueries extends DBConnector {
         return false;
     }
 
-
+    /**
+     * Updates the data of a customer in the db
+     *
+     * @param customer customer to be updated
+     * @return true if customer exists in db and no SQLExceptions occurs
+     */
     public boolean updateCustomer(Customer customer) {
         try {
             String sql = "UPDATE customer SET address_id = ?, business_name = ?, first_name = ?, " +
@@ -250,6 +218,12 @@ public class SqlQueries extends DBConnector {
     }
 
 
+    /**
+     * Retrieves the orderId's of orders in the db containing a subscriptionId
+     *
+     * @param subscription the subscription to match subscription_id in the order table in the db
+     * @return ArrayList containing the order id's
+     */
     public ArrayList<Integer> getOrderIdsBySubscription(Subscription subscription) {
         ArrayList<Integer> orderIds = new ArrayList<Integer>();
         ResultSet res = null;
@@ -269,7 +243,12 @@ public class SqlQueries extends DBConnector {
         return orderIds;
     }
 
-
+    /**
+     * Retrieves the orderId's of orders in the db containing a customer_id but not a subscription
+     *
+     * @param customer the customer to match the customer_id in the order table in the db
+     * @return ArrayList containing the order id's
+     */
     public ArrayList<Integer> getOrderIdsByCustomer(Customer customer) {
         ArrayList<Integer> orderIds = new ArrayList<>();
         ResultSet res = null;
@@ -289,13 +268,15 @@ public class SqlQueries extends DBConnector {
         return orderIds;
     }
 
-    /*    Method for getting all customers with
-    its orders, subscriptions (with orders)
-*/
-
-
-
-//    nyeste
+    /**
+     * Fetches all the customers in the db, setting the customer's respective Subscription,
+     * setting the all the orders of the customer in the customer's orders list as well as
+     * setting the orders of the customer's subscription, in the subscription's respective orders list.
+     *
+     * @param allOrders an ObservableList containing all the Orders in the db, the list returned by method getOrders
+     *                  is to be used as parameter
+     * @return ObservableList containing all the customers, if any errors occur , the list will be empty
+     */
     public ObservableList<Customer> getAllCustomers(ObservableList<Order> allOrders) {
 
         ObservableList<Subscription> allSubscriptions = getAllSubscriptions();
@@ -315,8 +296,6 @@ public class SqlQueries extends DBConnector {
                 existingCustomer.setAddress(getAddress(res.getInt("address_id")));
 
                 ObservableList<Order> allOrdersUnderCustomer = FXCollections.observableArrayList();
-
-
 
 
                 allSubscriptions.stream().filter(subscription -> subscription.getCustomerId() == existingCustomer.getCustomerId()).forEach(subscription -> {
@@ -355,8 +334,12 @@ public class SqlQueries extends DBConnector {
 
     /*Dish methods*/
 
-    // Method for  Registering Dish in database
-
+    /**
+     * Adds dishes in the db
+     *
+     * @param theDish to be added
+     * @return true if insert went ok
+     */
     public boolean addDish(Dish theDish) {
         ResultSet res = null;
         try {
@@ -377,7 +360,12 @@ public class SqlQueries extends DBConnector {
         return false;
     }
 
-    //    Method for updating/changing a Dish
+    /**
+     * Updates a dish in the db
+     *
+     * @param dish to be updated
+     * @return true if update was successful
+     */
     public boolean updateDish(Dish dish) {
         try {
             String sql = "UPDATE dish SET price = ?, name = ? WHERE dish_id = ?";
@@ -396,7 +384,12 @@ public class SqlQueries extends DBConnector {
         return false;
     }
 
-    //    Method for deleting a dish
+    /**
+     * Deletes a Dish from the database
+     *
+     * @param dish to be deleted from the db
+     * @return true if deletion was successful
+     */
     public boolean deleteDish(Dish dish) {
         try {
             String sqlSetning = "DELETE FROM dish WHERE dish_id = ?";
@@ -1209,8 +1202,6 @@ public class SqlQueries extends DBConnector {
     }
 
 
-
-
     /*Order Methods*/
 //    Method for getting orders based on position id
     public ObservableList<Order> getOrders(int posId, ObservableList<Dish> allDishes) {
@@ -1349,6 +1340,10 @@ public class SqlQueries extends DBConnector {
             String insertSql = "INSERT INTO `order`(customer_id, subscription_id, customer_requests, delivery_date, delivered_date, " +
                     "price, address_id, status_id) VALUES(?,?,?,?,?,?,?,?)";
             insertQuery = con.prepareStatement(insertSql, Statement.RETURN_GENERATED_KEYS);
+            if (!addAddress(order.getAddress())) {
+                return false;
+            }
+
             if (customer == null) {
                 insertQuery.setNull(1, Types.INTEGER);
             } else {
@@ -1416,6 +1411,9 @@ public class SqlQueries extends DBConnector {
             String sql = "UPDATE `order` SET customer_requests = ?, delivery_date = ?, " +
                     "delivered_date = ?, price = ?, address_id = ?, status_id  = ? WHERE order_id = " + order.getOrderId();
             updateQuery = con.prepareStatement(sql);
+            if (!updateAddress(order.getAddress())){
+                return false;
+            }
             updateQuery.setString(1, order.getCustomerRequests());
             updateQuery.setTimestamp(2, Timestamp.valueOf(order.getDeadlineTime()));
             if (order.getActualDeliveryDateTime() == null) {
@@ -1429,10 +1427,7 @@ public class SqlQueries extends DBConnector {
 
             if (updateQuery.executeUpdate() == 1) {
                 return true;
-            } else {
-                return true;
             }
-
         } catch (SQLException e) {
             SqlCleanup.rullTilbake(con);
             e.printStackTrace();
