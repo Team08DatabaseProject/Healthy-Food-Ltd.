@@ -182,8 +182,7 @@ public class EmployeeFormController extends EmployeesController implements Initi
 	              }
               }
           } catch (Exception exc) {
-              System.out.println(exc);
-							exc.printStackTrace();
+              PopupDialog.errorDialog("Error", "Couldn't add new employee.");
           }
       }
   };

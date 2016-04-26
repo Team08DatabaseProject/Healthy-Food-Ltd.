@@ -165,8 +165,7 @@ public class CustomersFormController extends CustomersController implements Init
 
                 }
             } catch (Exception exc) {
-                System.out.println(exc);
-                exc.printStackTrace();
+                PopupDialog.errorDialog("Error", "Couldn't add new customer.");
             }
         }
     };

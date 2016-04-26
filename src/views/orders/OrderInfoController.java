@@ -16,6 +16,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
+import main.PopupDialog;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -53,8 +54,7 @@ public class OrderInfoController extends OrdersController implements Initializab
                     formStage.setScene(dishScene);
                     formStage.show();
                 } catch (Exception exc) {
-                    exc.printStackTrace();
-                    System.out.println(exc);
+                    PopupDialog.errorDialog("Error", "Couldn't display dish information.");
                 }
             }
         }

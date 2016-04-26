@@ -88,8 +88,7 @@ public class POrderController extends InventoryController implements Initializab
 				formStage.setScene(formScene);
 				formStage.show();
 			} catch (Exception exc) {
-				exc.printStackTrace();
-				System.out.println(exc);
+				PopupDialog.errorDialog("Error", "Couldn't add new line to purchase order.");
 			}
 		}
 	};

@@ -87,8 +87,7 @@ public class InventoryController extends MainController implements Initializable
 					formStage.setScene(orderScene);
 					formStage.show();
 			} catch (Exception exc) {
-				exc.printStackTrace();
-				System.out.println(exc);
+				PopupDialog.errorDialog("Error", "Couldn't add new purchase order.");
 			}
 
 		}
