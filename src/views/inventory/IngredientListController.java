@@ -23,7 +23,7 @@ import java.util.ResourceBundle;
 /**
  * Created by HUMBUG on 22.04.2016.
  */
-public class IngredientListController extends InventoryController implements Initializable {
+public class IngredientListController extends POrderController implements Initializable {
 
 	@FXML
 	public TableColumn<Ingredient, String> nameCol;

@@ -11,8 +11,8 @@
 
 <?import com.sun.javafx.scene.control.skin.TableColumnHeader?>
 <?import com.sun.javafx.scene.control.skin.TableHeaderRow?>
-<GridPane fx:id="subWindowGP" fx:controller="users.chef.ControllerChefDishInfo" hgap="5" prefHeight="300.0" prefWidth="800.0" vgap="10" alignment="CENTER" xmlns="http://javafx.com/javafx/8"
-          xmlns:fx="http://javafx.com/fxml/1" stylesheets="@/users/chef/ChefStyle.css">
+<GridPane fx:id="subWindowGP" fx:controller="views.orders.DishInfoController" hgap="5" prefHeight="300.0" prefWidth="800.0" vgap="10" alignment="CENTER" xmlns="http://javafx.com/javafx/8"
+          xmlns:fx="http://javafx.com/fxml/1" stylesheets="@/main/Main.css">
     <padding>
         <Insets bottom="25" left="30" right="20" top="25" />
     </padding>

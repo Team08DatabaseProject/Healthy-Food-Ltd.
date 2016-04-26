@@ -19,7 +19,7 @@ import java.util.ResourceBundle;
 /**
  * Created by HUMBUG on 22.04.2016.
  */
-public class SupplierListController extends InventoryController implements Initializable {
+public class SupplierListController extends POrderController implements Initializable {
 
 	@FXML
 	public TableColumn<Supplier, String> nameCol;

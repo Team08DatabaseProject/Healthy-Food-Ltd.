@@ -204,11 +204,12 @@ public class MainController extends Main implements Initializable {
 					if(currentView != INVENTORY) {
 						FXMLLoader loader = new FXMLLoader();
 						loader.setLocation(getClass().getResource("../views/inventory/Inventory.fxml"));
-						TabPane inventoryPane = loader.load();
+						GridPane inventoryPane = loader.load();
 						rootBorderPane.setCenter(inventoryPane);
 						currentView = INVENTORY;
 					}
 				} catch(IOException e) {
+					e.printStackTrace();
 					PopupDialog.errorDialog("Error", "Error generating GUI.");
 				}
 			}
@@ -289,9 +290,15 @@ public class MainController extends Main implements Initializable {
 			case Employee.DRIVER :
 				topMenuButtons.add(createDriverButton());
 				break;
-            case Employee.SALES :
-                topMenuButtons.add(createSalesButton());
-                topMenuButtons.add(createCustomersButton());
+			case Employee.SALES :
+      	topMenuButtons.add(createSalesButton());
+        topMenuButtons.add(createCustomersButton());
+				break;
+			case Employee.NUTRITION :
+				topMenuButtons.add(createMenusButton());
+				topMenuButtons.add(createDishesButton());
+				topMenuButtons.add(createIngredientsButton());
+				break;
 		}
 		topMenuHBox.getChildren().addAll(topMenuButtons);
         Platform.runLater(new Runnable() {

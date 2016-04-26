@@ -8,8 +8,8 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<GridPane fx:id="subWindowGP" fx:controller="users.chef.ControllerChefOrderInfo" hgap="5" prefHeight="500.0" prefWidth="800.0" vgap="10" alignment="CENTER" xmlns="http://javafx.com/javafx/8"
-          xmlns:fx="http://javafx.com/fxml/1" stylesheets="@/users/chef/ChefStyle.css" gridLinesVisible="false">
+<GridPane fx:id="subWindowGP" fx:controller="views.orders.OrderInfoController" hgap="5" prefHeight="500.0" prefWidth="800.0" vgap="10" alignment="CENTER" xmlns="http://javafx.com/javafx/8"
+          xmlns:fx="http://javafx.com/fxml/1" stylesheets="@/main/Main.css" gridLinesVisible="false">
     <padding>
         <Insets bottom="25" left="30" right="20" top="25" />
     </padding>
