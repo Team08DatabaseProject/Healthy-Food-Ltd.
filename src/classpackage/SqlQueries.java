@@ -69,32 +69,6 @@ public class SqlQueries extends DBConnector {
     // TODO: 04.04.2016 the strings for Gui that deals with Orders should use just so we have this standardized
 
 
-    /* public final String CREATED = "Created";
-    public final String INPREPARATION = "In preparation";
-    public final String READYFORDELIVERY = "Ready for delivery";
-    public final String UNDERDELIVERY = "Under delivery";
-    public final String DELIVERED = "In preparation";
-
-    public String getINPREPARATION() {
-        return INPREPARATION;
-    }
-
-    public String getCREATED() {
-        return CREATED;
-    }
-
-    public String getREADYFORDELIVERY() {
-        return READYFORDELIVERY;
-    }
-
-    public String getUNDERDELIVERY() {
-        return UNDERDELIVERY;
-    }
-
-    public String getDELIVERED() {
-        return DELIVERED;
-    }
-*/
     public final int CREATED = 1;
     public final int INPREPARATION = 2;
     public final int READYFORDELIVERY = 3;
@@ -117,10 +91,8 @@ public class SqlQueries extends DBConnector {
 
     /**
      * Adds a new address to the database and sets addressId to primary key.
-     * Returns false if any <code>SQL Exceptions </code>occurs
-     *
-     * @param newAddress
-     * @return boolean
+     * @param newAddress 
+     * @return false if any <code>SQL Exceptions </code>occurs
      */
     public boolean addAddress(Address newAddress) {
         try {
@@ -302,7 +274,7 @@ public class SqlQueries extends DBConnector {
         ArrayList<Integer> orderIds = new ArrayList<>();
         ResultSet res = null;
         try {
-            String selectSql = "SELECT order_id FROM `order` WHERE customer_id = ?";
+            String selectSql = "SELECT order_id FROM `order` WHERE customer_id = ? AND subscription_id IS NULL ";
             selectQuery = con.prepareStatement(selectSql);
             selectQuery.setInt(1, customer.getCustomerId());
             res = selectQuery.executeQuery();
@@ -378,102 +350,6 @@ public class SqlQueries extends DBConnector {
         }
         return customers;
     }
-
-
-   /* public ObservableList<Customer> getAllCustomers(ObservableList<Order> allOrders) {
-        ObservableList<Subscription> allSubscriptions = getAllSubscriptions();
-        ObservableList<Customer> customers = FXCollections.observableArrayList();
-        ResultSet res = null;
-        try {
-            String selectSql = "SELECT * FROM customer";
-            selectQuery = con.prepareStatement(selectSql);
-            res = selectQuery.executeQuery();
-            while (res.next()) {
-                boolean isBusiness = false;
-                if (res.getInt("isBusiness") == 1) {
-                    isBusiness = true;
-                }
-                Customer existingCustomer = new Customer(res.getInt("c_id"), isBusiness, res.getString("email"), res.getString("first_name"),
-                        res.getString("last_name"), res.getInt("phone"), res.getString("business_name"));
-                existingCustomer.setAddress(getAddress(res.getInt("address_id")));
-
-                ObservableList<Order> allOrdersUnderCustomer = FXCollections.observableArrayList();
-
-
-
-                for (Subscription subscription : allSubscriptions
-                        ) {
-
-                    if (subscription.getCustomerId() == existingCustomer.getCustomerId()) {
-                        existingCustomer.setSubscription(subscription);
-                    }
-                    ObservableList<Order> ordersOnThisSubscription = FXCollections.observableArrayList();
-                    ArrayList<Integer> orderIdsForThisSubscription = getOrderIdsBySubscription(subscription);
-                    for (Integer orderId :
-                            orderIdsForThisSubscription) {
-                        for (Order order :
-                                allOrders) {
-                            if (order.getOrderId() == orderId) {
-                                ordersOnThisSubscription.add(order);
-                            }
-                        }
-                    }
-                    ordersOnThisSubscription.forEach(allOrdersUnderCustomer::add);
-                    subscription.setOrdersOnThisSubscription(ordersOnThisSubscription);
-                }
-
-                ArrayList<Integer> orderIdsByCustomer = getOrderIdsByCustomer(existingCustomer);
-
-                for (Integer orderId :
-                        orderIdsByCustomer) {
-                    for (Order order :
-                            allOrders) {
-                        if (orderId == order.getOrderId() && !existingCustomer.getSubscription().getOrdersOnThisSubscription().contains(order)) {
-                            allOrdersUnderCustomer.add(order);
-                        }
-                    }
-
-                    existingCustomer.setOrders(allOrdersUnderCustomer);
-                }
-                customers.add(existingCustomer);
-            }
-
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            closeEverything(res, selectQuery, con);
-        }
-        return customers;
-    }*/
-
-    /*public void setOrdersInCustomer(ObservableList<Customer> allCustomers) {
-        ObservableList<> customers = FXCollections.observableArrayList();
-        try {
-            String selectSql = "SELECT * FROM customer";
-            selectQuery = con.prepareStatement(selectSql);
-            ResultSet res = selectQuery.executeQuery();
-            while (res.next()) {
-                boolean isBusiness = false;
-                if (res.getInt("isBusiness") == 1) {
-                    isBusiness = true;
-
-                }
-                Customer existingCustomer = new Customer(res.getInt(1), isBusiness, res.getString("email"), res.getString("first_name"),
-                        res.getString("last_name"), res.getInt("phone"), res.getString("business_name"));
-                existingCustomer.setAddress(getAddress(res.getInt("address_id")));
-                customers.add(existingCustomer);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("method getAllCustomers failed");
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("method getAllCustomers failed, not Sql exception!");
-        }
-        return customers;
-    }
-*/
 
 
 
@@ -1333,6 +1209,8 @@ public class SqlQueries extends DBConnector {
     }
 
 
+
+
     /*Order Methods*/
 //    Method for getting orders based on position id
     public ObservableList<Order> getOrders(int posId, ObservableList<Dish> allDishes) {
@@ -1353,11 +1231,12 @@ public class SqlQueries extends DBConnector {
                 selectQuery.setInt(3, READYFORDELIVERY);
                 //DRIVER
             } else if (posId == 3) {
-                selectSql = "SELECT * FROM `order` WHERE status_id = ? OR status_id = ?";
-                // + "SELECT * FROM `order` WHERE status_id = ? AND delivery_date = DATE(now())";
+
+                selectSql = "SELECT * FROM `order` WHERE (status_id = ? OR status_id = ? OR `order`.status_id = ?) AND (DATE(delivery_date) = CURDATE() AND DATE(delivered_date) = curdate())";
                 selectQuery = con.prepareStatement(selectSql);
                 selectQuery.setInt(1, READYFORDELIVERY);
                 selectQuery.setInt(2, DELIVERED);
+                selectQuery.setInt(3, UNDERDELIVERY);
             } else if (posId == 4) {
                 selectSql = "SELECT * FROM `order` WHERE status_id = ? OR status_id = ? OR status_id = ? OR status_id = ?";
                 selectQuery = con.prepareStatement(selectSql);
