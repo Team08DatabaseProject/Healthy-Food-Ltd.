@@ -23,7 +23,7 @@
 
 <!--> Table in submenu "Employees" </!-->
 
-<TabPane tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/null" xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.inventory.InventoryController">
+<TabPane fx:id="inventoryGP" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/null" xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.inventory.InventoryController">
     <tabs>
         <Tab fx:id="pOrdersTab" text="Purchase orders">
             <GridPane style="-fx-padding: 10px;">
@@ -159,9 +159,6 @@
                </rowConstraints>
                 </GridPane>
             </VBox>
-        </Tab>
-        <Tab fx:id="StatTab" text="Statistics">
-
         </Tab>
     </tabs>
 </TabPane>
