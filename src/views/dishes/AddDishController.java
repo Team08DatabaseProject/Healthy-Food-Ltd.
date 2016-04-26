@@ -86,8 +86,9 @@ public class AddDishController extends DishesController implements Initializable
                 if (!(dishNameField.getText().isEmpty() || dishPriceField.getText().isEmpty() || chosenDishLines.isEmpty())) {
 
                     dishNameString = dishNameField.getText();
-                    dishPriceString = nf.format(dishPriceField.getText());
-                    dishPrice = Double.parseDouble(dishPriceString);
+
+                    dishPrice = Double.parseDouble(dishPriceField.getText());
+                    dishPriceString = nf.format(dishPrice);
 
                     dishNameLabel.setText("Dish name: " + dishNameString);
                     dishPriceLabel.setText("Dish price: " + dishPriceString + " NOK");
