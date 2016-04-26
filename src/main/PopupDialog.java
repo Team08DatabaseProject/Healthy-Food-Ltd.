@@ -1,4 +1,4 @@
-package div;
+package main;
 
 import classpackage.*;
 import javafx.application.Platform;
@@ -11,9 +11,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
-import javafx.util.Pair;
 
 import java.util.Optional;
 

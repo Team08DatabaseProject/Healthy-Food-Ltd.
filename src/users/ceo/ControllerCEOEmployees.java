@@ -2,7 +2,7 @@ package users.ceo;
 
 import classpackage.Address;
 import classpackage.*;
-import div.*;
+import main.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -17,15 +17,11 @@ import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.net.URL;
-import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.concurrent.ThreadLocalRandom;
-
-import static div.PopupDialog.newPasswordEmail;
 
 /**
  * Created by HUMBUG on 06.04.2016.

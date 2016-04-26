@@ -1,6 +1,6 @@
 package users.chef;
 
-import div.PopupDialog;
+import main.PopupDialog;
 import classpackage.Ingredient;
 import classpackage.Supplier;
 import javafx.application.Platform;

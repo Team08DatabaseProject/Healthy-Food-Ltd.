@@ -3,9 +3,6 @@ package users.sales.customers;
 import classpackage.Address;
 import classpackage.Customer;
 import classpackage.Subscription;
-import div.PopupDialog;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -20,7 +17,6 @@ import javafx.stage.Stage;
 import users.sales.ControllerSales;
 
 import java.net.URL;
-import java.time.LocalDate;
 import java.util.ResourceBundle;
 
 /**

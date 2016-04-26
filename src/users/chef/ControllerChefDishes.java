@@ -1,9 +1,8 @@
 package users.chef;
 
 import classpackage.*;
-import div.PopupDialog;
+import main.PopupDialog;
 import javafx.application.Platform;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
@@ -11,15 +10,10 @@ import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
-import javafx.util.Callback;
-import javafx.util.converter.DoubleStringConverter;
 
 import java.net.URL;
-import java.text.NumberFormat;
-import java.util.List;
 import java.util.ResourceBundle;
 
 /**

@@ -1,3 +1,4 @@
+/*
 package classpackage;
 
 import javafx.collections.FXCollections;
@@ -7,12 +8,13 @@ import javafx.collections.ObservableList;
 import java.time.LocalDate;
 import div.TranslationMethod;
 
-/**
+*
  * Created by axelkvistad on 4/15/16.
  * This is a class for retrieving Observablelists of test objects for the different class types
  * When testing you need test objects, use the ones made in this class instead of making your own.
  * This saves time and makes the code more readable.
- */
+
+
 public class TestObjects {
 
     private static TranslationMethod tm = new TranslationMethod();
@@ -262,3 +264,4 @@ public class TestObjects {
 
 
 }
+*/

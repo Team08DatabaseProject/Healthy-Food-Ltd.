@@ -1,7 +1,7 @@
 package users.chef;
 
 import classpackage.*;
-import div.PopupDialog;
+import main.PopupDialog;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -14,11 +14,9 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.GridPane;
-import javafx.util.Callback;
 import javafx.util.StringConverter;
 import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.util.converter.DoubleStringConverter;
-import javafx.util.converter.IntegerStringConverter;
 
 import java.net.URL;
 import java.text.NumberFormat;

@@ -3,8 +3,7 @@ package users.sales.orders;
 import classpackage.Customer;
 import classpackage.Order;
 import classpackage.OrderStatus;
-import div.PopupDialog;
-import javafx.collections.ObservableList;
+import main.PopupDialog;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -18,7 +17,6 @@ import javafx.scene.layout.GridPane;
 import users.sales.ControllerSales;
 
 import java.net.URL;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ResourceBundle;
 
