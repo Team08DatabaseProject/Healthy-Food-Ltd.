@@ -1,90 +1,42 @@
-/*
 package classpackage;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
-*/
 /**
  * Created by paul thomas on 20.04.2016.
- *//*
-
+ */
 public class SqlQueriesTest {
 
-    public static SqlQueries myQuery = new SqlQueries();
-
-
-    public static ObservableList<Address> addressList = FXCollections.observableArrayList(
-            new Address("Dessertgata 10", 7000, "Trondheim"),
-            new Address("Kjøttveien 4", 7010, "Trondheim"),
-            new Address("Karbogata 28", 7020, "Trondheim"),
-            new Address("Sjømatgata 23", 7030, "Trondheim"),
-            new Address("Grønnsakveien 1", 7040, "Trondheim"),
-            new Address("Snacksveien 8", 7050, "Trondheim"),
-            new Address("Kugata 17", 7060, "Trondheim")
-    );
-
-    public static Supplier dessertSupplier = new Supplier(90112233, addressList.get(0), "Sweet Pleasures Company");
-
-    public static Supplier meatSupplier = new Supplier(90223344, addressList.get(1), "The Slaughterhouse");
-    public static Supplier carbSupplier = new Supplier(40998877, addressList.get(2), "Never Forghetti Ltd.");
-    public static Supplier seafoodSupplier = new Supplier(40112233, addressList.get(3), "Crabs 'R' Us");
-    public static Supplier vegetableSupplier = new Supplier(40223344, addressList.get(4), "Fruity Duty");
-    public static Supplier snackSupplier = new Supplier(91338292, addressList.get(5), "Crunchy Munchies");
-    public static Supplier dairySupplier = new Supplier(97456282, addressList.get(6), "Uncle Jack's Farm");
-
-
-    public static Ingredient sugar = new Ingredient("Sugar", "Gram", 10000, 0.02, dessertSupplier);
-    public static Ingredient milk = new Ingredient("Milk", "Liter", 30, 20, dairySupplier);
-    public static Ingredient flour = new Ingredient("Flour", "Gram", 15000, 0.025, dessertSupplier);
-    public static Ingredient salmon = new Ingredient("Salmon", "Number of", 30, 30, seafoodSupplier);
-    public static Ingredient carrot = new Ingredient("Carrot", "Kilogram", 300, 20, vegetableSupplier);
-    public static Ingredient chocolate = new Ingredient("Chocolate", "Gram", 5000, 0.15, dessertSupplier);
-    public static Ingredient trout = new Ingredient("Trout", "Number of", 25, 40, seafoodSupplier);
-    public static Ingredient potato = new Ingredient("Potato", "Kilogram", 60, 25, carbSupplier);
-    public static Ingredient butter = new Ingredient("Butter", "Kilogram", 7, 50, dairySupplier);
-    public static Ingredient beef = new Ingredient("Beef", "Kilogram", 20, 50, meatSupplier);
-    public static Ingredient spaghetti = new Ingredient("Spaghetti", "Kilogram", 50, 10, carbSupplier);
-    public static Ingredient potatoChips = new Ingredient("Potato chips", "Kilogram", 5, 30, snackSupplier);
-    public static Ingredient lettuce = new Ingredient("Lettuce", "Kilogram", 8, 20, vegetableSupplier);
-    public static Ingredient paprika = new Ingredient("Paprika", "Kilogram", 4, 25, vegetableSupplier);
-
-
-    public static ObservableList<Supplier> supplierList = FXCollections.observableArrayList(
-            dessertSupplier, meatSupplier, carbSupplier, seafoodSupplier, vegetableSupplier, snackSupplier, dairySupplier
-    );
-
-    public static ObservableList<Ingredient> allIngredients = FXCollections.observableArrayList(
-            sugar, milk, flour, chocolate, carrot, trout, salmon, potato, butter, beef, spaghetti, potatoChips, lettuce, paprika
-    );
-
-
-    ArrayList<String> supplierNames = new ArrayList<>();
-    ArrayList<Integer> supplierId = new ArrayList<>();
-
-
-    public static ObservableList<Dish> testDishes = TestObjects.dishList;
-    public static ObservableList<Menu> testMenus = TestObjects.allMenus;
-    public static ObservableList<Subscription> testSubscriptions = TestObjects.allSubscriptions;
-    public static ObservableList<Customer> testCustomers = TestObjects.allCustomers;
-    public static ObservableList<Order> testOrders = TestObjects.orderList;
-    public static ObservableList<Employee> employees = FXCollections.observableArrayList();
+    SqlQueries myQuery = new SqlQueries();
+    ObservableList<Address> addressList;
+    ObservableList<Supplier> supplierList;
+    ObservableList<Ingredient> allIngredients;
+    ObservableList<Dish> testDishes;
+    ObservableList<MenuLine> testMenuLines;
+    ObservableList<Menu> testMenus;
+    ObservableList<Subscription> testSubscriptions;
+    ObservableList<Customer> testCustomers;
+    ObservableList<Order> testOrders;
+    ObservableList<Employee> testEmployees;
+    ObservableList<DishLine> dishlines = FXCollections.observableArrayList();
 
 
 
 
 
 
-    */
-/*Testing with JUnit
+    /*Testing with JUnit
     *
     *
     * addAddress
@@ -99,23 +51,123 @@ public class SqlQueriesTest {
     *
     *
     *
-    * *//*
-
+    * */
 
     @org.junit.Before
     public void setUp() throws Exception {
-    }
+        addressList = FXCollections.observableArrayList(
+                new Address("Dessertgata 10", 7000, "Trondheim"),
+                new Address("Kjøttveien 4", 7010, "Trondheim"),
+                new Address("Karbogata 28", 7020, "Trondheim"),
+                new Address("Sjømatgata 23", 7030, "Trondheim"),
+                new Address("Grønnsakveien 1", 7040, "Trondheim"),
+                new Address("Snacksveien 8", 7050, "Trondheim"),
+                new Address("Kugata 17", 7060, "Trondheim")
+        );
 
-    @org.junit.After
-    public void tearDown() throws Exception {
+        supplierList = FXCollections.observableArrayList(
+                new Supplier(90112233, addressList.get(0), "Sweet Pleasures Company"),
+                new Supplier(90223344, addressList.get(1), "The Slaughterhouse"),
+                new Supplier(40998877, addressList.get(2), "Never Forghetti Ltd."),
+                new Supplier(40112233, addressList.get(3), "Crabs 'R' Us"),
+                new Supplier(40223344, addressList.get(4), "Fruity Duty"),
+                new Supplier(91338292, addressList.get(5), "Crunchy Munchies"),
+                new Supplier(97456282, addressList.get(6), "Uncle Jack's Farm")
+        );
 
-    }
+        allIngredients = FXCollections.observableArrayList(
+                new Ingredient("Sugar", "Gram", 10000, 0.02, supplierList.get(0)
+                ),
+                new Ingredient("Milk", "Liter", 30, 20, supplierList.get(0)
+                ),
+                new Ingredient("Flour", "Gram", 15000, 0.025, supplierList.get(0)
+                ),
+                new Ingredient("Salmon", "Number of", 30, 30, supplierList.get(0)
+                ),
+                new Ingredient("Carrot", "Kilogram", 300, 20, supplierList.get(0)
+                ),
+                new Ingredient("Chocolate", "Gram", 5000, 0.15, supplierList.get(0)
+                ),
+                new Ingredient("Trout", "Number of", 25, 40, supplierList.get(0)
+                ),
+                new Ingredient("Potato", "Kilogram", 60, 25, supplierList.get(0)
+                ),
+                new Ingredient("Butter", "Kilogram", 7, 50, supplierList.get(0)
+                ),
+                new Ingredient("Beef", "Kilogram", 20, 50, supplierList.get(0)
+                ),
+                new Ingredient("Spaghetti", "Kilogram", 50, 10, supplierList.get(0)
+                ),
+                new Ingredient("Potato chips", "Kilogram", 5, 30, supplierList.get(0)
+                ),
+                new Ingredient("Lettuce", "Kilogram", 8, 20, supplierList.get(0)
+                ),
+                new Ingredient("Paprika", "Kilogram", 4, 25, supplierList.get(0)
+                ));
 
-    @Ignore
-    public void address() throws Exception {
+
+        testDishes = FXCollections.observableArrayList(
+                new Dish(100, "Carrot cake", allIngredients),
+                new Dish(200, "Trout with potato", allIngredients),
+                new Dish(175, "Beef with spaghetti", allIngredients),
+                new Dish(200, "Salmon with potato", allIngredients),
+                new Dish(100, "Weird dish", allIngredients),
+                new Dish(75, "Veggie dish", allIngredients)
+        );
+
+        MealType mealType = new MealType(1, "testMealType");
+        testMenuLines = FXCollections.observableArrayList(
+                new MenuLine(testDishes.get(0), 1, 1)
+        );
+
+        testMenus = FXCollections.observableArrayList(
+                new Menu("Beef and carrot cake", mealType, testMenuLines),
+                new Menu("Trout and carrot cake", mealType, testMenuLines),
+                new Menu("Weird new Menu", mealType, testMenuLines),
+                new Menu("Veggie new Menu", mealType, testMenuLines)
+        );
+
+        ObservableList<OrderLine> orderLines = FXCollections.observableArrayList(
+                new OrderLine(testDishes.get(0), 1)
+        );
+
+        OrderStatus orderStatus = new OrderStatus(1, "Created");
+
+        testOrders = FXCollections.observableArrayList(
+                new Order(1, "request1", LocalDateTime.now(), null, 1, orderStatus, orderLines, addressList.get(0)),
+                new Order(2, "request2", LocalDateTime.now(), null, 2, orderStatus, orderLines, addressList.get(1)),
+                new Order(3, "request3", LocalDateTime.now(), null, 3, orderStatus, orderLines, addressList.get(2)),
+                new Order(4, "request4", LocalDateTime.now(), null, 4, orderStatus, orderLines, addressList.get(3)),
+                new Order(5, "request5", LocalDateTime.now(), null, 2, orderStatus, orderLines, addressList.get(4))
+        );
 
 
-//        Addresses
+
+
+        testSubscriptions = FXCollections.observableArrayList(
+                new Subscription(LocalDate.now(), LocalDate.now(), testOrders),
+                new Subscription(LocalDate.now(), LocalDate.now(), testOrders),
+                new Subscription(LocalDate.now(), LocalDate.now(), testOrders)
+        );
+
+        testCustomers = FXCollections.observableArrayList(
+                new Customer(false, "email1", "fName1", "lName1", 12345678,
+                        addressList.get(0), null, testSubscriptions.get(0), testOrders),
+                new Customer(false, "email2", "fName2", "lName2", 22345678,
+                        addressList.get(1), null, testSubscriptions.get(1), testOrders),
+                new Customer(true, "email3", "fName3", "lName3", 32345678,
+                        addressList.get(2), "Business1", testSubscriptions.get(2), testOrders)
+        );
+        
+        testEmployees = FXCollections.observableArrayList(
+        );
+
+
+
+
+
+
+        //        Addresses
         for (Address address :
                 addressList) {
             assertTrue(myQuery.addAddress(address));
@@ -125,6 +177,103 @@ public class SqlQueriesTest {
             assertNotNull(myQuery.getAddress(address.getAddressId()));
         }
 
+        for (Supplier supplier :
+                supplierList) {
+            myQuery.addSupplier(supplier);
+        }
+        for (Supplier supplier :
+                supplierList) {
+            supplier.setBusinessName("RiskyBusiness");
+            assertTrue(myQuery.updateSupplier(supplier));
+        }
+
+        for (Order order :
+                testOrders) {
+            order.setActualDeliveryDateTime(LocalDateTime.now());
+            order.setDeadlineTime(LocalDateTime.now().plusDays(2));
+            assertTrue(myQuery.addOrder(null, order, null));
+        }
+
+        ObservableList<EmployeePosition> employeePositions = myQuery.getEmployeePositions();
+        for (int i = 0; i < 5; i++) {
+            testEmployees.add(new Employee("randomUser" + i, "random" + i, "randomlastName" + i,
+                    1 + i, "emai.sd" + i, 2123 + i, "password" + i, addressList.get(i), employeePositions.get(2)));
+            assertTrue(myQuery.addEmployee(testEmployees.get(i)));
+            testEmployees.get(i).setFirstName("TestName" + i);
+        }
+
+        //        addSuppliers
+
+        for (Ingredient ingredient :
+                allIngredients) {
+            assertTrue(myQuery.addIngredient(ingredient));
+            ingredient.setIngredientName("IngredientTest");
+        }
+
+        for (Dish dish :
+                testDishes) {
+            assertTrue(myQuery.addDish(dish));
+        }
+
+        for (Customer customer :
+                testCustomers) {
+            customer.setAddress(addressList.get(1));
+            assertTrue(myQuery.addCustomer(customer));
+        }
+
+        //        Adding Subscriptions
+        for (Subscription subscription :
+                testSubscriptions) {
+            assertTrue(myQuery.addSubscription(subscription, testCustomers.get(0), null));
+        }
+
+             /*adding orders on a Customer*/
+
+//        Adds order, updates the order
+        for (Order order :
+                testOrders) {
+            order.setActualDeliveryDateTime(LocalDateTime.now());
+            order.setDeadlineTime(LocalDateTime.now().plusDays(2));
+            assertTrue(myQuery.addOrder(null, order, null));
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        ObservableList<Supplier> allSuppliers = myQuery.getAllSuppliers();
+        ObservableList<Ingredient> allIngredients = myQuery.getAllIngredients(allSuppliers);
+        ObservableList<Dish> allDishes = myQuery.getAllDishes(allIngredients);
+        ObservableList<Menu> allMenus = myQuery.getAllMenus(allDishes);
+        ObservableList<MealType> allMealTypes = myQuery.getAllMealTypes();
+
+        allSuppliers.forEach(Assert::assertNotNull);
+        allIngredients.forEach(Assert::assertNotNull);
+        allDishes.forEach(Assert::assertNotNull);
+        allMenus.forEach(Assert::assertNotNull);
+        allMealTypes.forEach(Assert::assertNotNull);
+    }
+
+    @org.junit.After
+    public void tearDown() throws Exception {
+
+    }
+
+
+
+    @Ignore
+    public void address2() throws Exception {
         //        deleteAddress
         for (Address address :
                 addressList) {
@@ -137,74 +286,37 @@ public class SqlQueriesTest {
 
     @Ignore
     public void subscription() throws Exception {
-        for (Order order :
-                testOrders) {
-            order.setActualDeliveryDateTime(LocalDateTime.now());
-            order.setDeadlineTime(LocalDateTime.now().plusDays(2));
-            assertTrue(myQuery.addOrder(null, order, null));
-        }
-        for (Order order :
-                testOrders) {
-            assertTrue(myQuery.deleteOrder(order));
-        }
+
 
     }
 
-//    Testing Employee methods
-    @Test
+    //    Testing Employee methods
+/*    @Ignore
     public void employees() throws Exception {
         ObservableList<EmployeePosition> employeePositions = myQuery.getEmployeePositions();
         for (int i = 0; i < 5; i++) {
-            employees.add(new Employee("randomUser" + i, "random" + i, "randomlastName" + i,
-                    1 + i, "emai.sd" + i, 2123 + i, "password" + i, addressList.get(i), employeePositions.get(2)));
-            assertTrue(myQuery.addEmployee(employees.get(i)));
-            employees.get(i).setFirstName("TestName" + i);
-            assertTrue(myQuery.updateEmployee(employees.get(i)));
-            Employee testEmployee = myQuery.getEmployeeByUsername(employees.get(i).getUsername());
-            assertTrue(testEmployee.getEmployeeId() == employees.get(i).getEmployeeId());
-            assertTrue(myQuery.deleteEmployee(employees.get(i)));
+            assertTrue(myQuery.updateEmployee(testEmployees.get(i)));
+            Employee testEmployee = myQuery.getEmployeeByUsername(testEmployees.get(i).getUsername());
+            assertTrue(testEmployee.getEmployeeId() == testEmployees.get(i).getEmployeeId());
+            assertTrue(myQuery.deleteEmployee(testEmployees.get(i)));
         }
-    }
+    }*/
 
-//    Testing specifically getters from database
-    @Test
-    public void getters() throws Exception{
-        ObservableList<Supplier> allSuppliers = myQuery.getAllSuppliers();
-        ObservableList<Ingredient> allIngredients = myQuery.getAllIngredients(allSuppliers);
-        ObservableList<Dish> allDishes = myQuery.getAllDishes(allIngredients);
-        ObservableList<Menu> allMenus = myQuery.getAllMenus(allDishes);
-
-        allSuppliers.forEach(Assert::assertNotNull);
-        allIngredients.forEach(Assert::assertNotNull);
-        allDishes.forEach(Assert::assertNotNull);
-        allMenus.forEach(Assert::assertNotNull);
-    }
-
-
-
+    //    Testing specifically getters from database
     @Ignore
+    public void getters() throws Exception {
+
+
+    }
+
+
+    @Test
     public void supplier() throws Exception {
-//        addSuppliers
-        for (Supplier supplier :
-                supplierList) {
-            myQuery.addSupplier(supplier);
-        }
-        for (Supplier supplier :
-                supplierList) {
-            supplier.setBusinessName("RiskyBusiness");
-            assertTrue(myQuery.updateSupplier(supplier));
-        }
+
+
         ObservableList<Supplier> suppliersFromDb = myQuery.getAllSuppliers();
 
-        for (Ingredient ingredient :
-                allIngredients) {
-            assertTrue(myQuery.addIngredient(ingredient));
-            ingredient.setIngredientName("IngredientTest");
-        }
-
-        */
-/*Checks against the database if the objects exist and the name change was registered*//*
-
+        /*Checks against the database if the objects exist and the name change was registered*/
         assertTrue(myQuery.updateIngredient(allIngredients));
         ObservableList<Ingredient> ingredientsFromDb = myQuery.getAllIngredients(suppliersFromDb);
         boolean ingredientsExistsInDb = false;
@@ -224,10 +336,6 @@ public class SqlQueriesTest {
         }
         assertTrue(ingredientsExistsInDb);
 
-        for (Dish dish :
-                testDishes) {
-            assertTrue(myQuery.addDish(dish));
-        }
 
         for (Dish dish :
                 testDishes) {
@@ -236,18 +344,14 @@ public class SqlQueriesTest {
         }
 
 
-//        Adding Subscriptions
+/*//        Adding Subscriptions
         for (Subscription subscription :
                 testSubscriptions) {
-            assertTrue(myQuery.addSubscription(subscription));
-        }
+            assertTrue(myQuery.addSubscription(subscription, testCustomers.get(0), null));
+        }*/
 
 //        adding customers and updating them
-        for (Customer customer :
-                testCustomers) {
-            customer.setAddress(addressList.get(1));
-            assertTrue(myQuery.addCustomer(customer));
-        }
+
 
         for (Customer customer :
                 testCustomers) {
@@ -259,31 +363,19 @@ public class SqlQueriesTest {
 
 
 
-      */
-/*adding orders on a Customer*//*
 
 
-//        Adds order, updates the order, and deletes them
-        for (Order order :
-                testOrders) {
-            order.setActualDeliveryDateTime(LocalDateTime.now());
-            order.setDeadlineTime(LocalDateTime.now().plusDays(2));
-            assertTrue(myQuery.addOrder(null, order, null));
-        }
+
 
         for (Order order :
                 testOrders) {
             order.setActualDeliveryDateTime(LocalDateTime.now());
             order.setDeadlineTime(LocalDateTime.now().plusDays(5));
             order.setPrice(34.5);
-            assertTrue(myQuery.updateOrder(order, null));
+            assertTrue(myQuery.updateOrder(order));
         }
 
 
-        for (Order order :
-                testOrders) {
-            assertTrue(myQuery.deleteOrder(order));
-        }
 
 //        Adds order with subscription and deletes them
         for (Order order :
@@ -295,20 +387,16 @@ public class SqlQueriesTest {
             assertTrue(myQuery.deleteOrder(order));
         }
 
-//        Add order with customer and deletes them
+//        Add order with customer
         for (Order order :
                 testOrders) {
             assertTrue(myQuery.addOrder(null, order, testCustomers.get(0)));
         }
 
-        for (Order order :
-                testOrders) {
-            assertTrue(myQuery.deleteOrder(order));
-        }
 
 
 //        Dishlines
-        ObservableList<DishLine> dishlines = FXCollections.observableArrayList();
+
         for (Ingredient ingredient :
                 allIngredients) {
             dishlines.add(new DishLine(ingredient, 42));
@@ -319,6 +407,11 @@ public class SqlQueriesTest {
             assertTrue(myQuery.addIngredientInDish(dish, dishlines));
         }
 
+//        Adding MealTypes
+        for (MealType mealType :
+                TestObjects.mealTypes) {
+            assertTrue(myQuery.addMealType(mealType));
+        }
 //        Adding menus
         for (Menu menu :
                 testMenus) {
@@ -338,6 +431,24 @@ public class SqlQueriesTest {
                 testMenus) {
             assertTrue(myQuery.addDishesInMenu(menu, testMenuLines));
         }
+
+    }
+
+    @After
+    public void after() {
+
+        for (Order order :
+                testOrders) {
+            assertTrue(myQuery.deleteOrder(order));
+        }
+
+
+
+
+
+
+
+
 
 //        Deleting MenuLines in menus
         for (Menu menu :
@@ -372,62 +483,8 @@ public class SqlQueriesTest {
             assertTrue(myQuery.addIngredient(ingredient));
             assertTrue(myQuery.deleteIngredient(ingredient));
         }
+
+
     }
 
-
-*/
-/*
-
-Template
-//
-
-//        Testing against the db to ensure the suppliers were added
-        boolean suppliersExists = true;
-        ObservableList<Supplier> suppliersInDb = myQuery.getAllSuppliers();
-        for (Supplier supplier :
-                supplierList) {
-            if (!suppliersInDb.contains(supplier)){
-                suppliersExists = false;
-            }
-        }
-        assertTrue(suppliersExists);
-
-
-
-//      Adding ingredient
-        for (Ingredient ingredient :
-                allIngredients) {
-            assertTrue(myQuery.addIngredient(ingredient));
-        }
-
-
-
-        //        Testing against the db to ensure the Ingredients were added
-        boolean ingredientsExists = true;
-        ObservableList<Ingredient> ingredientsInDb = myQuery.getAllIngredients(suppliersInDb);
-        for (Ingredient ingredient :
-                ingredientsInDb) {
-            if (!ingredientsInDb.contains(ingredient)){
-                suppliersExists = false;
-            }
-        }
-        assertTrue(ingredientsExists);
-
-//        Deleting Ingredients
-        for (Ingredient ingredient :
-                allIngredients) {
-            assertTrue(myQuery.deleteIngredient(ingredient));
-        }
-
-//        Deleting Suppliers
-        for (Supplier supplier :
-                supplierList) {
-            assertTrue(myQuery.deleteSupplier(supplier));
-        }
-
-       *//*
-
-
-
 }
-*/

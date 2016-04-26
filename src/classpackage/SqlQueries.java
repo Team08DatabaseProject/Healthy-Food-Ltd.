@@ -16,12 +16,16 @@ import java.util.stream.Collectors;
  * <br>
  * SQLQueries is the class containing all the methods connecting to the database and doing operations towards it.
  * <br>
- * This cla
+ * This class inherits one connection from DBConnector and keeps the connection open for the methods to use
+ * <br>
+ * Almost all methods inserting data into the database, and wherever the objects have an id, the method sets the id from the generated keys in the database
  */
 
 
 public class SqlQueries extends DBConnector {
 
+    // TODO: 26.04.2016 add mealtypes in gui
+    // TODO: 26.04.2016 delete orderswrong
     // TODO: 26.04.2016 User manual for changing database
     // TODO: 26.04.2016 timetable report
     // TODO: 25.04.2016 presentation
@@ -406,6 +410,12 @@ public class SqlQueries extends DBConnector {
         return false;
     }
 
+    /**
+     * Fetches all the dishes in the database.
+     *
+     * @param allIngredients in the db, the list returned by method getAllIngredient should be used as parameter.
+     * @return ObservableList of all the dishes in the db, if an error occurs the list will be empty or incomplete
+     */
     public ObservableList<Dish> getAllDishes(ObservableList<Ingredient> allIngredients) {
         ObservableList<Dish> allDishes = FXCollections.observableArrayList();
         ResultSet res = null;
@@ -422,7 +432,6 @@ public class SqlQueries extends DBConnector {
                 dish.setAllDishLinesForThisDish(getDishLinesByDish(dish, allIngredients));
                 allDishes.add(dish);
             }
-
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -431,8 +440,13 @@ public class SqlQueries extends DBConnector {
         return allDishes;
     }
 
-
-    //    Method for adding Dish in Menu
+    /**
+     * Adds MenuLines to a menu in the db
+     *
+     * @param menu     the MenuLines should be added under
+     * @param menuLine the MenuLines to be added under the menu
+     * @return true if addition to db was successful, performs a rollback if an error occurs and returns false
+     */
     public boolean addDishesInMenu(Menu menu, ObservableList<MenuLine> menuLine) {
         try {
             con.setAutoCommit(false);
@@ -449,6 +463,7 @@ public class SqlQueries extends DBConnector {
             }
             return true;
         } catch (SQLException e) {
+            SqlCleanup.rullTilbake(con);
             e.printStackTrace();
         } finally {
             closeEverything(null, insertQuery, con);
@@ -457,7 +472,13 @@ public class SqlQueries extends DBConnector {
     }
 
 
-    //    Method for removing dishes in a menu
+    /**
+     * Deletes MenuLines in a Menu in the db
+     *
+     * @param menu      the MenuLines should be added under
+     * @param menuLines to be added to the menu
+     * @return true if deletion was succesful, false and performs rollback if any errors occurs
+     */
     public boolean deleteDishesInMenu(Menu menu, ObservableList<MenuLine> menuLines) {
         PreparedStatement deleteQuery = null;
         try {
@@ -473,6 +494,7 @@ public class SqlQueries extends DBConnector {
             con.commit();
             return true;
         } catch (SQLException e) {
+            SqlCleanup.rullTilbake(con);
             e.printStackTrace();
         } finally {
             closeEverything(null, deleteQuery, con);
@@ -480,7 +502,13 @@ public class SqlQueries extends DBConnector {
         return false;
     }
 
-
+    /**
+     * Fetches the Dishlines to a Dish from the db
+     *
+     * @param dish           dish to fetch Dishlines for
+     * @param allIngredients all ingredients in the db, the list returned by getAllIngredients is to be used
+     * @return an ObservableList containing the DishLines to the dish
+     */
     public ObservableList<DishLine> getDishLinesByDish(Dish dish, ObservableList<Ingredient> allIngredients) {
         ResultSet res = null;
         ObservableList<DishLine> dishLines = FXCollections.observableArrayList();
@@ -512,12 +540,18 @@ public class SqlQueries extends DBConnector {
         return dishLines;
     }
 
-    public boolean addEmployee(Employee newEmp) {
+    /**
+     * Adds an employee and its corresponding Address to the db
+     *
+     * @param newEmployee the employee to be added
+     * @return true if addition was successful
+     */
+    public boolean addEmployee(Employee newEmployee) {
         ResultSet res = null;
 
         try {
             con.setAutoCommit(false);
-            if (!addAddress(newEmp.getAddress())) {
+            if (!addAddress(newEmployee.getAddress())) {
                 SqlCleanup.rullTilbake(con);
                 SqlCleanup.settAutoCommit(con);
                 return false;
@@ -525,20 +559,20 @@ public class SqlQueries extends DBConnector {
             String insertSql = "INSERT INTO employee (first_name, last_name, phone, email, address_id, username, pos_id, salary, passhash) " +
                     "VALUES(?,?,?,?,?,?,?,?,?)";
             insertQuery = con.prepareStatement(insertSql, Statement.RETURN_GENERATED_KEYS);
-            insertQuery.setString(1, newEmp.getFirstName());
-            insertQuery.setString(2, newEmp.getLastName());
-            insertQuery.setInt(3, newEmp.getPhoneNo());
-            insertQuery.setString(4, newEmp.geteMail());
-            insertQuery.setInt(5, newEmp.getAddress().getAddressId());
-            insertQuery.setString(6, newEmp.getUsername());
-            insertQuery.setInt(7, newEmp.getPosition().getId());
-            insertQuery.setDouble(8, newEmp.getSalary());
-            insertQuery.setString(9, newEmp.getPassHash());
+            insertQuery.setString(1, newEmployee.getFirstName());
+            insertQuery.setString(2, newEmployee.getLastName());
+            insertQuery.setInt(3, newEmployee.getPhoneNo());
+            insertQuery.setString(4, newEmployee.geteMail());
+            insertQuery.setInt(5, newEmployee.getAddress().getAddressId());
+            insertQuery.setString(6, newEmployee.getUsername());
+            insertQuery.setInt(7, newEmployee.getPosition().getId());
+            insertQuery.setDouble(8, newEmployee.getSalary());
+            insertQuery.setString(9, newEmployee.getPassHash());
             insertQuery.execute();
 
             res = insertQuery.getGeneratedKeys();
             res.next();
-            newEmp.setEmployeeId(res.getInt(1));
+            newEmployee.setEmployeeId(res.getInt(1));
             return true;
         } catch (SQLIntegrityConstraintViolationException e) {
             e.printStackTrace();
@@ -550,7 +584,11 @@ public class SqlQueries extends DBConnector {
         return false;
     }
 
-
+    /**
+     * Fetches all employees in the db and sets its respective Address and EmployeePosition.
+     *
+     * @return an ObservableList containing all the employees
+     */
     public ObservableList<Employee> getEmployees() {
         ObservableList<Employee> employees = FXCollections.observableArrayList();
         try {
@@ -580,40 +618,11 @@ public class SqlQueries extends DBConnector {
         return employees;
     }
 
-    /*
-        public Employee getUser(String username, String passwordHash) {
-            int personId = -1;
-            int posId = -1;
-            double salary = -1;
-            int attempts = 0;
-            boolean success = false;
-            do {
-                try {
-    //                con.setAutoCommit(false);
-                    String selectSql = "SELECT employee_id, username, pos_id, salary, passhash FROM employee WHERE username = ? AND passHash = ?";
-                    selectQuery = con.prepareStatement(selectSql);
-                    selectQuery.setString(1, username);
-                    selectQuery.setString(2, passwordHash);
-                    res = selectQuery.executeQuery();
-                    res.next();
-                    personId = res.getInt("employee_id");
-                    posId = res.getInt("pos_id");
-                    salary = res.getDouble("salary");
-                    //       con.commit();
-                    success = true;
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                } finally {
-                    SqlCleanup.lukkResSet(res);
-                    SqlCleanup.settAutoCommit(con);
-                }
-            } while (!success);
-            if (personId != -1) {
-                return new Employee(personId, username, posId, salary);
-            }
-            return null;
-        }
-    */
+    /**
+     * Fetches the EmployeePositions in the db
+     *
+     * @return an ObservableList containing the EmployeePositions
+     */
     public ObservableList<EmployeePosition> getEmployeePositions() {
         ResultSet res = null;
         ObservableList<EmployeePosition> employeePositions = FXCollections.observableArrayList();
@@ -633,18 +642,24 @@ public class SqlQueries extends DBConnector {
         return null;
     }
 
-    public EmployeePosition getEmployeePosition(int posId) {
+    /**
+     * Fetches an EmployeePosition from an int
+     *
+     * @param positionId positionId for the corresponding EmployeePosition
+     * @return returns the corresponding EmployeePosition if positionId matches in db, returns null otherwise
+     */
+    public EmployeePosition getEmployeePosition(int positionId) {
         ResultSet res = null;
         try {
             String selectSql = "SELECT description, default_salary FROM employee_position WHERE pos_id = ?";
             selectQuery = con.prepareStatement(selectSql);
-            selectQuery.setInt(1, posId);
+            selectQuery.setInt(1, positionId);
             res = selectQuery.executeQuery();
             if (!res.next()) return null;
 
             String description = res.getString(1);
             double salary = res.getDouble(2);
-            return new EmployeePosition(posId, description, salary);
+            return new EmployeePosition(positionId, description, salary);
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -653,6 +668,12 @@ public class SqlQueries extends DBConnector {
         return null;
     }
 
+    /**
+     * Fetches an Employee from the db matching the username
+     *
+     * @param username username of the Employee in the db
+     * @return the Employee that matched the username, returns null if username doesnt exist
+     */
     public Employee getEmployeeByUsername(String username) {
         ResultSet res = null;
         try {
@@ -683,6 +704,12 @@ public class SqlQueries extends DBConnector {
         return null;
     }
 
+    /**
+     * Updates an employee in the db
+     *
+     * @param employee the Employee to be updated
+     * @return true if update was successful, false and performs rollback otherwise
+     */
     public boolean updateEmployee(Employee employee) {
         try {
             String updateSql = "UPDATE employee SET first_name = ?, last_name = ?, phone = ?, email = ?," +
@@ -719,7 +746,12 @@ public class SqlQueries extends DBConnector {
         return false;
     }
 
-
+    /**
+     * Deletes an Employee from the db
+     *
+     * @param employee the Employee to be deleted
+     * @return true if deletion was successful, false and performs rollback otherwise
+     */
     public boolean deleteEmployee(Employee employee) {
         try {
             con.setAutoCommit(false);
@@ -745,13 +777,12 @@ public class SqlQueries extends DBConnector {
         return false;
     }
 
-
-
-    /*Ingredient methods*/
-
-    // Method for adding Ingredients
-
-    //    Method is usable for adding ingredient with or without new supplier
+    /**
+     * Adds an Ingredient to the db
+     *
+     * @param ingredient Ingredient to be added
+     * @return true if addition was successful, false otherwise
+     */
     public boolean addIngredient(Ingredient ingredient) {
         ResultSet res = null;
         try {
@@ -789,6 +820,12 @@ public class SqlQueries extends DBConnector {
         return false;
     }
 
+    /**
+     * Fetches an Ingredient from the db.
+     *
+     * @param ingredientId the ingredientId for the corresponding ingredient in the db
+     * @return the Ingredient from the db with matching ingredientId, returns null if it does not find a match
+     */
     public Ingredient getIngredient(int ingredientId) {
         try {
             String selectSql = "SELECT quantity_owned, unit, price, description FROM ingredient WHERE ingredient_id = ?";
@@ -807,7 +844,12 @@ public class SqlQueries extends DBConnector {
         return null;
     }
 
-    //    Method for updating an Ingredient
+    /**
+     * Updates Ingredients in the db.
+     *
+     * @param ingredients an ObservableList containing the Ingredients to be updated
+     * @return true if update was succesful, false otherwise
+     */
     public boolean updateIngredient(ObservableList<Ingredient> ingredients) {
         try {
             con.setAutoCommit(false);
@@ -831,6 +873,12 @@ public class SqlQueries extends DBConnector {
         return false;
     }
 
+    /**
+     * Deletes an Ingredient in the db.
+     *
+     * @param ingredient the Ingredient to be deleted
+     * @return true if deletion was successful, false otherwise
+     */
     public boolean deleteIngredient(Ingredient ingredient) {
         try {
             String sqlSetning = "DELETE FROM ingredient WHERE ingredient_id = ?";
@@ -846,15 +894,18 @@ public class SqlQueries extends DBConnector {
         return false;
     }
 
-    // TODO: 28.03.2016 needs to enable a selector in the windows of the individual employee positions that lets you select elements and send them to methods
-
-    /*Method for registering ingredients in DISH
-    * */
-    public boolean addIngredientInDish(Dish dish, ObservableList<DishLine> dishLine) {
+    /**
+     * Adds a DishLine in a Dish
+     *
+     * @param dish      the Dish, the DishLines should be added under
+     * @param dishLines the DishLines to be added
+     * @return
+     */
+    public boolean addIngredientInDish(Dish dish, ObservableList<DishLine> dishLines) {
         try {
             con.setAutoCommit(false);
             for (DishLine oneLine :
-                    dishLine) {
+                    dishLines) {
 
                 String sqlSetning = "INSERT INTO dish_line(ingredient_id, dish_id, quantity) VALUES(?,?,?)";
                 insertQuery = con.prepareStatement(sqlSetning);
@@ -874,6 +925,12 @@ public class SqlQueries extends DBConnector {
         return false;
     }
 
+    /**
+     * Fetches the Ingredients that have the supplier in the parameters
+     *
+     * @param supplierId supplierId to match in the db
+     * @return ObservableList containing the Ingredients that matched supplierId in the db
+     */
     public ObservableList<Ingredient> getIngredientsBySupplierId(int supplierId) {
         ObservableList<Ingredient> ingredients = FXCollections.observableArrayList();
         try {
@@ -896,7 +953,13 @@ public class SqlQueries extends DBConnector {
         return ingredients;
     }
 
-    //    Method for removing rows aka dishlines from dishline. Dishlines sent it is removed from the table.
+    /**
+     * Deletes DishLines to a dish in the db
+     *
+     * @param dish      the dish to delete Ingredients from
+     * @param dishLines the DishLines to be deleted
+     * @return true if deletion was successful, false and performes rollback otherwise
+     */
     public boolean deleteIngredientsInDish(Dish dish, ObservableList<DishLine> dishLines) {
         PreparedStatement deleteQuery = null;
         try {
@@ -913,6 +976,7 @@ public class SqlQueries extends DBConnector {
             con.setAutoCommit(true);
             return true;
         } catch (SQLException e) {
+            SqlCleanup.rullTilbake(con);
             e.printStackTrace();
         } finally {
             closeEverything(null, deleteQuery, con);
@@ -921,6 +985,12 @@ public class SqlQueries extends DBConnector {
     }
 
 
+    /**
+     * Fetches all the Ingredients from the db
+     *
+     * @param allSuppliers all Suppliers in the db, the list returned by method getAllSuppliers is to be used her
+     * @return an ObservableList containing all the Ingredients
+     */
     public ObservableList<Ingredient> getAllIngredients(ObservableList<Supplier> allSuppliers) {
         ObservableList<Ingredient> ingredients = FXCollections.observableArrayList();
         ResultSet res = null;
@@ -963,9 +1033,12 @@ public class SqlQueries extends DBConnector {
         return ingredients;
     }
 
-    /*Menu methods*/
-
-    //    method for adding menu
+    /**
+     * Adds a Menu to the db.
+     *
+     * @param menu the Menu to be added
+     * @return true if addition was successful, false otherwise
+     */
     public boolean addMenu(Menu menu) {
         ResultSet res = null;
         try {
@@ -989,7 +1062,12 @@ public class SqlQueries extends DBConnector {
         return false;
     }
 
-    //    Method for updating a Menu
+    /**
+     * Updates a Menu in the db
+     *
+     * @param menu the Menu to be updated
+     * @return true if update was successful, false otherwise
+     */
     public boolean updateMenu(Menu menu) {
         try {
             String sql = "UPDATE menu SET meal_type_id = ?, description = ?" +
@@ -1009,7 +1087,12 @@ public class SqlQueries extends DBConnector {
         return false;
     }
 
-    //    Method for deleting a menu
+    /**
+     * Deletes a Menu from the db.
+     *
+     * @param menu the Menu to be deleted
+     * @return true if deletion was successful, false otherwise
+     */
     public boolean deleteMenu(Menu menu) {
         try {
             String sqlSetning = "DELETE FROM menu WHERE menu_id = ?";
@@ -1026,6 +1109,12 @@ public class SqlQueries extends DBConnector {
         return false;
     }
 
+    /**
+     * Fetches all Menus from the db
+     *
+     * @param allDishes an ObservableList containing all the dishes in the db, the list returned by method getAllDishes is to be used here.
+     * @return an ObservableList containing all the menus
+     */
     public ObservableList<Menu> getAllMenus(ObservableList<Dish> allDishes) {
         ObservableList<Menu> menus = FXCollections.observableArrayList();
         ResultSet res = null;
@@ -1050,8 +1139,12 @@ public class SqlQueries extends DBConnector {
         return menus;
     }
 
-    /*MealType methods*/
-
+    /**
+     * Adds a MealType to the db.
+     *
+     * @param mealType the MealType to be added
+     * @return true if addition was successful, false otherwise
+     */
     public boolean addMealType(MealType mealType) {
         ResultSet res = null;
         try {
@@ -1072,6 +1165,12 @@ public class SqlQueries extends DBConnector {
         return false;
     }
 
+    /**
+     * Fetches a MealType matching the id in the db
+     *
+     * @param id the id to match
+     * @return the matching MealType, null if it finds no match
+     */
     public MealType getMealType(int id) {
         ResultSet res = null;
         try {
@@ -1090,6 +1189,11 @@ public class SqlQueries extends DBConnector {
         return null;
     }
 
+    /**
+     * Fetches all the MealTypes from the db
+     *
+     * @return an ObservableList containg all the MealTypes
+     */
     public ObservableList<MealType> getAllMealTypes() {
         ResultSet res = null;
         ObservableList<MealType> mealTypes = FXCollections.observableArrayList();
@@ -1108,9 +1212,13 @@ public class SqlQueries extends DBConnector {
         return mealTypes;
     }
 
-    /*MenuLine methods*/
-
-
+    /**
+     * Adds MenuLines to the db.
+     *
+     * @param menu      the Menu the MenuLines gets added to
+     * @param menuLines the MenuLines to add
+     * @return
+     */
     public boolean addMenuLine(Menu menu, ObservableList<MenuLine> menuLines) {
         try {
             String insertSql = "INSERT INTO menu_line(dish_id, menu_id, quantity, price_factor) VALUES(?,?,?,?)";
@@ -1132,6 +1240,13 @@ public class SqlQueries extends DBConnector {
         return false;
     }
 
+    /**
+     * Fetches the MenuLines to a Menu in the db
+     *
+     * @param menu      the Menu to get MenuLines from
+     * @param allDishes all dishes in the db, the list returned by getAllDishes is to be used here
+     * @return
+     */
     public ObservableList<MenuLine> getMenuLinesByMenu(Menu menu, ObservableList<Dish> allDishes) {
         ObservableList<MenuLine> menuLines = FXCollections.observableArrayList();
         ResultSet res = null;
@@ -1154,9 +1269,14 @@ public class SqlQueries extends DBConnector {
         return menuLines;
     }
 
-    //    Deleting menuLines
+    /**
+     * Deletes MenuLines to a Menu in the db
+     *
+     * @param menu      the Menu to delete from
+     * @param menuLines the MenuLines to be deleted
+     * @return true, if deletion was successful, false otherwise
+     */
     public boolean deleteMenuLines(Menu menu, ObservableList<MenuLine> menuLines) {
-//        con.setTransactionIsolation();
         try {
             con.setAutoCommit(false);
             String sqlSetning = "DELETE FROM menu_line WHERE menu_id = " + menu.getMenuId() + " AND dish_id = ?";
@@ -1177,7 +1297,13 @@ public class SqlQueries extends DBConnector {
         return false;
     }
 
-    //    Method for updating MenuLines in a Menu
+    /**
+     * Updates the MenuLines to a Menu in the db.
+     *
+     * @param menu      the Menu to update for
+     * @param menuLines the MenuLines to be updated
+     * @return true if update was successful, false otherwise
+     */
     public boolean updateMenuLine(Menu menu, ObservableList<MenuLine> menuLines) {
         try {
             con.setAutoCommit(false);
@@ -1201,9 +1327,13 @@ public class SqlQueries extends DBConnector {
         return false;
     }
 
-
-    /*Order Methods*/
-//    Method for getting orders based on position id
+    /**
+     * Fetches all the Orders based on an EmployeePosition
+     *
+     * @param posId     the positionId for the EmployeePosition
+     * @param allDishes all the Dishes in the db, the list returned by method getAllDishes is to be used here
+     * @return an ObservableList containing the orders
+     */
     public ObservableList<Order> getOrders(int posId, ObservableList<Dish> allDishes) {
         ObservableList<Order> orders = FXCollections.observableArrayList();
         ResultSet res = null;
@@ -1328,6 +1458,14 @@ public class SqlQueries extends DBConnector {
      customer_id will be set to null if customer is null. the order will be added to subscription_relation order
     if subscription is NOT null*/
 
+    /**
+     * Adds an Order to the db
+     *
+     * @param subscription the Subscription the Order should be put under, if it does not belong under a Supscription, set as null
+     * @param order        the Order to be added
+     * @param customer     the Customer the Order should be added under
+     * @return true if addition was successful, false otherwise
+     */
     public boolean addOrder(Subscription subscription, Order order, Customer customer) {
         PreparedStatement updateQuery = null;
         ResultSet res = null;
@@ -1389,6 +1527,14 @@ public class SqlQueries extends DBConnector {
         return false;
     }
 
+    /**
+     * Same as addOrder but with multiple Orders in a List
+     *
+     * @param subscription the Subscription the Order should be put under, if it does not belong under a Supscription, set as null
+     * @param orders       the Orders to be added
+     * @param customer     the Customer the Order should be added under
+     * @return true if addition was successful, false otherwise
+     */
     public boolean addOrders(Subscription subscription, ObservableList<Order> orders, Customer customer) {
         try {
             con.setAutoCommit(false);
@@ -1405,8 +1551,12 @@ public class SqlQueries extends DBConnector {
         return false;
     }
 
-    //    updates both order and
-
+    /**
+     * Updates an Order in the db.
+     *
+     * @param order the Order to be updated
+     * @return true if update was successful, false otherwise
+     */
     public boolean updateOrder(Order order) {
         try {
             con.setAutoCommit(false);
@@ -1443,6 +1593,13 @@ public class SqlQueries extends DBConnector {
         return false;
     }
 
+    /**
+     * Adds OrderLines in an Order
+     *
+     * @param order      the Order to add under
+     * @param orderLines the OrderLines to be added
+     * @return true if addition was successful, false and performs rollback otherwise
+     */
     public boolean addOrderLines(Order order, ObservableList<OrderLine> orderLines) {
         try {
             con.setAutoCommit(false);
@@ -1466,6 +1623,13 @@ public class SqlQueries extends DBConnector {
         return false;
     }
 
+    /**
+     * Fetches and sets the OrderLines in an Order
+     *
+     * @param order     the order to be processed
+     * @param allDishes all the dishes in the db, the list returned by method getAllDishes is to be used here
+     * @return
+     */
     public boolean setOrderLinesInOrder(Order order, ObservableList<Dish> allDishes) {
         ResultSet res = null;
         ObservableList<OrderLine> dishLinesInThisOrder = FXCollections.observableArrayList();
@@ -1495,7 +1659,13 @@ public class SqlQueries extends DBConnector {
         return false;
     }
 
-    //    Method for deleting an orderlines in an order
+    /**
+     * Deletes OrderLines in an Order
+     *
+     * @param order      the order to be deleted from
+     * @param orderLines the OrderLines to be deleted
+     * @return true if deletion was successful, false and performs rollback otherwise
+     */
     public boolean deleteOrderLine(Order order, ObservableList<OrderLine> orderLines) {
         try {
             con.setAutoCommit(false);
@@ -1519,8 +1689,12 @@ public class SqlQueries extends DBConnector {
         return false;
     }
 
-
-    //    Method for getting an Order status
+    /**
+     * Fetches an OrderStatus from the db.
+     *
+     * @param id the id matching the OrderStatus in the db
+     * @return the OrderStatues if found, null otherwise
+     */
     public OrderStatus getOrderStatus(int id) {
         try {
             String selectSql = "SELECT status_id, name FROM orderstatus WHERE status_id = ?";
@@ -1537,7 +1711,12 @@ public class SqlQueries extends DBConnector {
         return null;
     }
 
-    //    Method for deleting an order
+    /**
+     * Deletes an Order in the db.
+     *
+     * @param order the Order to be deleted
+     * @return true if deletion was successful, false otherwise
+     */
     public boolean deleteOrder(Order order) {
         try {
             String sqlSetning = "DELETE FROM `order` WHERE order_id = ?";
@@ -1554,14 +1733,14 @@ public class SqlQueries extends DBConnector {
         return false;
     }
 
-
-
-
-
-
-
-    /*Subscription methods:*/
-
+    /**
+     * Adds a Subscription in the db and also adds the Orders under the Subscription
+     *
+     * @param subscription The Subscription to be added
+     * @param customer     the Customer that has the Subscription
+     * @param orders       the Orders to be added
+     * @return true if addition was successful, false and perform rollback otherwise
+     */
     public boolean addSubscription(Subscription subscription, Customer customer, ObservableList<Order> orders) {
         ResultSet res = null;
         try {
@@ -1592,7 +1771,11 @@ public class SqlQueries extends DBConnector {
         return false;
     }
 
-
+    /**
+     * Fetches all the Subscriptions from the db.
+     *
+     * @return list of all the Subscriptions
+     */
     public ObservableList<Subscription> getAllSubscriptions() {
         ObservableList<Subscription> subscriptions = FXCollections.observableArrayList();
         ResultSet res = null;
@@ -1616,7 +1799,7 @@ public class SqlQueries extends DBConnector {
         return subscriptions;
     }
 
-    //    Method for updating a subscription
+
     public boolean updateSubscription(Subscription subscription) {
         try {
             String sql = "UPDATE subscription SET customer_id = ?, start_date = ?, " +
@@ -1642,10 +1825,12 @@ public class SqlQueries extends DBConnector {
         return false;
     }
 
-
-
-    /*Supplier methods:*/
-
+    /**
+     * Adds a Supplier to the db.
+     *
+     * @param supplier the Supplier to be added
+     * @return true if addition was successful, false otherwise
+     */
     public boolean addSupplier(Supplier supplier) {
         ResultSet res = null;
         try {
@@ -1677,7 +1862,7 @@ public class SqlQueries extends DBConnector {
         return false;
     }
 
-    //    Method for deleting The supplier in the parameters from db
+
     public boolean deleteSupplier(Supplier supplier) {
         try {
             String sqlSetning = "DELETE FROM supplier WHERE supplier_id = " + supplier.getSupplierId();
@@ -1693,7 +1878,11 @@ public class SqlQueries extends DBConnector {
         return false;
     }
 
-
+    /**
+     * Fetches all the Suppliers from the db.
+     *
+     * @return a List containing all the Suppliers
+     */
     public ObservableList<Supplier> getAllSuppliers() {
         ObservableList<Supplier> suppliers = FXCollections.observableArrayList();
         ResultSet res = null;
@@ -1718,7 +1907,12 @@ public class SqlQueries extends DBConnector {
         return suppliers;
     }
 
-    //    Method for updating supplyer
+    /**
+     * Updates a Supplier in the db.
+     *
+     * @param supplier the Supplier
+     * @return true if update was successful, false otherwise
+     */
     public boolean updateSupplier(Supplier supplier) {
         try {
             String sql = "UPDATE supplier SET address_id = ?, business_name = ?, " +
@@ -1739,7 +1933,11 @@ public class SqlQueries extends DBConnector {
         return false;
     }
 
-    //    Method for getting all OrderStatus types
+    /**
+     * Fetches the all the OrderStatuses from the db
+     *
+     * @return all the OrderStatuses
+     */
     public ObservableList<OrderStatus> getStatusTypes() {
         ObservableList<OrderStatus> statusTypes = FXCollections.observableArrayList();
         try {
@@ -1759,7 +1957,12 @@ public class SqlQueries extends DBConnector {
         return null;
     }
 
-
+    /**
+     * Fetches a ZipCode from the db
+     *
+     * @param zipcode to match in the db
+     * @return the ZipCode matching
+     */
     public ZipCode getZipcodeByZipInt(int zipcode) {
         ResultSet res = null;
         try {
@@ -1780,6 +1983,13 @@ public class SqlQueries extends DBConnector {
         return null;
     }
 
+    /**
+     * Helper method to close things properly after a method has been called
+     *
+     * @param res   the ResultSet to be closed, can be null
+     * @param query the Prepared Statement to be closed
+     * @param con   the connection to set to autocommit(true)
+     */
     public void closeEverything(ResultSet res, PreparedStatement query, Connection con) {
         if (!(res == null)) {
             SqlCleanup.lukkResSet(res);
@@ -1901,126 +2111,4 @@ public class SqlQueries extends DBConnector {
         }
         return null;
     }
-
-
 }
-
-
-/* UNUSED OR TEMPLATE METHODS*/
-/*public boolean registerEmployee(String firstName, String lastName, int phoneNumber, String email, int addressId, String userName, int positionId,
-                                    int salary, String passHash) {
-        boolean success = false;
-        try {
-            con.setAutoCommit(false);
-            String sqlSetning = "INSERT INTO employee(first_name, last_name, phone, email, address_id, username, pos_id, salary, passhash) VALUES(?,?,?,?,?,?,?,?,?)";
-            insertQuery = con.prepareStatement(sqlSetning);
-            insertQuery.setString(1, firstName);
-            insertQuery.setString(2, lastName);
-            insertQuery.setInt(3, phoneNumber);
-            insertQuery.setString(4, email);
-            insertQuery.setInt(5, addressId);
-            insertQuery.setString(6, userName);
-            insertQuery.setInt(7, positionId);
-            insertQuery.setInt(8, salary);
-            insertQuery.setString(9, passHash);
-            insertQuery.execute();
-            con.commit();
-            success = true;
-        } catch (SQLIntegrityConstraintViolationException e) {
-//            this has to match gui and have to be handled in a better way!! // TODO: 27.03.2016
-            System.out.println("Unique value restraint!!!");
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("Method registerEmployee failed");
-            SqlCleanup.lukkForbindelse(con);
-        } finally {
-            SqlCleanup.lukkSetning(insertQuery);
-            SqlCleanup.settAutoCommit(con);
-        }
-        return success;
-    }*/
-
-
-
-
-/*
-
-/*
-created
-in preparation
-ready for delivery
-under delivery
-delivered
-
-users.sales {
-*
-}
-users.chef{
-created
-in preparation
-ready for delivery
-}
-users.driver{
-ready for delivery
-delivered (timestamp)
-}
-users.ceo
-{
-*
-}
-admin{
-*
-}
-
- */
-
-/*
-public ResultSet getContent(String queryStr) {
-    Connection conn = null;
-    Statement stmt = null;
-    ResultSet resultSet = null;
-    CachedRowSetImpl crs = null;
-    try {
-        Connection conn = dataSource.getConnection();
-        stmt = conn.createStatement();
-        resultSet = stmt.executeQuery(queryStr);
-
-        crs = new CachedRowSetImpl();
-        crs.populate(resultSet);
-    } catch (SQLException e) {
-        throw new IllegalStateException("Unable to execute query: " + queryStr, e);
-    }finally {
-        try {
-            if (resultSet != null) {
-                resultSet.close();
-            }
-            if (stmt != null) {
-                stmt.close();
-            }
-            if (conn != null) {
-                conn.close();
-            }
-        } catch (SQLException e) {
-            LOGGER.error("Ignored", e);
-        }
-    }
-
-    return crs;
-}
-Here is the snippet for creating data source using c3p0:
-
- ComboPooledDataSource cpds = new ComboPooledDataSource();
-            try {
-                cpds.setDriverClass("<users.driver class>"); //loads the jdbc users.driver
-            } catch (PropertyVetoException e) {
-                e.printStackTrace();
-                return;
-            }
-            cpds.setJdbcUrl("jdbc:<url>");
-            cpds.setMinPoolSize(5);
-            cpds.setAcquireIncrement(5);
-            cpds.setMaxPoolSize(20);
-
-
- javax.sql.DataSource dataSource = cpds;
- */
