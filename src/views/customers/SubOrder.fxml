@@ -6,11 +6,9 @@
 <?import javafx.collections.FXCollections?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import java.lang.*?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.image.Image?>
-
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
 <GridPane fx:id="subWindowGP" alignment="CENTER" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
           fx:controller="views.customers.SubOrderController" stylesheets="@/main/Main.css">
     <padding>
@@ -64,7 +62,6 @@
             <Label fx:id="day6" visible="false"/>
             <Label fx:id="day7" visible="false"/>
         </VBox>
-
 
         <HBox GridPane.rowIndex="1" GridPane.columnIndex="2" spacing="10" alignment="CENTER">
             <ComboBox fx:id="chooseDishCB" prefWidth="150" promptText="Dishes">

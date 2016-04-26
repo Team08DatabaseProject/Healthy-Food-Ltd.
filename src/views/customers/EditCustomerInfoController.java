@@ -45,6 +45,7 @@ public class EditCustomerInfoController extends CustomersController implements I
     public TableColumn statusCol;
     public TableColumn partOfSubscriptionCol;
     public Button subscriptionButton;
+    public Button commitChangesButton;
 
     private ObservableList<Order> selectedCustomerOrders = FXCollections.observableArrayList();
 
@@ -66,9 +67,6 @@ public class EditCustomerInfoController extends CustomersController implements I
             }
         }
     };
-
-
-
 
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
 
@@ -178,6 +176,7 @@ public class EditCustomerInfoController extends CustomersController implements I
         currentOrdersTable.setItems(selectedCustomerOrders);
 
         subscriptionButton.setOnAction(subscriptionEvent);
+
 
     }
 

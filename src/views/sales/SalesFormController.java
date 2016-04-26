@@ -1,9 +1,8 @@
 package views.sales;
 
 import classpackage.*;
-import java.lang.String;
-
-import main.PopupDialog;
+import div.PopupDialog;
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -32,20 +31,22 @@ import java.util.ResourceBundle;
 public class SalesFormController extends SalesController implements Initializable{
 
     @FXML
-    public GridPane ordersFormGrid;
-    public TextField orderIdField;
+    public GridPane subMenuGP;
     public TextField customerIdField;
     public TextField subscriptionIdField;
     public TextField fNameField;
     public TextField lNameField;
+    public TextField customerAddressField;
+    public TextField customerZipCodeField;
+    public TextField customerPlaceField;
     public CheckBox businessBox;
     public TextField businessNameField;
     public TextField emailField;
     public TextField phoneField;
     public TextField addressField;
     public TextField zipCodeField;
-    public Label priceFieldLabel;
     public TextField placeField;
+    public Button deliveryToCustomerAddressButton;
     public TextArea customerRequestsField;
     public Label deadlineLabel;
     public ComboBox<Integer> deadlineHrBox;
@@ -61,9 +62,12 @@ public class SalesFormController extends SalesController implements Initializabl
     public TableColumn priceCol;
     public ComboBox<OrderStatus> statusBox;
     public Button removeOrderDishButton;
+    private double totalPrice = 0;
 
 
-    ObservableList<OrderLine> chosenDishes = FXCollections.observableArrayList();
+    ObservableList<OrderLine> chosenOrderLines = FXCollections.observableArrayList();
+    ObservableList<OrderLine> addOrderLines = FXCollections.observableArrayList();
+    ObservableList<OrderLine> removeOrderLines = FXCollections.observableArrayList();
 
     //ObservableLists for the hour and minute ComboBoxes:
     //Opening/delivery hours from 7 AM to 10 PM
@@ -73,23 +77,49 @@ public class SalesFormController extends SalesController implements Initializabl
     final ObservableList<Integer> deadlineMinuteList = FXCollections.observableArrayList(0, 15, 30, 45);
 
 
+    EventHandler<ActionEvent> setDeliveryToCustomerAddressEvent = new EventHandler<ActionEvent>() {
+        @Override
+        public void handle(ActionEvent event) {
+            try {
+                if (selectedCustomer != null) {
+                    addressField.setText(selectedCustomer.getAddress().getAddress());
+                    zipCodeField.setText(String.valueOf(selectedCustomer.getAddress().getZipCode()));
+                    placeField.setText(selectedCustomer.getAddress().getPlace());
+                } else {
+                    PopupDialog.errorDialog("Error", "No customer-registered address could be found.\nPlease enter delivery location manually.");
+                }
+            } catch (Exception exc) {
+                System.out.println(exc);
+            }
+        }
+    };
+
+
     EventHandler<ActionEvent> addDishToOrderEvent = new EventHandler<ActionEvent>() {
         @Override
         public void handle(ActionEvent event) {
             try{
                 if (selectedDish != null){
                     boolean add = true;
-                    for (OrderLine ol : chosenDishes) {
-                        if (ol.getDish().getDishName().equals(selectedDish.getDishName())){
+                    for (OrderLine ol : chosenOrderLines) {
+                        if (ol.getDish().equals(selectedDish)){
                             add = false;
                         }
                     }
                     if (add){
+
+                        for (OrderLine ol : addOrderLines) {
+                            if (ol.getDish().equals(selectedDish)) {
+                                addOrderLines.remove(ol);
+                            }
+                        }
                         OrderLine newOL = new OrderLine(selectedDish);
-                        chosenDishes.add(newOL);
-                        chosenDishTable.setItems(chosenDishes);
-                        double totalPrice = 0;
-                        for (OrderLine ol : chosenDishes){
+                        newOL.setOriginal(false);
+                        chosenOrderLines.add(newOL);
+                        addOrderLines.add(newOL);
+                        chosenDishTable.setItems(chosenOrderLines);
+                        totalPrice = 0;
+                        for (OrderLine ol : chosenOrderLines){
                             totalPrice += ol.getTotal();
                         }
                         priceField.setText(nf.format(totalPrice));
@@ -107,7 +137,20 @@ public class SalesFormController extends SalesController implements Initializabl
             try {
                 selectedOrderLine = (OrderLine) chosenDishTable.getSelectionModel().getSelectedItem();
                 if (selectedOrderLine != null) {
-                    chosenDishes.remove(selectedOrderLine);
+                    if (selectedOrderLine.isOriginal() && !selectedOrderLine.isChanged()) {
+                        removeOrderLines.add(selectedOrderLine);
+                    }
+
+                    addOrderLines.remove(selectedOrderLine);
+                    chosenOrderLines.remove(selectedOrderLine);
+                    chosenDishTable.setItems(chosenOrderLines);
+
+                    totalPrice = 0;
+                    for (OrderLine ol : chosenOrderLines){
+                        totalPrice += ol.getTotal();
+                    }
+                    priceField.setText(nf.format(totalPrice));
+
                 }else {
                     Alert alert = new Alert(Alert.AlertType.WARNING);
                     alert.setTitle("No selection");
@@ -125,12 +168,6 @@ public class SalesFormController extends SalesController implements Initializabl
         @Override
         public void handle(ActionEvent e) {
             try {
-                String firstName = fNameField.getText();
-                String lastName = lNameField.getText();
-                boolean isBusiness = businessBox.isArmed();
-                String businessName = businessNameField.getText();
-                String email = emailField.getText();
-                int phoneNumber = Integer.parseInt(phoneField.getText());
                 String address = addressField.getText();
                 int zipCodeInt = Integer.parseInt(zipCodeField.getText());
                 String place = placeField.getText();
@@ -142,44 +179,84 @@ public class SalesFormController extends SalesController implements Initializabl
                 Integer deadlineMin = deadlineMinBox.getValue();
                 LocalTime deadlineTime = LocalTime.of(deadlineHr, deadlineMin);
                 LocalDateTime deadlineLDT = LocalDateTime.of(deadlineDate, deadlineTime);
-
-                // startsub:
-                LocalDate startSubscription = deadlineDatePicker.getValue();
-                LocalDate endSubscription = deadlineDatePicker.getValue();
-
-                double price = Double.parseDouble(priceField.getText());
+                double price = totalPrice;
                 OrderStatus status = statusBox.getValue();
-               // int orderId = Integer.parseInt(orderIdField.getText());
-                int customerId = Integer.parseInt(customerIdField.getText());
-                int subcriptionId = Integer.parseInt(subscriptionIdField.getText());
-
                 Address newAddress = new Address(address, zipCodeInt, place);
-                ObservableList<Dish> dishesInThisOrder = FXCollections.observableArrayList();
-
-                Order newOrder = new Order(customerRequests, deadlineLDT, price, status, dishesInThisOrder, newAddress);
+                Order newOrder = new Order(customerRequests, deadlineLDT, price, status, chosenOrderLines, newAddress);
+                String firstName = fNameField.getText();
+                String lastName = lNameField.getText();
+                String email = emailField.getText();
+                int phoneNumber = Integer.parseInt(phoneField.getText());
+                String customerAddress = customerAddressField.getText();
+                int customerZipCode = Integer.parseInt(customerZipCodeField.getText());
+                String customerPlace = customerPlaceField.getText();
+                Address customerAddressObject = new Address(customerAddress, customerZipCode, customerPlace);
+                boolean isBusiness = businessBox.isArmed();
+                Customer newCustomer;
                 orders.add(newOrder);
 
-                Subscription subscription = new Subscription(startSubscription, endSubscription, orders);
-                if (selectedCustomer != null) {
-                    ObservableList<Order> newOrderList = selectedCustomer.getOrders();
-                    newOrderList.add(newOrder);
-                    selectedCustomer.setOrders(newOrderList);
-                    if (db.updateCustomer(selectedCustomer)) {
-                        PopupDialog.confirmationDialog("Result", "Order succesfully registered to customer.");
+                if (selectedOrder != null && selectedCustomer != null) {
+                    selectedOrder.setDeadlineTime(deadlineLDT);
+                    selectedOrder.setPrice(price);
+                    selectedOrder.setAddress(newAddress);
+                    selectedOrder.setStatus(status);
+                    selectedOrder.setCustomerRequests(customerRequests);
+                    boolean ok = true;
+                    if (!removeOrderLines.isEmpty()) {
+                        if (!db.deleteOrderLine(selectedOrder, removeOrderLines)) {
+                            PopupDialog.errorDialog("Error", "Unable to remove dishes from order.");
+                            ok = false;
+                        }
+                    }
+                    if (!addOrderLines.isEmpty() && ok) {
+                        if (!db.addOrderLines(selectedOrder, addOrderLines)) {
+                            PopupDialog.errorDialog("Error", "Unable to add dishes to order.");
+                            ok = false;
+                        }
+                    }
+                    if (!chosenOrderLines.isEmpty() && ok) {
+                        selectedOrder.setDishesInThisOrder(chosenOrderLines);
                     } else {
-                        PopupDialog.errorDialog("Error", "Order failed to register.");
+                        ObservableList<OrderLine> emptyOL = FXCollections.observableArrayList();
+                        selectedOrder.setDishesInThisOrder(emptyOL);
+                    }
+                    if (ok && db.updateOrder(selectedOrder)) {
+                        PopupDialog.confirmationDialog("Result", "Order successfully updated.");
+                    } else if (ok) {
+                        PopupDialog.errorDialog("Error", "Order failed to update.");
+                    }
+                } else if (selectedCustomer == null){
+                    ObservableList<Order> newOrderList = FXCollections.observableArrayList(newOrder);
+                    if (isBusiness && !businessNameField.getText().isEmpty()) {
+                        String businessName = businessNameField.getText();
+                        newCustomer = new Customer(isBusiness, email, firstName, lastName, phoneNumber,
+                                customerAddressObject, businessName, null, newOrderList);
+                    } else {
+                        newCustomer = new Customer(isBusiness, email, firstName, lastName, phoneNumber,
+                                customerAddressObject, null, null, newOrderList);
+                    }
+                    ObservableList<Order> firstOrder = FXCollections.observableArrayList(newOrder);
+                    newCustomer.setOrders(firstOrder);
+                    if (db.addCustomer(newCustomer) && db.addOrder(null, newOrder, newCustomer)) {
+                        PopupDialog.confirmationDialog("Result", "New customer and order registered");
+                    } else {
+                        PopupDialog.errorDialog("Error", "Customer and order failed to register.");
                     }
                 } else {
-                    ObservableList<Order> newOrderList = FXCollections.observableArrayList(newOrder);
-                    Customer newCustomer = new Customer(isBusiness, email, firstName, lastName, phoneNumber,
-                            newAddress, businessName, subscription, newOrderList);
-                    if(db.addCustomer(newCustomer)) {
-                        PopupDialog.confirmationDialog("Result", "New customer successfully added and order registered.");
-                    } else {
-                        PopupDialog.errorDialog("Error", "New customer and order failed to register.");
-                    }
+                        if (selectedCustomer.getSubscription() != null && !db.updateSubscription(selectedCustomer.getSubscription())) {
+                            PopupDialog.errorDialog("Error", "Failed to update subscription.");
+                        }
+                        if(db.addOrder(null, newOrder, selectedCustomer)) {
+                            selectedCustomer.getOrders().add(newOrder);
+                            if (db.updateCustomer(selectedCustomer)) {
+                                PopupDialog.confirmationDialog("Result", "Order successfully registered to customer.");
+                            } else {
+                                PopupDialog.errorDialog("Error", "Failed to update customer.");
+                            }
+                        } else {
+                            PopupDialog.errorDialog("Error", "Failed to register order.");
+                        }
                 }
-
             } catch(Exception exc) {
                 System.out.println("createOrderFieldEvent: " + exc);
             }
@@ -188,15 +265,19 @@ public class SalesFormController extends SalesController implements Initializabl
 
     public void initialize(URL fxmlFileLocation, ResourceBundle resources){
 
-        //Disables the ability to change these three fields
-        orderIdField.setDisable(true);
-        customerIdField.setDisable(true);
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                subMenuGP.requestFocus();
+            }
+        });
+
+
+
         subscriptionIdField.setDisable(true);
-        //.
+        customerIdField.setDisable(true);
 
         if (selectedCustomer != null) {
-            orderIdField.setDisable(true);
-            customerIdField.setDisable(true);
             subscriptionIdField.setDisable(true);
             fNameField.setDisable(true);
             lNameField.setDisable(true);
@@ -204,11 +285,12 @@ public class SalesFormController extends SalesController implements Initializabl
             businessNameField.setDisable(true);
             emailField.setDisable(true);
             phoneField.setDisable(true);
-            addressField.setDisable(true);
-            zipCodeField.setDisable(true);
-            customerIdField.setText(String.valueOf(selectedCustomer.getCustomerId()));
+            customerAddressField.setDisable(true);
+            customerZipCodeField.setDisable(true);
+            customerPlaceField.setDisable(true);
+
             if (selectedCustomer.getSubscription() != null) {
-                subscriptionIdField.setText(String.valueOf(selectedCustomer.getSubscription().getSubscriptionId()));
+                subscriptionIdField.setText("Subscription ID: " + selectedCustomer.getSubscription().getSubscriptionId());
             }
             fNameField.setText(selectedCustomer.getFirstName());
             lNameField.setText(selectedCustomer.getLastName());
@@ -218,8 +300,29 @@ public class SalesFormController extends SalesController implements Initializabl
             }
             emailField.setText(selectedCustomer.getEmail());
             phoneField.setText(String.valueOf(selectedCustomer.getPhoneNumber()));
-            addressField.setText(selectedCustomer.getAddress().getAddress());
-            zipCodeField.setText(String.valueOf(selectedCustomer.getAddress().getZipCode()));
+            customerAddressField.setText(selectedCustomer.getAddress().getAddress());
+            customerZipCodeField.setText(String.valueOf(selectedCustomer.getAddress().getZipCode()));
+            customerPlaceField.setText(selectedCustomer.getAddress().getPlace());
+            customerIdField.setText("Customer ID: " + selectedCustomer.getCustomerId());
+        } else {
+            deliveryToCustomerAddressButton.setDisable(true);
+        }
+
+        if (selectedOrder != null) {
+            for (OrderLine orderLine : selectedOrder.getDishesInThisOrder()) {
+                orderLine.setOriginal(true);
+            }
+            createButton.setText("Apply changes");
+            addressField.setText(selectedOrder.getAddress().getAddress());
+            zipCodeField.setText(String.valueOf(selectedOrder.getAddress().getZipCode()));
+            placeField.setText(selectedOrder.getAddress().getPlace());
+            deadlineDatePicker.setValue(selectedOrder.getDeadlineTime().toLocalDate());
+            deadlineHrBox.setValue(selectedOrder.getDeadlineTime().getHour());
+            deadlineMinBox.setValue(selectedOrder.getDeadlineTime().getMinute());
+            statusBox.setValue(selectedOrder.getStatus());
+            totalPrice = selectedOrder.getPrice();
+            priceField.setText(nf.format(totalPrice));
+            chosenOrderLines = selectedOrder.getDishesInThisOrder();
         }
 
         deadlineHrBox.setItems(deadlineHourList);
@@ -275,7 +378,6 @@ public class SalesFormController extends SalesController implements Initializabl
                     return dish.getDishName();
                 }
             }
-
             @Override
             public Dish fromString(String string) {
                 return null;
@@ -311,15 +413,23 @@ public class SalesFormController extends SalesController implements Initializabl
                 new EventHandler<TableColumn.CellEditEvent<OrderLine, Integer>>() {
                     @Override
                     public void handle(TableColumn.CellEditEvent<OrderLine, Integer> event) {
-                        event.getTableView().getItems().get(event.getTablePosition().getRow()).setAmount(event.getNewValue());
+
+                        if (event.getTableView().getItems().get(event.getTablePosition().getRow()).isOriginal() && !event.getTableView().getItems().get(event.getTablePosition().getRow()).isChanged()) {
+                            removeOrderLines.add(event.getTableView().getItems().get(event.getTablePosition().getRow()));
+                            event.getTableView().getItems().get(event.getTablePosition().getRow()).setChanged(true);
+                            System.out.println("Adding pasta to removeOL");
+                        } else {
+                            addOrderLines.remove(event.getTableView().getItems().get(event.getTablePosition().getRow()));
+                            event.getTableView().getItems().get(event.getTablePosition().getRow()).setAmount(event.getNewValue());
+                            addOrderLines.add(event.getTableView().getItems().get(event.getTablePosition().getRow()));
+                        }
                         double totalPrice = 0;
-                        for (OrderLine ol : chosenDishes){
+                        for (OrderLine ol : chosenOrderLines){
                             totalPrice += ol.getTotal();
                         }
                         priceField.setText(nf.format(totalPrice));
                     }
-                }
-        );
+                });
 
         priceField.setDisable(true);
         priceCol.setCellFactory(column -> {
@@ -335,11 +445,11 @@ public class SalesFormController extends SalesController implements Initializabl
             };
         });
 
-
-        chosenDishTable.getColumns().setAll(dishNameCol, quantityCol, priceCol);
+        chosenDishTable.setItems(chosenOrderLines);
 
         createButton.setOnAction(createOrderFieldEvent);
         addDishButton.setOnAction(addDishToOrderEvent);
         removeOrderDishButton.setOnAction(removeDishFromOrderEvent);
+        deliveryToCustomerAddressButton.setOnAction(setDeliveryToCustomerAddressEvent);
     }
 }

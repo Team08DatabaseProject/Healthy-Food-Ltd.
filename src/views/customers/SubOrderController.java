@@ -15,7 +15,8 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.scene.layout.*;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 import javafx.util.StringConverter;
 import javafx.util.converter.IntegerStringConverter;
 
@@ -166,6 +167,7 @@ public class SubOrderController extends CustomersController implements Initializ
 
                 LocalDateTime orderLDT = startSub.atStartOfDay();
                 int startDayOfWeek = orderLDT.getDayOfWeek().getValue();
+                System.out.println("Subscription start day: " + startDayOfWeek);
                 orderLDT = orderLDT.plusHours(hour);
                 orderLDT = orderLDT.plusMinutes(minute);
 
@@ -173,6 +175,7 @@ public class SubOrderController extends CustomersController implements Initializ
                     orderLDT = orderLDT.plusDays(dayOfWeek - startDayOfWeek);
                 } else if (dayOfWeek < startDayOfWeek) {
                     orderLDT = orderLDT.plusWeeks(1);
+                    orderLDT = orderLDT.minusDays(startDayOfWeek - dayOfWeek);
                 }
 
                 LocalDateTime lastSub = endSub.atStartOfDay().plusDays(1);
@@ -201,8 +204,6 @@ public class SubOrderController extends CustomersController implements Initializ
     };
 
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
-        System.out.println(selectedSubscription.getEndSubscription().toString());
-        System.out.println(selectedSubscription.getEndSubscription().atStartOfDay().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
 
         Platform.runLater(new Runnable() {
             @Override

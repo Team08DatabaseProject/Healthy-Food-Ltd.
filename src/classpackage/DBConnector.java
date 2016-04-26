@@ -13,7 +13,9 @@ public class DBConnector {
             username + "&password=" + password;
     private String databaseDriver = "com.mysql.jdbc.Driver";
     protected static Connection con = null;
-
+    /**
+     * The object ontaining all the connection and information to the MySQL database. Object used for all mysql queries
+     */
     public DBConnector() {
         if(con == null) {
             try {
@@ -26,7 +28,9 @@ public class DBConnector {
             }
         }
     }
-
+    /**
+     * Closes the connection to the MySQL DB cleaning up all resources connected to the object.
+     */
     public void closeConnection() {
         try {
             con.close();
