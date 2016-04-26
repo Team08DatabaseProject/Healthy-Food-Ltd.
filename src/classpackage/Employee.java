@@ -56,8 +56,6 @@ public class Employee {
 
     /**
      * Creates an employee object to the database
-     *
-     * @param employeeId the unique identifier for the employee object
      * @param username username used for login
      * @param firstName first name
      * @param lastName last name
@@ -83,10 +81,9 @@ public class Employee {
     /**
      * Constructor without password
      *
-     * @param int employeeId
-     * @param  String username
-     * @param  double salary
-     * @return
+     * @param employeeId employeeId
+     * @param  salary username
+     * @param  username salary
      */
     public Employee(int employeeId, String username, double salary) {
         this.employeeId.set(employeeId);

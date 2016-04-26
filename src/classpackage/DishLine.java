@@ -111,7 +111,6 @@ public class DishLine {
         return unitAndAmount;
     }
 
-    // TODO: 10.04.2016 Probably needs revision do to GUI
 
     /**
      * String representation of the object (returns the ingredient and amount in an array like string)

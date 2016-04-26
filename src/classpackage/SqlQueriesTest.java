@@ -1,4 +1,3 @@
-/*
 package classpackage;
 
 import javafx.collections.FXCollections;
@@ -14,11 +13,9 @@ import java.time.LocalDateTime;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-*/
 /**
  * Created by paul thomas on 20.04.2016.
- *//*
-
+ */
 public class SqlQueriesTest {
 
     SqlQueries myQuery = new SqlQueries();
@@ -33,30 +30,7 @@ public class SqlQueriesTest {
     ObservableList<Order> testOrders;
     ObservableList<Employee> testEmployees;
     ObservableList<DishLine> dishlines = FXCollections.observableArrayList();
-
-
-
-
-
-
-    */
-/*Testing with JUnit
-    *
-    *
-    * addAddress
-    * addSupplier
-    * addIngredient
-    * addDish
-    * addIngredientInDish
-    * addMenu
-    * addDishInMenu
-    *
-    *
-    *
-    *
-    *
-    * *//*
-
+    ObservableList<MealType> allMealTypes;
 
     @org.junit.Before
     public void setUp() throws Exception {
@@ -232,9 +206,7 @@ public class SqlQueriesTest {
             assertTrue(myQuery.addSubscription(subscription, testCustomers.get(0), null));
         }
 
-             */
-/*adding orders on a Customer*//*
-
+             /*adding orders on a Customer*/
 
 //        Adds order, updates the order
         for (Order order :
@@ -263,7 +235,7 @@ public class SqlQueriesTest {
         ObservableList<Ingredient> allIngredients = myQuery.getAllIngredients(allSuppliers);
         ObservableList<Dish> allDishes = myQuery.getAllDishes(allIngredients);
         ObservableList<Menu> allMenus = myQuery.getAllMenus(allDishes);
-        ObservableList<MealType> allMealTypes = myQuery.getAllMealTypes();
+        allMealTypes = myQuery.getAllMealTypes();
 
         allSuppliers.forEach(Assert::assertNotNull);
         allIngredients.forEach(Assert::assertNotNull);
@@ -272,62 +244,13 @@ public class SqlQueriesTest {
         allMealTypes.forEach(Assert::assertNotNull);
     }
 
-    @org.junit.After
-    public void tearDown() throws Exception {
-
-    }
-
-
-
-    @Ignore
-    public void address2() throws Exception {
-        //        deleteAddress
-        for (Address address :
-                addressList) {
-            assertTrue(myQuery.deleteAddress(address));
-        }
-
-
-    }
-
-
-    @Ignore
-    public void subscription() throws Exception {
-
-
-    }
-
-    //    Testing Employee methods
-*/
-/*    @Ignore
-    public void employees() throws Exception {
-        ObservableList<EmployeePosition> employeePositions = myQuery.getEmployeePositions();
-        for (int i = 0; i < 5; i++) {
-            assertTrue(myQuery.updateEmployee(testEmployees.get(i)));
-            Employee testEmployee = myQuery.getEmployeeByUsername(testEmployees.get(i).getUsername());
-            assertTrue(testEmployee.getEmployeeId() == testEmployees.get(i).getEmployeeId());
-            assertTrue(myQuery.deleteEmployee(testEmployees.get(i)));
-        }
-    }*//*
-
-
-    //    Testing specifically getters from database
-    @Ignore
-    public void getters() throws Exception {
-
-
-    }
-
-
     @Test
     public void supplier() throws Exception {
 
 
         ObservableList<Supplier> suppliersFromDb = myQuery.getAllSuppliers();
 
-        */
-/*Checks against the database if the objects exist and the name change was registered*//*
-
+        /*Checks against the database if the objects exist and the name change was registered*/
         assertTrue(myQuery.updateIngredient(allIngredients));
         ObservableList<Ingredient> ingredientsFromDb = myQuery.getAllIngredients(suppliersFromDb);
         boolean ingredientsExistsInDb = false;
@@ -354,24 +277,14 @@ public class SqlQueriesTest {
             assertTrue(myQuery.updateDish(dish));
         }
 
-
-*/
-/*//*
-/        Adding Subscriptions
-        for (Subscription subscription :
-                testSubscriptions) {
-            assertTrue(myQuery.addSubscription(subscription, testCustomers.get(0), null));
-        }*//*
-
-
 //        adding customers and updating them
 
 
-        for (Customer customer :
+        /*for (Customer customer :
                 testCustomers) {
             customer.setEmail("JUnit@gmailtesting.org");
             assertTrue(myQuery.updateCustomer(customer));
-        }
+        }*/
 
 
 
@@ -423,7 +336,7 @@ public class SqlQueriesTest {
 
 //        Adding MealTypes
         for (MealType mealType :
-                TestObjects.mealTypes) {
+                allMealTypes) {
             assertTrue(myQuery.addMealType(mealType));
         }
 //        Adding menus
@@ -502,4 +415,3 @@ public class SqlQueriesTest {
     }
 
 }
-*/

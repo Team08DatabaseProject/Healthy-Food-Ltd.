@@ -104,7 +104,7 @@ public class POrder {
 	}
 	/**
 	 * Returns an ObservableList containing all lines of the purchase order.
-	 * @return An ObservableList<POrderLine>.
+	 * @return An ObservableListPOrderLine.
 	 */
 	public String getFormattedPlacedDate() {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMMM yyyy");

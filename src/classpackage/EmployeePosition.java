@@ -71,7 +71,7 @@ public class EmployeePosition {
 	/**
 	 * Sets the default salary of the position
 	 *
-	 * @param description the default salary of the position
+	 * @param defaultSalary the default salary of the position
 	 */
 	public void setDefaultSalary(double defaultSalary) {
 		this.defaultSalary = defaultSalary;

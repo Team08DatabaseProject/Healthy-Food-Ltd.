@@ -71,7 +71,7 @@ public class Ingredient {
     /**
      * Sets if the object has been changed
      *
-     * @param boolean true or false if it was changed
+     * @param bln true or false if it was changed
      */
     public void setChanged(boolean bln) {
         changed = bln;

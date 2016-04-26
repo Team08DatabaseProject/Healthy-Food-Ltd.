@@ -128,7 +128,7 @@ public class Dish {
     /**
      * Gets the dish line of the object
      *
-     * @return the ObservableList<DishLine> of the object
+     * @return the ObservableList DishLine of the object
      */
     public ObservableList<DishLine> getAllDishLinesForThisDish() {
         return dishLines;

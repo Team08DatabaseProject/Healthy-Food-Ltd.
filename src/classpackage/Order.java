@@ -55,8 +55,8 @@ public class Order {
      *
      * @param orderId the unique identifier of the order
      * @param customerRequests customer flexible requests
-     * @param deadline deadline for production
-     * @param actualDeliveryDate actual delivered date
+     * @param deadlineTime deadline for production
+     * @param actualDeliveryDateTime actual delivered date
      * @param price price of the order
      * @param status status of delivery
      * @param dishesInThisOrder all the dishes in the current order
@@ -98,7 +98,7 @@ public class Order {
      * Creates an Order object to database (with "LocalDateTime deadlineTime" instead of "LocalDate deadline")
      *
      * @param customerRequests customer flexible requests
-     * @param deadline deadline for production
+     * @param deadlineTime deadline for production
      * @param price price of the order
      * @param status status of delivery
      * @param dishesInThisOrder all the dishes in the current order

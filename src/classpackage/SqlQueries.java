@@ -23,32 +23,14 @@ import java.util.stream.Collectors;
 
 
 public class SqlQueries extends DBConnector {
-
-    // TODO: 26.04.2016 add mealtypes in gui
-    // TODO: 26.04.2016 delete orderswrong
-    // TODO: 26.04.2016 User manual for changing database
-    // TODO: 26.04.2016 timetable report
-    // TODO: 25.04.2016 presentation
-    // TODO: 25.04.2016 fix getEmployees to work faster
-    // TODO: 24.04.2016 JavaDoc
-    // TODO: 23.04.2016 Log out, (statistikk), sette alt inne i samme vindu, styling, validate felt
-    // TODO: 22.04.2016 In Delete methods that include fex adress remember to delete the address as well
-    // TODO: 19.04.2016 Refine methods to give confirmations on both execute() and executeUpdate()
-
-
+    
     public final int CREATED = 1;
     public final int INPREPARATION = 2;
     public final int READYFORDELIVERY = 3;
     public final int UNDERDELIVERY = 4;
     public final int DELIVERED = 5;
 
-
-    /*
-    Class where all methods that sql is required, shall be written.
-     For example every method that requires getting data from database.
-     */
     PreparedStatement selectQuery;
-
     PreparedStatement insertQuery;
     PreparedStatement updateQuery;
 
@@ -1022,7 +1004,6 @@ public class SqlQueries extends DBConnector {
                     ingredients.add(tempIngredient);
                 } catch (Exception e) {
                     e.printStackTrace();
-                    System.out.println("method getAllIngredients failed, when trying to get index of temporary arraylist");
                 }
             }
         } catch (SQLException e) {
@@ -1429,7 +1410,6 @@ public class SqlQueries extends DBConnector {
                 updateQuery.setInt(2, subscription.getSubscriptionId());
             }
             updateQuery.setString(3, order.getCustomerRequests());
-            System.out.println(order.getDeadlineTime().toString());
             updateQuery.setTimestamp(4, Timestamp.valueOf(order.getDeadlineTime()));
             if (order.getActualDeliveryDateTime() == null) {
                 updateQuery.setNull(5, Types.DATE);
@@ -1499,7 +1479,6 @@ public class SqlQueries extends DBConnector {
                     "delivered_date = ?, price = ?, address_id = ?, status_id  = ? WHERE order_id = ?";
             PreparedStatement updateQuery = con.prepareStatement(sql);
             if (!updateAddress(order.getAddress())){
-                System.out.println("address fail");
                 return false;
             }
             updateQuery.setString(1, order.getCustomerRequests());
@@ -1610,7 +1589,6 @@ public class SqlQueries extends DBConnector {
                     orderLines) {
                 deleteQuery.setInt(1, order.getOrderId());
                 deleteQuery.setInt(2, orderline.getDish().getDishId());
-                System.out.println("Removing dish: " + orderline.getDish().getDishName());
                 deleteQuery.executeUpdate();
             }
             con.commit();
@@ -1727,7 +1705,6 @@ public class SqlQueries extends DBConnector {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            System.out.println("method getAllSubscriptions failed");
         } finally {
             closeEverything(res, selectQuery, con);
         }
@@ -1750,10 +1727,8 @@ public class SqlQueries extends DBConnector {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            System.out.println("method updateSubscription failed");
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.println("method updateSubscription failed, not SQL exeption");
         } finally {
             closeEverything(null, insertQuery, con);
         }
@@ -1786,10 +1761,8 @@ public class SqlQueries extends DBConnector {
             return true;
         } catch (SQLIntegrityConstraintViolationException e) {
             e.printStackTrace();
-            System.out.println("Restraint violation in addSupplier");
         } catch (SQLException e) {
             e.printStackTrace();
-            System.out.println("Something went wrong: user registration failed in method addSupplier");
             SqlCleanup.rullTilbake(con);
         } finally {
             closeEverything(res, insertQuery, con);
@@ -1835,7 +1808,6 @@ public class SqlQueries extends DBConnector {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            System.out.println("method getAllSuppliers failed");
         } finally {
             closeEverything(res, selectQuery, con);
         }
@@ -2021,7 +1993,6 @@ public class SqlQueries extends DBConnector {
             }
 
         } catch (SQLException e) {
-            System.out.println("Something went wrong: addPOrder failed. " + e);
         } finally {
             closeEverything(null, insertQuery, con);
         }

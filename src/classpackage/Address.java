@@ -32,9 +32,9 @@ public class Address {
     /**
      * Creates a new Address object to the database
      *
-     * @param String address
-     * @param  int zipCode
-     * @param  String place
+     * @param address address
+     * @param  zipCode zipCode
+     * @param  place place
      */
     public Address(String address, int zipCode, String place) {
         this.address.set(address);
@@ -144,5 +144,28 @@ public class Address {
      */
     public void setPlace(String place) {
         this.place.set(place);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Address address1 = (Address) o;
+
+        if (addressId != null ? !addressId.getValue().equals(address1.addressId.getValue()) : address1.addressId != null) return false;
+        if (address != null ? !address.getValue().equals(address1.address.getValue()) : address1.address != null) return false;
+        if (zipCode != null ? !zipCode.getValue().equals(address1.zipCode.getValue()) : address1.zipCode != null) return false;
+        return place != null ? place.getValue().equals(address1.place.getValue()) : address1.place == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = addressId != null ? addressId.hashCode() : 0;
+        result = 31 * result + (address != null ? address.hashCode() : 0);
+        result = 31 * result + (zipCode != null ? zipCode.hashCode() : 0);
+        result = 31 * result + (place != null ? place.hashCode() : 0);
+        return result;
     }
 }

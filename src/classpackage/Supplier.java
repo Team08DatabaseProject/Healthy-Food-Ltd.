@@ -101,4 +101,31 @@ public class Supplier {
                 ", businessName=" + getBusinessName() +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Supplier supplier = (Supplier) o;
+
+        if (supplierId != null ? !supplierId.equals(supplier.supplierId) : supplier.supplierId != null) return false;
+        if (phoneNumber != null ? !phoneNumber.equals(supplier.phoneNumber) : supplier.phoneNumber != null)
+            return false;
+        if (thisAddress != null ? !thisAddress.equals(supplier.thisAddress) : supplier.thisAddress != null)
+            return false;
+        if (businessName != null ? !businessName.equals(supplier.businessName) : supplier.businessName != null)
+            return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = supplierId != null ? supplierId.hashCode() : 0;
+        result = 31 * result + (phoneNumber != null ? phoneNumber.hashCode() : 0);
+        result = 31 * result + (thisAddress != null ? thisAddress.hashCode() : 0);
+        result = 31 * result + (businessName != null ? businessName.hashCode() : 0);
+        return result;
+    }
 }
