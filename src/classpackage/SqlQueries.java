@@ -4,17 +4,16 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.sql.*;
-import java.sql.Date;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
  * Created by paul thomas on 17.03.2016.
  */
-
 
 /*
 * Sales:
@@ -26,6 +25,32 @@ import java.util.stream.Collectors;
 * Subscription to Customer
 * 
 * */
+
+
+
+
+    /*/**
+ * Returns an Image object that can then be painted on the screen.
+ * The url argument must specify an absolute {@link URL}. The name
+ * argument is a specifier that is relative to the url argument.
+ * <p>
+ * This method always returns immediately, whether or not the
+ * image exists. When this applet attempts to draw the image on
+ * the screen, the data will be loaded. The graphics primitives
+ * that draw the image will incrementally paint on the screen.
+ *
+ * @param  url  an absolute URL giving the base location of the image
+ * @param  name the location of the image, relative to the url argument
+ * @return      the image at the specified URL
+ * @see         Image
+ *
+public Image getImage(URL url, String name) {
+        try {
+        return getImage(new URL(url, name));
+        } catch (MalformedURLException e) {
+        return null;
+        }
+        }*/
 
 public class SqlQueries extends DBConnector {
 
@@ -91,8 +116,11 @@ public class SqlQueries extends DBConnector {
     }
 
     /**
+     * Adds a new address to the database and sets addressId to primary key.
+     * Returns false if any <code>SQL Exceptions </code>occurs
+     *
      * @param newAddress
-     * @return
+     * @return boolean
      */
     public boolean addAddress(Address newAddress) {
         try {
@@ -112,6 +140,13 @@ public class SqlQueries extends DBConnector {
         return false;
     }
 
+    /**
+     * Fetches an Address from the database, matching addressId with
+     * Address table.
+     *
+     * @param addressId
+     * @return Address
+     */
     public Address getAddress(int addressId) {
         try {
             String selectSql = "SELECT address, zipcode, place FROM address WHERE address_id = ?";
@@ -129,6 +164,14 @@ public class SqlQueries extends DBConnector {
         return null;
     }
 
+    /**
+     * Updates an address in the database, matching the address id
+     * Returns true if address table in db is updated
+     * Returns false if address is null or any <code>SQLException</code> occurs.*
+     *
+     * @param address
+     * @return boolean
+     */
     public boolean updateAddress(Address address) {
         try {
             String sql = "UPDATE address SET zipcode = ?, address = ?, place = ? WHERE address_ID = ?;";
@@ -161,25 +204,31 @@ public class SqlQueries extends DBConnector {
     }
 
 
-    /*Customer methods:*/
-    //Method for registering Customer
+    /**
+     * Adds a customer to the database while also adding the corresponding address of the object.
+     * Returns false if address is null or any <code>SQLException</code> occurs.
+     *
+     * @param theCustomer
+     * @return boolean
+     */
     public boolean addCustomer(Customer theCustomer) {
         ResultSet res = null;
         try {
             con.setAutoCommit(false);
             if (!addAddress(theCustomer.getAddress())) {
-                System.out.println("Error Here!");
                 return false;
             }
             String sqlSetning = "INSERT INTO customer(address_id, business_name, first_name, last_name, phone, email, isbusiness) VALUES(?,?,?,?,?,?,?)";
+
+            insertQuery = con.prepareStatement(sqlSetning, Statement.RETURN_GENERATED_KEYS);
             int isBusiness = 0;
             if (theCustomer.getIsBusiness()) {
                 isBusiness = 1;
+                insertQuery.setString(2, theCustomer.getBusinessName());
+            } else {
+                insertQuery.setNull(2, Types.INTEGER);
             }
-
-            insertQuery = con.prepareStatement(sqlSetning, Statement.RETURN_GENERATED_KEYS);
             insertQuery.setInt(1, theCustomer.getAddress().getAddressId());
-            insertQuery.setString(2, theCustomer.getBusinessName());
             insertQuery.setString(3, theCustomer.getFirstName());
             insertQuery.setString(4, theCustomer.getLastName());
             insertQuery.setInt(5, theCustomer.getPhoneNumber());
@@ -250,10 +299,10 @@ public class SqlQueries extends DBConnector {
 
 
     public ArrayList<Integer> getOrderIdsByCustomer(Customer customer) {
-        ArrayList<Integer> orderIds = new ArrayList<Integer>();
+        ArrayList<Integer> orderIds = new ArrayList<>();
         ResultSet res = null;
         try {
-            String selectSql = "SELECT order_id FROM `order` WHERE customer_id = ? AND subscription_id = NULL ";
+            String selectSql = "SELECT order_id FROM `order` WHERE customer_id = ?";
             selectQuery = con.prepareStatement(selectSql);
             selectQuery.setInt(1, customer.getCustomerId());
             res = selectQuery.executeQuery();
@@ -273,6 +322,8 @@ public class SqlQueries extends DBConnector {
 */
 
 
+
+//    nyeste
     public ObservableList<Customer> getAllCustomers(ObservableList<Order> allOrders) {
 
         ObservableList<Subscription> allSubscriptions = getAllSubscriptions();
@@ -294,9 +345,7 @@ public class SqlQueries extends DBConnector {
                 ObservableList<Order> allOrdersUnderCustomer = FXCollections.observableArrayList();
 
 
-/*//                List<User> olderUsers = users.stream().filter(u -> u.age > 30).collect(Collectors.toList());
-                Subscription ex = allSubscriptions.stream().filter(subscription1 -> subscription1.getCustomerId() == existingCustomer.getCustomerId())
-                existingCustomer.setSubscription();*/
+
 
                 allSubscriptions.stream().filter(subscription -> subscription.getCustomerId() == existingCustomer.getCustomerId()).forEach(subscription -> {
                     existingCustomer.setSubscription(subscription);
@@ -330,6 +379,74 @@ public class SqlQueries extends DBConnector {
         return customers;
     }
 
+
+   /* public ObservableList<Customer> getAllCustomers(ObservableList<Order> allOrders) {
+        ObservableList<Subscription> allSubscriptions = getAllSubscriptions();
+        ObservableList<Customer> customers = FXCollections.observableArrayList();
+        ResultSet res = null;
+        try {
+            String selectSql = "SELECT * FROM customer";
+            selectQuery = con.prepareStatement(selectSql);
+            res = selectQuery.executeQuery();
+            while (res.next()) {
+                boolean isBusiness = false;
+                if (res.getInt("isBusiness") == 1) {
+                    isBusiness = true;
+                }
+                Customer existingCustomer = new Customer(res.getInt("c_id"), isBusiness, res.getString("email"), res.getString("first_name"),
+                        res.getString("last_name"), res.getInt("phone"), res.getString("business_name"));
+                existingCustomer.setAddress(getAddress(res.getInt("address_id")));
+
+                ObservableList<Order> allOrdersUnderCustomer = FXCollections.observableArrayList();
+
+
+
+                for (Subscription subscription : allSubscriptions
+                        ) {
+
+                    if (subscription.getCustomerId() == existingCustomer.getCustomerId()) {
+                        existingCustomer.setSubscription(subscription);
+                    }
+                    ObservableList<Order> ordersOnThisSubscription = FXCollections.observableArrayList();
+                    ArrayList<Integer> orderIdsForThisSubscription = getOrderIdsBySubscription(subscription);
+                    for (Integer orderId :
+                            orderIdsForThisSubscription) {
+                        for (Order order :
+                                allOrders) {
+                            if (order.getOrderId() == orderId) {
+                                ordersOnThisSubscription.add(order);
+                            }
+                        }
+                    }
+                    ordersOnThisSubscription.forEach(allOrdersUnderCustomer::add);
+                    subscription.setOrdersOnThisSubscription(ordersOnThisSubscription);
+                }
+
+                ArrayList<Integer> orderIdsByCustomer = getOrderIdsByCustomer(existingCustomer);
+
+                for (Integer orderId :
+                        orderIdsByCustomer) {
+                    for (Order order :
+                            allOrders) {
+                        if (orderId == order.getOrderId() && !existingCustomer.getSubscription().getOrdersOnThisSubscription().contains(order)) {
+                            allOrdersUnderCustomer.add(order);
+                        }
+                    }
+
+                    existingCustomer.setOrders(allOrdersUnderCustomer);
+                }
+                customers.add(existingCustomer);
+            }
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            closeEverything(res, selectQuery, con);
+        }
+        return customers;
+    }*/
+
     /*public void setOrdersInCustomer(ObservableList<Customer> allCustomers) {
         ObservableList<> customers = FXCollections.observableArrayList();
         try {
@@ -355,8 +472,8 @@ public class SqlQueries extends DBConnector {
             System.out.println("method getAllCustomers failed, not Sql exception!");
         }
         return customers;
-    }*/
-
+    }
+*/
 
 
 
