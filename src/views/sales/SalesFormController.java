@@ -3,6 +3,7 @@ package views.sales;
 import classpackage.*;
 import classpackage.Menu;
 import javafx.collections.ListChangeListener;
+import javafx.stage.Stage;
 import main.PopupDialog;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
@@ -69,7 +70,7 @@ public class SalesFormController extends SalesController implements Initializabl
     public Button removeMenuButton;
 
     private double totalPrice = 0;
-    private Address deliveryAddress;
+    private Address deliveryAddress = null;
 
     ObservableList<OrderLine> oldOrderLines = FXCollections.observableArrayList();
     ObservableList<OrderLine> chosenOrderLines = FXCollections.observableArrayList();
@@ -246,7 +247,7 @@ public class SalesFormController extends SalesController implements Initializabl
                 LocalDateTime deadlineLDT = LocalDateTime.of(deadlineDate, deadlineTime);
                 double price = totalPrice;
                 OrderStatus status = statusBox.getValue();
-                if (deliveryAddress.getAddressId() == 0) {
+                if (deliveryAddress == null) {
                     deliveryAddress = new Address(address, zipCodeInt, place);
                 }
                 Order newOrder = new Order(customerRequests, deadlineLDT, price, status, chosenOrderLines, deliveryAddress);
@@ -291,6 +292,10 @@ public class SalesFormController extends SalesController implements Initializabl
                     }
                     if (ok && db.updateOrder(selectedOrder)) {
                         PopupDialog.confirmationDialog("Result", "Order successfully updated.");
+                        Stage stage = (Stage) subMenuGP.getScene().getWindow();
+                        selectedOrder = null;
+                        chosenOrderLines = null;
+                        stage.close();
                     } else if (ok) {
                         PopupDialog.errorDialog("Error", "Order failed to update.");
                     }
@@ -308,20 +313,28 @@ public class SalesFormController extends SalesController implements Initializabl
                     newCustomer.setOrders(firstOrder);
                     if (db.addCustomer(newCustomer) && db.addOrder(null, newOrder, newCustomer)) {
                         PopupDialog.confirmationDialog("Result", "New customer and order registered");
+                        Stage stage = (Stage) subMenuGP.getScene().getWindow();
+                        selectedOrder = null;
+                        chosenOrderLines = null;
+                        stage.close();
                     } else {
                         PopupDialog.errorDialog("Error", "Customer and order failed to register.");
                     }
                 } else {
                         if (selectedCustomer.getSubscription() != null && !db.updateSubscription(selectedCustomer.getSubscription())) {
                             PopupDialog.errorDialog("Error", "Failed to update subscription.");
+
                         }
                         if(db.addOrder(null, newOrder, selectedCustomer)) {
                             selectedCustomer.getOrders().add(newOrder);
                             PopupDialog.confirmationDialog("Result", "Order successfully registered to customer.");
+                            Stage stage = (Stage) subMenuGP.getScene().getWindow();
+                            selectedOrder = null;
+                            chosenOrderLines = null;
+                            stage.close();
                         } else {
                             PopupDialog.errorDialog("Error", "Failed to update order.");
                         }
-
                 }
             } catch(Exception exc) {
                 System.out.println("createOrderFieldEvent: " + exc);
@@ -390,6 +403,7 @@ public class SalesFormController extends SalesController implements Initializabl
             deadlineMinBox.setValue(selectedOrder.getDeadlineTime().getMinute());
             statusBox.setValue(selectedOrder.getStatus());
             totalPrice = selectedOrder.getPrice();
+            customerRequestsField.setText(selectedOrder.getCustomerRequests());
             priceField.setText(nf.format(totalPrice));
             chosenOrderLines = selectedOrder.getDishesInThisOrder();
             oldOrderLines.setAll(chosenOrderLines);

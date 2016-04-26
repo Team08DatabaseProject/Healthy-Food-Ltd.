@@ -41,6 +41,7 @@ public class SalesController extends MainController implements Initializable{
     public TableColumn deadlineCol;
     public TableColumn priceCol;
     public TableColumn statusCol;
+    public Button closeButton;
 
     protected static Dish selectedDish;
     protected static Order selectedOrder;
@@ -114,6 +115,8 @@ public class SalesController extends MainController implements Initializable{
         public void handle(MouseEvent event) {
 
             if (event.isPrimaryButtonDown() && event.getClickCount() >= 1) {
+                closeButton.setVisible(true);
+                closeButton.setDisable(false);
                 selectedOrder = (Order)ordersTable.getSelectionModel().getSelectedItem();
                 boolean found = false;
                 for (Customer customer : customers) {
@@ -142,6 +145,19 @@ public class SalesController extends MainController implements Initializable{
             try {
                 orders = db.getOrders(4, dishes);
                 ordersTable.setItems(orders);
+            } catch (Exception exc) {
+                System.out.println(exc);
+            }
+        }
+    };
+
+    EventHandler<ActionEvent> closeBottom = new EventHandler<ActionEvent>() {
+        @Override
+        public void handle(ActionEvent event) {
+            try {
+                rootPaneOrders.setBottom(null);
+                closeButton.setVisible(false);
+                closeButton.setDisable(true);
             } catch (Exception exc) {
                 System.out.println(exc);
             }
@@ -188,5 +204,6 @@ public class SalesController extends MainController implements Initializable{
         ordersTable.setOnMousePressed(ordersInfoEvent);
         ordersTable.setItems(orders);
         refreshButton.setOnAction(refreshEvent);
+        closeButton.setOnAction(closeBottom);
     }
 }

@@ -48,6 +48,7 @@
                                 </ImageView>
                             </graphic>
                         </Button>
+                        <Button fx:id="closeButton" visible="false" disable="true" styleClass="subMenuButton" text="Close order info"/>
                     </children>
                 </HBox>
             </VBox>
