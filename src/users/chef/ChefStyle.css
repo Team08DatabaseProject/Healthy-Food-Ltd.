@@ -14,6 +14,14 @@
     -fx-alignment: CENTER;
 }
 
+.text-field {
+    -fx-max-width: 200px;
+}
+
+.text-area {
+    -fx-max-width: 250px;
+}
+
 .subWindowButton:hover {
     -fx-background-color: #d969d9;
 }
@@ -215,4 +223,68 @@
     -fx-font-weight: bold;
     -fx-text-fill: #333333;
     -fx-effect: dropshadow( gaussian , rgba(255,255,255,0.5) , 0,0,0,1 );
+}
+
+/* SALES: */
+Button {
+    -fx-min-width: 100px;
+    -fx-min-height: 100px;
+    -fx-alignment: CENTER;
+}
+
+.menuButtons{
+    -fx-min-width: 110px;
+    -fx-min-height: 45px;
+    -fx-alignment: CENTER;
+}
+
+.newOrderButton{
+    -fx-min-width: 130px;
+    -fx-min-height: 50px;
+    -fx-alignment: CENTER;
+    -fx-padding: 10px;
+}
+
+.infoButton{
+    -fx-min-width: 100px;
+    -fx-min-height: 50px;
+    -fx-alignment: CENTER;
+    -fx-padding: 10px;
+}
+
+.smallButton{
+    -fx-min-width: 80px;
+    -fx-min-height: 30px;
+    -fx-alignment: CENTER;
+    -fx-padding: 0px;
+}
+
+.column{
+    -fx-font-size: 10px;
+}
+
+.FormField {
+    -fx-pref-width: 200px;
+    -fx-padding: 2px;
+}
+
+Label {
+    -fx-padding: 0px;
+    -fx-margin: 0px;
+}
+
+GridPane {
+    -fx-hgap: 2px;
+    -fx-vgap: 2px;
+}
+
+.ErrorMsg {
+    -fx-font-size: 8pt;
+    -fx-text-fill: red;
+    -fx-padding: 2px;
+    -fx-margin: 0px;
+}
+
+.FormField:error {
+    -fx-border-color: red;
 }

@@ -6,6 +6,7 @@ package users.driver;
 
 //import classpackage.SqlQueries;
 import classpackage.*;
+import div.PopupDialog;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -27,6 +28,7 @@ import javafx.scene.layout.HBox;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.Date;
 import java.util.ResourceBundle;
@@ -63,25 +65,21 @@ public class ControllerDriver implements Initializable {
     public Button generateRouteButton;
     public Button deliveryInProcessButton;
 
-    Address firstAddress = new Address("Osloveien 54", 7018, "Trondheim");
-    Address secondAddress = new Address("Weidemanns vei 5A", 7014, "Trondheim");
-    Address thirdAddress = new Address("Klæbuveien 134A", 7031, "Trondheim");
-
     protected static ObservableList<OrderStatus> statusTypes = db.getStatusTypes();
     protected static ObservableList<Supplier> supplierList = db.getAllSuppliers();
     protected static ObservableList<Ingredient> ingredientList = db.getAllIngredients(supplierList);
     protected static ObservableList<Dish> dishList = db.getAllDishes(ingredientList);
     protected static ObservableList<Order> orderList = db.getOrders(3, dishList);
 
-
-
   //  protected static ObservableList<Order> orderList = testObjects.orderList;
     protected static ObservableList<Order> routeOrderList = FXCollections.observableArrayList();
+    protected static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMMM yyyy \n HH:mm");
+
 
     /* "https://www.google.com/maps/dir/" + firstAddress.getAddress() + ",+" + firstAddress.getZipCode() + "+" + firstAddress.getPlace() + ",+Norway/";*/
     public static String generateUrl(ObservableList<Order> ordersToGenerateRoute){
         String url = "https://www.google.com/maps/dir/";
-        Collections.sort(ordersToGenerateRoute, (o1, o2) -> o1.getDeadline().compareTo(o2.getDeadline()));
+        Collections.sort(ordersToGenerateRoute, (o1, o2) -> o1.getDeadlineTime().compareTo(o2.getDeadlineTime()));
         for (Order order :
                 ordersToGenerateRoute) {
             Address address = order.getAddress();
@@ -120,6 +118,9 @@ public class ControllerDriver implements Initializable {
                 if (!routeOrderList.isEmpty()) {
                     for (Order order : routeOrderList) {
                         order.setStatus(statusTypes.get(3));
+                        if(!db.updateOrder(order)){
+                            PopupDialog.errorDialog("Error", "Failed to update order status.");
+                        }
                     }
                 }
             } catch (Exception exc) {
@@ -131,17 +132,24 @@ public class ControllerDriver implements Initializable {
     EventHandler<ActionEvent> addToDeliveryRouteEvent = new EventHandler<ActionEvent>() {
         @Override
         public void handle(ActionEvent event) {
-            Order item = (Order) ordersReadyTable.getSelectionModel().getSelectedItem();
-            if (item != null) {
-                boolean exists = false;
+            Order selectedOrder = (Order) ordersReadyTable.getSelectionModel().getSelectedItem();
+            if (selectedOrder != null) {
+                boolean add = true;
+                boolean delivered = false;
                 for (Order order :
                         routeOrderList) {
-                    if (order == item) {
-                        exists = true;
+                    if (order.getOrderId() == selectedOrder.getOrderId()) {
+                        add = false;
+                    } else if (order.getStatus() == statusTypes.get(4)) {
+                        delivered = true;
                     }
                 }
-                if (!exists) {
-                    routeOrderList.add(item);
+                if (delivered) {
+                    PopupDialog.errorDialog("Error", "Order has been marked as delivered.");
+                } else if (!add) {
+                    PopupDialog.errorDialog("Error", "Order has already been placed in route list.");
+                } else {
+                    routeOrderList.add(selectedOrder);
                 }
             }
         }
@@ -154,6 +162,7 @@ public class ControllerDriver implements Initializable {
             if (item != null) {
                 routeOrdersTable.getSelectionModel().clearSelection();
                 routeOrderList.remove(item);
+                routeOrdersTable.setItems(routeOrderList);
             }
         }
     };
@@ -177,9 +186,26 @@ public class ControllerDriver implements Initializable {
         public void handle(ActionEvent event) {
             try {
                 Order order = (Order) ordersReadyTable.getSelectionModel().getSelectedItem();
-                if (order != null) {
+                if (order != null && order.getStatus().getStatusId() != statusTypes.get(4).getStatusId()) {
                     LocalDateTime deliveryDate = LocalDateTime.now();
                     order.setActualDeliveryDateTime(deliveryDate);
+                    orderList.remove(order);
+                    routeOrderList.remove(order);
+                    order.setStatus(statusTypes.get(4));
+                    if(!db.updateOrder(order)) {
+                        order.setStatus(statusTypes.get(3));
+                        order.setActualDeliveryDateTime(null);
+                        orderList.add(order);
+                        routeOrderList.add(order);
+                        ordersReadyTable.setItems(orderList);
+                        routeOrdersTable.setItems(routeOrderList);
+                        PopupDialog.errorDialog("Error", "Failed to update order status.");
+                    } else {
+                        routeOrderList.remove(order);
+                        routeOrdersTable.setItems(routeOrderList);
+                        orderList.add(order);
+                        ordersReadyTable.setItems(orderList);
+                    }
                 }
             } catch (Exception exc) {
                 System.out.println(exc);
@@ -198,15 +224,9 @@ public class ControllerDriver implements Initializable {
             mapStage.setTitle("Delivery route");
             mapStage.setHeight(600);
             mapStage.setWidth(900);
-           // Stage stage = (Stage) rootPaneDriver.getScene().getWindow();
             addMap(url, paneForMap, mapStage);
         }
     };
-
-    public String ldtToString(LocalDateTime ldt) {
-        return "Date: " + ldt.getYear() + "/" + ldt.getMonthValue() + "/" + ldt.getDayOfMonth() + "\nTime: "
-                + String.format("%02d", ldt.getHour()) + ":" + String.format("%02d", ldt.getMinute());
-    }
 
 
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
@@ -216,7 +236,6 @@ public class ControllerDriver implements Initializable {
         statusColLeft.setCellValueFactory(new PropertyValueFactory<Order, OrderStatus>("status"));
         addressColLeft.setCellValueFactory(new PropertyValueFactory<Order, Address>("address"));
 
-
         deadlineColLeft.setCellFactory(column -> {
             return new TableCell<Order, LocalDateTime>() {
                 @Override
@@ -224,7 +243,7 @@ public class ControllerDriver implements Initializable {
                     if (ldt == null || empty) {
                         setText(null);
                     } else {
-                        setText(ldtToString(ldt));
+                        setText(ldt.format(formatter));
                     }
                 }
             };
@@ -239,7 +258,7 @@ public class ControllerDriver implements Initializable {
                     } else if (empty) {
                         setText(null);
                     } else {
-                        setText(ldtToString(ldt));
+                        setText(ldt.format(formatter));
                     }
                 }
             };
@@ -272,9 +291,6 @@ public class ControllerDriver implements Initializable {
             };
         });
 
-
-
-
         deadlineColRight.setCellValueFactory(new PropertyValueFactory<Order, LocalDateTime>("deadlineTime"));
 
         dateDeliveredColRight.setCellValueFactory(
@@ -294,7 +310,7 @@ public class ControllerDriver implements Initializable {
                     if (ldt == null || empty) {
                         setText(null);
                     } else {
-                        setText(ldtToString(ldt));
+                        setText(ldt.format(formatter));
                     }
                 }
             };
@@ -309,7 +325,7 @@ public class ControllerDriver implements Initializable {
                     } else if (empty) {
                         setText(null);
                     } else {
-                        setText(ldtToString(ldt));
+                        setText(ldt.format(formatter));
                     }
                 }
             };

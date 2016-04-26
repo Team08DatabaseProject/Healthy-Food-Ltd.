@@ -3,12 +3,9 @@
 <!--> Axel </!-->
 <!--> Textfields for registering new order </!-->
 
-<?import javafx.collections.FXCollections?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import java.lang.*?>
-
 <GridPane fx:id="subsInfoGrid" prefHeight="200.0" prefWidth="1600.0" BorderPane.alignment="CENTER" xmlns="http://javafx.com/javafx/8"
           xmlns:fx="http://javafx.com/fxml/1" fx:controller="users.sales.subscriptions.ControllerSalesSubsInfo" stylesheets="@/users/sales/SalesStyle.css">
 

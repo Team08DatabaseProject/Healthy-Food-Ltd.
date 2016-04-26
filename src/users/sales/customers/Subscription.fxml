@@ -2,10 +2,9 @@
 
 <!--> Axel </!-->
 
-<?import javafx.geometry.*?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-
 <GridPane fx:id="subWindowGP" fx:controller="users.sales.customers.ControllerSalesSubscription" xmlns="http://javafx.com/javafx/8"
           xmlns:fx="http://javafx.com/fxml/1" stylesheets="@/users/chef/ChefStyle.css" alignment="CENTER">
     <padding>

@@ -1,10 +1,14 @@
 package users.sales.customers;
 
-import classpackage.*;
+import classpackage.Address;
+import classpackage.Customer;
+import classpackage.Order;
+import classpackage.Subscription;
 import div.IntField;
 import div.PopupDialog;
 import div.StringField;
 import div.ZipCodeField;
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -13,7 +17,10 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
@@ -29,7 +36,7 @@ import java.util.ResourceBundle;
 public class ControllerSalesCustomerForm extends ControllerSalesCustomer implements Initializable{
 
     @FXML
-    public GridPane addCustomerTable;
+    public GridPane subWindowGP;
     public Button customerSubmitButton;
     public StringField fNameField;
     public StringField lNameField;
@@ -172,7 +179,7 @@ public class ControllerSalesCustomerForm extends ControllerSalesCustomer impleme
     };
 
     public void closeWindow() {
-        Stage stage = (Stage) addCustomerTable.getScene().getWindow();
+        Stage stage = (Stage) subWindowGP.getScene().getWindow();
         stage.close();
     }
 
@@ -227,7 +234,15 @@ public class ControllerSalesCustomerForm extends ControllerSalesCustomer impleme
         }
     };
 
-    public void initialize(URL fxmlFileLocation, ResourceBundle resources) { // Required method for Initializable, runs at program launch
+    public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
+
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                subWindowGP.requestFocus();
+            }
+        });
+
         fNameField.textProperty().addListener(validatefName);
         lNameField.textProperty().addListener(validatelName);
         businessNameField.textProperty().addListener(validateBusinessName);

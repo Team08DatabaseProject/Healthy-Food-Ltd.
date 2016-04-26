@@ -3,6 +3,7 @@ package users.chef;
 import classpackage.Dish;
 import classpackage.Order;
 import classpackage.OrderLine;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -110,7 +111,6 @@ public class ControllerChefOrderInfo extends ControllerChef implements Initializ
         });*/
 
         dishesInOrderTable.setEditable(true);
-        dishesInOrderTable.getColumns().setAll(dishNameCol, dishAmountCol, dishPriceCol);
         dishesInOrderTable.setItems(dishesInOrder);
         dishesInOrderTable.setOnMousePressed(viewDishInfoEvent);
 

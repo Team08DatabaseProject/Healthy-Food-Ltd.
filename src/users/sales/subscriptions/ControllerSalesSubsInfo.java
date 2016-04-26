@@ -1,8 +1,6 @@
 package users.sales.subscriptions;
 
 import classpackage.ZipCode;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;

@@ -6,19 +6,29 @@
 <?import javafx.collections.FXCollections?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
 <?import java.lang.*?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.image.Image?>
-<GridPane fx:id="ordersFormGrid" hgap="10" prefHeight="500.0" prefWidth="1600.0" vgap="10" BorderPane.alignment="CENTER"
-          xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" gridLinesVisible="true"
-          fx:controller="users.sales.orders.ControllerSalesOrdersForm" stylesheets="@/users/sales/SalesStyle.css">
+
+
+<GridPane fx:id="subMenuGP" prefHeight="600.0" hgap="50" vgap="20" prefWidth="1700.0" alignment="CENTER" gridLinesVisible="true"
+          xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+          fx:controller="users.sales.orders.ControllerSalesOrdersForm" stylesheets="@/users/chef/ChefStyle.css">
 
     <padding>
-        <Insets bottom="25" left="30" right="20" top="25" />
+        <Insets bottom="25" left="25" right="25" top="25" />
     </padding>
     <children>
-        <VBox GridPane.columnIndex="0" spacing="10">
+        <Label text="Customer information" GridPane.rowIndex="0" GridPane.columnIndex="0"
+               styleClass="mediumBigLabel" GridPane.halignment="CENTER" translateY="-25"/>
+        <Label text="   Delivery information" GridPane.rowIndex="0" GridPane.columnIndex="1" GridPane.columnSpan="2"
+               styleClass="mediumBigLabel" GridPane.halignment="CENTER" translateX="50" translateY="-25"/>
+        <Label text="Dishes in order" GridPane.rowIndex="0" GridPane.columnIndex="3"
+               styleClass="mediumBigLabel" GridPane.halignment="CENTER" translateX="125" translateY="-25"/>
+
+        <VBox GridPane.columnIndex="0" GridPane.rowIndex="1" spacing="15" alignment="TOP_LEFT">
+
             <TextField fx:id="fNameField"  promptText="First name"/>
 
             <TextField fx:id="lNameField" promptText="Last name"/>
@@ -30,11 +40,27 @@
             <TextField fx:id="phoneField" promptText="Phone number"/>
 
             <TextField fx:id="emailField" promptText="Email address"/>
+
+            <TextField fx:id="customerAddressField" promptText="Customer address"/>
+
+            <TextField fx:id="customerZipCodeField" promptText="Customer Zip code"/>
+
+            <TextField fx:id="customerPlaceField" promptText="Customer city"/>
+
+            <TextField fx:id="customerIdField" promptText="Customer ID"/>
+
+            <TextField fx:id="subscriptionIdField" promptText="Subscription ID"/>
         </VBox>
 
-       <!--next collumn><!-->
 
-        <VBox GridPane.columnIndex="1" spacing="10">
+
+
+       <!--next column><!-->
+
+        <VBox GridPane.columnIndex="1" GridPane.rowIndex="1" spacing="20" alignment="TOP_LEFT" translateX="50">
+
+            <Button fx:id="deliveryToCustomerAddressButton" text="Set location to customer&#10;registered address (optional)" styleClass="subMenuButton"/>
+
             <TextField fx:id="addressField" promptText="Delivery address"/>
 
             <TextField fx:id="zipCodeField" promptText="ZIP Code"/>
@@ -44,7 +70,8 @@
             <Label fx:id="deadlineLabel" text="  Date and time of delivery:" prefHeight="25"/>
 
             <DatePicker fx:id="deadlineDatePicker" promptText="Date"/>
-            <HBox spacing="10">
+
+            <HBox spacing="5" alignment="CENTER_LEFT">
                 <ComboBox fx:id="deadlineHrBox" promptText="Hour" />
 
                 <ComboBox fx:id="deadlineMinBox" promptText="Minute" />
@@ -52,80 +79,77 @@
 
             <ComboBox fx:id="statusBox" promptText="Status">
                 <items>
-                    <FXCollections fx:factory="observableArrayList" >
-                        <String fx:value="Created" />
-                        <String fx:value="In preparation" />
-                        <String fx:value="Ready for Delivery" />
-                        <String fx:value="In delivery" />
-                        <String fx:value="Delivered" />
+                    <FXCollections fx:factory="observableArrayList">
                     </FXCollections>
                 </items>
             </ComboBox>
         </VBox>
 
-       <!--next collumn><!-->
+        <HBox GridPane.columnIndex="2" GridPane.rowIndex="1" spacing="20" alignment="TOP_LEFT" translateX="75">
+            <VBox spacing="10" GridPane.hgrow="SOMETIMES">
 
-        <VBox GridPane.columnIndex="2" spacing="10">
-            <TextField fx:id="orderIdField" promptText="Order ID (leave empty)"/>
+                <VBox spacing="5" alignment="CENTER_LEFT">
+                    <Label text="Customer requests"/>
+                    <TextArea fx:id="customerRequestsField" prefWidth="200"
+                              promptText="Extra requests"/>
+                </VBox>
 
-            <TextField fx:id="customerIdField" promptText="Customer ID (leave empty)"/>
+                <VBox spacing="5" alignment="CENTER_LEFT">
+                    <Label text="Order price&#10;(calculated automatically)" />
+                    <TextField fx:id="priceField" />
+                </VBox>
+            </VBox>
+        </HBox>
 
-            <TextField fx:id="subscriptionIdField" promptText="Subscription ID (leave empty)"/>
 
-            <TextArea fx:id="customerRequestsField" GridPane.rowSpan="5" prefWidth="200"
-                      promptText="Extra requests"/>
-
-            <Label fx:id="priceFieldLabel" text="  Price:" />
-
-            <TextField fx:id="priceField" />
-
-        </VBox>
 
         <!--next collumn><!-->
 
-        <VBox GridPane.columnIndex="3" spacing="10">
-            <TableView fx:id="chosenDishTable" prefWidth="400" GridPane.columnSpan="4"
-                       GridPane.rowSpan="8">
-                <TableColumn fx:id="dishNameCol" text="Dish name" />
-                <TableColumn fx:id="quantityCol" text="Quantity" />
-                <TableColumn fx:id="priceCol" text="Price" />
+        <VBox GridPane.columnIndex="3" GridPane.rowIndex="1" spacing="10" translateX="125">
+            <TableView fx:id="chosenDishTable" prefWidth="400" prefHeight="400" maxHeight="450">
+                <placeholder>
+                    <VBox alignment="CENTER" spacing="20">
+                        <ImageView>
+                            <Image url="@/labels/Noodles-48.png"/>
+                        </ImageView>
+                        <Label text="Select dishes below&#10;to add them to the order"/>
+                    </VBox>
+                </placeholder>
+                <columns>
+                    <TableColumn fx:id="dishNameCol" text="Dish name" />
+                    <TableColumn fx:id="quantityCol" text="Quantity" />
+                    <TableColumn fx:id="priceCol" text="Price" />
+                </columns>
                 <columnResizePolicy>
                     <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                 </columnResizePolicy>
             </TableView>
+            <HBox spacing="10" alignment="CENTER">
+                <ComboBox fx:id="chooseDishes" promptText="Dishes">
+                    <items>
+                        <FXCollections fx:factory="observableArrayList" >
+                        </FXCollections>
+                    </items>
+                </ComboBox>
+
+                <Button fx:id="addDishButton" styleClass="subMenuButton" text="Add" >
+                    <graphic>
+                        <ImageView>
+                            <Image url="@/labels/salesLabels/Plus.png"/>
+                        </ImageView>
+                    </graphic>
+                </Button>
+
+                <Button fx:id="removeOrderDishButton" styleClass="subMenuButton" text="Remove" >
+                    <graphic>
+                        <ImageView>
+                            <Image url="@/labels/salesLabels/Cancel.png"/>
+                        </ImageView>
+                    </graphic>
+                </Button>
+            </HBox>
         </VBox>
-
-        <HBox GridPane.columnIndex="3" GridPane.rowIndex="2" spacing="10" alignment="CENTER">
-            <ComboBox fx:id="chooseDishes" prefWidth="150" promptText="Dishes">
-                <items>
-                    <FXCollections fx:factory="observableArrayList" >
-                    </FXCollections>
-                </items>
-            </ComboBox>
-
-            <Button fx:id="addDishButton" styleClass="smallButton" text="Add" >
-                <graphic>
-                    <ImageView>
-                        <Image url="@/labels/salesLabels/Plus.png"/>
-                    </ImageView>
-                </graphic>
-            </Button>
-
-            <Button fx:id="removeOrderDishButton" styleClass="smallButton" text="Remove" >
-                <graphic>
-                    <ImageView>
-                        <Image url="@/labels/salesLabels/Cancel.png"/>
-                    </ImageView>
-                </graphic>
-            </Button>
-        </HBox>
-
-        <!--next collumn><!-->
-
-        <VBox alignment="CENTER_LEFT" spacing="10" GridPane.columnIndex="0" GridPane.rowIndex="2">
-           <children>
-              <Button fx:id="createButton" styleClass="newOrderButton" text="Create new order" />
-           </children>
-        </VBox>
+        <Button fx:id="createButton" styleClass="subMenuButton" text="Create new order" translateX="125"
+                GridPane.rowIndex="2" GridPane.columnIndex="3" GridPane.vgrow="SOMETIMES"/>
     </children>
 </GridPane>

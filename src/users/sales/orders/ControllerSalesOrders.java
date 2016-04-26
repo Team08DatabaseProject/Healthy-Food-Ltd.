@@ -4,7 +4,7 @@ import classpackage.Customer;
 import classpackage.Order;
 import classpackage.OrderStatus;
 import div.PopupDialog;
-import javafx.collections.ObservableList;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -18,7 +18,6 @@ import javafx.scene.layout.GridPane;
 import users.sales.ControllerSales;
 
 import java.net.URL;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ResourceBundle;
 
@@ -28,6 +27,7 @@ import java.util.ResourceBundle;
 public class ControllerSalesOrders extends ControllerSales implements Initializable{
 
     @FXML
+    public GridPane subMenuGP;
     public Button createOrderButton; //Button for creating an order
     public Button deleteOrderButton; //Button for deleting an order
     public TableView ordersTable;
@@ -36,22 +36,22 @@ public class ControllerSalesOrders extends ControllerSales implements Initializa
     public TableColumn deadlineCol;
     public TableColumn priceCol;
     public TableColumn statusCol;
-    private GridPane ordersFormGrid;
-
-
-
 
     EventHandler<ActionEvent> createOrderEvent = new EventHandler<ActionEvent>() {
         @Override
         public void handle(ActionEvent event) {
             try {
-                selectedCustomer = PopupDialog.createOrderDialog("Customer type", "New or existing customer?", customers);
+                selectedOrder = null;
+                Customer tempCustomer = PopupDialog.createOrderDialog("Customer type", "New or existing customer?", customers);
+                if (tempCustomer.getCustomerId() <= -1) {
+                    selectedCustomer = null;
+                } else {
+                    selectedCustomer = tempCustomer;
+                }
                 FXMLLoader loader = new FXMLLoader();
                 loader.setLocation(getClass().getResource("OrdersCreateForm.fxml"));
-                ordersFormGrid = loader.load();
+                GridPane ordersFormGrid = loader.load();
                 rootPaneOrders.setCenter(ordersFormGrid);
-                rootPaneOrders.setBottom(null);
-                rootPaneOrders.setRight(null);
             } catch (Exception e) {
                 System.out.println(e);
             }
@@ -83,7 +83,6 @@ public class ControllerSalesOrders extends ControllerSales implements Initializa
     EventHandler<MouseEvent> ordersInfoEvent = new EventHandler<MouseEvent>() {
         @Override
         public void handle(MouseEvent event) {
-
             if (event.isPrimaryButtonDown() && event.getClickCount() >= 1) {
                 selectedOrder = (Order)ordersTable.getSelectionModel().getSelectedItem();
                 boolean found = false;
@@ -92,7 +91,6 @@ public class ControllerSalesOrders extends ControllerSales implements Initializa
                         if (order.getOrderId() == selectedOrder.getOrderId() && !found) {
                             selectedCustomer = customer;
                             found = true;
-
                         }
                     }
                 }
@@ -109,6 +107,13 @@ public class ControllerSalesOrders extends ControllerSales implements Initializa
     };
 
     public void initialize(URL fxmlFileLocation, ResourceBundle resources){
+
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                subMenuGP.requestFocus();
+            }
+        });
 
         ordersTable.setEditable(true);
         orderIdCol.setCellValueFactory(new PropertyValueFactory<Order,Integer>("orderId")); //orderId

@@ -7,7 +7,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<GridPane fx:id="addCustomerTable" hgap="10" prefHeight="500.0" prefWidth="1600.0" vgap="10" BorderPane.alignment="CENTER"
+<GridPane fx:id="subWindowGP" stylesheets="@/users/chef/ChefStyle.css" prefHeight="500.0" prefWidth="1600.0" alignment="CENTER"
           xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="users.sales.customers.ControllerSalesCustomerForm">
 
     <padding>
@@ -53,6 +53,6 @@
     <!--next collumn><!-->
 
     <HBox spacing="10" alignment="CENTER" GridPane.columnIndex="0" GridPane.rowIndex="20" GridPane.columnSpan="2">
-        <Button styleClass="SmallButton" fx:id="customerSubmitButton" text="Submit"/>
+        <Button styleClass="subWindowButton" fx:id="customerSubmitButton" text="Submit"/>
     </HBox>
 </GridPane>

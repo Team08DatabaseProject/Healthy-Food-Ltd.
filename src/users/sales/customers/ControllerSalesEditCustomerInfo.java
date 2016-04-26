@@ -3,7 +3,6 @@ package users.sales.customers;
 import classpackage.Order;
 import classpackage.OrderLine;
 import classpackage.OrderStatus;
-import classpackage.Subscription;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -47,6 +46,7 @@ public class ControllerSalesEditCustomerInfo extends ControllerSales implements 
     public TableColumn statusCol;
     public TableColumn partOfSubscriptionCol;
     public Button subscriptionButton;
+    public Button commitChangesButton;
 
     private ObservableList<Order> selectedCustomerOrders = FXCollections.observableArrayList();
 
@@ -68,9 +68,6 @@ public class ControllerSalesEditCustomerInfo extends ControllerSales implements 
             }
         }
     };
-
-
-
 
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
 
@@ -180,6 +177,7 @@ public class ControllerSalesEditCustomerInfo extends ControllerSales implements 
         currentOrdersTable.setItems(selectedCustomerOrders);
 
         subscriptionButton.setOnAction(subscriptionEvent);
+
 
     }
 

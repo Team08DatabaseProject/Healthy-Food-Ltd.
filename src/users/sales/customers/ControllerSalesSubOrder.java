@@ -15,7 +15,8 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.scene.layout.*;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 import javafx.util.StringConverter;
 import javafx.util.converter.IntegerStringConverter;
 import users.sales.ControllerSales;
@@ -24,7 +25,6 @@ import java.net.URL;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
 import java.util.Locale;
@@ -168,6 +168,7 @@ public class ControllerSalesSubOrder extends ControllerSales implements Initiali
 
                 LocalDateTime orderLDT = startSub.atStartOfDay();
                 int startDayOfWeek = orderLDT.getDayOfWeek().getValue();
+                System.out.println("Subscription start day: " + startDayOfWeek);
                 orderLDT = orderLDT.plusHours(hour);
                 orderLDT = orderLDT.plusMinutes(minute);
 
@@ -175,6 +176,7 @@ public class ControllerSalesSubOrder extends ControllerSales implements Initiali
                     orderLDT = orderLDT.plusDays(dayOfWeek - startDayOfWeek);
                 } else if (dayOfWeek < startDayOfWeek) {
                     orderLDT = orderLDT.plusWeeks(1);
+                    orderLDT = orderLDT.minusDays(startDayOfWeek - dayOfWeek);
                 }
 
                 LocalDateTime lastSub = endSub.atStartOfDay().plusDays(1);
@@ -203,8 +205,6 @@ public class ControllerSalesSubOrder extends ControllerSales implements Initiali
     };
 
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
-        System.out.println(selectedSubscription.getEndSubscription().toString());
-        System.out.println(selectedSubscription.getEndSubscription().atStartOfDay().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
 
         Platform.runLater(new Runnable() {
             @Override

@@ -4,11 +4,9 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.collections.FXCollections?>
 
-
-<?import java.lang.String?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.image.Image?>
-<GridPane fx:id="subMenuGP" fx:controller="users.chef.ControllerChefIngredients" alignment="CENTER" xmlns:fx="http://javafx.com/fxml">
+<GridPane fx:id="subMenuGP" stylesheets="@/users/chef/ChefStyle.css" fx:controller="users.chef.ControllerChefIngredients" alignment="CENTER" xmlns:fx="http://javafx.com/fxml">
     <children>
         <VBox GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.rowSpan="2" styleClass="greenVBox" prefWidth="30"/>
         <VBox GridPane.columnIndex="2" GridPane.rowIndex="0" GridPane.rowSpan="2" styleClass="greenVBox" prefWidth="30"/>

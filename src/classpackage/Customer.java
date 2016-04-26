@@ -59,6 +59,11 @@ public class Customer {
         this.businessName.set(businessName);
     }
 
+
+    public Customer(){  // needed for PopupDialog
+        this.customerId.set(-1);
+    }
+
     public ObservableList<Order> getOrders() {
         return orders;
     }

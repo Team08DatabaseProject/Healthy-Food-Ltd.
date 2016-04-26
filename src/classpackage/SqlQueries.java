@@ -110,8 +110,8 @@ public class SqlQueries extends DBConnector {
      */
     public boolean updateAddress(Address address) {
         try {
-            String sql = "UPDATE address SET zipcode = ?, address = ?, place = ? WHERE address_ID = ?;";
-            updateQuery = con.prepareStatement(sql);
+            String sql = "UPDATE address SET zipcode = ?, address = ?, place = ? WHERE address_ID = ?";
+            PreparedStatement updateQuery = con.prepareStatement(sql);
             updateQuery.setInt(1, address.getZipCode());
             updateQuery.setString(2, address.getAddress());
             updateQuery.setString(3, address.getPlace());
@@ -197,7 +197,7 @@ public class SqlQueries extends DBConnector {
             if (customer.getIsBusiness()) {
                 isBusiness = 1;
             }
-            updateQuery = con.prepareStatement(sql);
+            PreparedStatement updateQuery = con.prepareStatement(sql);
             updateQuery.setInt(1, customer.getAddress().getAddressId());
             updateQuery.setString(2, customer.getBusinessName());
             updateQuery.setString(3, customer.getFirstName());
@@ -1329,6 +1329,7 @@ public class SqlQueries extends DBConnector {
     if subscription is NOT null*/
 
     public boolean addOrder(Subscription subscription, Order order, Customer customer) {
+        PreparedStatement updateQuery = null;
         ResultSet res = null;
         try {
             if (order.getAddress().getAddressId() == 0) {
@@ -1339,38 +1340,39 @@ public class SqlQueries extends DBConnector {
             }
             String insertSql = "INSERT INTO `order`(customer_id, subscription_id, customer_requests, delivery_date, delivered_date, " +
                     "price, address_id, status_id) VALUES(?,?,?,?,?,?,?,?)";
-            insertQuery = con.prepareStatement(insertSql, Statement.RETURN_GENERATED_KEYS);
+            updateQuery = con.prepareStatement(insertSql, Statement.RETURN_GENERATED_KEYS);
             if (!addAddress(order.getAddress())) {
                 return false;
             }
 
             if (customer == null) {
-                insertQuery.setNull(1, Types.INTEGER);
+                updateQuery.setNull(1, Types.INTEGER);
             } else {
-                insertQuery.setInt(1, customer.getCustomerId());
+                updateQuery.setInt(1, customer.getCustomerId());
             }
             if (subscription == null) {
-                insertQuery.setNull(2, Types.INTEGER);
+                updateQuery.setNull(2, Types.INTEGER);
             } else {
-                insertQuery.setInt(2, subscription.getSubscriptionId());
+                updateQuery.setInt(2, subscription.getSubscriptionId());
             }
-            insertQuery.setString(3, order.getCustomerRequests());
-            insertQuery.setTimestamp(4, Timestamp.valueOf(order.getDeadlineTime()));
+            updateQuery.setString(3, order.getCustomerRequests());
+            System.out.println(order.getDeadlineTime().toString());
+            updateQuery.setTimestamp(4, Timestamp.valueOf(order.getDeadlineTime()));
             if (order.getActualDeliveryDateTime() == null) {
-                insertQuery.setNull(5, Types.DATE);
+                updateQuery.setNull(5, Types.DATE);
             } else {
-                insertQuery.setTimestamp(5, Timestamp.valueOf(order.getActualDeliveryDateTime()));
+                updateQuery.setTimestamp(5, Timestamp.valueOf(order.getActualDeliveryDateTime()));
             }
-            insertQuery.setDouble(6, order.getPrice());
-            insertQuery.setInt(7, order.getAddress().getAddressId());
-            insertQuery.setInt(8, order.getStatus().getStatusId());
+            updateQuery.setDouble(6, order.getPrice());
+            updateQuery.setInt(7, order.getAddress().getAddressId());
+            updateQuery.setInt(8, order.getStatus().getStatusId());
             if (subscription != null) {
-                insertQuery.setInt(2, subscription.getSubscriptionId());
+                updateQuery.setInt(2, subscription.getSubscriptionId());
             } else {
-                insertQuery.setNull(2, Types.INTEGER);
+                updateQuery.setNull(2, Types.INTEGER);
             }
-            if (insertQuery.executeUpdate() == 1) {
-                res = insertQuery.getGeneratedKeys();
+            if (updateQuery.executeUpdate() == 1) {
+                res = updateQuery.getGeneratedKeys();
                 res.next();
                 order.setOrderId(res.getInt(1));
                 return true;
@@ -1382,7 +1384,7 @@ public class SqlQueries extends DBConnector {
             SqlCleanup.rullTilbake(con);
             e.printStackTrace();
         } finally {
-            closeEverything(res, insertQuery, null);
+            closeEverything(res, updateQuery, null);
         }
         return false;
     }
@@ -1409,9 +1411,10 @@ public class SqlQueries extends DBConnector {
         try {
             con.setAutoCommit(false);
             String sql = "UPDATE `order` SET customer_requests = ?, delivery_date = ?, " +
-                    "delivered_date = ?, price = ?, address_id = ?, status_id  = ? WHERE order_id = " + order.getOrderId();
-            updateQuery = con.prepareStatement(sql);
+                    "delivered_date = ?, price = ?, address_id = ?, status_id  = ? WHERE order_id = ?";
+            PreparedStatement updateQuery = con.prepareStatement(sql);
             if (!updateAddress(order.getAddress())){
+                System.out.println("address fail");
                 return false;
             }
             updateQuery.setString(1, order.getCustomerRequests());
@@ -1424,6 +1427,7 @@ public class SqlQueries extends DBConnector {
             updateQuery.setDouble(4, order.getPrice());
             updateQuery.setInt(5, order.getAddress().getAddressId());
             updateQuery.setInt(6, order.getStatus().getStatusId());
+            updateQuery.setInt(7, order.getOrderId());
 
             if (updateQuery.executeUpdate() == 1) {
                 return true;
@@ -1495,11 +1499,13 @@ public class SqlQueries extends DBConnector {
     public boolean deleteOrderLine(Order order, ObservableList<OrderLine> orderLines) {
         try {
             con.setAutoCommit(false);
-            String sqlSetning = "DELETE FROM order_line WHERE order_id = " + order.getOrderId() + " AND dish_id =?";
+            String sqlSetning = "DELETE FROM order_line WHERE order_id = ? AND dish_id = ?";
             PreparedStatement deleteQuery = con.prepareStatement(sqlSetning);
             for (OrderLine orderline :
                     orderLines) {
                 deleteQuery.setInt(1, order.getOrderId());
+                deleteQuery.setInt(2, orderline.getDish().getDishId());
+                System.out.println("Removing dish: " + orderline.getDish().getDishName());
                 deleteQuery.executeUpdate();
             }
             con.commit();

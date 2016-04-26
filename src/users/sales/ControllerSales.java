@@ -1,25 +1,20 @@
 package users.sales;
 
+
 import classpackage.*;
-import div.DoubleField;
 import javafx.application.Platform;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.geometry.Insets;
-import javafx.scene.Node;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
-
 import java.net.URL;
 import java.text.NumberFormat;
 import java.time.format.DateTimeFormatter;
-import java.util.Optional;
 import java.util.ResourceBundle;
 
 /**
@@ -29,7 +24,13 @@ import java.util.ResourceBundle;
 
 public class ControllerSales implements Initializable {
 
-    protected static final NumberFormat nf = NumberFormat.getNumberInstance();
+    @FXML
+    public BorderPane rootPaneSales; //RootPane
+    public Button ordersButton; //Button for showing orders
+    public Button subsButton;
+    public Button customersButton;
+
+    protected final NumberFormat nf = NumberFormat.getNumberInstance();
     {
         nf.setMaximumFractionDigits(2);
     }
@@ -43,6 +44,7 @@ public class ControllerSales implements Initializable {
     protected static ObservableList<Subscription> subscriptions = db.getAllSubscriptions();
     protected static ObservableList<OrderStatus> statusTypes = db.getStatusTypes();
 
+
     protected static Dish selectedDish;
     protected static Order selectedOrder;
     protected static Customer selectedCustomer;
@@ -50,14 +52,6 @@ public class ControllerSales implements Initializable {
     protected static OrderStatus selectedStatus;
     protected static OrderLine selectedOrderLine;
     protected static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMMM yyyy \n HH:mm");
-
-    @FXML
-    public BorderPane rootPaneSales; //RootPane
-    public Button ordersButton; //Button for showing orders
-    public Button subsButton;
-    public Button customersButton;
-
-
 
 
     EventHandler<ActionEvent> orderEvent = new EventHandler<ActionEvent>() {
@@ -103,6 +97,14 @@ public class ControllerSales implements Initializable {
     };
 
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
+
+
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                rootPaneSales.requestFocus();
+            }
+        });
 
         ordersButton.setOnAction(orderEvent);
         subsButton.setOnAction(subsEvent);

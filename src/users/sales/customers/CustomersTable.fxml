@@ -2,11 +2,10 @@
 
 <!--> Axel </!-->
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-
 <!--> Table in submenu "Orders for Sales" </!-->
 
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 <GridPane prefHeight="500" prefWidth="200.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8"
           fx:controller="users.sales.customers.ControllerSalesCustomer" stylesheets="@/users/sales/SalesStyle.css">
     <children>
