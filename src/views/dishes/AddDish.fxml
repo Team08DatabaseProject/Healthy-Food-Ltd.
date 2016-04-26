@@ -31,8 +31,8 @@
                         <FXCollections fx:factory="observableArrayList"/>
                     </items>
                 </ComboBox>
-                <Button fx:id="addIngToDishButton" prefWidth="150" prefHeight="50" text="Add to dish"/>
-                <Button fx:id="removeIngFromDishButton" prefWidth="150" prefHeight="50" text="Remove ingredient&#10;from dish"/>
+                <Button fx:id="addIngToDishButton" prefWidth="150" prefHeight="50" text="Add to dish" styleClass="subWindowButton"/>
+                <Button fx:id="removeIngFromDishButton" prefWidth="150" minHeight="80" text="Remove ingredient&#10;from dish" styleClass="subWindowButton"/>
             </children>
         </HBox>
 
