@@ -4,11 +4,7 @@ package users.chef;
  * Created by Axel Kvistad on 13.04.2016
  */
 import classpackage.MenuLine;
-import div.Login;
 import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -20,12 +16,9 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import classpackage.Menu;
-import javafx.util.StringConverter;
 
 import java.net.URL;
 import java.util.ResourceBundle;

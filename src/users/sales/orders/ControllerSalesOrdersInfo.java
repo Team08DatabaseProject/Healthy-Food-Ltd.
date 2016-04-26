@@ -7,8 +7,10 @@ import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.util.StringConverter;
 
@@ -80,6 +82,8 @@ public class ControllerSalesOrdersInfo extends ControllerSalesOrders implements 
                     selectedOrder.setStatus(status);
                     selectedCustomer.getSubscription().setStartSubscription(startSub);
                     selectedCustomer.getSubscription().setEndSubscription(endSub);
+
+                    db.updateOrder(selectedOrder, selectedCustomer);
                 }
             } catch(Exception exc) {
                 System.out.println("editInfo(orders)Event: " + exc);
@@ -139,6 +143,5 @@ public class ControllerSalesOrdersInfo extends ControllerSalesOrders implements 
         priceField.setText(String.valueOf(selectedOrder.getPrice()));
         statusBox.setValue(selectedOrder.getStatus());
         applyButton.setOnAction(editInfoEvent);
-
     }
 }

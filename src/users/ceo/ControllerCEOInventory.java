@@ -1,7 +1,7 @@
 package users.ceo;
 
 import classpackage.*;
-import div.PopupDialog;
+import main.PopupDialog;
 import javafx.beans.property.*;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;

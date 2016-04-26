@@ -1,4 +1,4 @@
-package div;
+package main;
 
 import javafx.css.PseudoClass;
 import javafx.scene.control.Label;

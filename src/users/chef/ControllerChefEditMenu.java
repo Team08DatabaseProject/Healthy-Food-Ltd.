@@ -3,7 +3,7 @@ package users.chef;
 import classpackage.Dish;
 import classpackage.MealType;
 import classpackage.MenuLine;
-import div.PopupDialog;
+import main.PopupDialog;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -17,7 +17,6 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.GridPane;
-import javafx.util.StringConverter;
 import javafx.util.converter.IntegerStringConverter;
 
 import java.net.URL;

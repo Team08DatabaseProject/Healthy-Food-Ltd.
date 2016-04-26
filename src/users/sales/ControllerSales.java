@@ -1,17 +1,12 @@
 package users.sales;
 
 import classpackage.*;
-import div.DoubleField;
-import javafx.application.Platform;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.geometry.Insets;
-import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
@@ -19,7 +14,6 @@ import javafx.scene.layout.GridPane;
 import java.net.URL;
 import java.text.NumberFormat;
 import java.time.format.DateTimeFormatter;
-import java.util.Optional;
 import java.util.ResourceBundle;
 
 /**

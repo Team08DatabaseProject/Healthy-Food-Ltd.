@@ -1,10 +1,10 @@
 package users.sales.customers;
 
 import classpackage.*;
-import div.IntField;
-import div.PopupDialog;
-import div.StringField;
-import div.ZipCodeField;
+import main.IntField;
+import main.PopupDialog;
+import main.StringField;
+import main.ZipCodeField;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
