@@ -162,11 +162,6 @@ public class EditDishController extends DishesController implements Initializabl
         oldDishLines = selectedDish.getAllDishLinesForThisDish();
         currentDishLines.addAll(oldDishLines);
 
-        for (DishLine dl : currentDishLines) {
-            System.out.println(dl.getIngredient().getIngredientName());
-        }
-
-
         editIngredientCB.setItems(ingredientList);
         editDishNameField.setText(selectedDish.getDishName());
         editDishPriceField.setText(nf.format(selectedDish.getPrice()));

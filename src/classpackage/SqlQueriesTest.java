@@ -16,6 +16,8 @@ import static org.junit.Assert.assertTrue;
 /**
  * Created by paul thomas on 20.04.2016.
  */
+
+
 public class SqlQueriesTest {
 
     SqlQueries myQuery = new SqlQueries();
@@ -206,7 +208,8 @@ public class SqlQueriesTest {
             assertTrue(myQuery.addSubscription(subscription, testCustomers.get(0), null));
         }
 
-             /*adding orders on a Customer*/
+//adding orders on a Customer
+
 
 //        Adds order, updates the order
         for (Order order :
@@ -250,7 +253,8 @@ public class SqlQueriesTest {
 
         ObservableList<Supplier> suppliersFromDb = myQuery.getAllSuppliers();
 
-        /*Checks against the database if the objects exist and the name change was registered*/
+//Checks against the database if the objects exist and the name change was registered
+
         assertTrue(myQuery.updateIngredient(allIngredients));
         ObservableList<Ingredient> ingredientsFromDb = myQuery.getAllIngredients(suppliersFromDb);
         boolean ingredientsExistsInDb = false;
@@ -280,11 +284,12 @@ public class SqlQueriesTest {
 //        adding customers and updating them
 
 
-        /*for (Customer customer :
+for (Customer customer :
                 testCustomers) {
             customer.setEmail("JUnit@gmailtesting.org");
             assertTrue(myQuery.updateCustomer(customer));
-        }*/
+        }
+
 
 
 
