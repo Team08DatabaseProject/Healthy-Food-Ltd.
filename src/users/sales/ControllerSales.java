@@ -1,6 +1,5 @@
 package users.sales;
 
-
 import classpackage.*;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
