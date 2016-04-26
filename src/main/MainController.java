@@ -16,6 +16,7 @@ import javafx.scene.layout.HBox;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 
 /**
@@ -37,6 +38,9 @@ public class MainController extends Main implements Initializable {
 	private final int SALES = 8;
 	private final int CUSTOMERS = 9;
 	private int currentView;
+
+	protected static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMMM yyyy \n HH:mm");
+
 
 
 	private Button createOrdersButton() {
@@ -282,6 +286,9 @@ public class MainController extends Main implements Initializable {
 			case Employee.DRIVER :
 				topMenuButtons.add(createDriverButton());
 				break;
+            case Employee.SALES :
+                topMenuButtons.add(createSalesButton());
+                topMenuButtons.add(createCustomersButton());
 		}
 		topMenuHBox.getChildren().addAll(topMenuButtons);
 	}

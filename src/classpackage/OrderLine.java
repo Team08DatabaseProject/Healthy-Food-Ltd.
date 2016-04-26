@@ -14,6 +14,8 @@ public class OrderLine {
     private ObjectProperty<Dish> dish = new SimpleObjectProperty<>();
     private IntegerProperty amount = new SimpleIntegerProperty();
     private NumberBinding total;
+    private boolean changed = false;
+    private boolean original = true;
 
     public OrderLine(Dish dish, int amount) {
         this.dish.set(dish);
@@ -53,5 +55,21 @@ public class OrderLine {
 
     public double getTotal() {
         return total.doubleValue();
+    }
+
+    public boolean isChanged() {
+        return changed;
+    }
+
+    public void setChanged(boolean bln) {
+        changed = bln;
+    }
+
+    public boolean isOriginal() {
+        return original;
+    }
+
+    public void setOriginal(boolean bln) {
+        original = bln;
     }
 }

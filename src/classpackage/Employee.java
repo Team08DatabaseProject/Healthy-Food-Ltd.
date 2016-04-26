@@ -19,12 +19,12 @@ public class Employee {
     private ObjectProperty<Address> address = new SimpleObjectProperty<>();
     private ObjectProperty<EmployeePosition> position = new SimpleObjectProperty<>();
     private BooleanProperty checked = new SimpleBooleanProperty();
-    private static final int ADMIN = 0;
-    private static final int CEO = 1;
-    private static final int CHEF = 2;
-    private static final int DRIVER = 3;
-    private static final int SALES = 4;
-    private static final int NUTRITION = 5;
+    public static final int ADMIN = 0;
+    public static final int CEO = 1;
+    public static final int CHEF = 2;
+    public static final int DRIVER = 3;
+    public static final int SALES = 4;
+    public static final int NUTRITION = 5;
 
     // Constructor for getting an employee from the employee table (in the DB)
     public Employee(int employeeId, String username, String firstName, String lastName, int phoneNo, String eMail, double salary, String passHash, Address address, EmployeePosition position) {
@@ -38,12 +38,9 @@ public class Employee {
         this.passHash.set(passHash);
         this.address.set(address);
         this.position.set(position);
-        /* Kall til EncryptionService her for å generere passHash (og kanskje salt) */
-        // Thomas: If a new employee is being created (i dont meant he object.. i mean a real new one to be added to the DB), the method to encrypt the password should called before and only the hash should be passed to the object.
-        //passHash = "encryption-ting her";
+
     }
 
-    // Constructor for creating a new employee object from GUI, missing employeeId
     public Employee(String username, String firstName, String lastName, int phoneNo, String eMail, double salary, String passHash, Address address, EmployeePosition position) {
         this.username.set(username);
         this.firstName.set(firstName);
@@ -54,9 +51,7 @@ public class Employee {
         this.passHash.set(passHash);
         this.address.set(address);
         this.position.set(position);
-        /* Kall til EncryptionService her for å generere passHash (og kanskje salt) */
-        // Thomas: If a new employee is being created (i dont meant he object.. i mean a real new one to be added to the DB), the method to encrypt the password should called before and only the hash should be passed to the object.
-        //passHash = "encryption-ting her";
+
     }
 
     // employee constructor without password

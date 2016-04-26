@@ -5,6 +5,7 @@ package views.driver;
  */
 
 import classpackage.*;
+import main.PopupDialog;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -21,6 +22,7 @@ import javafx.scene.layout.BorderPane;
 
 import java.net.URL;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.ResourceBundle;
 
@@ -55,6 +57,7 @@ public class DriverController extends MainController implements Initializable {
     public Button generateRouteButton;
     public Button deliveryInProcessButton;
 
+
     protected static ObservableList<OrderStatus> statusTypes = db.getStatusTypes();
     protected static ObservableList<Supplier> supplierList = db.getAllSuppliers();
     protected static ObservableList<Ingredient> ingredientList = db.getAllIngredients(supplierList);
@@ -63,6 +66,7 @@ public class DriverController extends MainController implements Initializable {
 
   //  protected static ObservableList<Order> orderList = testObjects.orderList;
     protected static ObservableList<Order> routeOrderList = FXCollections.observableArrayList();
+    protected static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMMM yyyy \n HH:mm");
 
     /* "https://www.google.com/maps/dir/" + firstAddress.getAddress() + ",+" + firstAddress.getZipCode() + "+" + firstAddress.getPlace() + ",+Norway/";*/
     public static String generateUrl(){
@@ -106,6 +110,9 @@ public class DriverController extends MainController implements Initializable {
                 if (!routeOrderList.isEmpty()) {
                     for (Order order : routeOrderList) {
                         order.setStatus(statusTypes.get(3));
+                        if(!db.updateOrder(order)){
+                            PopupDialog.errorDialog("Error", "Failed to update order status.");
+                        }
                     }
                 }
             } catch (Exception exc) {
@@ -154,9 +161,26 @@ public class DriverController extends MainController implements Initializable {
         public void handle(ActionEvent event) {
             try {
                 Order order = (Order) ordersReadyTable.getSelectionModel().getSelectedItem();
-                if (order != null) {
+                if (order != null && order.getStatus().getStatusId() != statusTypes.get(4).getStatusId()) {
                     LocalDateTime deliveryDate = LocalDateTime.now();
                     order.setActualDeliveryDateTime(deliveryDate);
+                    orderList.remove(order);
+                    routeOrderList.remove(order);
+                    order.setStatus(statusTypes.get(4));
+                    if(!db.updateOrder(order)) {
+                        order.setStatus(statusTypes.get(3));
+                        order.setActualDeliveryDateTime(null);
+                        orderList.add(order);
+                        routeOrderList.add(order);
+                        ordersReadyTable.setItems(orderList);
+                        routeOrdersTable.setItems(routeOrderList);
+                        PopupDialog.errorDialog("Error", "Failed to update order status.");
+                    } else {
+                        routeOrderList.remove(order);
+                        routeOrdersTable.setItems(routeOrderList);
+                        orderList.add(order);
+                        ordersReadyTable.setItems(orderList);
+                    }
                 }
             } catch (Exception exc) {
                 System.out.println(exc);
@@ -175,15 +199,9 @@ public class DriverController extends MainController implements Initializable {
             mapStage.setTitle("Delivery route");
             mapStage.setHeight(600);
             mapStage.setWidth(900);
-           // Stage stage = (Stage) rootPaneDriver.getScene().getWindow();
             addMap(url, paneForMap, mapStage);
         }
     };
-
-    public String ldtToString(LocalDateTime ldt) {
-        return "Date: " + ldt.getYear() + "/" + ldt.getMonthValue() + "/" + ldt.getDayOfMonth() + "\nTime: "
-                + String.format("%02d", ldt.getHour()) + ":" + String.format("%02d", ldt.getMinute());
-    }
 
 
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
@@ -201,7 +219,7 @@ public class DriverController extends MainController implements Initializable {
                     if (ldt == null || empty) {
                         setText(null);
                     } else {
-                        setText(ldtToString(ldt));
+                        setText(ldt.format(formatter));
                     }
                 }
             };
@@ -216,7 +234,7 @@ public class DriverController extends MainController implements Initializable {
                     } else if (empty) {
                         setText(null);
                     } else {
-                        setText(ldtToString(ldt));
+                        setText(ldt.format(formatter));
                     }
                 }
             };
@@ -261,7 +279,7 @@ public class DriverController extends MainController implements Initializable {
                     if (ldt == null || empty) {
                         setText(null);
                     } else {
-                        setText(ldtToString(ldt));
+                        setText(ldt.format(formatter));
                     }
                 }
             };
@@ -276,7 +294,7 @@ public class DriverController extends MainController implements Initializable {
                     } else if (empty) {
                         setText(null);
                     } else {
-                        setText(ldtToString(ldt));
+                        setText(ldt.format(formatter));
                     }
                 }
             };

@@ -1,14 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!--> Axel </!-->
-
-<?import java.lang.*?>
-<?import javafx.geometry.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.collections.FXCollections?>
-
 <GridPane fx:id="subWindowGP" fx:controller="views.customers.EditCustomerInfoController" xmlns="http://javafx.com/javafx/8"
           xmlns:fx="http://javafx.com/fxml/1" stylesheets="@/main/Main.css" alignment="CENTER">
     <padding>
@@ -41,7 +35,7 @@
             </GridPane>
         </VBox>
 
-        <TableView fx:id="currentOrdersTable" GridPane.columnIndex="1" GridPane.rowIndex="0" prefWidth="400" styleClass="subWindowTableView">
+        <TableView fx:id="currentOrdersTable" GridPane.columnIndex="1" GridPane.rowIndex="0" prefWidth="600" styleClass="subWindowTableView">
             <columnResizePolicy><TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/></columnResizePolicy>
             <columns>
                 <TableColumn fx:id="orderIDCol" text="Order ID"/>
@@ -49,12 +43,13 @@
                 <TableColumn fx:id="priceCol" text="Price (NOK)"/>
                 <TableColumn fx:id="dishQuantityCol" text="Dish quantity"/>
                 <TableColumn fx:id="statusCol" text="Status"/>
-                <TableColumn fx:id="partOfSubscriptionCol" text="Subscription"/>
+                <TableColumn fx:id="partOfSubscriptionCol" text="Subscription ID"/>
             </columns>
         </TableView>
 
         <HBox GridPane.rowIndex="1" GridPane.columnIndex="1">
-            <Button fx:id="subscriptionButton" text="Add subscription"/>
+            <Button fx:id="subscriptionButton" text="Add subscription" styleClass="subWindowButton"/>
+            <Button fx:id="commitChangesButton" text="Commit changes" styleClass="subWindowButton"/>
         </HBox>
     </children>
 </GridPane>

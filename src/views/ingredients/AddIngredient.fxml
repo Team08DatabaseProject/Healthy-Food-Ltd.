@@ -27,12 +27,16 @@
 
         <TextField fx:id="ingQuantityField" GridPane.columnIndex="0" GridPane.rowIndex="3" promptText="Start quantity"/>
 
-        <ComboBox fx:id="ingSupplierCB" GridPane.columnIndex="1" GridPane.rowIndex="1" promptText="Supplier">
-            <items>
-                <FXCollections fx:factory="observableArrayList" >
-                </FXCollections>
-            </items>
-        </ComboBox>
+        <HBox spacing="10"  GridPane.columnIndex="1" GridPane.rowIndex="1">
+            <ComboBox fx:id="ingSupplierCB" promptText="Supplier">
+                <items>
+                    <FXCollections fx:factory="observableArrayList" >
+                    </FXCollections>
+                </items>
+            </ComboBox>
+            <Button fx:id="addSupplierButton" text="Register new supplier" styleClass="subWindowButton"/>
+        </HBox>
+
         <VBox alignment="BOTTOM_LEFT" spacing="10" GridPane.columnIndex="0" GridPane.rowIndex="4">
             <children>
                 <Button fx:id="ingApplyButton" styleClass="subWindowButton" text="Apply">

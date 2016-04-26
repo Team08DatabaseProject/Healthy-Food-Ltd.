@@ -197,6 +197,8 @@ public class PopupDialog {
 		Node existingButton = dialog.getDialogPane().lookupButton(existingCustomerButtonType);
 		Node newButton = dialog.getDialogPane().lookupButton(newCustomerButtonType);
 		existingButton.setDisable(true);
+        Customer newCustomer = new Customer();
+
 
 		customerCB.setItems(customerList);
 		customerCB.setCellFactory(column -> {
@@ -224,14 +226,14 @@ public class PopupDialog {
 			if (dialogButton == existingCustomerButtonType) {
 				return customerCB.getValue();
 			} else if (dialogButton == newCustomerButtonType) {
-				return null;
+				return newCustomer;
 			}
-			return null;
+			return newCustomer;
 		});
 		Optional<Customer> result = dialog.showAndWait();
 		if(result.isPresent()) {
 			return result.get();
 		}
-		return null;
+		return newCustomer;
 	}
 }

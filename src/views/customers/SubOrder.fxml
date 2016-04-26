@@ -29,7 +29,7 @@
                 <ComboBox fx:id="deadlineHrCB" promptText="Hour"/>
                 <ComboBox fx:id="deadlineMinCB" promptText="Minute" />
             </HBox>
-            <Button fx:id="addDayAndTimeButton" text="Add day and time"/>
+            <Button fx:id="addDayAndTimeButton" text="Add day and time" styleClass="subWindowButton"/>
         </VBox>
 
         <VBox GridPane.rowIndex="0" GridPane.columnIndex="1" spacing="10">
@@ -42,7 +42,7 @@
         </VBox>
 
 
-        <TableView fx:id="chosenDishTable" GridPane.rowIndex="0" GridPane.columnIndex="2">
+        <TableView fx:id="chosenDishTable" GridPane.rowIndex="0" GridPane.columnIndex="2" styleClass="subWindowTableView">
             <columns>
                 <TableColumn fx:id="dishNameCol" text="Dish name" />
                 <TableColumn fx:id="quantityCol" text="Quantity" />

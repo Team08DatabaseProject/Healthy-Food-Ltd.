@@ -31,7 +31,7 @@ public class AddIngredientController extends IngredientsController implements In
     public TextField ingQuantityField;
     public ComboBox<Supplier> ingSupplierCB;
     public Button ingApplyButton;
-
+    public Button addSupplierButton;
 
     EventHandler<ActionEvent> ingApplyButtonClick = new EventHandler<ActionEvent>() {
         @Override
@@ -54,6 +54,16 @@ public class AddIngredientController extends IngredientsController implements In
         }
     };
 
+    /*
+    EventHandler<ActionEvent> addSupplierEvent = new EventHandler<ActionEvent>() {
+        @Override
+        public void handle(ActionEvent event) {
+            try {
+
+            }
+        }
+    }
+*/
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
 
         Platform.runLater(new Runnable() {

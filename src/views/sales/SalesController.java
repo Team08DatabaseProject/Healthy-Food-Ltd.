@@ -2,6 +2,8 @@ package views.sales;
 
 import classpackage.*;
 import javafx.collections.ObservableList;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 import main.MainController;
 import main.PopupDialog;
 import javafx.event.ActionEvent;
@@ -35,7 +37,6 @@ public class SalesController extends MainController implements Initializable{
     public TableColumn deadlineCol;
     public TableColumn priceCol;
     public TableColumn statusCol;
-    private GridPane ordersFormGrid;
 
     protected static Dish selectedDish;
     protected static Order selectedOrder;
@@ -62,11 +63,13 @@ public class SalesController extends MainController implements Initializable{
             try {
                 selectedCustomer = PopupDialog.createOrderDialog("Customer type", "New or existing customer?", customers);
                 FXMLLoader loader = new FXMLLoader();
-                loader.setLocation(getClass().getResource("OrdersCreateForm.fxml"));
-                ordersFormGrid = loader.load();
-                rootPaneOrders.setCenter(ordersFormGrid);
-                rootPaneOrders.setBottom(null);
-                rootPaneOrders.setRight(null);
+                loader.setLocation(getClass().getResource("SalesForm.fxml"));
+                GridPane ordersFormGrid = loader.load();
+                Scene formScene = new Scene(ordersFormGrid, 1900, 700);
+                Stage formStage = new Stage();
+                formStage.setTitle("Create order");
+                formStage.setScene(formScene);
+                formStage.show();
             } catch (Exception e) {
                 System.out.println(e);
             }
@@ -114,7 +117,7 @@ public class SalesController extends MainController implements Initializable{
                 }
                 try {
                     FXMLLoader loader = new FXMLLoader();
-                    loader.setLocation(getClass().getResource("OrdersInfoTable.fxml"));
+                    loader.setLocation(getClass().getResource("SalesInfo.fxml"));
                     GridPane ordersInfoGrid = loader.load();
                     rootPaneOrders.setBottom(ordersInfoGrid);
                 } catch (Exception e) {

@@ -25,7 +25,7 @@ import javafx.stage.Stage;
 import javafx.util.StringConverter;
 
 import java.net.URL;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ResourceBundle;
 
 /**
@@ -85,6 +85,7 @@ public class OrdersController extends MainController implements Initializable {
             try {
                 ObservableList<Order> orderUpdateList = FXCollections.observableArrayList();
                 String updateString = "";
+                String errorString = "";
                 for (Order order : orderList) {
                     if (order.isChanged()) {
                         orderUpdateList.add(order);
@@ -94,10 +95,21 @@ public class OrdersController extends MainController implements Initializable {
                 }
                 if (orderUpdateList.isEmpty()) {
                     PopupDialog.errorDialog("Update failure", "Changes were not applied, as no changes were detected in orders.");
-                } else if (1==1) {  // TODO: 4/24/16 update with SqlQueries method
-                    PopupDialog.confirmationDialog("Result", "Order(s):" + updateString + "\nupdated.");
                 } else {
-                    PopupDialog.errorDialog("Error", "Something went wrong.\nOrder:" + updateString + "\nfailed to update.");
+                    boolean allAdded = true;
+                    for (Order order : orderUpdateList) {
+                        if (!db.updateOrder(order)) {
+                            errorString += "\n" + order.getOrderId();
+                            allAdded = false;
+                        }
+                    }
+                    if (allAdded) {
+                        PopupDialog.confirmationDialog("Result", "Order(s):" + updateString + "\nupdated.");
+                    } else {
+                        PopupDialog.errorDialog("Error", "Something went wrong.\nOrder(s):" + errorString + "\nfailed to update.");
+
+                    }
+
                 }
             } catch (Exception exc) {
                 System.out.println(exc);
@@ -117,7 +129,7 @@ public class OrdersController extends MainController implements Initializable {
 
         chefOrdersTable.setEditable(true);
         orderIdCol.setCellValueFactory(new PropertyValueFactory<Order, Integer>("orderId"));
-        deadlineCol.setCellValueFactory(new PropertyValueFactory<Order, LocalDate>("deadline"));
+        deadlineCol.setCellValueFactory(new PropertyValueFactory<Order, LocalDateTime>("deadlineTime"));
         dishQuantityCol.setCellValueFactory(new PropertyValueFactory<Order, ObservableList<OrderLine>>("dishesInThisOrder"));
         priceCol.setCellValueFactory(new PropertyValueFactory<Order, Double>("price"));
         statusCol.setCellValueFactory(new PropertyValueFactory<Order, OrderStatus>("status"));
@@ -139,8 +151,7 @@ public class OrdersController extends MainController implements Initializable {
                     public void handle(TableColumn.CellEditEvent<Order, OrderStatus> event) {
                         event.getTableView().getItems().get(event.getTablePosition().getRow()).setChanged(true);
                     }
-                }
-        );
+                });
 
         dishQuantityCol.setCellFactory(col -> {
             return new TableCell<Order, ObservableList<OrderLine>>() {
@@ -150,6 +161,19 @@ public class OrdersController extends MainController implements Initializable {
                         setText(null);
                     } else {
                         setText(String.valueOf(orderLine.size()));
+                    }
+                }
+            };
+        });
+
+        deadlineCol.setCellFactory(column -> {
+            return new TableCell<Order, LocalDateTime>() {
+                @Override
+                public void updateItem(LocalDateTime ldt, boolean empty) {
+                    if (ldt == null || empty) {
+                        setText(null);
+                    } else {
+                        setText(ldt.format(formatter));
                     }
                 }
             };

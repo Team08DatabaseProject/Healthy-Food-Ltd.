@@ -60,6 +60,7 @@ public class Customer {
     }
 
 
+
     public Customer(){  // needed for PopupDialog
         this.customerId.set(-1);
     }

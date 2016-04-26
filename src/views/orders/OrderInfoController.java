@@ -2,6 +2,7 @@ package views.orders;
 
 import classpackage.Dish;
 import classpackage.OrderLine;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
@@ -25,7 +26,7 @@ import java.util.ResourceBundle;
 public class OrderInfoController extends OrdersController implements Initializable {
 
     @FXML
-    public GridPane orderInfoGP;
+    public GridPane subWindowGP;
     public Label leftHeader;
     public Label deadlineLabel;
     public Label priceLabel;
@@ -60,8 +61,16 @@ public class OrderInfoController extends OrdersController implements Initializab
     };
 
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
+
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                subWindowGP.requestFocus();
+            }
+        });
+
         leftHeader.setText("Order " + selectedOrder.getOrderId());
-        deadlineLabel.setText(selectedOrder.getDeadlineTime().toString());
+        deadlineLabel.setText(selectedOrder.getDeadlineTime().format(formatter));
         priceLabel.setText(selectedOrder.getPrice() + " NOK");
         addressLabel.setText(selectedOrder.getAddress().getAddress());
         requestLabel.setText("\"" + selectedOrder.getCustomerRequests() + "\"");
