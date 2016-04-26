@@ -1,6 +1,7 @@
 package views.inventory;
 
 import classpackage.*;
+import javafx.application.Platform;
 import main.MainController;
 import main.PopupDialog;
 import javafx.beans.property.*;
@@ -294,6 +295,12 @@ public class InventoryController extends MainController implements Initializable
 	}
 
 	public void initialize(URL fxmlFileLocation, ResourceBundle resources) { // Required method for Initializable, runs at program launch
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				rootPane.requestFocus();
+			}
+		});
 		//Purchase orders
 		pOrders = db.getPOrders(false);
 		pOrdersStatus.getSelectionModel().selectFirst();

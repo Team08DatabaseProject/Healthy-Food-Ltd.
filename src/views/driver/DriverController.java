@@ -5,6 +5,7 @@ package views.driver;
  */
 
 import classpackage.*;
+import javafx.application.Platform;
 import main.PopupDialog;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -205,6 +206,13 @@ public class DriverController extends MainController implements Initializable {
 
 
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
+
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                rootPane.requestFocus();
+            }
+        });
 
         deadlineColLeft.setCellValueFactory(new PropertyValueFactory<Order, LocalDateTime>("deadlineTime"));
         dateDeliveredColLeft.setCellValueFactory(new PropertyValueFactory<Order, LocalDateTime>("actualDeliveryDateTime"));

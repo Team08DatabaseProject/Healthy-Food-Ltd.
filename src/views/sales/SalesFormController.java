@@ -1,6 +1,8 @@
 package views.sales;
 
 import classpackage.*;
+import classpackage.Menu;
+import javafx.collections.ListChangeListener;
 import main.PopupDialog;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
@@ -62,9 +64,13 @@ public class SalesFormController extends SalesController implements Initializabl
     public TableColumn priceCol;
     public ComboBox<OrderStatus> statusBox;
     public Button removeOrderDishButton;
+    public ComboBox<Menu> chooseMenus;
+    public Button setToMenuButton;
+    public Button removeMenuButton;
+
     private double totalPrice = 0;
 
-
+    ObservableList<OrderLine> oldOrderLines = FXCollections.observableArrayList();
     ObservableList<OrderLine> chosenOrderLines = FXCollections.observableArrayList();
     ObservableList<OrderLine> addOrderLines = FXCollections.observableArrayList();
     ObservableList<OrderLine> removeOrderLines = FXCollections.observableArrayList();
@@ -105,8 +111,7 @@ public class SalesFormController extends SalesController implements Initializabl
                         if (ol.getDish().equals(selectedDish)){
                             add = false;
                         }
-                    }
-                    if (add){
+                    } if (add){
 
                         for (OrderLine ol : addOrderLines) {
                             if (ol.getDish().equals(selectedDish)) {
@@ -131,6 +136,63 @@ public class SalesFormController extends SalesController implements Initializabl
         }
     };
 
+    EventHandler<ActionEvent> addMenuToOrderEvent = new EventHandler<ActionEvent>() {
+        @Override
+        public void handle(ActionEvent event) {
+            try{
+                if (selectedMenu != null && chosenOrderLines.isEmpty()){
+
+                    ObservableList<MenuLine> tempMenuLines = selectedMenu.getMenuLines();
+                    for (MenuLine ml : tempMenuLines) {
+                        OrderLine newOL = new OrderLine(ml.getDish(), ml.getAmount());
+                        chosenOrderLines.add(newOL);
+                    }
+                    totalPrice = selectedMenu.getTotalPrice();
+                    priceField.setText(nf.format(totalPrice));
+                    priceField.setEditable(false);
+                    chooseDishes.setDisable(true);
+                    chooseMenus.setDisable(true);
+                    addDishButton.setDisable(true);
+                    setToMenuButton.setDisable(true);
+                    removeMenuButton.setDisable(false);
+                    chosenDishTable.setEditable(false);
+                    addOrderLines.clear();
+                    addOrderLines.addAll(chosenOrderLines);
+                    if (selectedOrder != null) {
+                        removeOrderLines.clear();
+                        removeOrderLines.addAll(oldOrderLines);
+                    }
+                } else {
+                    PopupDialog.informationDialog("Information", "To set an order as a menu, you must make sure\n" +
+                            "that the chosen dish table is empty and that you have selected a menu to add.");
+                }
+            }catch (Exception e){
+                System.out.println("addDishToOrderEvent " + e);
+            }
+        }
+    };
+
+    EventHandler<ActionEvent> removeMenuFromOrderEvent = new EventHandler<ActionEvent>() {
+        @Override
+        public void handle(ActionEvent event) {
+            try {
+                chosenDishTable.setEditable(true);
+                chosenOrderLines.clear();
+                addOrderLines.clear();
+                totalPrice = 0;
+                priceField.setText(nf.format(totalPrice));
+                priceField.setEditable(true);
+                chooseDishes.setDisable(false);
+                chooseMenus.setDisable(false);
+                addDishButton.setDisable(false);
+                setToMenuButton.setDisable(false);
+                removeMenuButton.setDisable(true);
+            } catch (Exception exc) {
+                System.out.println(exc);
+            }
+        }
+    };
+
     EventHandler<ActionEvent> removeDishFromOrderEvent = new EventHandler<ActionEvent>() {
         @Override
         public void handle(ActionEvent event) {
@@ -143,7 +205,6 @@ public class SalesFormController extends SalesController implements Initializabl
 
                     addOrderLines.remove(selectedOrderLine);
                     chosenOrderLines.remove(selectedOrderLine);
-                    chosenDishTable.setItems(chosenOrderLines);
 
                     totalPrice = 0;
                     for (OrderLine ol : chosenOrderLines){
@@ -276,6 +337,7 @@ public class SalesFormController extends SalesController implements Initializabl
 
         subscriptionIdField.setDisable(true);
         customerIdField.setDisable(true);
+        removeMenuButton.setDisable(true);
 
         if (selectedCustomer != null) {
             subscriptionIdField.setDisable(true);
@@ -312,6 +374,8 @@ public class SalesFormController extends SalesController implements Initializabl
             for (OrderLine orderLine : selectedOrder.getDishesInThisOrder()) {
                 orderLine.setOriginal(true);
             }
+            setToMenuButton.setDisable(true);
+            chooseMenus.setDisable(true);
             createButton.setText("Apply changes");
             addressField.setText(selectedOrder.getAddress().getAddress());
             zipCodeField.setText(String.valueOf(selectedOrder.getAddress().getZipCode()));
@@ -323,6 +387,7 @@ public class SalesFormController extends SalesController implements Initializabl
             totalPrice = selectedOrder.getPrice();
             priceField.setText(nf.format(totalPrice));
             chosenOrderLines = selectedOrder.getDishesInThisOrder();
+            oldOrderLines = selectedOrder.getDishesInThisOrder();
         }
 
         deadlineHrBox.setItems(deadlineHourList);
@@ -390,6 +455,30 @@ public class SalesFormController extends SalesController implements Initializabl
             }
         });
 
+        chooseMenus.setItems(menus);
+        chooseMenus.setConverter(new StringConverter<Menu>() {
+            @Override
+            public String toString(Menu menu) {
+                if (menu == null){
+                    return null;
+                } else {
+                    return menu.getName();
+                }
+            }
+            @Override
+            public Menu fromString(String string) {
+                return null;
+            }
+        });
+        chooseMenus.valueProperty().addListener(new ChangeListener<Menu>() {
+            @Override
+            public void changed(ObservableValue<? extends Menu> observable, Menu oldValue, Menu newValue) {
+                selectedMenu = newValue;
+            }
+        });
+
+
+
         chosenDishTable.setEditable(true);
         dishNameCol.setCellValueFactory(new PropertyValueFactory<OrderLine, Dish>("dish")); //dishName
         quantityCol.setCellValueFactory(new PropertyValueFactory<OrderLine, Integer>("amount")); //qty
@@ -451,5 +540,7 @@ public class SalesFormController extends SalesController implements Initializabl
         addDishButton.setOnAction(addDishToOrderEvent);
         removeOrderDishButton.setOnAction(removeDishFromOrderEvent);
         deliveryToCustomerAddressButton.setOnAction(setDeliveryToCustomerAddressEvent);
+        setToMenuButton.setOnAction(addMenuToOrderEvent);
+        removeMenuButton.setOnAction(removeMenuFromOrderEvent);
     }
 }

@@ -123,29 +123,59 @@
                     <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                 </columnResizePolicy>
             </TableView>
-            <HBox spacing="10" alignment="CENTER">
-                <ComboBox fx:id="chooseDishes" promptText="Dishes">
-                    <items>
-                        <FXCollections fx:factory="observableArrayList" >
-                        </FXCollections>
-                    </items>
-                </ComboBox>
+            <HBox spacing="5" alignment="TOP_CENTER">
 
-                <Button fx:id="addDishButton" styleClass="subMenuButton" text="Add" >
-                    <graphic>
-                        <ImageView>
-                            <Image url="@/icons/sales/Plus.png"/>
-                        </ImageView>
-                    </graphic>
-                </Button>
 
-                <Button fx:id="removeOrderDishButton" styleClass="subMenuButton" text="Remove" >
-                    <graphic>
-                        <ImageView>
-                            <Image url="@/icons/sales/Cancel.png"/>
-                        </ImageView>
-                    </graphic>
-                </Button>
+                <VBox spacing="5">
+                    <Button fx:id="addDishButton" styleClass="subMenuButton" text="Add dish" >
+                        <graphic>
+                            <ImageView>
+                                <Image url="@/icons/sales/Plus.png"/>
+                            </ImageView>
+                        </graphic>
+                    </Button>
+
+                    <Button fx:id="removeOrderDishButton" styleClass="subMenuButton" text="Remove dish" >
+                        <graphic>
+                            <ImageView>
+                                <Image url="@/icons/sales/Cancel.png"/>
+                            </ImageView>
+                        </graphic>
+                    </Button>
+
+                    <ComboBox fx:id="chooseDishes" promptText="Dishes">
+                        <items>
+                            <FXCollections fx:factory="observableArrayList" >
+                            </FXCollections>
+                        </items>
+                    </ComboBox>
+                </VBox>
+
+                <VBox spacing="5">
+                    <Button fx:id="setToMenuButton" styleClass="subMenuButton" text="Set order&#10;as menu" >
+                        <graphic>
+                            <ImageView>
+                                <Image url="@/icons/sales/Plus.png"/>
+                            </ImageView>
+                        </graphic>
+                    </Button>
+
+                    <Button fx:id="removeMenuButton" styleClass="subMenuButton" text="Remove menu">
+                        <graphic>
+                            <ImageView>
+                                <Image url="@/icons/sales/Cancel.png"/>
+                            </ImageView>
+                        </graphic>
+                    </Button>
+
+                    <ComboBox fx:id="chooseMenus" promptText="Menus">
+                        <items>
+                            <FXCollections fx:factory="observableArrayList" >
+                            </FXCollections>
+                        </items>
+                    </ComboBox>
+                </VBox>
+
             </HBox>
         </VBox>
         <Button fx:id="createButton" styleClass="subMenuButton" text="Create new order" translateX="125"

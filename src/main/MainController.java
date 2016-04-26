@@ -1,6 +1,7 @@
 package main;
 
 import classpackage.Employee;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -11,6 +12,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TabPane;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 
@@ -26,6 +28,7 @@ public class MainController extends Main implements Initializable {
 
 	@FXML
 	HBox topMenuHBox;
+    public BorderPane rootPane;
 
 	// Constants for views
 	private final int ORDERS = 1;
@@ -291,5 +294,11 @@ public class MainController extends Main implements Initializable {
                 topMenuButtons.add(createCustomersButton());
 		}
 		topMenuHBox.getChildren().addAll(topMenuButtons);
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                rootPane.requestFocus();
+            }
+        });
 	}
 }

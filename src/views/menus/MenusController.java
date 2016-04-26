@@ -112,7 +112,7 @@ public class MenusController extends MainController implements Initializable{
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                subMenuGP.requestFocus();
+                rootPane.requestFocus();
             }
         });
 

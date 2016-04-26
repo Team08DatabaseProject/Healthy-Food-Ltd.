@@ -2,6 +2,7 @@ package views.ingredients;
 
 import classpackage.Ingredient;
 import classpackage.Supplier;
+import javafx.application.Platform;
 import main.MainController;
 import main.PopupDialog;
 import javafx.collections.FXCollections;
@@ -133,6 +134,13 @@ public class IngredientsController extends MainController implements Initializab
 
 
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
+
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                rootPane.requestFocus();
+            }
+        });
 
         ingName.setCellValueFactory(new PropertyValueFactory<Ingredient, String>("ingredientName"));
         ingUnit.setCellValueFactory(new PropertyValueFactory<Ingredient, String>("unit"));
