@@ -1,4 +1,4 @@
-package div;
+package main;
 
 import classpackage.MenuLine;
 import classpackage.OrderLine;

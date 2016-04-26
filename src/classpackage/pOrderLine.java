@@ -4,7 +4,9 @@ import javafx.beans.binding.NumberBinding;
 import javafx.beans.property.*;
 
 /**
- * Created by HUMBUG on 22.04.2016.
+ * An object for saving the data of one purchase order line.
+ * Contains the metadata itself as as well as an object representing the ingredient that's being obught.
+ * A number binding calculating the total price of the line is also provided.
  */
 public class POrderLine {
 
@@ -15,6 +17,12 @@ public class POrderLine {
 	private NumberBinding totalBinding;
 	private DoubleProperty total = new SimpleDoubleProperty();
 
+	/**
+	 * Constructor for retrieving the purchase order line from the database.
+	 * @param pOrderId	The ID of the purchase order. Automatically generated when the order was inserted into the database.
+	 * @param ingredient	An object containing the data of the ingredient that is being bought.
+	 * @param quantity	The quantity of the ingredient being bought.
+	 */
 	public POrderLine(int pOrderId, Ingredient ingredient, double quantity) {
 		this.pOrderId.set(pOrderId);
 		this.ingredient.set(ingredient);
@@ -23,6 +31,11 @@ public class POrderLine {
 		total.bind(this.totalBinding);
 	}
 
+	/**
+	 * Constructor for creating a new purchase order line from the GUI. Missing ID, which is later inserted by the database.
+	 * @param ingredient	An object containing the data of the ingredient that is being bought.
+	 * @param quantity	The quantity of the ingredient being bought.
+	 */
 	public POrderLine(Ingredient ingredient, double quantity) {
 		this.ingredient.set(ingredient);
 		this.quantity.set(quantity);

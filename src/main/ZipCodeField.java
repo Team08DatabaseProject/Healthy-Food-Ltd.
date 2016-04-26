@@ -1,9 +1,7 @@
-package div;
+package main;
 
 import javafx.css.PseudoClass;
 import javafx.scene.control.Label;
-import javafx.scene.layout.Border;
-import javafx.scene.layout.BorderStroke;
 
 /**
  * Created by HUMBUG on 07.04.2016.

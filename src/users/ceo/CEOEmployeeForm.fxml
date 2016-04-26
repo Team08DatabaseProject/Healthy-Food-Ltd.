@@ -10,7 +10,7 @@
 
 <!--> Textfields for registering new employee </!-->
 
-<?import div.*?>
+<?import main.*?>
 <GridPane fx:id="addEmployeeTable" hgap="10" vgap="10" prefHeight="500.0" prefWidth="400.0" BorderPane.alignment="CENTER"
           xmlns:fx="http://javafx.com/fxml" fx:controller="users.ceo.ControllerCEOEmployeeForm" stylesheets="@/users/ceo/CEOStyle.css">
     <padding>

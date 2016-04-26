@@ -1,4 +1,4 @@
-package div;
+package main;
 /**
  * Created by axelkvistad on 3/17/16.
  * Stole the template from a website
@@ -189,7 +189,7 @@ public class Login extends Application {
 
         //Adding BorderPane to the scene and loading CSS
         Scene scene = new Scene(bp);
-        scene.getStylesheets().add(getClass().getClassLoader().getResource("div/login.css").toExternalForm());
+        scene.getStylesheets().add(getClass().getClassLoader().getResource("main/login.css").toExternalForm());
         primaryStage.setScene(scene);
         /*
         primaryStage.titleProperty().bind(

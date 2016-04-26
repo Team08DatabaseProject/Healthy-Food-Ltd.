@@ -3,8 +3,8 @@ package users.sales.orders;
 import classpackage.Customer;
 import classpackage.Order;
 import classpackage.OrderStatus;
-import div.PopupDialog;
 import javafx.application.Platform;
+import main.PopupDialog;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -65,6 +65,7 @@ public class ControllerSalesOrders extends ControllerSales implements Initializa
                 int selectedIndex = ordersTable.getSelectionModel().getSelectedIndex();
                 if(selectedIndex >= 0){
                     ordersTable.getItems().remove(selectedIndex);
+                    db.deleteOrder(selectedOrder);
                 }else{
                     //Nothing selected
                     Alert alert = new Alert(Alert.AlertType.WARNING);

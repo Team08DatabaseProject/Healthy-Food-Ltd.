@@ -3,7 +3,7 @@
 <!--> Trym </!-->
 <!--> Textfields for registering new order </!-->
 
-<?import div.*?>
+<?import main.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>

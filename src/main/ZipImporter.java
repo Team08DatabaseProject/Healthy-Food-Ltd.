@@ -1,11 +1,9 @@
-package div;
+package main;
 
 import classpackage.DBConnector;
 
 import java.io.*;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Scanner;
 
 /**
@@ -27,7 +25,7 @@ class Importer extends DBConnector {
 			PreparedStatement q = con.prepareStatement("INSERT INTO zipcode (zipcode, place) VALUES (?, ?);");
 			PreparedStatement q2 = con.prepareStatement("SELECT * FROM zipcode WHERE zipcode = ?;");
 			PreparedStatement q3 = con.prepareStatement("UPDATE zipcode SET place = ? WHERE zipcode = ?;");
-			Scanner s = new Scanner(new BufferedReader(new InputStreamReader(new FileInputStream(".\\src\\div\\Postnummerregister_ansi.txt"))));
+			Scanner s = new Scanner(new BufferedReader(new InputStreamReader(new FileInputStream(".\\src\\main\\Postnummerregister_ansi.txt"))));
 			while(s.hasNextLine()) {
 				String[] line = s.nextLine().split("\t");
 				q2.setString(1, line[0]);

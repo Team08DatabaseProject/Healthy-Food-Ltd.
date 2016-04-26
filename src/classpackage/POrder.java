@@ -9,7 +9,14 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 /**
- * Created by HUMBUG on 23.04.2016.
+ * An object for saving all the contents of a Purchase order.
+ * Contains metadata for the purchase order itself as well as an object
+ * representing the supplier and an ObservableList containing each line of the order,
+ * stored as POrderLine objects.
+ *
+ * A number binding calculating the grand total of the entire purchase order is also provided.
+ * It does not support adding or removing purchase order lines after object creation as that
+ * is not possible in the GUI.
  */
 public class POrder {
 
@@ -21,8 +28,14 @@ public class POrder {
 	private DoubleBinding grandTotalBinding;
 	private DoubleProperty grandTotal = new SimpleDoubleProperty();
 
-	// Constructor for getting order from database.
-	// Bollock
+	/**
+	 * Constructor for retrieving the complete purchase order from the database.
+	 * @param pOrderId	The ID of the purchase order. Automatically generated when order was inserted into the database.
+	 * @param supplier	An object containing the data of the supplier to which the purchase order was sent.
+	 * @param placedDate	The date on which the purchase order was saved.
+	 * @param pOrderLines	An ObservableList containing POrderLine objects representing each line of the purchase order.
+	 * @param received	Set to true if the order has been received and put in storage.
+	 */
 	public POrder(int pOrderId, Supplier supplier, LocalDate placedDate, ObservableList<POrderLine> pOrderLines, boolean received) {
 		this.pOrderId .set(pOrderId);
 		this.supplier.set(supplier);
@@ -39,7 +52,11 @@ public class POrder {
 		grandTotal.bind(grandTotalBinding);
 	}
 
-	// Constructor for creating a new order from GUI.
+	/**
+	 * Constructor for saving a new purchase order from the GUI.
+	 * @param supplier	An object containing the data of the supplier to which the purchase order was sent.
+	 * @param pOrderLines	An ObservableList containing POrderLine objects representing each line of the purchase order.
+	 */
 	public POrder(Supplier supplier, ObservableList<POrderLine> pOrderLines) {
 		this.supplier.set(supplier);
 		this.pOrderLines = pOrderLines;
@@ -82,14 +99,13 @@ public class POrder {
 		return pOrderLines;
 	}
 
-	public void setpOrderLines(ObservableList<POrderLine> pOrderLines) {
-		this.pOrderLines = pOrderLines;
-	}
-
 	public LocalDate getPlacedDate() {
 		return placedDate.get();
 	}
-
+	/**
+	 * Returns an ObservableList containing all lines of the purchase order.
+	 * @return An ObservableList<POrderLine>.
+	 */
 	public String getFormattedPlacedDate() {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMMM yyyy");
 		return placedDate.get().format(formatter);
