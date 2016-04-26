@@ -26,7 +26,20 @@ public class Employee {
     private static final int SALES = 4;
     private static final int NUTRITION = 5;
 
-    // Constructor for getting an employee from the employee table (in the DB)
+    /**
+     * Creates an employee object from the database
+     *
+     * @param employeeId the unique identifier for the employee object
+     * @param username username used for login
+     * @param firstName first name
+     * @param lastName last name
+     * @param phoneNo phone number
+     * @param eMail email
+     * @param salary salary
+     * @param passHash the pass harsh to be compared
+     * @param address address of the employeee
+     * @param position position of the employee
+     */
     public Employee(int employeeId, String username, String firstName, String lastName, int phoneNo, String eMail, double salary, String passHash, Address address, EmployeePosition position) {
         this.employeeId.set(employeeId);
         this.username.set(username);
@@ -43,7 +56,20 @@ public class Employee {
         //passHash = "encryption-ting her";
     }
 
-    // Constructor for creating a new employee object from GUI, missing employeeId
+    /**
+     * Creates an employee object to the database
+     *
+     * @param employeeId the unique identifier for the employee object
+     * @param username username used for login
+     * @param firstName first name
+     * @param lastName last name
+     * @param phoneNo phone number
+     * @param eMail email
+     * @param salary salary
+     * @param passHash the pass harsh to be compared
+     * @param address address of the employeee
+     * @param position position of the employee
+     */
     public Employee(String username, String firstName, String lastName, int phoneNo, String eMail, double salary, String passHash, Address address, EmployeePosition position) {
         this.username.set(username);
         this.firstName.set(firstName);
@@ -58,9 +84,14 @@ public class Employee {
         // Thomas: If a new employee is being created (i dont meant he object.. i mean a real new one to be added to the DB), the method to encrypt the password should called before and only the hash should be passed to the object.
         //passHash = "encryption-ting her";
     }
-
-    // employee constructor without password
-
+    /**
+     * Constructor without password
+     *
+     * @param int employeeId
+     * @param  String username
+     * @param  double salary
+     * @return
+     */
     public Employee(int employeeId, String username, double salary) {
         this.employeeId.set(employeeId);
         this.username.set(username);
