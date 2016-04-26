@@ -12,10 +12,12 @@ import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.util.Pair;
 
+import java.awt.*;
 import java.util.Optional;
 
 /**
@@ -96,7 +98,7 @@ public class PopupDialog {
 		Dialog<Pair<String, String>> dialog = new Dialog<>();
 		dialog.setTitle("Login Dialog");
 		dialog.setHeaderText("Welcome to the Healthy Catering System.");
-		dialog.setGraphic(new ImageView(this.getClass().getResource("../icons/Key-48.png").toString()));
+		dialog.setGraphic(new ImageView(getClass().getResource("/icons/Key-48.png").toString()));
 		ButtonType loginButtonType = new ButtonType("Login", ButtonBar.ButtonData.OK_DONE);
 		dialog.getDialogPane().getButtonTypes().addAll(loginButtonType, ButtonType.CANCEL);
 		GridPane grid = new GridPane();

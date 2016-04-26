@@ -47,7 +47,7 @@ public class MainController extends Main implements Initializable {
 
 
 	private Button createOrdersButton() {
-		ImageView icon = new ImageView("icons/Numbered_List-48.png");
+		ImageView icon = new ImageView("/icons/Numbered_List-48.png");
 		Button button = new Button("Orders", icon);
 		button.getStyleClass().add("TopButton");
 		button.setId("ordersButton");
@@ -57,7 +57,7 @@ public class MainController extends Main implements Initializable {
 				try {
 					if(currentView != ORDERS) {
 						FXMLLoader loader = new FXMLLoader();
-						loader.setLocation(getClass().getResource("../views/orders/Orders.fxml"));
+						loader.setLocation(getClass().getResource("/views/orders/Orders.fxml"));
 						GridPane inventoryPane = loader.load();
 						rootBorderPane.setCenter(inventoryPane);
 						currentView = ORDERS;
@@ -71,7 +71,7 @@ public class MainController extends Main implements Initializable {
 	}
 
 	private Button createMenusButton() {
-		ImageView icon = new ImageView("icons/Meal-48.png");
+		ImageView icon = new ImageView("/icons/Meal-48.png");
 		Button button = new Button("Menus", icon);
 		button.getStyleClass().add("TopButton");
 		button.setId("menusButton");
@@ -81,7 +81,7 @@ public class MainController extends Main implements Initializable {
 				try {
 					if(currentView != MENUS) {
 						FXMLLoader loader = new FXMLLoader();
-						loader.setLocation(getClass().getResource("../views/menus/Menus.fxml"));
+						loader.setLocation(getClass().getResource("/views/menus/Menus.fxml"));
 						GridPane menusPane = loader.load();
 						rootBorderPane.setCenter(menusPane);
 						currentView = MENUS;
@@ -96,7 +96,7 @@ public class MainController extends Main implements Initializable {
 	}
 
 	private Button createDishesButton() {
-		ImageView icon = new ImageView("icons/Noodles-48.png");
+		ImageView icon = new ImageView("/icons/Noodles-48.png");
 		Button button = new Button("Dishes", icon);
 		button.getStyleClass().add("TopButton");
 		button.setId("dishesButton");
@@ -106,7 +106,7 @@ public class MainController extends Main implements Initializable {
 				try {
 					if(currentView != DISHES) {
 						FXMLLoader loader = new FXMLLoader();
-						loader.setLocation(getClass().getResource("../views/dishes/Dishes.fxml"));
+						loader.setLocation(getClass().getResource("/views/dishes/Dishes.fxml"));
 						GridPane menusPane = loader.load();
 						rootBorderPane.setCenter(menusPane);
 						currentView = DISHES;
@@ -121,7 +121,7 @@ public class MainController extends Main implements Initializable {
 	}
 
 	private Button createIngredientsButton() {
-		ImageView icon = new ImageView("icons/Mushroom-48.png");
+		ImageView icon = new ImageView("/icons/Mushroom-48.png");
 		Button button = new Button("Ingredients", icon);
 		button.getStyleClass().add("TopButton");
 		button.setId("ingredientsButton");
@@ -131,7 +131,7 @@ public class MainController extends Main implements Initializable {
 				try {
 					if(currentView != INGREDIENTS) {
 						FXMLLoader loader = new FXMLLoader();
-						loader.setLocation(getClass().getResource("../views/ingredients/Ingredients.fxml"));
+						loader.setLocation(getClass().getResource("/views/ingredients/Ingredients.fxml"));
 						GridPane ingredientsPane = loader.load();
 						rootBorderPane.setCenter(ingredientsPane);
 						currentView = INGREDIENTS;
@@ -145,7 +145,7 @@ public class MainController extends Main implements Initializable {
 	}
 
 	private Button createEmployeesButton() {
-		ImageView icon = new ImageView("icons/Manager-48.png");
+		ImageView icon = new ImageView("/icons/Manager-48.png");
 		Button button = new Button("Employees", icon);
 		button.getStyleClass().add("TopButton");
 		button.setId("employeesButton");
@@ -155,7 +155,7 @@ public class MainController extends Main implements Initializable {
 				try {
 					if(currentView != EMPLOYEES) {
 						FXMLLoader loader = new FXMLLoader();
-						loader.setLocation(getClass().getResource("../views/employees/Employees.fxml"));
+						loader.setLocation(getClass().getResource("/views/employees/Employees.fxml"));
 						GridPane employeesPane = loader.load();
 						rootBorderPane.setCenter(employeesPane);
 						currentView = EMPLOYEES;
@@ -169,7 +169,7 @@ public class MainController extends Main implements Initializable {
 	}
 
 	private Button createDriverButton() {
-		ImageView icon = new ImageView("icons/Deliver_Food-48.png");
+		ImageView icon = new ImageView("/icons/Deliver_Food-48.png");
 		Button button = new Button("Driver", icon);
 		button.getStyleClass().add("TopButton");
 		button.setId("driverButton");
@@ -179,7 +179,7 @@ public class MainController extends Main implements Initializable {
 				try {
 					if(currentView != DRIVER) {
 						FXMLLoader loader = new FXMLLoader();
-						loader.setLocation(getClass().getResource("../views/driver/Driver.fxml"));
+						loader.setLocation(getClass().getResource("/views/driver/Driver.fxml"));
 						GridPane driverPane = loader.load();
 						rootBorderPane.setCenter(driverPane);
 						currentView = DRIVER;
@@ -193,7 +193,7 @@ public class MainController extends Main implements Initializable {
 	}
 
 	private Button createInventoryButton() {
-		ImageView icon = new ImageView("icons/Move_by_Trolley-48.png");
+		ImageView icon = new ImageView("/icons/Move_by_Trolley-48.png");
 		Button button = new Button("Inventory", icon);
 		button.getStyleClass().add("TopButton");
 		button.setId("inventoryButton");
@@ -203,7 +203,7 @@ public class MainController extends Main implements Initializable {
 				try {
 					if(currentView != INVENTORY) {
 						FXMLLoader loader = new FXMLLoader();
-						loader.setLocation(getClass().getResource("../views/inventory/Inventory.fxml"));
+						loader.setLocation(getClass().getResource("/views/inventory/Inventory.fxml"));
 						GridPane inventoryPane = loader.load();
 						rootBorderPane.setCenter(inventoryPane);
 						currentView = INVENTORY;
@@ -219,7 +219,7 @@ public class MainController extends Main implements Initializable {
 
 
 	private Button createSalesButton() {
-		ImageView icon = new ImageView("icons/sales/Service_Bell.png");
+		ImageView icon = new ImageView("/icons/sales/Service_Bell.png");
 		Button button = new Button("Sales", icon);
 		button.getStyleClass().add("TopButton");
 		button.setId("salesButton");
@@ -229,7 +229,7 @@ public class MainController extends Main implements Initializable {
 				try {
 					if(currentView != SALES) {
 						FXMLLoader loader = new FXMLLoader();
-						loader.setLocation(getClass().getResource("../views/sales/Sales.fxml"));
+						loader.setLocation(getClass().getResource("/views/sales/Sales.fxml"));
 						GridPane salesPane = loader.load();
 						rootBorderPane.setCenter(salesPane);
 						currentView = SALES;
@@ -243,7 +243,7 @@ public class MainController extends Main implements Initializable {
 	}
 
 	private Button createCustomersButton() {
-		ImageView icon = new ImageView("icons/sales/User_Group_Woman_Woman.png");
+		ImageView icon = new ImageView("/icons/sales/User_Group_Woman_Woman.png");
 		Button button = new Button("Customers", icon);
 		button.getStyleClass().add("TopButton");
 		button.setId("customersButton");
@@ -253,7 +253,7 @@ public class MainController extends Main implements Initializable {
 				try {
 					if(currentView != CUSTOMERS) {
 						FXMLLoader loader = new FXMLLoader();
-						loader.setLocation(getClass().getResource("../views/customers/Customers.fxml"));
+						loader.setLocation(getClass().getResource("/views/customers/Customers.fxml"));
 						GridPane custPane = loader.load();
 						rootBorderPane.setCenter(custPane);
 						currentView = CUSTOMERS;

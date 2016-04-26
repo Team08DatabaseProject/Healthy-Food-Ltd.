@@ -46,7 +46,7 @@ public class Main extends Application {
                 }
             }
             primaryStage.setTitle("Healthy Catering System. Logged in as: " + loggedInEmp.getUsername() + " - " + loggedInEmp.getPosition().getDescription());
-            Parent root = FXMLLoader.load(getClass().getResource("./Main.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("Main.fxml"));
             Scene scene = new Scene(root, 1200, 800);
             rootBorderPane = (BorderPane) scene.lookup("#rootPane");
             primaryStage.setScene(scene);
