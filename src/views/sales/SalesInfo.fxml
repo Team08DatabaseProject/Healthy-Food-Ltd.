@@ -12,7 +12,7 @@
 <?import javafx.scene.image.Image?>
 
 <GridPane fx:id="subMenuGP" prefHeight="200.0" prefWidth="1600.0" BorderPane.alignment="CENTER" xmlns="http://javafx.com/javafx/8"
-          xmlns:fx="http://javafx.com/fxml/1" fx:controller="users.sales.orders.ControllerSalesOrdersInfo" stylesheets="@/users/chef/ChefStyle.css">
+          xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.sales.SalesInfoController" stylesheets="@/main/Main.css">
     <padding>
         <Insets bottom="25" left="30" right="20" top="25" />
     </padding>

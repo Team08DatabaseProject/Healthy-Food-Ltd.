@@ -34,6 +34,7 @@ public class SalesController extends MainController implements Initializable{
     public GridPane subMenuGP;
     public Button createOrderButton; //Button for creating an order
     public Button deleteOrderButton; //Button for deleting an order
+    public Button refreshButton;
     public TableView ordersTable;
     public BorderPane rootPaneOrders;
     public TableColumn orderIdCol;
@@ -62,11 +63,15 @@ public class SalesController extends MainController implements Initializable{
     {
         nf.setMaximumFractionDigits(2);
     }
+
     EventHandler<ActionEvent> createOrderEvent = new EventHandler<ActionEvent>() {
         @Override
         public void handle(ActionEvent event) {
             try {
                 selectedCustomer = PopupDialog.createOrderDialog("Customer type", "New or existing customer?", customers);
+                if (selectedCustomer.getCustomerId() == -1) {
+                    selectedCustomer = null;
+                }
                 FXMLLoader loader = new FXMLLoader();
                 loader.setLocation(getClass().getResource("SalesForm.fxml"));
                 GridPane ordersFormGrid = loader.load();
@@ -132,6 +137,18 @@ public class SalesController extends MainController implements Initializable{
         }
     };
 
+    EventHandler<ActionEvent> refreshEvent = new EventHandler<ActionEvent>() {
+        @Override
+        public void handle(ActionEvent event) {
+            try {
+                orders = db.getOrders(4, dishes);
+                ordersTable.setItems(orders);
+            } catch (Exception exc) {
+                System.out.println(exc);
+            }
+        }
+    };
+
     public void initialize(URL fxmlFileLocation, ResourceBundle resources){
 
         Platform.runLater(new Runnable() {
@@ -178,5 +195,6 @@ public class SalesController extends MainController implements Initializable{
         deleteOrderButton.setOnAction(deleteOrderEvent);
         ordersTable.setOnMousePressed(ordersInfoEvent);
         ordersTable.setItems(orders);
+        refreshButton.setOnAction(refreshEvent);
     }
 }

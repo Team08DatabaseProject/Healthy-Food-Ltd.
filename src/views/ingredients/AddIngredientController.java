@@ -31,7 +31,6 @@ public class AddIngredientController extends IngredientsController implements In
     public TextField ingQuantityField;
     public ComboBox<Supplier> ingSupplierCB;
     public Button ingApplyButton;
-    public Button addSupplierButton;
 
     EventHandler<ActionEvent> ingApplyButtonClick = new EventHandler<ActionEvent>() {
         @Override

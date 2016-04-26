@@ -41,6 +41,13 @@
                                 </ImageView>
                             </graphic>
                         </Button>
+                        <Button fx:id="refreshButton" text="Refresh table" styleClass="subMenuButton">
+                            <graphic>
+                                <ImageView>
+                                    <Image url="@/icons/Refresh-24.png"/>
+                                </ImageView>
+                            </graphic>
+                        </Button>
                     </children>
                 </HBox>
             </VBox>

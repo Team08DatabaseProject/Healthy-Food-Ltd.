@@ -34,7 +34,6 @@
                     </FXCollections>
                 </items>
             </ComboBox>
-            <Button fx:id="addSupplierButton" text="Register new supplier" styleClass="subWindowButton"/>
         </HBox>
 
         <VBox alignment="BOTTOM_LEFT" spacing="10" GridPane.columnIndex="0" GridPane.rowIndex="4">

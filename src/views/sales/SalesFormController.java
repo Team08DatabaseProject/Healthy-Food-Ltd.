@@ -259,7 +259,9 @@ public class SalesFormController extends SalesController implements Initializabl
                 if (selectedOrder != null && selectedCustomer != null) {
                     selectedOrder.setDeadlineTime(deadlineLDT);
                     selectedOrder.setPrice(price);
-                    selectedOrder.setAddress(newAddress);
+                    selectedOrder.getAddress().setAddress(address);
+                    selectedOrder.getAddress().setZipCode(zipCodeInt);
+                    selectedOrder.getAddress().setPlace(place);
                     selectedOrder.setStatus(status);
                     selectedOrder.setCustomerRequests(customerRequests);
                     boolean ok = true;
@@ -387,7 +389,7 @@ public class SalesFormController extends SalesController implements Initializabl
             totalPrice = selectedOrder.getPrice();
             priceField.setText(nf.format(totalPrice));
             chosenOrderLines = selectedOrder.getDishesInThisOrder();
-            oldOrderLines = selectedOrder.getDishesInThisOrder();
+            oldOrderLines.setAll(chosenOrderLines);
         }
 
         deadlineHrBox.setItems(deadlineHourList);
