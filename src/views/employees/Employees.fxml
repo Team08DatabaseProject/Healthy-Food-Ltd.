@@ -14,7 +14,7 @@
 <!--> Table in submenu "Employees" </!-->
 
 <?import javafx.scene.layout.HBox?>
-<GridPane xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.employees.EmployeesController">
+<GridPane fx:id="employeesGP" xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.employees.EmployeesController">
     <children>
       <TableView fx:id="employeesTable" GridPane.columnIndex="0" GridPane.hgrow="SOMETIMES" GridPane.rowIndex="0" GridPane.vgrow="ALWAYS">
           <columns>
