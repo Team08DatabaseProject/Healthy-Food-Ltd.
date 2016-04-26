@@ -143,8 +143,8 @@
 
 .TopButton {
     -fx-background-color: #77DD77;
-    -fx-font-size: 20px;
-    -fx-min-width: 150px;
+    -fx-font-size: 15px;
+    -fx-min-width: 100px;
     -fx-min-height: 30px;
     -fx-alignment: CENTER;
 }
