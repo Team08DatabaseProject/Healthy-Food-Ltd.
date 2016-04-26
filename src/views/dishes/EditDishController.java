@@ -27,7 +27,7 @@ public class EditDishController extends DishesController implements Initializabl
 
     public GridPane subWindowGP;
     public TextField editDishNameField;
-    public TextField editDishPriceFactorField;
+    public TextField editDishPriceField;
     public ComboBox<Ingredient> editIngredientCB;
     public Button applyDishChangesButton;
     public Button addIngButton;
@@ -40,11 +40,10 @@ public class EditDishController extends DishesController implements Initializabl
     public Label currentNameLabel;
     public Label currentPriceLabel;
     public Button editDishCommitButton;
+
     protected DishLine selectedDishLine;
 
     private String dishNameString;
-    private double dishPriceFactor;
-    private String dishPriceFactorString;
     private double dishPrice = 0;
 
     // Current DishLines (ingredients) in the dish being edited
@@ -56,17 +55,11 @@ public class EditDishController extends DishesController implements Initializabl
         public void handle(ActionEvent event) {
             try {
                 String name = editDishNameField.getText();
-                String priceFactorString = editDishPriceFactorField.getText();
-                double priceFactor = Double.parseDouble(priceFactorString) / 100;
-                double price = 0;
-                for (DishLine dl : currentDishLines) {
-                    price += (dl.getAmount() * dl.getIngredient().getPrice());
-                }
-                price *= priceFactor;
-                double finalPrice = Math.round(price * 100.0) / 100.0;
+                String priceFactorString = editDishPriceField.getText();
+                dishPrice = Double.parseDouble(priceFactorString);
 
                 selectedDish.setDishName(name);
-                selectedDish.setPrice(finalPrice);
+                selectedDish.setPrice(dishPrice);
                 selectedDish.setAllDishLinesForThisDish(currentDishLines);
             } catch (Exception exc) {
                 System.out.println(exc);
@@ -78,16 +71,9 @@ public class EditDishController extends DishesController implements Initializabl
         @Override
         public void handle(ActionEvent event) {
             try {
-                if (!(editDishNameField.getText().isEmpty() || editDishPriceFactorField.getText().isEmpty() || currentDishLines.isEmpty())) {
-                    dishNameString = editDishNameField.getText();;
-                    dishPriceFactorString = editDishPriceFactorField.getText();
-                    dishPriceFactor = Double.parseDouble(dishPriceFactorString) / 100.0;
-                    dishPrice = 0;
-                    for (DishLine dl : currentDishLines) {
-                        dishPrice += (dl.getAmount() * dl.getIngredient().getPrice());
-                    }
-                    dishPrice *= dishPriceFactor;
-                    dishPrice = Math.round(dishPrice * 100.0) / 100.0;
+                if (!(editDishNameField.getText().isEmpty() || editDishPriceField.getText().isEmpty() || currentDishLines.isEmpty())) {
+                    dishNameString = editDishNameField.getText();
+                    dishPrice = Double.parseDouble(editDishPriceField.getText());
                     String dishPriceString = nf.format(dishPrice);
 
                     currentNameLabel.setText("Dish name: " + dishNameString);
@@ -165,18 +151,6 @@ public class EditDishController extends DishesController implements Initializabl
         }
     };
 
-    public double getDishPriceFactor() {
-        double ingPriceTotal = 0;
-        for (DishLine dl : selectedDish.getAllDishLinesForThisDish()) {
-            ingPriceTotal += dl.getIngredient().getPrice() * dl.getAmount();
-        }
-        if (ingPriceTotal == 0) {
-            return 100.0;
-        }
-        return Math.round((selectedDish.getPrice() / ingPriceTotal * 100.0));
-    }
-
-
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
         Platform.runLater(new Runnable() {
             @Override
@@ -195,7 +169,7 @@ public class EditDishController extends DishesController implements Initializabl
 
         editIngredientCB.setItems(ingredientList);
         editDishNameField.setText(selectedDish.getDishName());
-        editDishPriceFactorField.setText(nf.format(getDishPriceFactor()));
+        editDishPriceField.setText(nf.format(selectedDish.getPrice()));
         currentNameLabel.setText("Dish name: " + selectedDish.getDishName());
         currentPriceLabel.setText("Price: " + selectedDish.getPrice());
 

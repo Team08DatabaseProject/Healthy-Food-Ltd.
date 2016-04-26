@@ -19,8 +19,8 @@
         <VBox alignment="TOP_LEFT" spacing="10" GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.fillWidth="false" prefWidth="135">
             <children>
                 <TextField fx:id="dishNameField" promptText="Dish name"/>
-                <TextField fx:id="dishPriceFactorField" promptText="Price reduction(%)"/>
-                <Button fx:id="applyNewDishChangesButton" text="Apply changes"/>
+                <TextField fx:id="dishPriceField" promptText="Price"/>
+                <Button fx:id="applyNewDishChangesButton" text="Apply changes" styleClass="subWindowButton"/>
             </children>
         </VBox>
 
@@ -48,7 +48,7 @@
 
         <VBox alignment="BASELINE_LEFT" spacing="10" GridPane.columnIndex="0" GridPane.rowIndex="2">
             <Label fx:id="dishNameLabel" prefWidth="200" prefHeight="50" text="Dish name: "/>
-            <Label fx:id="dishPriceLabel" prefWidth="200" prefHeight="50" text="Price: "/>
+            <Label fx:id="dishPriceLabel" prefWidth="200" prefHeight="50" text="Dish price: "/>
             <Button fx:id="commitNewDishButton" text="Commit new dish" styleClass="subWindowButton"/>
         </VBox>
 

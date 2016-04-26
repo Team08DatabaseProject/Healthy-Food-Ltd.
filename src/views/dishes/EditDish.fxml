@@ -20,7 +20,7 @@
         <VBox alignment="TOP_LEFT" spacing="10" GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.fillWidth="false" prefWidth="135">
             <children>
                 <TextField fx:id="editDishNameField" promptText="Dish name"/>
-                <TextField fx:id="editDishPriceFactorField" promptText="Price factor(%)"/>
+                <TextField fx:id="editDishPriceField" promptText="Dish price"/>
                 <Button fx:id="applyDishChangesButton" prefWidth="100" text="Apply new&#10;name/price" styleClass="subWindowButton"/>
             </children>
         </VBox>

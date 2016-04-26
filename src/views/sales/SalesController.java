@@ -43,6 +43,7 @@ public class SalesController extends MainController implements Initializable{
     public TableColumn statusCol;
     public Button closeButton;
 
+
     protected static Dish selectedDish;
     protected static Order selectedOrder;
     protected static Customer selectedCustomer;

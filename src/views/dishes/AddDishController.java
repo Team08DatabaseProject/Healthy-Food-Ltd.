@@ -31,7 +31,7 @@ public class AddDishController extends DishesController implements Initializable
     @FXML
     public GridPane subWindowGP;
     public TextField dishNameField;
-    public TextField dishPriceFactorField;
+    public TextField dishPriceField;
     public ComboBox<Ingredient> ingredientComboBox;
     public Button addIngToDishButton;
     public Button removeIngFromDishButton;
@@ -46,8 +46,7 @@ public class AddDishController extends DishesController implements Initializable
     public Button applyNewDishChangesButton;
 
     private String dishNameString;
-    private double dishPriceFactor;
-    private String dishPriceFactorString;
+    private String dishPriceString;
     private double dishPrice = 0;
 
     // This list is filled up by the user by choosing from ingredientComboBox and clicking the addIngToDishButton
@@ -64,7 +63,7 @@ public class AddDishController extends DishesController implements Initializable
         @Override
         public void handle(ActionEvent event) {
             try {
-                if (!(dishNameString.isEmpty() || dishPriceFactorString.isEmpty() || chosenDishLines.isEmpty())) {
+                if (!(dishNameString.isEmpty() || dishPriceString.isEmpty() || chosenDishLines.isEmpty())) {
                     Dish newDish = new Dish(dishPrice, dishNameString, chosenDishLines);
                     if(db.addDish(newDish)) {
                         PopupDialog.confirmationDialog("Result", "Dish \"" + newDish.getDishName() + "\" added.");
@@ -84,18 +83,11 @@ public class AddDishController extends DishesController implements Initializable
         @Override
         public void handle(ActionEvent event) {
             try {
-                if (!(dishNameField.getText().isEmpty() || dishPriceFactorField.getText().isEmpty() || chosenDishLines.isEmpty())) {
+                if (!(dishNameField.getText().isEmpty() || dishPriceField.getText().isEmpty() || chosenDishLines.isEmpty())) {
 
-                    dishNameString = dishNameField.getText();;
-                    dishPriceFactorString = dishPriceFactorField.getText();
-                    dishPriceFactor = Double.parseDouble(dishPriceFactorString) / 100.0;
-                    dishPrice = 0;
-                    for (DishLine dl : chosenDishLines) {
-                         dishPrice += (dl.getAmount() * dl.getIngredient().getPrice());
-                    }
-                    dishPrice *= dishPriceFactor;
-                    dishPrice = Math.round(dishPrice * 100.0) / 100.0;
-                    String dishPriceString = nf.format(dishPrice);
+                    dishNameString = dishNameField.getText();
+                    dishPriceString = nf.format(dishPriceField.getText());
+                    dishPrice = Double.parseDouble(dishPriceString);
 
                     dishNameLabel.setText("Dish name: " + dishNameString);
                     dishPriceLabel.setText("Dish price: " + dishPriceString + " NOK");
@@ -114,7 +106,7 @@ public class AddDishController extends DishesController implements Initializable
                 boolean remove = false;
                 if (selectedDishLine != null) {
                     for (DishLine dl : chosenDishLines) {
-                        if (dl.getIngredient().getIngredientName().equals(selectedDishLine.getIngredient().getIngredientName())) {
+                        if (dl.getIngredient().getIngredientId() == (selectedDishLine.getIngredient().getIngredientId())) {
                             remove = true;
                         }
                     }
