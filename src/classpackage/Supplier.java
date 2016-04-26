@@ -6,12 +6,21 @@ import javafx.beans.property.*;
  * Created by paul thomas on 16.03.2016.
  */
 public class Supplier {
+    /**
+     * Objectvariables for Supplier.java
+     */
     private IntegerProperty supplierId = new SimpleIntegerProperty();
     private IntegerProperty phoneNumber = new SimpleIntegerProperty();
     private ObjectProperty<Address> thisAddress = new SimpleObjectProperty<>();
     private StringProperty businessName = new SimpleStringProperty();
 
-    // from database
+    /**
+     * Constructor used when reading from database
+     * @param supplierId
+     * @param phoneNumber
+     * @param thisAddress
+     * @param businessName
+     */
     public Supplier(int supplierId, int phoneNumber, Address thisAddress, String businessName) {
         this.supplierId.set(supplierId);
         this.phoneNumber.set(phoneNumber);
@@ -19,7 +28,12 @@ public class Supplier {
         this.businessName.set(businessName);
     }
 
-    // To database
+    /**
+     * Constructor used when writing to the database
+     * @param phoneNumber
+     * @param thisAddress
+     * @param businessName
+     */
     public Supplier(int phoneNumber, Address thisAddress, String businessName) {
         this.phoneNumber.set(phoneNumber);
         this.thisAddress.set(thisAddress);
@@ -74,6 +88,10 @@ public class Supplier {
         this.businessName.set(businessName);
     }
 
+    /**
+     * toString method
+     * @return toString
+     */
     @Override
     public String toString() {
         return "Supplier{" +

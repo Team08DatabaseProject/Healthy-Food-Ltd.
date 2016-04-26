@@ -65,6 +65,7 @@ public class ControllerSalesOrders extends ControllerSales implements Initializa
                 int selectedIndex = ordersTable.getSelectionModel().getSelectedIndex();
                 if(selectedIndex >= 0){
                     ordersTable.getItems().remove(selectedIndex);
+                    db.deleteOrder(selectedOrder);
                 }else{
                     //Nothing selected
                     Alert alert = new Alert(Alert.AlertType.WARNING);

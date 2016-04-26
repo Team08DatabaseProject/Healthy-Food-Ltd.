@@ -1,3 +1,4 @@
+/*
 package classpackage;
 
 import javafx.collections.FXCollections;
@@ -11,9 +12,11 @@ import java.util.ArrayList;
 
 import static org.junit.Assert.*;
 
+*/
 /**
  * Created by paul thomas on 20.04.2016.
- */
+ *//*
+
 public class SqlQueriesTest {
 
     public static SqlQueries myQuery = new SqlQueries();
@@ -80,7 +83,8 @@ public class SqlQueriesTest {
 
 
 
-    /*Testing with JUnit
+    */
+/*Testing with JUnit
     *
     *
     * addAddress
@@ -95,7 +99,8 @@ public class SqlQueriesTest {
     *
     *
     *
-    * */
+    * *//*
+
 
     @org.junit.Before
     public void setUp() throws Exception {
@@ -197,7 +202,9 @@ public class SqlQueriesTest {
             ingredient.setIngredientName("IngredientTest");
         }
 
-        /*Checks against the database if the objects exist and the name change was registered*/
+        */
+/*Checks against the database if the objects exist and the name change was registered*//*
+
         assertTrue(myQuery.updateIngredient(allIngredients));
         ObservableList<Ingredient> ingredientsFromDb = myQuery.getAllIngredients(suppliersFromDb);
         boolean ingredientsExistsInDb = false;
@@ -252,7 +259,9 @@ public class SqlQueriesTest {
 
 
 
-      /*adding orders on a Customer*/
+      */
+/*adding orders on a Customer*//*
+
 
 //        Adds order, updates the order, and deletes them
         for (Order order :
@@ -366,6 +375,7 @@ public class SqlQueriesTest {
     }
 
 
+*/
 /*
 
 Template
@@ -415,7 +425,9 @@ Template
             assertTrue(myQuery.deleteSupplier(supplier));
         }
 
-       */
+       *//*
+
 
 
 }
+*/
