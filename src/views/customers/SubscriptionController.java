@@ -3,6 +3,7 @@ package views.customers;
 import classpackage.Order;
 import classpackage.OrderLine;
 import classpackage.OrderStatus;
+import classpackage.Subscription;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -48,6 +49,10 @@ public class SubscriptionController extends CustomersController implements Initi
         @Override
         public void handle(ActionEvent event) {
             try {
+                if (selectedSubscription == null) {
+                    ObservableList<Order> emptyOrderList = FXCollections.observableArrayList();
+                    selectedSubscription = new Subscription(subscriptionStart.getValue(), subscriptionEnd.getValue(), emptyOrderList);
+                }
                 selectedOrder = null;
                 FXMLLoader loader = new FXMLLoader();
                 loader.setLocation(getClass().getResource("SubOrder.fxml"));

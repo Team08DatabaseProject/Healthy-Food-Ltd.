@@ -156,11 +156,8 @@ public class SubOrderController extends CustomersController implements Initializ
                 Address newAddress = new Address(address, zipCodeInt, place);
 
                 int dayOfWeek = dayOfWeekCB.getSelectionModel().getSelectedItem();
-                System.out.println("Day of week: " + dayOfWeek);
                 int hour = deadlineHrCB.getSelectionModel().getSelectedItem();
-                System.out.println("Hour: " + hour);
                 int minute = deadlineMinCB.getSelectionModel().getSelectedItem();
-                System.out.println("Minute: " + minute);
                 startSub = selectedSubscription.getStartSubscription();
                 endSub = selectedSubscription.getEndSubscription();
                 OrderStatus created = statusTypes.get(0);
@@ -198,7 +195,7 @@ public class SubOrderController extends CustomersController implements Initializ
                     }
                 }
             } catch (Exception exc) {
-                System.out.println(exc);
+                exc.printStackTrace();
             }
         }
     };
@@ -211,8 +208,12 @@ public class SubOrderController extends CustomersController implements Initializ
                 subWindowGP.requestFocus();
             }
         });
-        if (selectedSubscription.getOrdersOnThisSubscription() != null) {
+
+
+
+        if (selectedSubscription != null && !selectedSubscription.getOrdersOnThisSubscription().isEmpty()) {
             finalSubOrders = selectedSubscription.getOrdersOnThisSubscription();
+            System.out.println(selectedSubscription.getEndSubscription());
         }
 
         deadlineHrCB.setItems(deadlineHourList);
