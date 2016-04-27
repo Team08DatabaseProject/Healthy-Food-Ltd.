@@ -7,12 +7,14 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.util.Pair;
@@ -77,21 +79,72 @@ public class PopupDialog {
 	}
 
 	public static void newPOrderEmail(POrder pOrder, Supplier supplier) {
-		String content = "Dear " + supplier.getBusinessName() + "\n\n" +
-						"We wish to place an order for the following ingredients:\n\nName:\t\tPrice:\tQuantity:\tTotal:\n";
-		double grandTotal = 0.0;
-		for(POrderLine pOrderLine: pOrder.getpOrderLines()) {
-			double lineTotal = pOrderLine.getIngredient().getPrice() + pOrderLine.getQuantity();
-			grandTotal += lineTotal;
-			content += pOrderLine.getIngredient().getIngredientName() + "\t\t" + pOrderLine.getIngredient().getPrice() + "\t" +
-			pOrderLine.getQuantity() + "\t" + lineTotal + "\n";
-		}
-		content += "\nGrand total: " + grandTotal + "\n\nPurchase order ID: " + pOrder.getpOrderId() + "\n\nRegards\nHealthy Catering Ltd.";
-		Alert alert = new Alert(AlertType.INFORMATION);
-		alert.setTitle("Phone call made or e-mail sent");
-		alert.setHeaderText(null);
-		alert.setContentText(content);
-		alert.showAndWait();
+		Dialog<Object> dialog = new Dialog<>();
+		dialog.setTitle("Phone call made or e-mail sent");
+		dialog.setHeaderText(null);
+		dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK);
+		String firstHalf = "Dear " + supplier.getBusinessName() + ".\n\n" +
+						"We wish to place an order for the following ingredients:";
+		String secondHalf = "Grand total: " + pOrder.getGrandTotal() + "\nPurchase order ID: " + pOrder.getpOrderId() + "\n\nRegards\n" +
+						"Healthy Catering Ltd.";
+		GridPane grid = new GridPane();
+		dialog.getDialogPane().setContent(grid);
+		grid.setHgap(10);
+		grid.setPadding(new Insets(20, 10, 10, 10));
+		grid.add(new Label(firstHalf), 0, 0);
+		TableView<POrderLine> table = new TableView<>();
+		grid.add(table, 0, 1);
+		grid.add(new Label(secondHalf), 0, 2);
+		System.out.println(pOrder.getpOrderLines());
+		TableColumn<POrderLine, Ingredient> ingCol = new TableColumn<>("Ingredient");
+		TableColumn<POrderLine, Ingredient> priceCol = new TableColumn<>("Price");
+		TableColumn<POrderLine, Double> quantityCol = new TableColumn<>("Quantity");
+		TableColumn<POrderLine, Double> totalCol = new TableColumn<>("Total");
+		ingCol.setCellValueFactory(new PropertyValueFactory<>("ingredient"));
+		ingCol.setCellFactory(column -> {
+			return new TableCell<POrderLine, Ingredient>() {
+				@Override
+				protected void updateItem(Ingredient item, boolean empty) {
+					if(item == null || empty) {
+						setText(null);
+					} else {
+						setText(item.getIngredientName());
+					}
+				}
+			};
+		});
+		quantityCol.setCellValueFactory(new PropertyValueFactory<>("quantity"));
+		priceCol.setCellValueFactory(new PropertyValueFactory<>("ingredient"));
+		priceCol.setCellFactory(column -> {
+			return new TableCell<POrderLine, Ingredient>() {
+				@Override
+				protected void updateItem(Ingredient item, boolean empty) {
+					if(item == null || empty) {
+						setText(null);
+					} else {
+						setText(String.format("%.2f", item.getPrice()));
+						setAlignment(Pos.BASELINE_RIGHT);
+					}
+				}
+			};
+		});
+		totalCol.setCellValueFactory(new PropertyValueFactory<>("total"));
+		totalCol.setCellFactory(column -> {
+			return new TableCell<POrderLine, Double>() {
+				@Override
+				protected void updateItem(Double item, boolean empty) {
+					if(item == null || empty) {
+						setText(null);
+					} else {
+						setText(String.format("%.2f", item));
+						setAlignment(Pos.BASELINE_RIGHT);
+					}
+				}
+			};
+		});
+		table.getColumns().addAll(ingCol, priceCol, quantityCol, totalCol);
+		table.setItems(pOrder.getpOrderLines());
+		dialog.showAndWait();
 	}
 
 	public Optional<Pair<String, String>> loginDialog() {

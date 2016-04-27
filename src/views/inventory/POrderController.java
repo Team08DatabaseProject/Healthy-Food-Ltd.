@@ -160,13 +160,11 @@ public class POrderController extends InventoryController implements Initializab
 							supplier.getThisAddress().getZipCode() + " " + supplier.getThisAddress().getPlace());
 			addLineButton.setDisable(false);
 			chooseSupplierButton.setDisable(true);
-			System.out.println("Test 1");
 		} else {
 			supplierNameField.setText("");
 			phoneNoField.setText("");
 			supplierAddressField.setText("");
 			addLineButton.setDisable(true);
-			System.out.println("Test 2");
 		}
 	}
 
