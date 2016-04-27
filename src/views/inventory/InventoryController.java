@@ -195,6 +195,7 @@ public class InventoryController extends MainController implements Initializable
 					} else {
 						if(!item) {
 							Button button = new Button("Received");
+							button.getStyleClass().add("smallButton");
 							TableCell<POrder, Boolean> cell = this;
 							button.setOnAction(new EventHandler<ActionEvent>() {
 								@Override

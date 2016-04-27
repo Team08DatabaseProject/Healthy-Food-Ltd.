@@ -7,7 +7,6 @@
 <?import javafx.scene.layout.*?>
 <GridPane fx:id="subMenuGP" hgap="50" alignment="CENTER"  stylesheets="@/main/Main.css" xmlns="http://javafx.com/javafx/8"
           xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.driver.DriverController">
-    <Label text="Healthy Catering System - Driver" styleClass="BiggerLabel" alignment="TOP_CENTER" GridPane.rowIndex="0" GridPane.columnIndex="0" GridPane.columnSpan="2" translateX="340" translateY="-70"/>
     <VBox GridPane.rowIndex="1" GridPane.columnIndex="0" alignment="CENTER">
         <Label text="Orders ready for delivery" styleClass="mediumBigLabel"/>
         <TableView fx:id="ordersReadyTable" prefWidth="600.0" prefHeight="400.0">
