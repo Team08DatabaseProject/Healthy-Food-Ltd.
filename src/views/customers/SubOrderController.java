@@ -103,6 +103,7 @@ public class SubOrderController extends CustomersController implements Initializ
                     if (add){
                         OrderLine newOL = new OrderLine(selectedDish);
                         chosenOL.add(newOL);
+                        System.out.println(selectedDish.getDishName());
                         chosenDishTable.setItems(chosenOL);
                         double totalPrice = 0;
                         for (OrderLine ol : chosenOL){
@@ -128,6 +129,7 @@ public class SubOrderController extends CustomersController implements Initializ
                     }
                 }
                 if (!(selectedSubscription == null || finalSubOrders.isEmpty())) {
+                    db.addSubscription(selectedSubscription, selectedCustomer, finalSubOrders);
                     if (db.addOrders(selectedSubscription, finalSubOrders, selectedCustomer)) {
                         selectedSubscription.setOrdersOnThisSubscription(finalSubOrders);
                         PopupDialog.confirmationDialog("Result", "Orders added to subscription.");
