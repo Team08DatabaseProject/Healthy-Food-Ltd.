@@ -66,13 +66,6 @@ public class SubscriptionController extends CustomersController implements Initi
 
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
 
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                rootPane.requestFocus();
-            }
-        });
-
         if (selectedSubscription != null) {
             subscriptionOrders = selectedSubscription.getOrdersOnThisSubscription();
             subscriptionStart.setDisable(true);

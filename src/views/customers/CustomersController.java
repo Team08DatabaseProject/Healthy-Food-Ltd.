@@ -162,7 +162,7 @@ public class CustomersController extends MainController implements Initializable
         subscriptionIdCol.setCellValueFactory(new PropertyValueFactory<Customer,Subscription>("subscription")); //subscriptionId
         fNameCol.setCellValueFactory(new PropertyValueFactory<Customer,String>("firstName")); //firstName
         lNameCol.setCellValueFactory(new PropertyValueFactory<Customer,String>("lastName")); //lastName
-        phoneNumberCol.setCellValueFactory(new PropertyValueFactory<Customer, Integer>("phoneNr"));
+        phoneNumberCol.setCellValueFactory(new PropertyValueFactory<Customer, Integer>("phoneNumber"));
         emailCol.setCellValueFactory(new PropertyValueFactory<Customer, String>("email"));
         addressCol.setCellValueFactory(new PropertyValueFactory<Customer, Address>("address"));
         placeCol.setCellValueFactory(new PropertyValueFactory<Customer, Address>("address"));
@@ -206,6 +206,21 @@ public class CustomersController extends MainController implements Initializable
                 }
             };
         });
+
+        phoneNumberCol.setCellFactory(column -> {
+            return new TableCell<Customer, Integer>() {
+                @Override
+                public void updateItem(Integer item, boolean empty) {
+                    if (item == null || empty) {
+                        setText(null);
+                    } else {
+                        setText(item.toString());
+                    }
+                }
+            };
+        });
+
+
 
 
         subscriptionIdCol.setCellFactory(column -> {

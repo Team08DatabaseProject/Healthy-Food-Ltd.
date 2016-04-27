@@ -41,8 +41,6 @@ public class CustomersFormController extends CustomersController implements Init
     public StringField placeField;
     public ZipCodeField zipCodeField;
     public Label emailFieldErrorMsg;
-    public DatePicker startSubField;
-    public DatePicker endSubField;
 
     private boolean attemptedValidation = false;
 
@@ -145,20 +143,23 @@ public class CustomersFormController extends CustomersController implements Init
                     String firstName = fNameField.getText();
                     String lastName = lNameField.getText();
                     boolean isBusiness = businessBox.isArmed();
-                    String businessName = businessNameField.getText();
                     int phoneNumber = phoneField.getInt();
                     String email = emailField.getText();
                     String address = addressField.getText();
                     String place = placeField.getText();
                     int zipCode = zipCodeField.getInt();
-                    LocalDate startSub = startSubField.getValue();
-                    LocalDate endSub = endSubField.getValue();
                     Address addressObject = new Address(address, zipCode, place);
                     ObservableList<Order> ordersIntThisSubscription = FXCollections.observableArrayList();
-                    Subscription subscriptionObject = new Subscription(startSub, endSub, ordersIntThisSubscription);
-                    Customer newCustomer = new Customer(isBusiness, email, firstName, lastName, phoneNumber,
-                            addressObject, businessName, subscriptionObject, ordersIntThisSubscription);
-
+                    Customer newCustomer;
+                    if (businessNameField.getText().isEmpty()) {
+                        newCustomer = new Customer(false, email, firstName, lastName, phoneNumber,
+                                addressObject, null, null, ordersIntThisSubscription);
+                    } else {
+                        String businessName = businessNameField.getText();
+                        newCustomer = new Customer(isBusiness, email, firstName, lastName, phoneNumber,
+                                addressObject, businessName, null, ordersIntThisSubscription);
+                    }
+                    db.addCustomer(newCustomer);
                     customers.add(newCustomer);
                     PopupDialog.confirmationDialog("Result", "Customer: " +
                             newCustomer.getFirstName() + " " + newCustomer.getLastName() + " successfully added");
@@ -212,13 +213,10 @@ public class CustomersFormController extends CustomersController implements Init
                     String address = addressField.getText();
                     int zipCode = zipCodeField.getInt();
                     String place = placeField.getText();
-                    LocalDate startSub = startSubField.getValue();
-                    LocalDate endSub = endSubField.getValue();
                     Address addressObject = new Address(address, zipCode, place);
                     ObservableList<Order> ordersIntThisSubscription = FXCollections.observableArrayList();
-                    Subscription subscriptionObject = new Subscription(startSub, endSub, ordersIntThisSubscription);
                     selectedCustomer = new Customer(isBusiness, email, firstName, lastName, phoneNumber,
-                            addressObject, businessName, subscriptionObject, ordersIntThisSubscription);
+                            addressObject, businessName, null, ordersIntThisSubscription);
                 }
             } catch (Exception exc) {
                 System.out.println(exc);

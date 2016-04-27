@@ -70,6 +70,15 @@ public class AddMenuController extends MenusController implements Initializable{
                 menuPriceLabel.setText("Menu price: " + menuPriceString + " NOK");
                 if (add) {
                     if (db.addMenu(newMenu)) {
+                        menuList = db.getAllMenus(dishList);
+                        boolean found = false;
+                        for (Menu m : menuList) {
+                            if (m.getName().equals(newMenu.getName()) && !found) {
+                                newMenu.setMenuId(m.getMenuId());
+                                found = true;
+                            }
+                        }
+                        db.addMenuLine(newMenu, newMenu.getMenuLines());
                         menuList.add(newMenu);
                         PopupDialog.confirmationDialog("Result", "Menu \"" + newMenu.getName() + "\" added.");
                     } else {

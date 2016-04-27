@@ -99,6 +99,7 @@ public class MenusController extends MainController implements Initializable{
         @Override
         public void handle(ActionEvent event) {
             try {
+                dishList = db.getAllDishes(ingredientList);
                 menuList = db.getAllMenus(dishList);
                 chefMenusTable.setItems(menuList);
             } catch (Exception exc) {
