@@ -43,6 +43,7 @@ public class AddIngredientController extends IngredientsController implements In
                 Ingredient newIngredient = new Ingredient(name, unit, quantity, price, selectedSupplier);
                 if(db.addIngredient(newIngredient)) {
                     ingredientList.add(newIngredient);
+                    dishList = db.getAllDishes(ingredientList);
                     PopupDialog.confirmationDialog("Result", "Ingredient \"" + newIngredient.getIngredientName() + "\" added.");
                 } else {
                     PopupDialog.errorDialog("Error", "Could not add ingredient.");
@@ -53,16 +54,6 @@ public class AddIngredientController extends IngredientsController implements In
         }
     };
 
-    /*
-    EventHandler<ActionEvent> addSupplierEvent = new EventHandler<ActionEvent>() {
-        @Override
-        public void handle(ActionEvent event) {
-            try {
-
-            }
-        }
-    }
-*/
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
 
         Platform.runLater(new Runnable() {

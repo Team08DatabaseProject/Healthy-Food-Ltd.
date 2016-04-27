@@ -3,6 +3,7 @@ package views.dishes;
 import classpackage.*;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.control.Menu;
 import main.MainController;
 import main.PopupDialog;
 import javafx.application.Platform;
@@ -41,6 +42,8 @@ public class DishesController extends MainController implements Initializable {
     protected static ObservableList<Supplier> supplierList = db.getAllSuppliers();
     protected static ObservableList<Ingredient> ingredientList = db.getAllIngredients(supplierList);
     protected static ObservableList<Dish> dishList = db.getAllDishes(ingredientList);
+    protected static ObservableList<classpackage.Menu> menuList = db.getAllMenus(dishList);
+
 
 
     protected final NumberFormat nf = NumberFormat.getNumberInstance();

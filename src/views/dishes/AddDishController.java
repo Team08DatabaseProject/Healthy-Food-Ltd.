@@ -68,6 +68,7 @@ public class AddDishController extends DishesController implements Initializable
                     if(db.addDish(newDish)) {
                         PopupDialog.confirmationDialog("Result", "Dish \"" + newDish.getDishName() + "\" added.");
                         dishList.add(newDish);
+                        menuList = db.getAllMenus(dishList);
                     } else {
                         PopupDialog.errorDialog("Error", "Dish could not be added.");
                     }
@@ -104,6 +105,7 @@ public class AddDishController extends DishesController implements Initializable
         @Override
         public void handle(ActionEvent event) {
             try {
+                selectedDishLine = (DishLine) chosenIngTable.getSelectionModel().getSelectedItem();
                 boolean remove = false;
                 if (selectedDishLine != null) {
                     for (DishLine dl : chosenDishLines) {

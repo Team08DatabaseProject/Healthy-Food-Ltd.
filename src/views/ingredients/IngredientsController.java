@@ -1,5 +1,6 @@
 package views.ingredients;
 
+import classpackage.Dish;
 import classpackage.Ingredient;
 import classpackage.Supplier;
 import javafx.application.Platform;
@@ -48,6 +49,7 @@ public class IngredientsController extends MainController implements Initializab
 
     protected static ObservableList<Supplier> supplierList = db.getAllSuppliers();
     protected static ObservableList<Ingredient> ingredientList = db.getAllIngredients(supplierList);
+    protected static ObservableList<Dish> dishList = db.getAllDishes(ingredientList);
 
     private ObservableList<Ingredient> ingredientsCopy = FXCollections.observableArrayList();
 
@@ -67,6 +69,8 @@ public class IngredientsController extends MainController implements Initializab
                     PopupDialog.errorDialog("Update failure", "Changes were not applied, as no changes were detected in ingredients.");
                 } else if (db.updateIngredient(ingredientsCopy)) {
                     ingredientsCopy.clear();
+                    ingredientList = db.getAllIngredients(supplierList);
+                    dishList = db.getAllDishes(ingredientList);
                     PopupDialog.confirmationDialog("Result", "Ingredients:" + updateString + "\nupdated.");
                 } else {
                     PopupDialog.errorDialog("Error", "Something went wrong.\nIngredients:" + updateString + "\nfailed to update.");

@@ -52,8 +52,6 @@ public class AddMenuController extends MenusController implements Initializable{
 
     private ObservableList<MenuLine> chosenMenuLines = FXCollections.observableArrayList();
 
-
-
     EventHandler<ActionEvent> commitNewMenuEvent = new EventHandler<ActionEvent>() {
         @Override
         public void handle(ActionEvent event) {
