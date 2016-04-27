@@ -286,6 +286,7 @@ public class MainController extends Main implements Initializable {
 				topMenuButtons.add(createMenusButton());
 				topMenuButtons.add(createDishesButton());
 				topMenuButtons.add(createIngredientsButton());
+				topMenuButtons.add(createInventoryButton());
 				break;
 			case Employee.DRIVER :
 				topMenuButtons.add(createDriverButton());
